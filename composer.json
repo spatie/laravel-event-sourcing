@@ -1,6 +1,6 @@
 {
-    "name": "spatie/:package_name",
-    "description": ":package_description",
+    "name": "spatie/laravel-event-saucer",
+    "description": "Simple event saurcing in Laravel",
     "keywords": [
         "spatie",
         ":package_name"
@@ -9,8 +9,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": ":author_email",
+            "name": "Freek Van der Herten",
+            "email": "freek@spatie.be",
             "homepage": "https://spatie.be",
             "role": "Developer"
         }
@@ -20,16 +20,17 @@
     },
     "require-dev": {
         "larapack/dd": "^1.0",
+        "orchestra/testbench": "^3.6",
         "phpunit/phpunit": "^7.0"
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Skeleton\\": "src"
+            "Spatie\\EventSaucer\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Skeleton\\Tests\\": "tests"
+            "Spatie\\EventSaucer\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -43,11 +44,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\Skeleton\\SkeletonServiceProvider"
-            ],
-            "aliases": {
-                "Skeleton": "Spatie\\Skeleton\\SkeletonFacade"
-            }
+                "Spatie\\EventSaucer\EventSaucerServiceProvider"
+            ]
         }
     }
 }
