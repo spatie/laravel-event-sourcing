@@ -7,6 +7,7 @@ class EventSaucer
     /** @var array */
     public static $mutators = [];
 
+    /** @var array */
     public static $reactors = [];
 
     public static function registerMutators(array $mutators)
