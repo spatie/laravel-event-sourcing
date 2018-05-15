@@ -4,30 +4,50 @@ namespace Spatie\EventSaucer;
 
 class EventSubscriber
 {
-    public function handleEvent(string $eventName, $payload = null)
+    public $mutators = [
+
+    ];
+
+    public $actions = [
+
+    ];
+
+    public function handleEvent(string $eventName, $payload)
     {
-        if (! $this->shouldBeLogged($eventName)) {
+        if (!$this->shouldBeStored($eventName)) {
             return;
         }
 
-        LoggedEvent::createForEvent($eventName, $payload[0]);
+        $this->storeEvent($payload[0]);
+    }
 
-        // mutators
+    public function storeEvent(ShouldBeStored $event)
+    {
+        StoredEvent::createForEvent($event);
 
-        // reactors
+        collect(EventSaucer::$mutators)
+            ->each(function (string $mutatorClass) use ($event) {
+                app()->call($mutatorClass . '@handle', [$event]);
+            });
+
+        collect(EventSaucer::$reactors)
+            ->each(function (string $reactionClass) use ($event) {
+                app()->call($reactionClass . '@handle', [$event]);
+            });
+    }
+
+
+    protected function shouldBeStored($event): bool
+    {
+        if (!class_exists($event)) {
+            return false;
+        }
+
+        return $event instanceof ShouldBeStored;
     }
 
     public function subscribe($events)
     {
         $events->listen('*', static::class . '@handleEvent');
-    }
-
-    protected function shouldBeLogged($event): bool
-    {
-        if (! class_exists($event)) {
-            return false;
-        }
-
-        return in_array(LogsEvent::class, trait_uses_recursive($event));
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSaucer\Tests;
 
-use Spatie\EventSaucer\LoggedEvent;
+use Spatie\EventSaucer\StoredEvent;
 use Spatie\EventSaucer\Tests\Models\Account;
 use Spatie\EventSaucer\Tests\Events\MoneyAdded;
 
@@ -23,6 +23,6 @@ class EventSubscriberTest extends TestCase
     {
         event(new MoneyAdded($this->account, 1234));
 
-        $this->assertCount(1, LoggedEvent::all());
+        $this->assertCount(1, StoredEvent::all());
     }
 }

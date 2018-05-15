@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSaucer;
 
-trait LogsEvent
+trait StoresEvent
 {
     public function getEventLogProperties(): array
     {

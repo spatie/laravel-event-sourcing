@@ -3,13 +3,13 @@
 namespace Spatie\EventSaucer\Tests\Events;
 
 use Illuminate\Queue\SerializesModels;
-use Spatie\EventSaucer\LogsEvent;
+use Spatie\EventSaucer\StoresEvent;
+use Spatie\EventSaucer\ShouldBeStored;
 use Spatie\EventSaucer\Tests\Models\Account;
 
-
-class MoneyAdded implements ShouldBeLogged
+class MoneyAdded implements ShouldBeStored
 {
-    use LogsEvent, SerializesModels;
+    use StoresEvent, SerializesModels;
 
     /** @var \Spatie\EventSaucer\Tests\Models\Account */
     public $account;
