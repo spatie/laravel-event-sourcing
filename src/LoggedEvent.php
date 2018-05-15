@@ -19,4 +19,9 @@ class LoggedEvent extends Model
             'event_properties' => $event->getEventLogProperties(),
         ]);
     }
+
+    public function getEvent()
+    {
+        // return
+    }
 }

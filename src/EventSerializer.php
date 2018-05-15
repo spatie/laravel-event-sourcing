@@ -2,8 +2,6 @@
 
 namespace Spatie\EventSaucer;
 
-
-
 use Illuminate\Queue\SerializesAndRestoresModelIdentifiers;
 use ReflectionClass;
 use ReflectionProperty;

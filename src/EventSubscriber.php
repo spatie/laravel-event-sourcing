@@ -12,7 +12,9 @@ class EventSubscriber
 
         LoggedEvent::createForEvent($eventName, $payload[0]);
 
+        // mutators
 
+        // reactors
     }
 
     public function subscribe($events)

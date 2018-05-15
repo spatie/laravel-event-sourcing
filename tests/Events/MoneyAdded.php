@@ -7,7 +7,7 @@ use Spatie\EventSaucer\LogsEvent;
 use Spatie\EventSaucer\Tests\Models\Account;
 
 
-class MoneyAdded
+class MoneyAdded implements ShouldBeLogged
 {
     use LogsEvent, SerializesModels;
 
