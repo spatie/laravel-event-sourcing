@@ -4,14 +4,6 @@ namespace Spatie\EventSaucer;
 
 class EventSubscriber
 {
-    public $mutators = [
-
-    ];
-
-    public $actions = [
-
-    ];
-
     public function handleEvent(string $eventName, $payload)
     {
         if (!$this->shouldBeStored($eventName)) {
