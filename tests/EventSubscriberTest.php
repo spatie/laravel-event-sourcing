@@ -34,11 +34,13 @@ class EventSubscriberTest extends TestCase
 
         $this->assertCount(1, StoredEvent::get());
 
-        $event = StoredEvent::first()->event;
+        $storedEvent = StoredEvent::first();
 
-        $this->assertInstanceOf(MoneyAdded::class, $event);
-        $this->assertEquals(1234, $event->amount);
-        $this->assertEquals($this->account->id, $event->account->id);
+        $this->assertEquals(MoneyAdded::class, $storedEvent->event_class);
+
+        $this->assertInstanceOf(MoneyAdded::class, $storedEvent->event);
+        $this->assertEquals(1234, $storedEvent->event->amount);
+        $this->assertEquals($this->account->id, $storedEvent->event->account->id);
     }
 
     /** @test */

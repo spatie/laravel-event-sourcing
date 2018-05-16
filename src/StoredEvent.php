@@ -17,7 +17,7 @@ class StoredEvent extends Model
     public static function createForEvent(ShouldBeStored $event): self
     {
         return static::create([
-            'event_name' => get_class($event),
+            'event_class' => get_class($event),
             'serialized_event' => serialize(clone $event)
         ]);
     }
