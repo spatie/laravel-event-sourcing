@@ -23,4 +23,9 @@ class Account extends Model
 
         return $this;
     }
+
+    public function isBroke(): bool
+    {
+        return $this->amount < 0;
+    }
 }

@@ -2,13 +2,16 @@
 
 namespace Spatie\EventSaucer\Tests;
 
+use Illuminate\Support\Facades\Mail;
 use Spatie\EventSaucer\StoredEvent;
 use Spatie\EventSaucer\Tests\Events\DoNotStoreThisEvent;
 use Spatie\EventSaucer\Tests\Events\MoneySubtracted;
+use Spatie\EventSaucer\Tests\Mailables\AccountBroke;
 use Spatie\EventSaucer\Tests\Models\Account;
 use Spatie\EventSaucer\Tests\Events\MoneyAdded;
 use Spatie\EventSaucer\Facades\EventSaucer;
 use Spatie\EventSaucer\Tests\Mutators\BalanceMutator;
+use Spatie\EventSaucer\Tests\Reactors\BrokeReactor;
 
 class EventSubscriberTest extends TestCase
 {
@@ -20,6 +23,8 @@ class EventSubscriberTest extends TestCase
         parent::setUp();
 
         $this->account = Account::create();
+
+        Mail::fake();
     }
 
     /** @test */
@@ -56,5 +61,21 @@ class EventSubscriberTest extends TestCase
         event(new MoneySubtracted($this->account, 34));
         $this->account->refresh();
         $this->assertEquals(1200, $this->account->amount);
+    }
+
+    /** @test */
+    public function it_will_call_registered_reactors()
+    {
+        EventSaucer::addMutator(BalanceMutator::class);
+        EventSaucer::addReactor(BrokeReactor::class);
+
+        event(new MoneyAdded($this->account, 1234));
+        Mail::assertNotSent(AccountBroke::class);
+
+        event(new MoneySubtracted($this->account, 1000));
+        Mail::assertNotSent(AccountBroke::class);
+
+        event(new MoneySubtracted($this->account, 1000));
+        Mail::assertSent(AccountBroke::class);
     }
 }

@@ -12,12 +12,12 @@ class BalanceMutator
         MoneySubtracted::class => 'onMoneySubtracted',
     ];
 
-    public function onMoneyAdded(MoneyAdded $event) // + ioc arguments
+    public function onMoneyAdded(MoneyAdded $event)
     {
         $event->account->addMoney($event->amount);
     }
 
-    public function onMoneySubtracted(MoneySubtracted $event) // + ioc arguments
+    public function onMoneySubtracted(MoneySubtracted $event)
     {
         $event->account->subtractMoney($event->amount);
     }
