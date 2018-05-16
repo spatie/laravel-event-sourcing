@@ -49,8 +49,8 @@ abstract class TestCase extends Orchestra
             $table->timestamps();
         });
 
-        include_once __DIR__.'/../database/migrations/create_logged_events_table.php.stub';
+        include_once __DIR__.'/../database/migrations/create_stored_events_table.php.stub';
 
-        (new \CreateLoggedEventsTable())->up();
+        (new \CreateStoredEventsTable())->up();
     }
 }

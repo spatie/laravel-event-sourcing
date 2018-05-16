@@ -15,7 +15,7 @@ class StoredEvent extends Model
     public static function createForEvent(ShouldBeStored $event): self
     {
         return static::create([
-            'event_name' => class_name($event),
+            'event_name' => get_class($event),
             'event_properties' => $event->getEventLogProperties(),
         ]);
     }

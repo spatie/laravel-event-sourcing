@@ -39,11 +39,12 @@ class EventSubscriber
 
     protected function shouldBeStored($event): bool
     {
+
         if (!class_exists($event)) {
             return false;
         }
 
-        return $event instanceof ShouldBeStored;
+        return is_subclass_of($event, ShouldBeStored::class);
     }
 
     public function subscribe($events)
