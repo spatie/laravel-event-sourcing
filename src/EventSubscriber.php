@@ -30,7 +30,6 @@ class EventSubscriber
     {
         StoredEvent::createForEvent($event);
 
-
         $this->eventSaucer->mutators
             ->map(function(string $mutatorClass) {
                 return app($mutatorClass);
@@ -38,8 +37,6 @@ class EventSubscriber
             ->each(function (object $mutatorClass) use ($event) {
                 $this->callEventHandler($mutatorClass, $event);
             });
-
-
 
         $this->eventSaucer->reactors
             ->map(function(string $reactorClass) {
