@@ -2,6 +2,8 @@
 
 namespace Spatie\EventSaucer;
 
+use Illuminate\Support\Collection;
+
 class EventSubscriber
 {
     /** @var \Spatie\EventSaucer\EventSaucer */
@@ -30,21 +32,9 @@ class EventSubscriber
     {
         StoredEvent::createForEvent($event);
 
-        $this->eventSaucer->mutators
-            ->map(function(string $mutatorClass) {
-                return app($mutatorClass);
-            })
-            ->each(function (object $mutatorClass) use ($event) {
-                $this->callEventHandler($mutatorClass, $event);
-            });
-
-        $this->eventSaucer->reactors
-            ->map(function(string $reactorClass) {
-                return app($reactorClass);
-            })
-            ->each(function (object $reactorClass) use ($event) {
-                $this->callEventHandler($reactorClass, $event);
-            });
+        $this
+            ->callEventHandlers($this->eventSaucer->mutators, $event)
+            ->callEventHandlers($this->eventSaucer->reactors, $event);
     }
 
     protected function shouldBeStored($event): bool
@@ -54,6 +44,19 @@ class EventSubscriber
         }
 
         return is_subclass_of($event, ShouldBeStored::class);
+    }
+
+    protected function callEventHandlers(Collection $eventHandlers, ShouldBeStored $event): self
+    {
+        $eventHandlers
+            ->map(function(string $eventHandlerClass) {
+                return app($eventHandlerClass);
+            })
+            ->each(function (object $eventHandler) use ($event) {
+                $this->callEventHandler($eventHandler, $event);
+            });
+
+        return $this;
     }
 
     protected function callEventHandler(object $eventHandler, ShouldBeStored $event)
