@@ -6,4 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Account extends Model
 {
+    public function addMoney(int $amount): self
+    {
+        $this->amount += $amount;
+
+        $this->save();
+
+        return $this;
+    }
+
+    public function subtractMoney(int $amount): self
+    {
+        $this->amount -= $amount;
+
+        $this->save();
+
+        return $this;
+    }
 }

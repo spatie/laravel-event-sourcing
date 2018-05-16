@@ -2,14 +2,9 @@
 
 namespace Spatie\EventSaucer\Tests;
 
-use File;
-use Carbon\Carbon;
-use Dotenv\Dotenv;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Spatie\EventSaucer\EventSaucerServiceProvider;
 
 abstract class TestCase extends Orchestra
@@ -38,9 +33,6 @@ abstract class TestCase extends Orchestra
         ]);
     }
 
-    /**
-     * @param \Illuminate\Foundation\Application $app
-     */
     protected function setUpDatabase($app)
     {
         Schema::create('accounts', function (Blueprint $table) {

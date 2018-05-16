@@ -47,7 +47,10 @@
         "laravel": {
             "providers": [
                 "Spatie\\EventSaucer\\EventSaucerServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "EventSaucer": "Spatie\\EventSaucer\\Facades\\EventSaucer"
+            }
         }
     }
 }

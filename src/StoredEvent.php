@@ -11,20 +11,20 @@ class StoredEvent extends Model
     public $guarded = [];
 
     public $casts = [
-        'event_properties' => 'array',
+        'serialized_event' => 'array',
     ];
 
     public static function createForEvent(ShouldBeStored $event): self
     {
         return static::create([
             'event_name' => get_class($event),
-            'event_properties' => serialize($event)
+            'serialized_event' => serialize(clone $event)
         ]);
     }
 
     public function getEventAttribute(): object
     {
-        return unserialize($this->event_properties);
+        return unserialize($this->serialized_event);
     }
 
 }

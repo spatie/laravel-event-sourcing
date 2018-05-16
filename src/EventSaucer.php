@@ -4,19 +4,48 @@ namespace Spatie\EventSaucer;
 
 class EventSaucer
 {
-    /** @var array */
-    public static $mutators = [];
+    /** @var \Illuminate\Support\Collection */
+    public $mutators;
 
-    /** @var array */
-    public static $reactors = [];
+    /** @var \Illuminate\Support\Collection */
+    public $reactors;
 
-    public static function registerMutators(array $mutators)
+    public function __construct()
     {
-        static::$mutators = $mutators;
+        $this->mutators = collect();
+
+        $this->reactors = collect();
     }
 
-    public static function reactors(array $reactors)
+    public function addMutator(string $mutator): self
     {
-        static::$reactors = $reactors;
+        $this->mutators->push($mutator);
+
+        return $this;
+    }
+
+    public function registerMutators(array $mutators): self
+    {
+        collect($mutators)->each(function($mutator) {
+            $this->addMutator($mutator);
+        });
+
+        return $this;
+    }
+
+    public function addReactor(string $reactor): self
+    {
+        $this->reactors->push($reactor);
+
+        return $this;
+    }
+
+    public function registerReactors(array $reactors): self
+    {
+        collect($reactors)->each(function($reactor) {
+            $this->addReactor($reactor);
+        });
+
+        return $this;
     }
 }

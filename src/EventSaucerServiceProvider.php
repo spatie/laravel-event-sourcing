@@ -28,6 +28,12 @@ class EventSaucerServiceProvider extends ServiceProvider
             'command.medialibrary:clean',
         ]);
         */
+
+        $this->app->singleton(EventSaucer::class, function () {
+            return new EventSaucer();
+        });
+
+        $this->app->alias(EventSaucer::class, 'event-saucer');
     }
 
     public function register()
