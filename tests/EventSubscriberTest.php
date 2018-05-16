@@ -16,7 +16,7 @@ class EventSubscriberTest extends TestCase
     {
         parent::setUp();
 
-        $this->account = new Account();
+        $this->account = Account::create();
     }
 
     /** @test */
@@ -25,6 +25,16 @@ class EventSubscriberTest extends TestCase
         event(new MoneyAdded($this->account, 1234));
 
         $this->assertCount(1, StoredEvent::get());
+
+        $event = StoredEvent::first()->event;
+
+        dump(StoredEvent::first()->event_properties);
+
+        $this->assertInstanceOf(MoneyAdded::class, $event);
+
+        $this->assertEquals(1234, $event->amount);
+
+        $this->assertEquals($this->account->id, $event->account->id);
     }
 
     /** @test */

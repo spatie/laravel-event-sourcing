@@ -45,7 +45,7 @@ abstract class TestCase extends Orchestra
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('amount');
+            $table->integer('amount')->default(0);
             $table->timestamps();
         });
 

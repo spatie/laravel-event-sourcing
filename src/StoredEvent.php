@@ -3,6 +3,8 @@
 namespace Spatie\EventSaucer;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Queue\SerializesModels;
 
 class StoredEvent extends Model
 {
@@ -16,12 +18,13 @@ class StoredEvent extends Model
     {
         return static::create([
             'event_name' => get_class($event),
-            'event_properties' => $event->getEventLogProperties(),
+            'event_properties' => serialize($event)
         ]);
     }
 
-    public function event()
+    public function getEventAttribute(): object
     {
-        return new $this->event_name(...$this->event_properties);
+        return unserialize($this->event_properties);
     }
+
 }

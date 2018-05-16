@@ -9,7 +9,7 @@ use Spatie\EventSaucer\Tests\Models\Account;
 
 class MoneyAdded implements ShouldBeStored
 {
-    use StoresEvent, SerializesModels;
+    use StoresEvent;
 
     /** @var \Spatie\EventSaucer\Tests\Models\Account */
     public $account;
