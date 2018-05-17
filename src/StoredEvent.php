@@ -22,7 +22,7 @@ class StoredEvent extends Model
         ]);
     }
 
-    public function getEventAttribute(): object
+    public function getEventAttribute(): ShouldBeStored
     {
         return unserialize($this->serialized_event);
     }
