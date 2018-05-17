@@ -1,17 +1,17 @@
 <?php
 
-namespace Spatie\EventSaucer;
+namespace Spatie\EventSourcerer;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
-class EventSaucerServiceProvider extends ServiceProvider
+class EventSourcererServiceProvider extends ServiceProvider
 {
     public function boot()
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/event-saucer.php' => config_path('event-saucer.php'),
+                __DIR__.'/../config/event-sorcerer.php' => config_path('event-sorcerer.php'),
             ], 'config');
         }
 
@@ -29,16 +29,16 @@ class EventSaucerServiceProvider extends ServiceProvider
         ]);
         */
 
-        $this->app->singleton(EventSaucer::class, function () {
-            return new EventSaucer();
+        $this->app->singleton(EventSourcerer::class, function () {
+            return new EventSourcerer();
         });
 
-        $this->app->alias(EventSaucer::class, 'event-saucer');
+        $this->app->alias(EventSourcerer::class, 'event-sorcerer');
     }
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/event-saucer.php', 'event-saucer');
+        $this->mergeConfigFrom(__DIR__.'/../config/event-sorcerer.php', 'event-sorcerer');
 
         Event::subscribe(EventSubscriber::class);
     }

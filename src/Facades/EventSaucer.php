@@ -1,13 +1,13 @@
 <?php
 
-namespace Spatie\EventSaucer\Facades;
+namespace Spatie\EventSourcerer\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class EventSaucer extends Facade
+class EventSourcerer extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'event-saucer';
+        return 'event-sorcerer';
     }
 }

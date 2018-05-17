@@ -1,12 +1,12 @@
 **THIS PACKAGE IS STILL IN DEVELOPMENT**
 
-# Simple event sourcing in Laravel
+# Simple event sourcing in Laravel 🧙
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-event-saucer.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-saucer)
-[![Build Status](https://img.shields.io/travis/spatie/laravel-event-saucer/master.svg?style=flat-square)](https://travis-ci.org/spatie/laravel-event-saucer)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-event-sorcerer.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-sorcerer)
+[![Build Status](https://img.shields.io/travis/spatie/laravel-event-sorcerer/master.svg?style=flat-square)](https://travis-ci.org/spatie/laravel-event-sorcerer)
 [![StyleCI](https://styleci.io/repos/133496112/shield?branch=master)](https://styleci.io/repos/133496112)
-[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-event-saucer.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-event-saucer)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-event-saucer.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-saucer)
+[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-event-sorcerer.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-event-sorcerer)
+[![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-event-sorcerer.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-sorcerer)
 
 Event sourcing is to data with Git is to code <sup>[1](#footnote1)</sup>. Most applications have their current state stored in a database. By storing only the current state a lot of information is lost. You don't know how the application got in this state.
 
@@ -21,7 +21,7 @@ This package aims to be the simple and very pragmatic way to get started with ev
 You can install the package via composer:
 
 ```bash
-composer require spatie/laravel-event-saucer
+composer require spatie/laravel-event-sorcerer
 ```
 
 Coming soon...

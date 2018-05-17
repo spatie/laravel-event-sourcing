@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\EventSaucer;
+namespace Spatie\EventSourcerer;
 
-class EventSaucer
+class EventSourcerer
 {
     /** @var \Illuminate\Support\Collection */
     public $mutators;

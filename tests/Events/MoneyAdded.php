@@ -1,16 +1,16 @@
 <?php
 
-namespace Spatie\EventSaucer\Tests\Events;
+namespace Spatie\EventSourcerer\Tests\Events;
 
-use Spatie\EventSaucer\StoresEvent;
-use Spatie\EventSaucer\ShouldBeStored;
-use Spatie\EventSaucer\Tests\Models\Account;
+use Spatie\EventSourcerer\StoresEvent;
+use Spatie\EventSourcerer\ShouldBeStored;
+use Spatie\EventSourcerer\Tests\Models\Account;
 
 class MoneyAdded implements ShouldBeStored
 {
     use StoresEvent;
 
-    /** @var \Spatie\EventSaucer\Tests\Models\Account */
+    /** @var \Spatie\EventSourcerer\Tests\Models\Account */
     public $account;
 
     /** @var int */

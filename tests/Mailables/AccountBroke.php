@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSaucer\Tests\Mailables;
+namespace Spatie\EventSourcerer\Tests\Mailables;
 
 use Illuminate\Mail\Mailable;
 

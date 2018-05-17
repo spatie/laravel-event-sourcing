@@ -1,11 +1,13 @@
 {
-    "name": "spatie/laravel-event-saucer",
+    "name": "spatie/laravel-event-sorcerer",
     "description": "Simple event sourcing in Laravel",
     "keywords": [
         "spatie",
-        "laravel-eventsaucer"
+        "laravel-event-sourcerer",
+        "event",
+        "sourcing"
     ],
-    "homepage": "https://github.com/spatie/laravel-eventsaucer",
+    "homepage": "https://github.com/spatie/laravel-event-sorcerer",
     "license": "MIT",
     "authors": [
         {
@@ -27,12 +29,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\EventSaucer\\": "src"
+            "Spatie\\EventSourcerer\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\EventSaucer\\Tests\\": "tests"
+            "Spatie\\EventSourcerer\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -46,10 +48,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\EventSaucer\\EventSaucerServiceProvider"
+                "Spatie\\EventSourcerer\\EventSourcererServiceProvider"
             ],
             "aliases": {
-                "EventSaucer": "Spatie\\EventSaucer\\Facades\\EventSaucer"
+                "EventSourcerer": "Spatie\\EventSourcerer\\Facades\\EventSourcerer"
             }
         }
     }

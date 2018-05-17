@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\EventSaucer\Tests;
+namespace Spatie\EventSourcerer\Tests;
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\EventSaucer\EventSaucerServiceProvider;
+use Spatie\EventSourcerer\EventSourcererServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -19,7 +19,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            EventSaucerServiceProvider::class,
+            EventSourcererServiceProvider::class,
         ];
     }
 

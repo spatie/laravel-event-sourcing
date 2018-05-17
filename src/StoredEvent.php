@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSaucer;
+namespace Spatie\EventSourcerer;
 
 use Illuminate\Database\Eloquent\Model;
 
