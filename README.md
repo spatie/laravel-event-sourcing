@@ -8,11 +8,11 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-event-saucer.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-event-saucer)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-event-saucer.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-saucer)
 
-Event sourcing is to data with Git is to code <sup>[1](#footnote1)</sup>. Most application have their current state stored in a database. By storing only the current state a lot of information is lost. You don't know how the application got in this state.
+Event sourcing is to data with Git is to code <sup>[1](#footnote1)</sup>. Most applications have their current state stored in a database. By storing only the current state a lot of information is lost. You don't know how the application got in this state.
 
 Event sourcing tries to solve that problem by saving all events that happen in your app. The state of your application is built by listening to those events. 
 
-Here's a traditional example to make it more clear. Image you're a bank. Your clients have accounts. Instead of storing the balance of the accounts, you could store all the transactions. That way you not only know the balance of the account but also the reason why it's that specific number.
+Here's a traditional example to make it more clear. Image you're a bank. Your clients have accounts. Instead of storing the balance of the accounts, you could store all the transactions. That way you not only know the balance of the account but also the reason why it's that specific number. There are many other benefits of storing events.
 
 This package aims to be the simple and very pragmatic way to get started with event sourcing in Laravel.
 
