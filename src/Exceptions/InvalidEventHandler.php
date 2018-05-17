@@ -19,7 +19,7 @@ class InvalidEventHandler extends Exception
         $eventHandlerClass = get_class($eventHandler);
         $eventClass = get_class($event);
 
-        return new static("Tried to call `$methodName` on `$eventHandlerClass` to handle an event of class `$eventClass`.");
+        return new static("Tried to call `$methodName` on `$eventHandlerClass` to handle an event of class `$eventClass` but that method does not exist.");
     }
 
     public static function doesNotExist(string $eventHandlerClass)
