@@ -4,6 +4,7 @@ namespace Spatie\EventSorcerer;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Spatie\EventSorcerer\Console\ReplayEventsCommand;
 
 class EventSorcererServiceProvider extends ServiceProvider
 {
@@ -21,13 +22,11 @@ class EventSorcererServiceProvider extends ServiceProvider
             ], 'migrations');
         }
 
-        /*
+        $this->app->bind('command.event-sorcerer:replay-events', ReplayEventsCommand::class);
+
         $this->commands([
-            'command.medialibrary:regenerate',
-            'command.medialibrary:clear',
-            'command.medialibrary:clean',
+            'command.event-sorcerer:replay-events',
         ]);
-        */
 
         $this->app->singleton(EventSorcerer::class, function () {
             return new EventSorcerer();

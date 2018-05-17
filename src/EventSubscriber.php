@@ -33,7 +33,7 @@ class EventSubscriber
         StoredEvent::createForEvent($event);
 
         $this
-            ->callEventHandlers($this->eventSaucer->mutators, $event) // do some transaction stuff here
+            ->callEventHandlers($this->eventSaucer->mutators, $event)
             ->callEventHandlers($this->eventSaucer->reactors, $event);
     }
 
