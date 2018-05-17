@@ -4,6 +4,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-event-saucer.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-saucer)
 [![Build Status](https://img.shields.io/travis/spatie/laravel-event-saucer/master.svg?style=flat-square)](https://travis-ci.org/spatie/laravel-event-saucer)
+[![StyleCI](https://styleci.io/repos/133496112/shield?branch=master)](https://styleci.io/repos/133496112)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-event-saucer.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-event-saucer)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-event-saucer.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-saucer)
 
