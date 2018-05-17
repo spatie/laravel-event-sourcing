@@ -75,6 +75,10 @@ class EventSorcerer
             return;
         }
 
+        if (! method_exists($eventHandler, $method)) {
+            throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
+        }
+
         app()->call([$eventHandler, $method], compact('event'));
     }
 }
