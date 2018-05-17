@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcerer;
+namespace Spatie\EventSorcerer;
 
 class EventSorcerer
 {

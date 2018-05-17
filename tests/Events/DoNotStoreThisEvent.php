@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcerer\Tests\Events;
+namespace Spatie\EventSorcerer\Tests\Events;
 
 class DoNotStoreThisEvent
 {

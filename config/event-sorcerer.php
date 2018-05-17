@@ -2,6 +2,6 @@
 
 return [
     'mutators' => [
-        \Spatie\EventSourcerer\Tests\BalanceMutator::class,
+        \Spatie\EventSorcerer\Tests\BalanceMutator::class,
     ],
 ];

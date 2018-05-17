@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcerer;
+namespace Spatie\EventSorcerer;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
@@ -29,11 +29,11 @@ class EventSorcererServiceProvider extends ServiceProvider
         ]);
         */
 
-        $this->app->singleton(EventSourcerer::class, function () {
-            return new EventSourcerer();
+        $this->app->singleton(EventSorcerer::class, function () {
+            return new EventSorcerer();
         });
 
-        $this->app->alias(EventSourcerer::class, 'event-sorcerer');
+        $this->app->alias(EventSorcerer::class, 'event-sorcerer');
     }
 
     public function register()

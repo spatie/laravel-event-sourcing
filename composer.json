@@ -29,12 +29,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\EventSourcerer\\": "src"
+            "Spatie\\EventSorcerer\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\EventSourcerer\\Tests\\": "tests"
+            "Spatie\\EventSorcerer\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -48,10 +48,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\EventSourcerer\\EventSourcererServiceProvider"
+                "Spatie\\EventSorcerer\\EventSorcererServiceProvider"
             ],
             "aliases": {
-                "EventSourcerer": "Spatie\\EventSourcerer\\Facades\\EventSourcerer"
+                "EventSorcerer": "Spatie\\EventSorcerer\\Facades\\EventSorcerer"
             }
         }
     }

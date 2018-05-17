@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\EventSourcerer\Tests\Reactors;
+namespace Spatie\EventSorcerer\Tests\Reactors;
 
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventSourcerer\Tests\Events\MoneySubtracted;
-use Spatie\EventSourcerer\Tests\Mailables\AccountBroke;
+use Spatie\EventSorcerer\Tests\Events\MoneySubtracted;
+use Spatie\EventSorcerer\Tests\Mailables\AccountBroke;
 
 class BrokeReactor
 {

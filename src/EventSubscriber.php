@@ -1,15 +1,15 @@
 <?php
 
-namespace Spatie\EventSourcerer;
+namespace Spatie\EventSorcerer;
 
 use Illuminate\Support\Collection;
 
 class EventSubscriber
 {
-    /** @var \Spatie\EventSourcerer\EventSourcerer */
+    /** @var \Spatie\EventSorcerer\EventSorcerer */
     protected $eventSaucer;
 
-    public function __construct(EventSourcerer $eventSaucer)
+    public function __construct(EventSorcerer $eventSaucer)
     {
         $this->eventSaucer = $eventSaucer;
     }

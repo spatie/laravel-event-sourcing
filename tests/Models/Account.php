@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcerer\Tests\Models;
+namespace Spatie\EventSorcerer\Tests\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
