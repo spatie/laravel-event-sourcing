@@ -8,7 +8,7 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-event-sorcerer.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-event-sorcerer)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-event-sorcerer.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-sorcerer)
 
-Event sourcing is to data with Git is to code <sup>[1](#footnote1)</sup>. Most applications have their current state stored in a database. By storing only the current state a lot of information is lost. You don't know how the application got in this state.
+Event sourcing is to data what Git is to code <sup>[1](#footnote1)</sup>. Most applications have their current state stored in a database. By storing only the current state a lot of information is lost. You don't know how the application got in this state.
 
 Event sourcing tries to solve that problem by saving all events that happen in your app. The state of your application is built by listening to those events. 
 
@@ -61,7 +61,7 @@ We publish all received postcards [on our company website](https://spatie.be/en/
 -  [Event Sourcing made Simple](https://kickstarter.engineering/event-sourcing-made-simple-4a2625113224): the blogpost that showed us that event sourcing can be used very pragmatically as well
 - [EventSauce](https://eventsauce.io/): A pragmatic, feature rich event sourcing library for PHP made by [Frank de Jonge](https://frankdejonge.nl)
 - [prooph](https://github.com/prooph): A full blown CQRS and event sourcing solution in PHP
-- [The Many Meanings of Event-Driven Architecture](https://www.youtube.com/watch?v=STKCRSUsyP0): A recording a cool talk by [Martin Fawler](https://martinfowler.com/)
+- [The Many Meanings of Event-Driven Architecture](https://www.youtube.com/watch?v=STKCRSUsyP0): A recording of a cool talk by [Martin Fawler](https://martinfowler.com/)
 
 ## Credits
 
