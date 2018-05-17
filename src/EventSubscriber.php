@@ -16,12 +16,12 @@ class EventSubscriber
 
     public function subscribe($events)
     {
-        $events->listen('*', static::class . '@handleEvent');
+        $events->listen('*', static::class.'@handleEvent');
     }
 
     public function handleEvent(string $eventName, $payload)
     {
-        if (!$this->shouldBeStored($eventName)) {
+        if (! $this->shouldBeStored($eventName)) {
             return;
         }
 
@@ -39,7 +39,7 @@ class EventSubscriber
 
     protected function shouldBeStored($event): bool
     {
-        if (!class_exists($event)) {
+        if (! class_exists($event)) {
             return false;
         }
 
@@ -49,7 +49,7 @@ class EventSubscriber
     protected function callEventHandlers(Collection $eventHandlers, ShouldBeStored $event): self
     {
         $eventHandlers
-            ->map(function(string $eventHandlerClass) {
+            ->map(function (string $eventHandlerClass) {
                 return app($eventHandlerClass);
             })
             ->each(function (object $eventHandler) use ($event) {

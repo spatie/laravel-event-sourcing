@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSaucer\Tests\Events;
 
-use Illuminate\Queue\SerializesModels;
 use Spatie\EventSaucer\StoresEvent;
 use Spatie\EventSaucer\ShouldBeStored;
 use Spatie\EventSaucer\Tests\Models\Account;

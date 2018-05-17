@@ -2,16 +2,16 @@
 
 namespace Spatie\EventSaucer\Tests;
 
-use Illuminate\Support\Facades\Mail;
 use Spatie\EventSaucer\StoredEvent;
-use Spatie\EventSaucer\Tests\Events\DoNotStoreThisEvent;
-use Spatie\EventSaucer\Tests\Events\MoneySubtracted;
-use Spatie\EventSaucer\Tests\Mailables\AccountBroke;
+use Illuminate\Support\Facades\Mail;
+use Spatie\EventSaucer\Facades\EventSaucer;
 use Spatie\EventSaucer\Tests\Models\Account;
 use Spatie\EventSaucer\Tests\Events\MoneyAdded;
-use Spatie\EventSaucer\Facades\EventSaucer;
-use Spatie\EventSaucer\Tests\Mutators\BalanceMutator;
 use Spatie\EventSaucer\Tests\Reactors\BrokeReactor;
+use Spatie\EventSaucer\Tests\Events\MoneySubtracted;
+use Spatie\EventSaucer\Tests\Mailables\AccountBroke;
+use Spatie\EventSaucer\Tests\Mutators\BalanceMutator;
+use Spatie\EventSaucer\Tests\Events\DoNotStoreThisEvent;
 
 class EventSubscriberTest extends TestCase
 {
