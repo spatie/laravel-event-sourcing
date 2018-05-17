@@ -2,6 +2,9 @@
 
 namespace Spatie\EventSorcerer;
 
+use Illuminate\Support\Collection;
+use Spatie\EventSorcerer\Exceptions\InvalidEventHandler;
+
 class EventSorcerer
 {
     /** @var \Illuminate\Support\Collection */
@@ -47,5 +50,31 @@ class EventSorcerer
         });
 
         return $this;
+    }
+
+    public function callEventHandlers(Collection $eventHandlers, ShouldBeStored $event): self
+    {
+        $eventHandlers
+            ->map(function (string $eventHandlerClass) {
+                return app($eventHandlerClass);
+            })
+            ->each(function (object $eventHandler) use ($event) {
+                $this->callEventHandler($eventHandler, $event);
+            });
+
+        return $this;
+    }
+
+    protected function callEventHandler(object $eventHandler, ShouldBeStored $event)
+    {
+        if (! isset($eventHandler->handlesEvents)) {
+            throw InvalidEventHandler::cannotHandleEvents($eventHandler);
+        }
+
+        if (! $method = $eventHandler->handlesEvents[get_class($event)] ?? false) {
+            return;
+        }
+
+        app()->call([$eventHandler, $method], compact('event'));
     }
 }
