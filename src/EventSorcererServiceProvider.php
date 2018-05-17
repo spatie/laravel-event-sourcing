@@ -5,7 +5,7 @@ namespace Spatie\EventSourcerer;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
-class EventSourcererServiceProvider extends ServiceProvider
+class EventSorcererServiceProvider extends ServiceProvider
 {
     public function boot()
     {

@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcerer;
 
-class EventSourcerer
+class EventSorcerer
 {
     /** @var \Illuminate\Support\Collection */
     public $mutators;

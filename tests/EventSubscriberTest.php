@@ -2,10 +2,10 @@
 
 namespace Spatie\EventSourcerer\Tests;
 
-use Spatie\EventSourcerer\StoredEvent;
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventSourcerer\Facades\EventSourcerer;
+use Spatie\EventSourcerer\StoredEvent;
 use Spatie\EventSourcerer\Tests\Models\Account;
+use Spatie\EventSourcerer\Facades\EventSourcerer;
 use Spatie\EventSourcerer\Tests\Events\MoneyAdded;
 use Spatie\EventSourcerer\Tests\Reactors\BrokeReactor;
 use Spatie\EventSourcerer\Tests\Events\MoneySubtracted;
