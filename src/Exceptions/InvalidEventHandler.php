@@ -14,8 +14,8 @@ class InvalidEventHandler extends Exception
         return new static("`{$eventHandlerClass}` is not a valid event handler because it does not have a `handlesEvents` property.");
     }
 
-    public static function eventHandlingMethodDoesNotExist(object $eventHandler, ShouldBeStored $event, string $methodName) {
-
+    public static function eventHandlingMethodDoesNotExist(object $eventHandler, ShouldBeStored $event, string $methodName)
+    {
         $eventHandlerClass = get_class($eventHandler);
         $eventClass = get_class($event);
 

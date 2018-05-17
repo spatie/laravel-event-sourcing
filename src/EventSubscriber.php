@@ -2,8 +2,6 @@
 
 namespace Spatie\EventSorcerer;
 
-use Illuminate\Support\Collection;
-
 class EventSubscriber
 {
     /** @var \Spatie\EventSorcerer\EventSorcerer */
@@ -16,12 +14,12 @@ class EventSubscriber
 
     public function subscribe($events)
     {
-        $events->listen('*', static::class . '@handleEvent');
+        $events->listen('*', static::class.'@handleEvent');
     }
 
     public function handleEvent(string $eventName, $payload)
     {
-        if (!$this->shouldBeStored($eventName)) {
+        if (! $this->shouldBeStored($eventName)) {
             return;
         }
 
@@ -39,7 +37,7 @@ class EventSubscriber
 
     protected function shouldBeStored($event): bool
     {
-        if (!class_exists($event)) {
+        if (! class_exists($event)) {
             return false;
         }
 

@@ -2,10 +2,10 @@
 
 namespace Spatie\EventSorcerer\Tests;
 
-use Spatie\EventSorcerer\Exceptions\InvalidEventHandler;
 use Spatie\EventSorcerer\Facades\EventSorcerer;
-use Spatie\EventSorcerer\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventSorcerer\Exceptions\InvalidEventHandler;
 use Spatie\EventSorcerer\Tests\TestClasses\Models\Account;
+use Spatie\EventSorcerer\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventSorcerer\Tests\TestClasses\Mutators\InvalidMutatorThatCannotHandleEvents;
 use Spatie\EventSorcerer\Tests\TestClasses\Mutators\InvalidMutatorThatDoesNotHaveTheRightEventHandlingMethod;
 

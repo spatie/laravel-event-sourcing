@@ -4,8 +4,8 @@ namespace Spatie\EventSorcerer\Tests;
 
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSorcerer\StoredEvent;
-use Spatie\EventSorcerer\Tests\TestClasses\Models\Account;
 use Spatie\EventSorcerer\Facades\EventSorcerer;
+use Spatie\EventSorcerer\Tests\TestClasses\Models\Account;
 use Spatie\EventSorcerer\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventSorcerer\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventSorcerer\Tests\TestClasses\Events\MoneySubtracted;
