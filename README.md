@@ -77,7 +77,7 @@ All pledges will be dedicated to allocating workforce on maintenance and new awe
 
 ## Footnotes
 
-<a name="footnote1">1</a>: [Quote taken from Event Sourcing made Simple](https://kickstarter.engineering/event-sourcing-made-simple-4a2625113224)
+<a name="footnote1"><sup>1</sup></a> Quote taken from [Event Sourcing made Simple](https://kickstarter.engineering/event-sourcing-made-simple-4a2625113224)
 
 ## License
 
