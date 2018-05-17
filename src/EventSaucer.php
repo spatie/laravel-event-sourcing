@@ -26,7 +26,7 @@ class EventSaucer
 
     public function registerMutators(array $mutators): self
     {
-        collect($mutators)->each(function($mutator) {
+        collect($mutators)->each(function ($mutator) {
             $this->addMutator($mutator);
         });
 
@@ -42,7 +42,7 @@ class EventSaucer
 
     public function registerReactors(array $reactors): self
     {
-        collect($reactors)->each(function($reactor) {
+        collect($reactors)->each(function ($reactor) {
             $this->addReactor($reactor);
         });
 

@@ -4,5 +4,4 @@ namespace Spatie\EventSaucer;
 
 interface ShouldBeStored
 {
-
 }

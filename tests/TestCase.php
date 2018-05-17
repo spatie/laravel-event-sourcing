@@ -2,8 +2,8 @@
 
 namespace Spatie\EventSaucer\Tests;
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\EventSaucer\EventSaucerServiceProvider;
 
