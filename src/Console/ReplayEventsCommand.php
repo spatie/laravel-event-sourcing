@@ -27,17 +27,23 @@ class ReplayEventsCommand extends Command
     {
         $mutators = $this->getMutators();
 
-        if (count($mutators)) {
-            $this->warn("No mutators found to replay events to");
+        if ($mutators->isEmpty()) {
+            $this->warn('No mutators found to replay events to...');
 
             return;
         }
 
         $this->comment('Replaying events...');
 
-        StoredEvent::chunk(1000, function (StoredEvent $storedEvent) use ($mutators)  {
+        $bar = $this->output->createProgressBar(StoredEvent::count());
+
+        StoredEvent::chunk(1000, function (StoredEvent $storedEvent) use ($mutators, $bar)  {
             $this->eventSorcerer->callEventHandlers($mutators, $storedEvent);
+
+            $bar->advance();
         });
+
+        $bar->finish();
 
         $this->comment('All done!');
     }
