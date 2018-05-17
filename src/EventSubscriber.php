@@ -69,6 +69,6 @@ class EventSubscriber
             return;
         }
 
-        app()->call([$eventHandler, $method], ['event' => $event]);
+        app()->call([$eventHandler, $method], compact('event'));
     }
 }
