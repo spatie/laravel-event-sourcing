@@ -4,10 +4,9 @@ namespace Spatie\EventSorcerer\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Spatie\EventSorcerer\StoredEvent;
 use Spatie\EventSorcerer\EventSorcerer;
 use Spatie\EventSorcerer\Exceptions\InvalidEventHandler;
-use Spatie\EventSorcerer\Exceptions\InvalidMutator;
-use Spatie\EventSorcerer\StoredEvent;
 
 class ReplayEventsCommand extends Command
 {
@@ -40,7 +39,7 @@ class ReplayEventsCommand extends Command
 
         $bar = $this->output->createProgressBar(StoredEvent::count());
 
-        StoredEvent::chunk(1000, function (StoredEvent $storedEvent) use ($mutators, $bar)  {
+        StoredEvent::chunk(1000, function (StoredEvent $storedEvent) use ($mutators, $bar) {
             $this->eventSorcerer->callEventHandlers($mutators, $storedEvent);
 
             $bar->advance();
@@ -59,7 +58,7 @@ class ReplayEventsCommand extends Command
 
         return $this->eventSorcerer->mutators
             ->filter(function (string $mutator) use ($onlyCallMutators) {
-                if (!count($onlyCallMutators)) {
+                if (! count($onlyCallMutators)) {
                     return true;
                 }
 
@@ -70,7 +69,7 @@ class ReplayEventsCommand extends Command
     protected function guardAgainstNonExistingMutators(array $onlyCallMutators)
     {
         foreach ($onlyCallMutators as $mutator) {
-            if (!class_exists($mutator)) {
+            if (! class_exists($mutator)) {
                 throw InvalidEventHandler::doesNotExist($mutator);
             }
         }

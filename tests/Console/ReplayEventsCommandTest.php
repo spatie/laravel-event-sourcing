@@ -2,10 +2,10 @@
 
 namespace Spatie\EventSorcerer\Console;
 
-use Illuminate\Support\Facades\Artisan;
 use Mockery;
-use Spatie\EventSorcerer\Facades\EventSorcerer;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\EventSorcerer\Tests\TestCase;
+use Spatie\EventSorcerer\Facades\EventSorcerer;
 use Spatie\EventSorcerer\Tests\TestClasses\Mutators\BalanceMutator;
 
 class ReplayEventsCommandTest extends TestCase

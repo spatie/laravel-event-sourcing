@@ -22,7 +22,7 @@ class EventSorcerer
 
     public function addMutator(string $mutator): self
     {
-        if (!class_exists($mutator)) {
+        if (! class_exists($mutator)) {
             throw InvalidEventHandler::doesNotExist($mutator);
         }
 
@@ -42,7 +42,7 @@ class EventSorcerer
 
     public function addReactor(string $reactor): self
     {
-        if (!class_exists($reactor)) {
+        if (! class_exists($reactor)) {
             throw InvalidEventHandler::doesNotExist($reactor);
         }
 
