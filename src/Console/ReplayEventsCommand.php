@@ -5,6 +5,7 @@ namespace Spatie\EventSorcerer\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Spatie\EventSorcerer\EventSorcerer;
+use Spatie\EventSorcerer\Exceptions\InvalidEventHandler;
 use Spatie\EventSorcerer\Exceptions\InvalidMutator;
 use Spatie\EventSorcerer\StoredEvent;
 
@@ -68,7 +69,7 @@ class ReplayEventsCommand extends Command
     {
         foreach ($onlyCallMutators as $mutator) {
             if (!class_exists($mutator)) {
-                throw InvalidMutator::doesNotExist($mutator);
+                throw InvalidEventHandler::doesNotExist($mutator);
             }
         }
     }
