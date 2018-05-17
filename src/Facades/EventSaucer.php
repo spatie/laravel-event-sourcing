@@ -4,7 +4,7 @@ namespace Spatie\EventSourcerer\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class EventSourcerer extends Facade
+class EventSaucer extends Facade
 {
     protected static function getFacadeAccessor()
     {
