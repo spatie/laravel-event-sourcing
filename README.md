@@ -59,7 +59,7 @@ We publish all received postcards [on our company website](https://spatie.be/en/
 ## Resources
 
 -  [Event Sourcing made Simple](https://kickstarter.engineering/event-sourcing-made-simple-4a2625113224): the blogpost that showed us that event sourcing can be used very pragmatically as well
-- [EventSauce]: A pragmatic, feature rich event sourcing library for PHP made by [Frank de Jonge](https://frankdejonge.nl)
+- [EventSauce](https://eventsauce.io/): A pragmatic, feature rich event sourcing library for PHP made by [Frank de Jonge](https://frankdejonge.nl)
 - [prooph](https://github.com/prooph): A full blown CQRS and event sourcing solution in PHP
 - [The Many Meanings of Event-Driven Architecture](https://www.youtube.com/watch?v=STKCRSUsyP0): A recording a cool talk by [Martin Fawler](https://martinfowler.com/)
 
