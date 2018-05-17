@@ -1,6 +1,6 @@
 **THIS PACKAGE IS STILL IN DEVELOPMENT**
 
-# Simple event sourcing in Laravel 🧙‍♂️
+# Simple event sourcing in Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-event-saucer.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-saucer)
 [![Build Status](https://img.shields.io/travis/spatie/laravel-event-saucer/master.svg?style=flat-square)](https://travis-ci.org/spatie/laravel-event-saucer)
