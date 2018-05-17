@@ -21,6 +21,8 @@ class ReplayEventsCommand extends Command
 
     public function __construct(EventSorcerer $eventSorcerer)
     {
+        parent::__construct();
+
         $this->eventSorcerer = $eventSorcerer;
     }
 
