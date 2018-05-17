@@ -1,6 +1,6 @@
 **THIS PACKAGE IS STILL IN DEVELOPMENT**
 
-# The easiest way to do simple event vourcing in Laravel 🛸
+# Simple event sourcing in Laravel 🛸
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-event-saucer.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-saucer)
 [![Build Status](https://img.shields.io/travis/spatie/laravel-event-saucer/master.svg?style=flat-square)](https://travis-ci.org/spatie/laravel-event-saucer)
@@ -14,7 +14,7 @@ Event sourcing tries to solve that problem by saving all events that happen in y
 
 Here's a traditional example to make it more clear. Image you're a bank. Your clients have accounts. Instead of storing the balance of the accounts, you could store all the transactions. That way you not only know the balance of the account but also the reason why it's that specific number.
 
-This package aims to be the easiest way to get started with event sourcing in Laravel.
+This package aims to be the simple and very pragmatic way to get started with event sourcing in Laravel.
 
 ## Installation
 

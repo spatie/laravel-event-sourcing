@@ -1,6 +1,6 @@
 {
     "name": "spatie/laravel-event-saucer",
-    "description": "Simple event saurcing in Laravel",
+    "description": "Simple event sourcing in Laravel",
     "keywords": [
         "spatie",
         "laravel-eventsaucer"
