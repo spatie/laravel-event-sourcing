@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\EventSorcerer\Tests\Reactors;
+namespace Spatie\EventSorcerer\Tests\TestClasses\Reactors;
 
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventSorcerer\Tests\Events\MoneySubtracted;
-use Spatie\EventSorcerer\Tests\Mailables\AccountBroke;
+use Spatie\EventSorcerer\Tests\TestClasses\Events\MoneySubtracted;
+use Spatie\EventSorcerer\Tests\TestClasses\Mailables\AccountBroke;
 
 class BrokeReactor
 {
@@ -14,7 +14,7 @@ class BrokeReactor
 
     public function onMoneySubtracted(MoneySubtracted $event)
     {
-        //dd('here', $event->account->refresh()->getAttributes());
+        /** TODO: remove the need for refresh */
         if ($event->account->refresh()->isBroke()) {
             Mail::to('john@example.com')->send(new AccountBroke());
         }

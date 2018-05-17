@@ -4,18 +4,18 @@ namespace Spatie\EventSorcerer\Tests;
 
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSorcerer\StoredEvent;
-use Spatie\EventSorcerer\Tests\Models\Account;
+use Spatie\EventSorcerer\Tests\TestClasses\Models\Account;
 use Spatie\EventSorcerer\Facades\EventSorcerer;
-use Spatie\EventSorcerer\Tests\Events\MoneyAdded;
-use Spatie\EventSorcerer\Tests\Reactors\BrokeReactor;
-use Spatie\EventSorcerer\Tests\Events\MoneySubtracted;
-use Spatie\EventSorcerer\Tests\Mailables\AccountBroke;
-use Spatie\EventSorcerer\Tests\Mutators\BalanceMutator;
-use Spatie\EventSorcerer\Tests\Events\DoNotStoreThisEvent;
+use Spatie\EventSorcerer\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventSorcerer\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\EventSorcerer\Tests\TestClasses\Events\MoneySubtracted;
+use Spatie\EventSorcerer\Tests\TestClasses\Mailables\AccountBroke;
+use Spatie\EventSorcerer\Tests\TestClasses\Mutators\BalanceMutator;
+use Spatie\EventSorcerer\Tests\TestClasses\Events\DoNotStoreThisEvent;
 
 class EventSubscriberTest extends TestCase
 {
-    /** @var \Spatie\EventSorcerer\Tests\Models\Account */
+    /** @var \Spatie\EventSorcerer\Tests\TestClasses\Models\Account */
     protected $account;
 
     public function setUp()
