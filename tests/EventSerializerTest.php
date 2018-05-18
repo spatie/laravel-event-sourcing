@@ -44,7 +44,8 @@ class EventSerializerTest extends TestCase
         $array = json_decode($json, true);
 
         $this->assertEquals([
-            'account' => ['class' => get_class($account),
+            'account' => [
+                'class' => get_class($account),
                 'id' => 1,
                 'relations' => [],
                 'connection' => 'sqlite',

@@ -14,8 +14,7 @@ class BrokeReactor
 
     public function onMoneySubtracted(MoneySubtracted $event)
     {
-        /* TODO: remove the need for refresh */
-        if ($event->account->refresh()->isBroke()) {
+        if ($event->account->isBroke()) {
             Mail::to('john@example.com')->send(new AccountBroke());
         }
     }
