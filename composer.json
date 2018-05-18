@@ -22,7 +22,9 @@
         "illuminate/console": "5.6.*",
         "illuminate/database": "5.6.*",
         "illuminate/events": "5.6.*",
-        "illuminate/support": "5.6.*"
+        "illuminate/support": "5.6.*",
+        "symfony/property-access": "^4.0",
+        "symfony/serializer": "^4.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.1",

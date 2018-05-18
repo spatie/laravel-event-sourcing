@@ -18,7 +18,7 @@ class ReplayEventsCommandTest extends TestCase
 
         $account = Account::create();
 
-        foreach(range(1,10) as $i) {
+        foreach(range(1,3) as $i) {
             event(new MoneyAdded($account, 1234));
         }
     }
@@ -28,7 +28,7 @@ class ReplayEventsCommandTest extends TestCase
     {
         $projector = Mockery::mock(BalanceProjector::class);
 
-        $projector->shouldReceive('onMoneyAdded')->andReturnNull()->times(10);
+        $projector->shouldReceive('onMoneyAdded')->andReturnNull()->times(3);
 
         EventProjectionist::addProjector($projector);
 
