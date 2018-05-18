@@ -19,12 +19,12 @@ class StoredEvent extends Model
         $storedEvent->attributes['event_properties'] = (new EventSerializer())->serialize(clone $event);
         $storedEvent->save();
 
-       return $storedEvent;
+        return $storedEvent;
     }
 
     public function getEventAttribute(): ShouldBeStored
     {
-       return (new EventSerializer())->deserialize(
+        return (new EventSerializer())->deserialize(
            $this->event_class,
            $this->getOriginal('event_properties')
        );

@@ -2,17 +2,17 @@
 
 namespace Spatie\EventProjector\Console;
 
-use Illuminate\Support\Facades\Mail;
 use Mockery;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Facades\EventProjectionist;
+use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 
 class ReplayEventsCommandTest extends TestCase
 {
@@ -22,7 +22,7 @@ class ReplayEventsCommandTest extends TestCase
 
         $account = Account::create();
 
-        foreach(range(1,3) as $i) {
+        foreach (range(1, 3) as $i) {
             event(new MoneyAdded($account, 1234));
         }
 

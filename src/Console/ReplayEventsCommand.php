@@ -75,7 +75,7 @@ class ReplayEventsCommand extends Command
     protected function guardAgainstNonExistingProjectors(array $onlyCallProjectors)
     {
         foreach ($onlyCallProjectors as $projector) {
-            if (!class_exists($projector)) {
+            if (! class_exists($projector)) {
                 throw InvalidEventHandler::doesNotExist($projector);
             }
         }
