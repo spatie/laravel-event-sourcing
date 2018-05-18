@@ -8,7 +8,7 @@ use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 
 class EventSerializerTest extends TestCase
 {
-    /** @var EventSerializer */
+    /** @var \Spatie\EventProjector\EventSerializer */
     protected $eventSerializer;
 
     public function setUp()
