@@ -2,9 +2,9 @@
 
 namespace Spatie\EventProjector;
 
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 class EventSerializer
 {
@@ -13,8 +13,8 @@ class EventSerializer
 
     public function __construct()
     {
-        $encoders = array(new JsonEncoder());
-        $normalizers = array(new ObjectNormalizer());
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
 
         $this->serializer = new Serializer($normalizers, $encoders);
     }

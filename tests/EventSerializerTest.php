@@ -3,8 +3,8 @@
 namespace Spatie\EventProjector\Tests;
 
 use Spatie\EventProjector\EventSerializer;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 
 class EventSerializerTest extends TestCase
 {

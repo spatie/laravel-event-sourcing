@@ -60,7 +60,6 @@ class EventProjectionist
     {
         $eventHandlers
             ->map(function ($eventHandler) {
-
                 if (is_string($eventHandler)) {
                     $eventHandler = app($eventHandler);
                 }
@@ -97,7 +96,7 @@ class EventProjectionist
             return;
         }
 
-        if (!class_exists($projector)) {
+        if (! class_exists($projector)) {
             throw InvalidEventHandler::doesNotExist($projector);
         }
     }
