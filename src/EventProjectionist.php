@@ -20,11 +20,9 @@ class EventProjectionist
         $this->reactors = collect();
     }
 
-    public function addProjector(string $projector): self
+    public function addProjector($projector): self
     {
-        if (! class_exists($projector)) {
-            throw InvalidEventHandler::doesNotExist($projector);
-        }
+        $this->guardAgainstInvalidEventHandler($projector);
 
         $this->projectors->push($projector);
 
@@ -40,11 +38,9 @@ class EventProjectionist
         return $this;
     }
 
-    public function addReactor(string $reactor): self
+    public function addReactor($reactor): self
     {
-        if (! class_exists($reactor)) {
-            throw InvalidEventHandler::doesNotExist($reactor);
-        }
+        $this->guardAgainstInvalidEventHandler($reactor);
 
         $this->reactors->push($reactor);
 
@@ -63,8 +59,13 @@ class EventProjectionist
     public function callEventHandlers(Collection $eventHandlers, ShouldBeStored $event): self
     {
         $eventHandlers
-            ->map(function (string $eventHandlerClass) {
-                return app($eventHandlerClass);
+            ->map(function ($eventHandler) {
+
+                if (is_string($eventHandler)) {
+                    $eventHandler = app($eventHandler);
+                }
+
+                return $eventHandler;
             })
             ->each(function (object $eventHandler) use ($event) {
                 $this->callEventHandler($eventHandler, $event);
@@ -88,5 +89,16 @@ class EventProjectionist
         }
 
         app()->call([$eventHandler, $method], compact('event'));
+    }
+
+    protected function guardAgainstInvalidEventHandler($projector): void
+    {
+        if (! is_string($projector)) {
+            return;
+        }
+
+        if (!class_exists($projector)) {
+            throw InvalidEventHandler::doesNotExist($projector);
+        }
     }
 }

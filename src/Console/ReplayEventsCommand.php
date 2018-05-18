@@ -39,10 +39,11 @@ class ReplayEventsCommand extends Command
 
         $bar = $this->output->createProgressBar(StoredEvent::count());
 
-        StoredEvent::chunk(1000, function (StoredEvent $storedEvent) use ($projectors, $bar) {
-            $this->eventSorcerer->callEventHandlers($projectors, $storedEvent);
-
-            $bar->advance();
+        StoredEvent::chunk(1000, function (Collection $storedEvents) use ($projectors, $bar) {
+            $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $bar) {
+                $this->eventSorcerer->callEventHandlers($projectors, $storedEvent->event);
+                $bar->advance();
+            });
         });
 
         $bar->finish();
@@ -57,9 +58,9 @@ class ReplayEventsCommand extends Command
         $this->guardAgainstNonExistingProjectors($onlyCallProjectors);
 
         return $this->eventSorcerer->projectors
-            ->filter(function (string $projector) use ($onlyCallProjectors) {
-                if (! count($onlyCallProjectors)) {
-                    return true;
+            ->filter(function ($projector) use ($onlyCallProjectors) {
+                if (! is_string($projector)) {
+                    $projector = get_class($projector);
                 }
 
                 return in_array($projector, $onlyCallProjectors);
@@ -69,7 +70,7 @@ class ReplayEventsCommand extends Command
     protected function guardAgainstNonExistingProjectors(array $onlyCallProjectors)
     {
         foreach ($onlyCallProjectors as $projector) {
-            if (! class_exists($projector)) {
+            if (!class_exists($projector)) {
                 throw InvalidEventHandler::doesNotExist($projector);
             }
         }
