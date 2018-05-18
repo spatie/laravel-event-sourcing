@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Account extends Model
 {
+    public $guarded = [];
+
     public function addMoney(int $amount): self
     {
         $this->amount += $amount;

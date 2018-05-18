@@ -4,7 +4,6 @@ namespace Spatie\EventProjector;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class StoredEvent extends Model
 {
     public $guarded = [];
