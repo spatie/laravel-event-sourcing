@@ -2,13 +2,17 @@
 
 namespace Spatie\EventProjector\Console;
 
+use Illuminate\Support\Facades\Mail;
 use Mockery;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
+use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 
 class ReplayEventsCommandTest extends TestCase
 {
@@ -21,6 +25,8 @@ class ReplayEventsCommandTest extends TestCase
         foreach(range(1,3) as $i) {
             event(new MoneyAdded($account, 1234));
         }
+
+        Mail::fake();
     }
 
     /** @test */
@@ -41,6 +47,24 @@ class ReplayEventsCommandTest extends TestCase
         $this->artisan('event-projector:replay-events');
 
         $this->assertSee('No projectors found');
+    }
+
+    /** @test */
+    public function it_will_not_call_any_reactors()
+    {
+        EventProjectionist::addProjector(BalanceProjector::class);
+        EventProjectionist::addReactor(BrokeReactor::class);
+
+        $account = Account::create();
+        event(new MoneySubtracted($account, 2000));
+
+        Mail::assertSent(AccountBroke::class, 1);
+
+        Account::create();
+
+        $this->artisan('event-projector:replay-events', ['--projector' => [BalanceProjector::class]]);
+
+        Mail::assertSent(AccountBroke::class, 1);
     }
 
     protected function assertSee(string $text)

@@ -32,8 +32,6 @@ class EventProjectorServiceProvider extends ServiceProvider
             return new EventProjectionist();
         });
 
-
-
         $this->app->alias(EventProjectionist::class, 'event-projector');
     }
 
