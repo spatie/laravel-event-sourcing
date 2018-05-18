@@ -90,7 +90,7 @@ class EventProjectionist
         app()->call([$eventHandler, $method], compact('event'));
     }
 
-    protected function guardAgainstInvalidEventHandler($projector): void
+    protected function guardAgainstInvalidEventHandler($projector)
     {
         if (! is_string($projector)) {
             return;
