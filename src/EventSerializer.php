@@ -21,6 +21,10 @@ class EventSerializer
 
     public function serialize(ShouldBeStored $event): string
     {
+        /*
+         * We call __sleep so `Illuminate\Queue\SerializesModels` will
+         * prepare all models in the event for serialization.
+         */
         $event->__sleep();
 
         $json = $this->serializer->serialize($event, 'json');
@@ -32,6 +36,10 @@ class EventSerializer
     {
         $restoredEvent = $this->serializer->deserialize($json, $eventClass, 'json');
 
+        /*
+         *  We call manually serialize and unserialize to trigger
+         * `Illuminate\Queue\SerializesModels` model restoring capabilities.
+         */
         return unserialize(serialize($restoredEvent));
     }
 }
