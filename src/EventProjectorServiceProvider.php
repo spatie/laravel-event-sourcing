@@ -32,12 +32,24 @@ class EventProjectorServiceProvider extends ServiceProvider
             return new EventProjectionist();
         });
 
+
+
         $this->app->alias(EventProjectionist::class, 'event-projector');
     }
 
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/event-projector.php', 'event-projector');
+
+        $this->app
+            ->when(EventSubscriber::class)
+            ->needs('$storedEventModelClass')
+            ->give(config('event-projector.stored_event_model'));
+
+        $this->app
+            ->when(ReplayEventsCommand::class)
+            ->needs('$storedEventModelClass')
+            ->give(config('event-projector.stored_event_model'));
 
         Event::subscribe(EventSubscriber::class);
     }

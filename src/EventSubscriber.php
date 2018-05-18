@@ -7,9 +7,14 @@ class EventSubscriber
     /** @var \Spatie\EventProjector\EventProjectionist */
     protected $evenSorcerer;
 
-    public function __construct(EventProjectionist $evenSorcerer)
+    /** @var string */
+    protected $storedEventModelClass;
+
+    public function __construct(EventProjectionist $evenSorcerer, string $storedEventModelClass)
     {
         $this->evenSorcerer = $evenSorcerer;
+
+        $this->storedEventModelClass = $storedEventModelClass;
     }
 
     public function subscribe($events)
@@ -28,7 +33,7 @@ class EventSubscriber
 
     public function storeEvent(ShouldBeStored $event)
     {
-        StoredEvent::createForEvent($event);
+        $this->storedEventModelClass::createForEvent($event);
 
         $this->evenSorcerer
             ->callEventHandlers($this->evenSorcerer->projectors, $event)

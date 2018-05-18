@@ -9,14 +9,14 @@ class StoredEvent extends Model
     public $guarded = [];
 
     public $casts = [
-        'serialized_event' => 'array',
+        'event_properties' => 'array',
     ];
 
     public static function createForEvent(ShouldBeStored $event): self
     {
-        $storedEvent = new StoredEvent();
+        $storedEvent = new static();
         $storedEvent->event_class = get_class($event);
-        $storedEvent->attributes['serialized_event'] = (new EventSerializer())->serialize(clone $event);
+        $storedEvent->attributes['event_properties'] = (new EventSerializer())->serialize(clone $event);
         $storedEvent->save();
 
        return $storedEvent;
@@ -24,8 +24,9 @@ class StoredEvent extends Model
 
     public function getEventAttribute(): ShouldBeStored
     {
-       return (new EventSerializer())->deserialize($this->event_class, $this->getOriginal('serialized_event'));
-
-
+       return (new EventSerializer())->deserialize(
+           $this->event_class,
+           $this->getOriginal('event_properties')
+       );
     }
 }

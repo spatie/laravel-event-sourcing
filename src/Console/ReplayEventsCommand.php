@@ -18,11 +18,16 @@ class ReplayEventsCommand extends Command
     /** @var \Spatie\EventProjector\EventProjectionist */
     protected $eventSorcerer;
 
-    public function __construct(EventProjectionist $eventSorcerer)
+    /** @var string */
+    protected $storedEventModelClass;
+
+    public function __construct(EventProjectionist $eventSorcerer, string $storedEventModelClass)
     {
         parent::__construct();
 
         $this->eventSorcerer = $eventSorcerer;
+
+        $this->storedEventModelClass = $storedEventModelClass;
     }
 
     public function handle()
