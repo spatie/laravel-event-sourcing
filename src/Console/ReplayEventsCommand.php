@@ -10,7 +10,7 @@ use Spatie\EventSorcerer\Exceptions\InvalidEventHandler;
 
 class ReplayEventsCommand extends Command
 {
-    protected $signature = 'event-sorcerer:replay-events 
+    protected $signature = 'event-proje:replay-events 
                             {--mutator=*} : The mutator that should receive the event';
 
     protected $description = 'Replay stored events';
