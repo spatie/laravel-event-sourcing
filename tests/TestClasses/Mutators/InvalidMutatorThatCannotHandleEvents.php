@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSorcerer\Tests\TestClasses\Mutators;
+namespace Spatie\EventProjector\Tests\TestClasses\Mutators;
 
 class InvalidMutatorThatCannotHandleEvents
 {

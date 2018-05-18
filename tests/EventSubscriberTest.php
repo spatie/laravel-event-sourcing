@@ -1,21 +1,21 @@
 <?php
 
-namespace Spatie\EventSorcerer\Tests;
+namespace Spatie\EventProjector\Tests;
 
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventSorcerer\StoredEvent;
-use Spatie\EventSorcerer\Facades\EventSorcerer;
-use Spatie\EventSorcerer\Tests\TestClasses\Models\Account;
-use Spatie\EventSorcerer\Tests\TestClasses\Events\MoneyAdded;
-use Spatie\EventSorcerer\Tests\TestClasses\Reactors\BrokeReactor;
-use Spatie\EventSorcerer\Tests\TestClasses\Events\MoneySubtracted;
-use Spatie\EventSorcerer\Tests\TestClasses\Mailables\AccountBroke;
-use Spatie\EventSorcerer\Tests\TestClasses\Mutators\BalanceMutator;
-use Spatie\EventSorcerer\Tests\TestClasses\Events\DoNotStoreThisEvent;
+use Spatie\EventProjector\StoredEvent;
+use Spatie\EventProjector\Facades\EventProjector;
+use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
+use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
+use Spatie\EventProjector\Tests\TestClasses\Mutators\BalanceMutator;
+use Spatie\EventProjector\Tests\TestClasses\Events\DoNotStoreThisEvent;
 
 class EventSubscriberTest extends TestCase
 {
-    /** @var \Spatie\EventSorcerer\Tests\TestClasses\Models\Account */
+    /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
     protected $account;
 
     public function setUp()
@@ -54,7 +54,7 @@ class EventSubscriberTest extends TestCase
     /** @test */
     public function it_will_call_registered_mutators()
     {
-        EventSorcerer::addMutator(BalanceMutator::class);
+        EventProjector::addMutator(BalanceMutator::class);
 
         event(new MoneyAdded($this->account, 1234));
         $this->account->refresh();
@@ -68,8 +68,8 @@ class EventSubscriberTest extends TestCase
     /** @test */
     public function it_will_call_registered_reactors()
     {
-        EventSorcerer::addMutator(BalanceMutator::class);
-        EventSorcerer::addReactor(BrokeReactor::class);
+        EventProjector::addMutator(BalanceMutator::class);
+        EventProjector::addReactor(BrokeReactor::class);
 
         event(new MoneyAdded($this->account, 1234));
         Mail::assertNotSent(AccountBroke::class);

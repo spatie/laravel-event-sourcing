@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSorcerer\Tests\TestClasses\Mailables;
+namespace Spatie\EventProjector\Tests\TestClasses\Mailables;
 
 use Illuminate\Mail\Mailable;
 

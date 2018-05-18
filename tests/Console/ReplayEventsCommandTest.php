@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\EventSorcerer\Console;
+namespace Spatie\EventProjector\Console;
 
 use Mockery;
 use Illuminate\Support\Facades\Artisan;
-use Spatie\EventSorcerer\Tests\TestCase;
-use Spatie\EventSorcerer\Facades\EventSorcerer;
-use Spatie\EventSorcerer\Tests\TestClasses\Mutators\BalanceMutator;
+use Spatie\EventProjector\Tests\TestCase;
+use Spatie\EventProjector\Facades\EventProjector;
+use Spatie\EventProjector\Tests\TestClasses\Mutators\BalanceMutator;
 
 class ReplayEventsCommandTest extends TestCase
 {
@@ -19,14 +19,14 @@ class ReplayEventsCommandTest extends TestCase
             ->times(1)
             ->getMock();
 
-        EventSorcerer::addMutator(get_class($mutator));
+        EventProjector::addMutator(get_class($mutator));
         */
     }
 
     /** @test */
     public function it_will_not_replay_any_events_if_there_are_no_mutators_given()
     {
-        $this->artisan('event-sorcerer:replay-events');
+        $this->artisan('event-projector:replay-events');
 
         $this->assertSee('No mutators found');
     }

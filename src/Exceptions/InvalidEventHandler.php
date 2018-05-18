@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventSorcerer\Exceptions;
+namespace Spatie\EventProjector\Exceptions;
 
 use Exception;
-use Spatie\EventSorcerer\ShouldBeStored;
+use Spatie\EventProjector\ShouldBeStored;
 
 class InvalidEventHandler extends Exception
 {

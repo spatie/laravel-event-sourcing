@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\EventSorcerer;
+namespace Spatie\EventProjector;
 
 use Illuminate\Support\Collection;
-use Spatie\EventSorcerer\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
-class EventSorcerer
+class EventProjectionist
 {
     /** @var \Illuminate\Support\Collection */
     public $mutators;

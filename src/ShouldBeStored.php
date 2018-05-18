@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSorcerer;
+namespace Spatie\EventProjector;
 
 interface ShouldBeStored
 {

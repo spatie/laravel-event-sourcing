@@ -1,13 +1,13 @@
 <?php
 
-namespace Spatie\EventSorcerer;
+namespace Spatie\EventProjector;
 
 class EventSubscriber
 {
-    /** @var \Spatie\EventSorcerer\EventSorcerer */
+    /** @var \Spatie\EventProjector\EventProjectionist */
     protected $evenSorcerer;
 
-    public function __construct(EventSorcerer $evenSorcerer)
+    public function __construct(EventProjectionist $evenSorcerer)
     {
         $this->evenSorcerer = $evenSorcerer;
     }

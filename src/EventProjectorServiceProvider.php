@@ -1,18 +1,18 @@
 <?php
 
-namespace Spatie\EventSorcerer;
+namespace Spatie\EventProjector;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Spatie\EventSorcerer\Console\ReplayEventsCommand;
+use Spatie\EventProjector\Console\ReplayEventsCommand;
 
-class EventSorcererServiceProvider extends ServiceProvider
+class EventProjectorServiceProvider extends ServiceProvider
 {
     public function boot()
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/event-sorcerer.php' => config_path('event-sorcerer.php'),
+                __DIR__.'/../config/event-projector.php' => config_path('event-projector.php'),
             ], 'config');
         }
 
@@ -22,22 +22,22 @@ class EventSorcererServiceProvider extends ServiceProvider
             ], 'migrations');
         }
 
-        $this->app->bind('command.event-sorcerer:replay-events', ReplayEventsCommand::class);
+        $this->app->bind('command.event-projector:replay-events', ReplayEventsCommand::class);
 
         $this->commands([
-            'command.event-sorcerer:replay-events',
+            'command.event-projector:replay-events',
         ]);
 
-        $this->app->singleton(EventSorcerer::class, function () {
-            return new EventSorcerer();
+        $this->app->singleton(EventProjectionist::class, function () {
+            return new EventProjectionist();
         });
 
-        $this->app->alias(EventSorcerer::class, 'event-sorcerer');
+        $this->app->alias(EventProjectionist::class, 'event-projector');
     }
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/event-sorcerer.php', 'event-sorcerer');
+        $this->mergeConfigFrom(__DIR__.'/../config/event-projector.php', 'event-projector');
 
         Event::subscribe(EventSubscriber::class);
     }

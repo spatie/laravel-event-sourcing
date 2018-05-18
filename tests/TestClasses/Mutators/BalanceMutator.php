@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventSorcerer\Tests\TestClasses\Mutators;
+namespace Spatie\EventProjector\Tests\TestClasses\Mutators;
 
-use Spatie\EventSorcerer\Tests\TestClasses\Events\MoneyAdded;
-use Spatie\EventSorcerer\Tests\TestClasses\Events\MoneySubtracted;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 
 class BalanceMutator
 {

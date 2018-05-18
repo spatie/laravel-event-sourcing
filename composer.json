@@ -1,5 +1,5 @@
 {
-    "name": "spatie/laravel-event-sorcerer",
+    "name": "spatie/laravel-event-projector",
     "description": "Simple event sourcing in Laravel",
     "keywords": [
         "spatie",
@@ -7,7 +7,7 @@
         "event",
         "sourcing"
     ],
-    "homepage": "https://github.com/spatie/laravel-event-sorcerer",
+    "homepage": "https://github.com/spatie/laravel-event-projector",
     "license": "MIT",
     "authors": [
         {
@@ -31,12 +31,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\EventSorcerer\\": "src"
+            "Spatie\\EventProjector\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\EventSorcerer\\Tests\\": "tests"
+            "Spatie\\EventProjector\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -50,10 +50,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\EventSorcerer\\EventSorcererServiceProvider"
+                "Spatie\\EventProjector\\EventProjectorServiceProvider"
             ],
             "aliases": {
-                "EventSorcerer": "Spatie\\EventSorcerer\\Facades\\EventSorcerer"
+                "EventProjector": "Spatie\\EventProjector\\Facades\\EventProjector"
             }
         }
     }

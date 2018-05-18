@@ -1,24 +1,24 @@
 <?php
 
-namespace Spatie\EventSorcerer\Console;
+namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Spatie\EventSorcerer\StoredEvent;
-use Spatie\EventSorcerer\EventSorcerer;
-use Spatie\EventSorcerer\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\StoredEvent;
+use Spatie\EventProjector\EventProjectionist;
+use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
 class ReplayEventsCommand extends Command
 {
-    protected $signature = 'event-proje:replay-events 
+    protected $signature = 'event-projector:replay-events 
                             {--mutator=*} : The mutator that should receive the event';
 
     protected $description = 'Replay stored events';
 
-    /** @var \Spatie\EventSorcerer\EventSorcerer */
+    /** @var \Spatie\EventProjector\EventProjectionist */
     protected $eventSorcerer;
 
-    public function __construct(EventSorcerer $eventSorcerer)
+    public function __construct(EventProjectionist $eventSorcerer)
     {
         parent::__construct();
 

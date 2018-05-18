@@ -1,17 +1,17 @@
 <?php
 
-namespace Spatie\EventSorcerer\Tests;
+namespace Spatie\EventProjector\Tests;
 
-use Spatie\EventSorcerer\Facades\EventSorcerer;
-use Spatie\EventSorcerer\Exceptions\InvalidEventHandler;
-use Spatie\EventSorcerer\Tests\TestClasses\Models\Account;
-use Spatie\EventSorcerer\Tests\TestClasses\Events\MoneyAdded;
-use Spatie\EventSorcerer\Tests\TestClasses\Mutators\InvalidMutatorThatCannotHandleEvents;
-use Spatie\EventSorcerer\Tests\TestClasses\Mutators\InvalidMutatorThatDoesNotHaveTheRightEventHandlingMethod;
+use Spatie\EventProjector\Facades\EventProjector;
+use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Mutators\InvalidMutatorThatCannotHandleEvents;
+use Spatie\EventProjector\Tests\TestClasses\Mutators\InvalidMutatorThatDoesNotHaveTheRightEventHandlingMethod;
 
-class EventSorcererTest extends TestCase
+class EventProjectorTest extends TestCase
 {
-    /** @var \Spatie\EventSorcerer\Tests\TestClasses\Models\Account */
+    /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
     protected $account;
 
     public function setUp()
@@ -26,7 +26,7 @@ class EventSorcererTest extends TestCase
     {
         $this->expectException(InvalidEventHandler::class);
 
-        EventSorcerer::addMutator('non-exising-class-name');
+        EventProjector::addMutator('non-exising-class-name');
     }
 
     /** @test */
@@ -34,7 +34,7 @@ class EventSorcererTest extends TestCase
     {
         $this->expectException(InvalidEventHandler::class);
 
-        EventSorcerer::addReactor('non-exising-class-name');
+        EventProjector::addReactor('non-exising-class-name');
     }
 
     /** @test */
@@ -42,7 +42,7 @@ class EventSorcererTest extends TestCase
     {
         $this->expectException(InvalidEventHandler::class);
 
-        EventSorcerer::addMutator(InvalidMutatorThatCannotHandleEvents::class);
+        EventProjector::addMutator(InvalidMutatorThatCannotHandleEvents::class);
 
         event(new MoneyAdded($this->account, 1234));
     }
@@ -52,7 +52,7 @@ class EventSorcererTest extends TestCase
     {
         $this->expectException(InvalidEventHandler::class);
 
-        EventSorcerer::addMutator(InvalidMutatorThatDoesNotHaveTheRightEventHandlingMethod::class);
+        EventProjector::addMutator(InvalidMutatorThatDoesNotHaveTheRightEventHandlingMethod::class);
 
         event(new MoneyAdded($this->account, 1234));
     }
