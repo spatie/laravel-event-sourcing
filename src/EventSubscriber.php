@@ -31,7 +31,7 @@ class EventSubscriber
         StoredEvent::createForEvent($event);
 
         $this->evenSorcerer
-            ->callEventHandlers($this->evenSorcerer->mutators, $event)
+            ->callEventHandlers($this->evenSorcerer->projectors, $event)
             ->callEventHandlers($this->evenSorcerer->reactors, $event);
     }
 

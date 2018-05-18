@@ -4,13 +4,13 @@ namespace Spatie\EventProjector\Tests;
 
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventProjector\StoredEvent;
-use Spatie\EventProjector\Facades\EventProjector;
+use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
-use Spatie\EventProjector\Tests\TestClasses\Mutators\BalanceMutator;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventProjector\Tests\TestClasses\Events\DoNotStoreThisEvent;
 
 class EventSubscriberTest extends TestCase
@@ -52,9 +52,9 @@ class EventSubscriberTest extends TestCase
     }
 
     /** @test */
-    public function it_will_call_registered_mutators()
+    public function it_will_call_registered_projectors()
     {
-        EventProjector::addMutator(BalanceMutator::class);
+        EventProjectionist::addProjector(BalanceProjector::class);
 
         event(new MoneyAdded($this->account, 1234));
         $this->account->refresh();
@@ -68,8 +68,8 @@ class EventSubscriberTest extends TestCase
     /** @test */
     public function it_will_call_registered_reactors()
     {
-        EventProjector::addMutator(BalanceMutator::class);
-        EventProjector::addReactor(BrokeReactor::class);
+        EventProjectionist::addProjector(BalanceProjector::class);
+        EventProjectionist::addReactor(BrokeReactor::class);
 
         event(new MoneyAdded($this->account, 1234));
         Mail::assertNotSent(AccountBroke::class);

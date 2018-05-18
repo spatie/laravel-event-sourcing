@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\Mutators;
+namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
 
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 
-class BalanceMutator
+class BalanceProjector
 {
     public $handlesEvents = [
         MoneyAdded::class => 'onMoneyAdded',

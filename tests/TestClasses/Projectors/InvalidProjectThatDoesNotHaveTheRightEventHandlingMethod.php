@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\Mutators;
+namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
 
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 
-class InvalidMutatorThatDoesNotHaveTheRightEventHandlingMethod
+class InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod
 {
     public $handlesEvents = [
         MoneyAdded::class => 'hahaThisMethodDoesNotExist',

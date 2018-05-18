@@ -11,7 +11,7 @@ use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 class ReplayEventsCommand extends Command
 {
     protected $signature = 'event-projector:replay-events 
-                            {--mutator=*} : The mutator that should receive the event';
+                            {--projector=*} : The projector that should receive the event';
 
     protected $description = 'Replay stored events';
 
@@ -27,10 +27,10 @@ class ReplayEventsCommand extends Command
 
     public function handle()
     {
-        $mutators = $this->getMutators();
+        $projectors = $this->getProjectors();
 
-        if ($mutators->isEmpty()) {
-            $this->warn('No mutators found to replay events to...');
+        if ($projectors->isEmpty()) {
+            $this->warn('No projectors found to replay events to...');
 
             return;
         }
@@ -39,8 +39,8 @@ class ReplayEventsCommand extends Command
 
         $bar = $this->output->createProgressBar(StoredEvent::count());
 
-        StoredEvent::chunk(1000, function (StoredEvent $storedEvent) use ($mutators, $bar) {
-            $this->eventSorcerer->callEventHandlers($mutators, $storedEvent);
+        StoredEvent::chunk(1000, function (StoredEvent $storedEvent) use ($projectors, $bar) {
+            $this->eventSorcerer->callEventHandlers($projectors, $storedEvent);
 
             $bar->advance();
         });
@@ -50,27 +50,27 @@ class ReplayEventsCommand extends Command
         $this->comment('All done!');
     }
 
-    protected function getMutators(): Collection
+    protected function getProjectors(): Collection
     {
-        $onlyCallMutators = $this->option('mutator');
+        $onlyCallProjectors = $this->option('projector');
 
-        $this->guardAgainstNonExistingMutators($onlyCallMutators);
+        $this->guardAgainstNonExistingProjectors($onlyCallProjectors);
 
-        return $this->eventSorcerer->mutators
-            ->filter(function (string $mutator) use ($onlyCallMutators) {
-                if (! count($onlyCallMutators)) {
+        return $this->eventSorcerer->projectors
+            ->filter(function (string $projector) use ($onlyCallProjectors) {
+                if (! count($onlyCallProjectors)) {
                     return true;
                 }
 
-                return in_array($mutator, $onlyCallMutators);
+                return in_array($projector, $onlyCallProjectors);
             });
     }
 
-    protected function guardAgainstNonExistingMutators(array $onlyCallMutators)
+    protected function guardAgainstNonExistingProjectors(array $onlyCallProjectors)
     {
-        foreach ($onlyCallMutators as $mutator) {
-            if (! class_exists($mutator)) {
-                throw InvalidEventHandler::doesNotExist($mutator);
+        foreach ($onlyCallProjectors as $projector) {
+            if (! class_exists($projector)) {
+                throw InvalidEventHandler::doesNotExist($projector);
             }
         }
     }

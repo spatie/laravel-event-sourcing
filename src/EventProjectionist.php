@@ -8,33 +8,33 @@ use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 class EventProjectionist
 {
     /** @var \Illuminate\Support\Collection */
-    public $mutators;
+    public $projectors;
 
     /** @var \Illuminate\Support\Collection */
     public $reactors;
 
     public function __construct()
     {
-        $this->mutators = collect();
+        $this->projectors = collect();
 
         $this->reactors = collect();
     }
 
-    public function addMutator(string $mutator): self
+    public function addProjector(string $projector): self
     {
-        if (! class_exists($mutator)) {
-            throw InvalidEventHandler::doesNotExist($mutator);
+        if (! class_exists($projector)) {
+            throw InvalidEventHandler::doesNotExist($projector);
         }
 
-        $this->mutators->push($mutator);
+        $this->projectors->push($projector);
 
         return $this;
     }
 
-    public function registerMutators(array $mutators): self
+    public function registerProjectors(array $projectors): self
     {
-        collect($mutators)->each(function ($mutator) {
-            $this->addMutator($mutator);
+        collect($projectors)->each(function ($projector) {
+            $this->addProjector($projector);
         });
 
         return $this;

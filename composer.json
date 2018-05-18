@@ -53,7 +53,7 @@
                 "Spatie\\EventProjector\\EventProjectorServiceProvider"
             ],
             "aliases": {
-                "EventProjector": "Spatie\\EventProjector\\Facades\\EventProjector"
+                "EventProjectionist": "Spatie\\EventProjector\\Facades\\EventProjector"
             }
         }
     }
