@@ -24,6 +24,25 @@ You can install the package via composer:
 composer require spatie/laravel-event-projector
 ```
 
+Next up you should publish the migration by running
+
+```
+php artisan vendor:publish --provider="Spatie\EventProjector\EventProjectorServiceProvider" --tag="migrations"
+```
+
+After the migration has been published you can create the `stored_events` table by running the migrations:
+
+```
+php artisan migrate
+```
+
+Optionally you may publish the config file. It will be published at `config/event-projector.php`. This is the default content:
+
+```php
+// coming soon
+```
+
+
 Coming soon...
 
 ## Usage
