@@ -2,13 +2,13 @@
 
 namespace Spatie\EventProjector\Console;
 
-use Illuminate\Support\Facades\Event;
 use Mockery;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Artisan;
+use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
-use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
