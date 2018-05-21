@@ -16,16 +16,16 @@ class ReplayEventsCommand extends Command
     protected $description = 'Replay stored events';
 
     /** @var \Spatie\EventProjector\EventProjectionist */
-    protected $eventSorcerer;
+    protected $eventProjectionist;
 
     /** @var string */
     protected $storedEventModelClass;
 
-    public function __construct(EventProjectionist $eventSorcerer, string $storedEventModelClass)
+    public function __construct(EventProjectionist $eventProjectionist, string $storedEventModelClass)
     {
         parent::__construct();
 
-        $this->eventSorcerer = $eventSorcerer;
+        $this->eventProjectionist = $eventProjectionist;
 
         $this->storedEventModelClass = $storedEventModelClass;
     }
@@ -44,12 +44,11 @@ class ReplayEventsCommand extends Command
 
         $bar = $this->output->createProgressBar(StoredEvent::count());
 
-        StoredEvent::chunk(1000, function (Collection $storedEvents) use ($projectors, $bar) {
-            $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $bar) {
-                $this->eventSorcerer->callEventHandlers($projectors, $storedEvent->event);
-                $bar->advance();
-            });
-        });
+        $onEventReplayed = function() use ($bar) {
+            $bar->advance();
+        };
+
+        $this->eventProjectionist->replayEvents($projectors, $onEventReplayed);
 
         $bar->finish();
 
@@ -62,7 +61,7 @@ class ReplayEventsCommand extends Command
 
         $this->guardAgainstNonExistingProjectors($onlyCallProjectors);
 
-        return $this->eventSorcerer->projectors
+        return $this->eventProjectionist->projectors
             ->filter(function ($projector) use ($onlyCallProjectors) {
                 if (! is_string($projector)) {
                     $projector = get_class($projector);

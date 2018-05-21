@@ -2,9 +2,12 @@
 
 namespace Spatie\EventProjector\Console;
 
+use Illuminate\Support\Facades\Event;
 use Mockery;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Artisan;
+use Spatie\EventProjector\Events\FinishedEventReplay;
+use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
@@ -26,6 +29,8 @@ class ReplayEventsCommandTest extends TestCase
             event(new MoneyAdded($account, 1234));
         }
 
+        Event::fake([FinishedEventReplay::class, StartingEventReplay::class]);
+
         Mail::fake();
     }
 
@@ -38,7 +43,13 @@ class ReplayEventsCommandTest extends TestCase
 
         EventProjectionist::addProjector($projector);
 
+        Event::assertNotDispatched(StartingEventReplay::class);
+        Event::assertNotDispatched(FinishedEventReplay::class);
+
         $this->artisan('event-projector:replay-events', ['--projector' => [get_class($projector)]]);
+
+        Event::assertDispatched(StartingEventReplay::class);
+        Event::assertDispatched(FinishedEventReplay::class);
     }
 
     /** @test */
