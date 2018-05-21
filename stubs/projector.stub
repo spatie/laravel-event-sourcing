@@ -1,0 +1,10 @@
+<?php
+
+namespace DummyNamespace;
+
+class DummyClass
+{
+     public $handlesEvents = [
+       // EventHappened::class => 'onEventHappened',
+    ];
+}

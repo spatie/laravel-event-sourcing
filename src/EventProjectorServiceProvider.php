@@ -4,6 +4,8 @@ namespace Spatie\EventProjector;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Spatie\EventProjector\Console\MakeProjectorCommand;
+use Spatie\EventProjector\Console\MakeReactorCommand;
 use Spatie\EventProjector\Console\ReplayEventsCommand;
 
 class EventProjectorServiceProvider extends ServiceProvider
@@ -18,14 +20,14 @@ class EventProjectorServiceProvider extends ServiceProvider
 
         if (! class_exists('CreateStoredEventsTable')) {
             $this->publishes([
-                __DIR__.'/../database/migrations/create_stored_events_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_stored_events_table.php'),
+                __DIR__ . '/../stubs/create_stored_events_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_stored_events_table.php'),
             ], 'migrations');
         }
 
-        $this->app->bind('command.event-projector:replay-events', ReplayEventsCommand::class);
-
         $this->commands([
-            'command.event-projector:replay-events',
+            ReplayEventsCommand::class,
+            MakeProjectorCommand::class,
+            MakeReactorCommand::class,
         ]);
 
         $this->app->singleton(EventProjectionist::class, function () {
