@@ -44,7 +44,7 @@ class ReplayEventsCommand extends Command
 
         $bar = $this->output->createProgressBar(StoredEvent::count());
 
-        $onEventReplayed = function() use ($bar) {
+        $onEventReplayed = function () use ($bar) {
             $bar->advance();
         };
 

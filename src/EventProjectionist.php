@@ -15,7 +15,7 @@ class EventProjectionist
     /** @var \Illuminate\Support\Collection */
     public $reactors;
 
-    /** @var boolean */
+    /** @var bool */
     protected $isReplayingEvents = false;
 
     public function __construct()
@@ -69,7 +69,7 @@ class EventProjectionist
     public function callEventHandlers(Collection $eventHandlers, ShouldBeStored $event): self
     {
         $eventHandlers
-            ->pipe(function(Collection $eventHandler) {
+            ->pipe(function (Collection $eventHandler) {
                 return $this->instanciate($eventHandler);
             })
             ->each(function (object $eventHandler) use ($event) {
@@ -81,15 +81,15 @@ class EventProjectionist
 
     protected function callEventHandler(object $eventHandler, ShouldBeStored $event)
     {
-        if (!isset($eventHandler->handlesEvents)) {
+        if (! isset($eventHandler->handlesEvents)) {
             throw InvalidEventHandler::cannotHandleEvents($eventHandler);
         }
 
-        if (!$method = $eventHandler->handlesEvents[get_class($event)] ?? false) {
+        if (! $method = $eventHandler->handlesEvents[get_class($event)] ?? false) {
             return;
         }
 
-        if (!method_exists($eventHandler, $method)) {
+        if (! method_exists($eventHandler, $method)) {
             throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
         }
 
@@ -123,11 +123,11 @@ class EventProjectionist
 
     protected function guardAgainstInvalidEventHandler($projector)
     {
-        if (!is_string($projector)) {
+        if (! is_string($projector)) {
             return;
         }
 
-        if (!class_exists($projector)) {
+        if (! class_exists($projector)) {
             throw InvalidEventHandler::doesNotExist($projector);
         }
     }
