@@ -109,8 +109,6 @@ class ReplayEventsCommand extends Command
                 $this->warn('No events replayed!');
                 return false;
             }
-
-
         }
 
         return true;
