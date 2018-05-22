@@ -12,7 +12,7 @@ class CreateStoredEventsTable extends Migration
             $table->increments('id');
             $table->string('event_class');
             $table->text('event_properties');
-            $table->timestamps();
+            $table->timestamp('created_at')->nullable();
         });
     }
 

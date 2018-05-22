@@ -2,8 +2,13 @@
 
 namespace DummyNamespace;
 
-class DummyClass
+use Spatie\EventProjector\Projectors\Projector;
+use Spatie\EventProjector\Projectors\ProjectsEvents;
+
+class DummyClass implements Projector
 {
+    use ProjectsEvents;
+
     public $handlesEvents = [
         // EventHappened::class => 'onEventHappened',
     ];

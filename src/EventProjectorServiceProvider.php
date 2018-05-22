@@ -25,6 +25,13 @@ class EventProjectorServiceProvider extends ServiceProvider
             ], 'migrations');
         }
 
+
+        if (! class_exists('CreateProjectorStatusesTable')) {
+            $this->publishes([
+                __DIR__ . '/../stubs/create_projector_statuses_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_projector_statuses_table.php'),
+            ], 'migrations');
+        }
+
         $this->app->bind(EventSerializer::class, config('event-projector.event_serializer'));
 
         $this->app->bind('command.event-projector:replay-events',  ReplayEventsCommand::class);

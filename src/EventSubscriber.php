@@ -33,11 +33,11 @@ class EventSubscriber
 
     public function storeEvent(ShouldBeStored $event)
     {
-        $this->storedEventModelClass::createForEvent($event);
+        $storedEvent = $this->storedEventModelClass::createForEvent($event);
 
         $this->eventProjectionist
-            ->callEventHandlers($this->eventProjectionist->projectors, $event)
-            ->callEventHandlers($this->eventProjectionist->reactors, $event);
+            ->callEventHandlers($this->eventProjectionist->projectors, $storedEvent)
+            ->callEventHandlers($this->eventProjectionist->reactors, $storedEvent);
     }
 
     protected function shouldBeStored($event): bool

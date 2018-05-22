@@ -39,7 +39,7 @@ class ReplayEventsCommandTest extends TestCase
     /** @test */
     public function it_will_replay_events_to_the_given_projectors()
     {
-        $projector = Mockery::mock(BalanceProjector::class);
+        $projector = Mockery::mock(BalanceProjector::class.'[onMoneyAdded]');
 
         $projector->shouldReceive('onMoneyAdded')->andReturnNull()->times(3);
 

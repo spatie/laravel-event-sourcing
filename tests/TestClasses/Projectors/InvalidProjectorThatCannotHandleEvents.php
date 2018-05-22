@@ -2,6 +2,10 @@
 
 namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
 
-class InvalidProjectorThatCannotHandleEvents
+use Spatie\EventProjector\Projectors\Projector;
+use Spatie\EventProjector\Projectors\ProjectsEvents;
+
+class InvalidProjectorThatCannotHandleEvents implements Projector
 {
+    use ProjectsEvents;
 }

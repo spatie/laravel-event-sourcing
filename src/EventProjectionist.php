@@ -7,6 +7,7 @@ use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Projectors\Projector;
 
 class EventProjectionist
 {
@@ -67,34 +68,47 @@ class EventProjectionist
         return $this;
     }
 
-    public function callEventHandlers(Collection $eventHandlers, ShouldBeStored $event): self
+    public function callEventHandlers(Collection $eventHandlers, StoredEvent $storedEvent): self
     {
         $eventHandlers
             ->pipe(function (Collection $eventHandler) {
                 return $this->instanciate($eventHandler);
             })
-            ->each(function (object $eventHandler) use ($event) {
-                $this->callEventHandler($eventHandler, $event);
+            ->filter(function (object $eventHandler) use ($storedEvent) {
+                if ($eventHandler instanceof Projector) {
+                    return $eventHandler->hasReceivedAllPriorEvents($storedEvent);
+                }
+
+                return true;
+            })
+            ->each(function (object $eventHandler) use ($storedEvent) {
+                $this->callEventHandler($eventHandler, $storedEvent);
             });
 
         return $this;
     }
 
-    protected function callEventHandler(object $eventHandler, ShouldBeStored $event)
+    protected function callEventHandler(object $eventHandler, StoredEvent $storedEvent)
     {
-        if (! isset($eventHandler->handlesEvents)) {
+        if (!isset($eventHandler->handlesEvents)) {
             throw InvalidEventHandler::cannotHandleEvents($eventHandler);
         }
 
-        if (! $method = $eventHandler->handlesEvents[get_class($event)] ?? false) {
+        $event = $storedEvent->event;
+
+        if (!$method = $eventHandler->handlesEvents[get_class($event)] ?? false) {
             return;
         }
 
-        if (! method_exists($eventHandler, $method)) {
+        if (!method_exists($eventHandler, $method)) {
             throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
         }
 
         app()->call([$eventHandler, $method], compact('event'));
+
+        if ($eventHandler instanceof Projector) {
+            $eventHandler->rememberReceivedEvent($storedEvent);
+        }
     }
 
     public function replayEvents(Collection $projectors, callable $onEventReplayed)
@@ -109,7 +123,7 @@ class EventProjectionist
 
         StoredEvent::chunk(1000, function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
             $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
-                $this->callEventHandlers($projectors, $storedEvent->event);
+                $this->callEventHandlers($projectors, $storedEvent);
 
                 $onEventReplayed($storedEvent);
             });
@@ -124,11 +138,11 @@ class EventProjectionist
 
     protected function guardAgainstInvalidEventHandler($projector)
     {
-        if (! is_string($projector)) {
+        if (!is_string($projector)) {
             return;
         }
 
-        if (! class_exists($projector)) {
+        if (!class_exists($projector)) {
             throw InvalidEventHandler::doesNotExist($projector);
         }
     }
@@ -156,4 +170,6 @@ class EventProjectionist
 
         return $this;
     }
+
+
 }

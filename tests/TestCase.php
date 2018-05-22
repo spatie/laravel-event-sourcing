@@ -43,7 +43,8 @@ abstract class TestCase extends Orchestra
         });
 
         include_once __DIR__ . '/../stubs/create_stored_events_table.php.stub';
-
         (new \CreateStoredEventsTable())->up();
+        include_once __DIR__ . '/../stubs/create_projector_statuses_table.php.stub';
+        (new \CreateProjectorStatusesTable())->up();
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\EventProjectionist;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\Projectors\Projector;
 
 class ReplayEventsCommand extends Command
 {
@@ -77,7 +78,7 @@ class ReplayEventsCommand extends Command
         }
 
         return $allProjectors
-            ->filter(function ($projector) use ($onlyCallProjectors) {
+            ->filter(function (Projector $projector) use ($onlyCallProjectors) {
                 if (!is_string($projector)) {
                     $projector = get_class($projector);
                 }
