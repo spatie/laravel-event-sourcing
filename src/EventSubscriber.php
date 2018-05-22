@@ -5,14 +5,14 @@ namespace Spatie\EventProjector;
 class EventSubscriber
 {
     /** @var \Spatie\EventProjector\EventProjectionist */
-    protected $evenSorcerer;
+    protected $eventProjectionist;
 
     /** @var string */
     protected $storedEventModelClass;
 
-    public function __construct(EventProjectionist $evenSorcerer, string $storedEventModelClass)
+    public function __construct(EventProjectionist $eventProjectionist, string $storedEventModelClass)
     {
-        $this->evenSorcerer = $evenSorcerer;
+        $this->eventProjectionist = $eventProjectionist;
 
         $this->storedEventModelClass = $storedEventModelClass;
     }
@@ -35,9 +35,9 @@ class EventSubscriber
     {
         $this->storedEventModelClass::createForEvent($event);
 
-        $this->evenSorcerer
-            ->callEventHandlers($this->evenSorcerer->projectors, $event)
-            ->callEventHandlers($this->evenSorcerer->reactors, $event);
+        $this->eventProjectionist
+            ->callEventHandlers($this->eventProjectionist->projectors, $event)
+            ->callEventHandlers($this->eventProjectionist->reactors, $event);
     }
 
     protected function shouldBeStored($event): bool
