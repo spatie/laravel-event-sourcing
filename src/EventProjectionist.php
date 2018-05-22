@@ -3,6 +3,7 @@
 namespace Spatie\EventProjector;
 
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Events\FinishedEventReplay;
@@ -76,7 +77,11 @@ class EventProjectionist
             })
             ->filter(function (object $eventHandler) use ($storedEvent) {
                 if ($eventHandler instanceof Projector) {
-                    return $eventHandler->hasReceivedAllPriorEvents($storedEvent);
+                     if (! $eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
+                         event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));
+
+                         return false;
+                     }
                 }
 
                 return true;
