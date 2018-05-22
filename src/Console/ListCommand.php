@@ -24,9 +24,16 @@ class ListCommand extends Command
 
     public function handle()
     {
-        $titles = ['name', 'up to date', 'last processed event id', 'last event processed at'];
+        $titles = ['Name', 'Up to date', 'Last processed event id', 'Last event processed at'];
 
         $rows = $this->eventProjectionist->projectors
+            ->map(function ($eventHandler) {
+                if (is_string($eventHandler)) {
+                    $eventHandler = app($eventHandler);
+                }
+
+                return $eventHandler;
+            })
             ->map(function (Projector $projector) {
                 return [
                     $projector->getName(),

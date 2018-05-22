@@ -39,7 +39,7 @@ trait ProjectsEvents
 
     public function lastEventProcessedAt(): Carbon
     {
-        $this->getStatus()->updated_at;
+        return $this->getStatus()->updated_at;
     }
 
     protected function getStatus(): ProjectorStatus
