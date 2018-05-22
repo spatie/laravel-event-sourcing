@@ -6,6 +6,7 @@ use Mockery;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Artisan;
+use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
@@ -101,6 +102,8 @@ class ReplayEventsCommandTest extends TestCase
         EventProjectionist::addProjector(BalanceProjector::class);
         EventProjectionist::addReactor(BrokeReactor::class);
 
+        StoredEvent::truncate();
+
         $account = Account::create();
         event(new MoneySubtracted($account, 2000));
 
@@ -111,6 +114,7 @@ class ReplayEventsCommandTest extends TestCase
         $this->artisan('event-projector:replay-events', ['--projector' => [BalanceProjector::class]]);
 
         Mail::assertSent(AccountBroke::class, 1);
+
     }
 
     protected function assertSee(string $text)

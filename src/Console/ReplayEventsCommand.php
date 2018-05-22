@@ -77,7 +77,7 @@ class ReplayEventsCommand extends Command
         }
 
         return $allProjectors
-            ->filter(function (Projector $projector) use ($onlyCallProjectors) {
+            ->filter(function ($projector) use ($onlyCallProjectors) {
                 if (! is_string($projector)) {
                     $projector = get_class($projector);
                 }
