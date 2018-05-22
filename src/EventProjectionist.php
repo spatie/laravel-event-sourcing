@@ -3,11 +3,11 @@
 namespace Spatie\EventProjector;
 
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
-use Spatie\EventProjector\Models\StoredEvent;
-use Spatie\EventProjector\Projectors\Projector;
 
 class EventProjectionist
 {
@@ -90,17 +90,17 @@ class EventProjectionist
 
     protected function callEventHandler(object $eventHandler, StoredEvent $storedEvent)
     {
-        if (!isset($eventHandler->handlesEvents)) {
+        if (! isset($eventHandler->handlesEvents)) {
             throw InvalidEventHandler::cannotHandleEvents($eventHandler);
         }
 
         $event = $storedEvent->event;
 
-        if (!$method = $eventHandler->handlesEvents[get_class($event)] ?? false) {
+        if (! $method = $eventHandler->handlesEvents[get_class($event)] ?? false) {
             return;
         }
 
-        if (!method_exists($eventHandler, $method)) {
+        if (! method_exists($eventHandler, $method)) {
             throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
         }
 
@@ -138,11 +138,11 @@ class EventProjectionist
 
     protected function guardAgainstInvalidEventHandler($projector)
     {
-        if (!is_string($projector)) {
+        if (! is_string($projector)) {
             return;
         }
 
-        if (!class_exists($projector)) {
+        if (! class_exists($projector)) {
             throw InvalidEventHandler::doesNotExist($projector);
         }
     }
@@ -170,6 +170,4 @@ class EventProjectionist
 
         return $this;
     }
-
-
 }

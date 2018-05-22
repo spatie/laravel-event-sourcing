@@ -3,9 +3,9 @@
 namespace Spatie\EventProjector\EventSerializers;
 
 use Spatie\EventProjector\ShouldBeStored;
-use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 
 class JsonEventSerializer implements EventSerializer
 {

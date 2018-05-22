@@ -3,8 +3,8 @@
 namespace Spatie\EventProjector\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class StoredEvent extends Model
 {

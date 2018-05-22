@@ -4,10 +4,10 @@ namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\EventProjectionist;
-use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
+use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
 class ReplayEventsCommand extends Command
 {
@@ -34,7 +34,6 @@ class ReplayEventsCommand extends Command
     public function handle()
     {
         if (! $this->commandShouldRun()) {
-
             return;
         }
 
@@ -79,7 +78,7 @@ class ReplayEventsCommand extends Command
 
         return $allProjectors
             ->filter(function (Projector $projector) use ($onlyCallProjectors) {
-                if (!is_string($projector)) {
+                if (! is_string($projector)) {
                     $projector = get_class($projector);
                 }
 
@@ -90,7 +89,7 @@ class ReplayEventsCommand extends Command
     protected function guardAgainstNonExistingProjectors(array $onlyCallProjectors)
     {
         foreach ($onlyCallProjectors as $projector) {
-            if (!class_exists($projector)) {
+            if (! class_exists($projector)) {
                 throw InvalidEventHandler::doesNotExist($projector);
             }
         }
@@ -108,6 +107,7 @@ class ReplayEventsCommand extends Command
         if (count($this->option('projector') ?? []) === 0) {
             if (! $confirmed = $this->confirm('Are you sure you want to replay the events to all projectors?')) {
                 $this->warn('No events replayed!');
+
                 return false;
             }
         }
