@@ -24,10 +24,14 @@ class EventProjectorServiceProvider extends ServiceProvider
             ], 'migrations');
         }
 
+        $this->app->bind('command.event-projector:replay-events',  ReplayEventsCommand::class);
+        $this->app->bind('command.make:projector',  MakeProjectorCommand::class);
+        $this->app->bind('command.make:reactor',  MakeReactorCommand::class);
+
         $this->commands([
-            ReplayEventsCommand::class,
-            MakeProjectorCommand::class,
-            MakeReactorCommand::class,
+            'command.event-projector:replay-events',
+            'command.make:projector',
+            'command.make:reactor',
         ]);
     }
 

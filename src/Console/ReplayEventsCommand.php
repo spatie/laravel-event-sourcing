@@ -32,6 +32,11 @@ class ReplayEventsCommand extends Command
 
     public function handle()
     {
+        if (! $this->commandShouldRun()) {
+
+            return;
+        }
+
         $projectors = $this->getProjectors();
 
         if ($projectors->isEmpty()) {
@@ -68,17 +73,12 @@ class ReplayEventsCommand extends Command
         $allProjectors = $this->eventProjectionist->projectors;
 
         if (count($onlyCallProjectors) === 0) {
-            if (! $this->confirm('Are you sure you want to replay the events to all projectors?')) {
-                $this->warn('No events replayed!');
-                die();
-            }
-
             return $allProjectors;
         }
 
         return $allProjectors
             ->filter(function ($projector) use ($onlyCallProjectors) {
-                if (! is_string($projector)) {
+                if (!is_string($projector)) {
                     $projector = get_class($projector);
                 }
 
@@ -89,7 +89,7 @@ class ReplayEventsCommand extends Command
     protected function guardAgainstNonExistingProjectors(array $onlyCallProjectors)
     {
         foreach ($onlyCallProjectors as $projector) {
-            if (! class_exists($projector)) {
+            if (!class_exists($projector)) {
                 throw InvalidEventHandler::doesNotExist($projector);
             }
         }
@@ -97,8 +97,22 @@ class ReplayEventsCommand extends Command
 
     protected function emptyLine(int $amount = 1)
     {
-        foreach(range(1, $amount) as $i) {
+        foreach (range(1, $amount) as $i) {
             $this->line('');
         }
+    }
+
+    protected function commandShouldRun(): bool
+    {
+        if (count($this->option('projector') ?? []) === 0) {
+            if (! $confirmed = $this->confirm('Are you sure you want to replay the events to all projectors?')) {
+                $this->warn('No events replayed!');
+                return false;
+            }
+
+
+        }
+
+        return true;
     }
 }
