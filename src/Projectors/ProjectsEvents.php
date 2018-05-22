@@ -29,7 +29,7 @@ trait ProjectsEvents
 
     public function hasReceivedAllEvents(): bool
     {
-        return (int)$this->getStatus()->last_processed_event_id === StoredEvent::getMaxId();
+        return (int) $this->getStatus()->last_processed_event_id === StoredEvent::getMaxId();
     }
 
     public function getLastProcessedEventId(): int
