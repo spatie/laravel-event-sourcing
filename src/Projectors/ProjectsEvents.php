@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector\Projectors;
 
+use Carbon\Carbon;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 
@@ -29,6 +30,16 @@ trait ProjectsEvents
         }
 
         return get_class($this);
+    }
+
+    public function getLastProcessedEventId(): int
+    {
+        return $this->getStatus()->last_processed_event_id;
+    }
+
+    public function lastEventProcessedAt(): Carbon
+    {
+        $this->getStatus()->updated_at;
     }
 
     protected function getStatus(): ProjectorStatus

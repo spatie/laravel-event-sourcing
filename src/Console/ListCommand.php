@@ -3,11 +3,8 @@
 namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use Spatie\EventProjector\EventProjectionist;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
 class ListCommand extends Command
 {
@@ -27,5 +24,19 @@ class ListCommand extends Command
 
     public function handle()
     {
+        $titles = ['name', 'up to date', 'last processed event id', 'last event processed at'];
+
+        $rows = $this->eventProjectionist->projectors
+            ->map(function (Projector $projector) {
+                return [
+                    $projector->getName(),
+                    $projector->hasReceivedAllEvents() ? ✅ : 🛑,
+                    $projector->getLastProcessedEventId(),
+                    $projector->lastEventProcessedAt()->format('Y-m-d H:i:s'),
+                ];
+            })
+            ->toArray();
+
+        $this->table($titles, $rows);
     }
 }
