@@ -18,4 +18,6 @@ interface Projector
     public function getLastProcessedEventId(): int;
 
     public function lastEventProcessedAt(): Carbon;
+
+    public function resetStatus();
 }

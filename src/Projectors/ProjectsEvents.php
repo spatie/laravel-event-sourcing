@@ -42,8 +42,15 @@ trait ProjectsEvents
         return $this->getStatus()->updated_at;
     }
 
+    public function resetStatus()
+    {
+        $this->getStatus()->delete();
+    }
+
     protected function getStatus(): ProjectorStatus
     {
         return ProjectorStatus::getForProjector($this);
     }
+
+
 }

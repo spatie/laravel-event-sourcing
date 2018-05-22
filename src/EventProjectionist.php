@@ -83,6 +83,10 @@ class EventProjectionist
             })
             ->each(function (object $eventHandler) use ($storedEvent) {
                 $this->callEventHandler($eventHandler, $storedEvent);
+
+                if ($eventHandler instanceof Projector) {
+                    $eventHandler->rememberReceivedEvent($storedEvent);
+                }
             });
 
         return $this;
@@ -90,34 +94,32 @@ class EventProjectionist
 
     protected function callEventHandler(object $eventHandler, StoredEvent $storedEvent)
     {
-        if (! isset($eventHandler->handlesEvents)) {
+        if (!isset($eventHandler->handlesEvents)) {
             throw InvalidEventHandler::cannotHandleEvents($eventHandler);
         }
 
         $event = $storedEvent->event;
 
-        if (! $method = $eventHandler->handlesEvents[get_class($event)] ?? false) {
+        if (!$method = $eventHandler->handlesEvents[get_class($event)] ?? false) {
             return;
         }
 
-        if (! method_exists($eventHandler, $method)) {
+        if (!method_exists($eventHandler, $method)) {
             throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
         }
 
         app()->call([$eventHandler, $method], compact('event'));
-
-        if ($eventHandler instanceof Projector) {
-            $eventHandler->rememberReceivedEvent($storedEvent);
-        }
     }
 
     public function replayEvents(Collection $projectors, callable $onEventReplayed)
     {
-        $projectors = $this->instanciate($projectors);
-
         $this->isReplayingEvents = true;
 
         event(new StartingEventReplay());
+
+        $projectors = $this
+            ->instanciate($projectors)
+            ->each->resetStatus();
 
         $this->callMethod($projectors, 'onStartingEventReplay');
 
@@ -138,11 +140,11 @@ class EventProjectionist
 
     protected function guardAgainstInvalidEventHandler($projector)
     {
-        if (! is_string($projector)) {
+        if (!is_string($projector)) {
             return;
         }
 
-        if (! class_exists($projector)) {
+        if (!class_exists($projector)) {
             throw InvalidEventHandler::doesNotExist($projector);
         }
     }
