@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Spatie\EventProjector\Console\MakeProjectorCommand;
 use Spatie\EventProjector\Console\MakeReactorCommand;
 use Spatie\EventProjector\Console\ReplayEventsCommand;
+use Spatie\EventProjector\EventSerializers\Serializer;
 
 class EventProjectorServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,8 @@ class EventProjectorServiceProvider extends ServiceProvider
                 __DIR__ . '/../stubs/create_stored_events_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_stored_events_table.php'),
             ], 'migrations');
         }
+
+        $this->app->bind(Serializer::class, config('event-projector.event_serializer'));
 
         $this->app->bind('command.event-projector:replay-events',  ReplayEventsCommand::class);
         $this->app->bind('command.make:projector',  MakeProjectorCommand::class);
