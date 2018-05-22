@@ -21,11 +21,16 @@ class EventProjectionist
     /** @var bool */
     protected $isReplayingEvents = false;
 
-    public function __construct()
+    /** @var array array */
+    protected $config;
+
+    public function __construct(array $config)
     {
         $this->projectors = collect();
 
         $this->reactors = collect();
+
+        $this->config = $config;
     }
 
     public function isReplayingEvents(): bool
@@ -128,7 +133,7 @@ class EventProjectionist
 
         $this->callMethod($projectors, 'onStartingEventReplay');
 
-        StoredEvent::chunk(1000, function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
+        StoredEvent::chunk($this->config['replay']['chunk_amount'], function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
             $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
                 $this->callEventHandlers($projectors, $storedEvent);
 

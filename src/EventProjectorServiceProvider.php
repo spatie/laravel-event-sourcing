@@ -51,6 +51,14 @@ class EventProjectorServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/event-projector.php', 'event-projector');
 
+        $this->app->singleton(EventProjectionist::class, function () {
+            $config = config('event-projector');
+
+            return new EventProjectionist($config);
+        });
+
+        $this->app->alias(EventProjectionist::class, 'event-projector');
+
         $this->app
             ->when(EventSubscriber::class)
             ->needs('$storedEventModelClass')
@@ -62,11 +70,5 @@ class EventProjectorServiceProvider extends ServiceProvider
             ->give(config('event-projector.stored_event_model'));
 
         Event::subscribe(EventSubscriber::class);
-
-        $this->app->singleton(EventProjectionist::class, function () {
-            return new EventProjectionist();
-        });
-
-        $this->app->alias(EventProjectionist::class, 'event-projector');
     }
 }
