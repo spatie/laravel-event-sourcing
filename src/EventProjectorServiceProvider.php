@@ -29,12 +29,6 @@ class EventProjectorServiceProvider extends ServiceProvider
             MakeProjectorCommand::class,
             MakeReactorCommand::class,
         ]);
-
-        $this->app->singleton(EventProjectionist::class, function () {
-            return new EventProjectionist();
-        });
-
-       $this->app->alias(EventProjectionist::class, 'event-projector');
     }
 
     public function register()
@@ -52,5 +46,11 @@ class EventProjectorServiceProvider extends ServiceProvider
             ->give(config('event-projector.stored_event_model'));
 
         Event::subscribe(EventSubscriber::class);
+
+        $this->app->singleton(EventProjectionist::class, function () {
+            return new EventProjectionist();
+        });
+
+        $this->app->alias(EventProjectionist::class, 'event-projector');
     }
 }
