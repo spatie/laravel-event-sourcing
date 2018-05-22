@@ -42,6 +42,8 @@ class ReplayEventsCommand extends Command
 
         $this->comment('Replaying events...');
 
+        $this->emptyLine();
+
         $bar = $this->output->createProgressBar(StoredEvent::count());
 
         $onEventReplayed = function () use ($bar) {
@@ -52,6 +54,8 @@ class ReplayEventsCommand extends Command
 
         $bar->finish();
 
+        $this->emptyLine(2);
+
         $this->comment('All done!');
     }
 
@@ -61,7 +65,18 @@ class ReplayEventsCommand extends Command
 
         $this->guardAgainstNonExistingProjectors($onlyCallProjectors);
 
-        return $this->eventProjectionist->projectors
+        $allProjectors = $this->eventProjectionist->projectors;
+
+        if (count($onlyCallProjectors) === 0) {
+            if (! $this->confirm('Are you sure you want to replay the events to all projectors?')) {
+                $this->warn('No events replayed!');
+                die();
+            }
+
+            return $allProjectors;
+        }
+
+        return $allProjectors
             ->filter(function ($projector) use ($onlyCallProjectors) {
                 if (! is_string($projector)) {
                     $projector = get_class($projector);
@@ -77,6 +92,13 @@ class ReplayEventsCommand extends Command
             if (! class_exists($projector)) {
                 throw InvalidEventHandler::doesNotExist($projector);
             }
+        }
+    }
+
+    protected function emptyLine(int $amount = 1)
+    {
+        foreach(range(1, $amount) as $i) {
+            $this->line('');
         }
     }
 }

@@ -39,7 +39,7 @@ class EventProjectionist
         return $this;
     }
 
-    public function registerProjectors(array $projectors): self
+    public function addProjectors(array $projectors): self
     {
         collect($projectors)->each(function ($projector) {
             $this->addProjector($projector);
@@ -57,7 +57,7 @@ class EventProjectionist
         return $this;
     }
 
-    public function registerReactors(array $reactors): self
+    public function addReactors(array $reactors): self
     {
         collect($reactors)->each(function ($reactor) {
             $this->addReactor($reactor);
