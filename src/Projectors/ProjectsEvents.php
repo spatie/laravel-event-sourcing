@@ -24,6 +24,10 @@ trait ProjectsEvents
 
     public function getName(): string
     {
+        if (isset($this->name)) {
+            return $this->name;
+        }
+
         return get_class($this);
     }
 
