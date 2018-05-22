@@ -4,4 +4,14 @@ namespace DummyNamespace;
 
 class DummyClass
 {
+    public $handlesEvents = [
+        // EventHappened::class => 'onEventHappened',
+    ];
+
+    /*
+    public function onEventHappened(EventHappended $event)
+    {
+
+    }
+    */
 }
