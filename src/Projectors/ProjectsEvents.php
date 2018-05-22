@@ -8,21 +8,6 @@ use Spatie\EventProjector\Models\ProjectorStatus;
 
 trait ProjectsEvents
 {
-    public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool
-    {
-        return $storedEvent->id === $this->getStatus()->last_processed_event_id + 1;
-    }
-
-    public function rememberReceivedEvent(StoredEvent $storedEvent)
-    {
-        $this->getStatus()->rememberLastProcessedEvent($storedEvent);
-    }
-
-    public function hasReceivedAllEvents(): bool
-    {
-        return (int)$this->getStatus()->last_processed_event_id === StoredEvent::getMaxId();
-    }
-
     public function getName(): string
     {
         if (isset($this->name)) {
@@ -30,6 +15,21 @@ trait ProjectsEvents
         }
 
         return get_class($this);
+    }
+
+    public function rememberReceivedEvent(StoredEvent $storedEvent)
+    {
+        $this->getStatus()->rememberLastProcessedEvent($storedEvent);
+    }
+
+    public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool
+    {
+        return $storedEvent->id === $this->getStatus()->last_processed_event_id + 1;
+    }
+
+    public function hasReceivedAllEvents(): bool
+    {
+        return (int)$this->getStatus()->last_processed_event_id === StoredEvent::getMaxId();
     }
 
     public function getLastProcessedEventId(): int
@@ -51,6 +51,4 @@ trait ProjectsEvents
     {
         return ProjectorStatus::getForProjector($this);
     }
-
-
 }
