@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\Models\StoredEvent;
 
 class EventProjectionist
 {

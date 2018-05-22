@@ -4,7 +4,7 @@ namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\StoredEvent;
+use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\EventProjectionist;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 

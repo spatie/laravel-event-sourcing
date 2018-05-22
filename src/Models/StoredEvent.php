@@ -1,9 +1,10 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventProjector\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
+use Spatie\EventProjector\ShouldBeStored;
 
 class StoredEvent extends Model
 {
