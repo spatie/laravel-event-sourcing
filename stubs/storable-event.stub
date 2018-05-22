@@ -1,0 +1,10 @@
+<?php
+
+namespace DummyNamespace;
+
+class DummyClass implements ShouldBeStored
+{
+    public function __construct()
+    {
+    }
+}
