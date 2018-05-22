@@ -2,13 +2,13 @@
 
 namespace Spatie\EventProjector\Tests\TestClasses\Events;
 
-use Spatie\EventProjector\StoresEvent;
+use Illuminate\Queue\SerializesModels;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 
 class MoneyAdded implements ShouldBeStored
 {
-    use StoresEvent;
+    use SerializesModels;
 
     /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
     public $account;
