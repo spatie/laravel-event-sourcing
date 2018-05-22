@@ -1,12 +1,13 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventProjector\EventSerializers;
 
-use Symfony\Component\Serializer\Serializer;
+use Spatie\EventProjector\ShouldBeStored;
+use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-class EventSerializer
+class JsonEventSerializer implements EventSerializer
 {
     /** @var \Symfony\Component\Serializer\Serializer */
     protected $serializer;
@@ -16,7 +17,7 @@ class EventSerializer
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
 
-        $this->serializer = new Serializer($normalizers, $encoders);
+        $this->serializer = new SymfonySerializer($normalizers, $encoders);
     }
 
     public function serialize(ShouldBeStored $event): string

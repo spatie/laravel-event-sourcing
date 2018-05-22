@@ -3,7 +3,7 @@
 namespace Spatie\EventProjector;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\EventProjector\EventSerializers\Serializer;
+use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class StoredEvent extends Model
 {
@@ -17,7 +17,7 @@ class StoredEvent extends Model
     {
         $storedEvent = new static();
         $storedEvent->event_class = get_class($event);
-        $storedEvent->attributes['event_properties'] = app(Serializer::class)->serialize(clone $event);
+        $storedEvent->attributes['event_properties'] = app(EventSerializer::class)->serialize(clone $event);
         $storedEvent->save();
 
         return $storedEvent;
@@ -25,7 +25,7 @@ class StoredEvent extends Model
 
     public function getEventAttribute(): ShouldBeStored
     {
-        return app(Serializer::class)->deserialize(
+        return app(EventSerializer::class)->deserialize(
            $this->event_class,
            $this->getOriginal('event_properties')
        );

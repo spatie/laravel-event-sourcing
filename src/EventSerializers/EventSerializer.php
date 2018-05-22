@@ -4,7 +4,7 @@ namespace Spatie\EventProjector\EventSerializers;
 
 use Spatie\EventProjector\ShouldBeStored;
 
-interface Serializer
+interface EventSerializer
 {
     public function serialize(ShouldBeStored $event): string;
 

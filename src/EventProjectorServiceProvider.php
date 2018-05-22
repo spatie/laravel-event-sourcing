@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Spatie\EventProjector\Console\MakeProjectorCommand;
 use Spatie\EventProjector\Console\MakeReactorCommand;
 use Spatie\EventProjector\Console\ReplayEventsCommand;
-use Spatie\EventProjector\EventSerializers\Serializer;
+use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class EventProjectorServiceProvider extends ServiceProvider
 {
@@ -25,7 +25,7 @@ class EventProjectorServiceProvider extends ServiceProvider
             ], 'migrations');
         }
 
-        $this->app->bind(Serializer::class, config('event-projector.event_serializer'));
+        $this->app->bind(EventSerializer::class, config('event-projector.event_serializer'));
 
         $this->app->bind('command.event-projector:replay-events',  ReplayEventsCommand::class);
         $this->app->bind('command.make:projector',  MakeProjectorCommand::class);

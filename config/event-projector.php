@@ -11,5 +11,5 @@ return [
      * The class responsible for serializing events.
      * It should implement Spatie\EventProjector\EventSerializers\Serializer
      */
-    'event_serializer' => \Spatie\EventProjector\EventSerializers\JsonSerializer::class,
+    'event_serializer' => \Spatie\EventProjector\EventSerializers\JsonEventSerializer::class,
 ];
