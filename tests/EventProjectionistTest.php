@@ -2,7 +2,6 @@
 
 namespace Spatie\EventProjector\Tests;
 
-use Illuminate\Session\Store;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Models\ProjectorStatus;
