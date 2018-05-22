@@ -2,8 +2,8 @@
 
 namespace Spatie\EventProjector\Projectors;
 
-use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Models\ProjectorStatus;
 
 trait ProjectsEvents
 {
@@ -31,6 +31,4 @@ trait ProjectsEvents
     {
         return ProjectorStatus::getForProjector($this);
     }
-
-
 }

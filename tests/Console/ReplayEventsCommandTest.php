@@ -2,7 +2,6 @@
 
 namespace Spatie\EventProjector\Console;
 
-use Illuminate\Foundation\Console\Kernel;
 use Mockery;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
@@ -11,12 +10,12 @@ use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Facades\EventProjectionist;
-use Spatie\EventProjector\EventProjectionist as BoundEventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
+use Spatie\EventProjector\EventProjectionist as BoundEventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 
 class ReplayEventsCommandTest extends TestCase
@@ -59,9 +58,9 @@ class ReplayEventsCommandTest extends TestCase
     {
         EventProjectionist::addProjector(BalanceProjector::class);
 
-        $command = Mockery::mock(ReplayEventsCommand::class .'[confirm]', [
+        $command = Mockery::mock(ReplayEventsCommand::class.'[confirm]', [
             app(BoundEventProjectionist::class),
-            config('event-projector.stored_event_model')
+            config('event-projector.stored_event_model'),
         ]);
 
         $command->shouldReceive('confirm')->andReturn(false);
@@ -80,9 +79,9 @@ class ReplayEventsCommandTest extends TestCase
     {
         EventProjectionist::addProjector(BalanceProjector::class);
 
-        $command = Mockery::mock(ReplayEventsCommand::class .'[confirm]', [
+        $command = Mockery::mock(ReplayEventsCommand::class.'[confirm]', [
             app(BoundEventProjectionist::class),
-            config('event-projector.stored_event_model')
+            config('event-projector.stored_event_model'),
         ]);
 
         $command->shouldReceive('confirm')->andReturn(true);

@@ -9,9 +9,9 @@ class ProjectorStatus extends Model
 {
     public $guarded = [];
 
-    public static function getForProjector(Projector $projector): ProjectorStatus
+    public static function getForProjector(Projector $projector): self
     {
-        return ProjectorStatus::firstOrCreate(['projector_name' => $projector->getName()]);
+        return self::firstOrCreate(['projector_name' => $projector->getName()]);
     }
 
     public function rememberLastProcessedEvent(StoredEvent $storedEvent): self
