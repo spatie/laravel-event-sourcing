@@ -5,14 +5,14 @@ return [
     /*
      * This class is responsible for storing events. To add extra behavour you
      * can change this your a class of your own. The only restriction is that
-     * it should extend \Spatie\EventProjector\Models\StoredEvent
+     * it should extend \Spatie\EventProjector\Models\StoredEvent.
      */
     'stored_event_model' => \Spatie\EventProjector\Models\StoredEvent::class,
 
     /*
      * This class is responsible for serializing events. By default an event will be serialized
      *  and stored as json. You can customize the class name. A valid serializer
-     *  should implement Spatie\EventProjector\EventSerializers\Serializer
+     *  should implement Spatie\EventProjector\EventSerializers\Serializer.
      */
     'event_serializer' => \Spatie\EventProjector\EventSerializers\JsonEventSerializer::class,
 
