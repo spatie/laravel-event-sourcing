@@ -3,6 +3,7 @@
 namespace Spatie\EventProjector\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 

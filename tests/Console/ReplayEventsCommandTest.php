@@ -114,7 +114,6 @@ class ReplayEventsCommandTest extends TestCase
         $this->artisan('event-projector:replay-events', ['--projector' => [BalanceProjector::class]]);
 
         Mail::assertSent(AccountBroke::class, 1);
-
     }
 
     protected function assertSee(string $text)
