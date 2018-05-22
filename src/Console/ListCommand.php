@@ -30,7 +30,7 @@ class ListCommand extends Command
             ->map(function (Projector $projector) {
                 return [
                     $projector->getName(),
-                    $projector->hasReceivedAllEvents() ? '✅' : '🛑',
+                    $projector->hasReceivedAllEvents() ? '✅' : '',
                     $projector->getLastProcessedEventId(),
                     $projector->lastEventProcessedAt()->format('Y-m-d H:i:s'),
                 ];
