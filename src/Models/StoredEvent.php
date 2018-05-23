@@ -5,8 +5,8 @@ namespace Spatie\EventProjector\Models;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EventProjector\ShouldBeStored;
-use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
+use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class StoredEvent extends Model
 {
