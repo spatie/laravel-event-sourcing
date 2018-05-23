@@ -45,11 +45,11 @@ class StoredEvent extends Model
 
     public function getMetaDataAttribute(): SchemalessAttributes
     {
-        return SchemalessAttributes::createForModel($this, 'extra_attributes');
+        return SchemalessAttributes::createForModel($this, 'meta_data');
     }
 
     public function scopeWithMetaDataAttributes(): Builder
     {
-        return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
+        return SchemalessAttributes::scopeWithSchemalessAttributes('meta_data');
     }
 }
