@@ -3,12 +3,13 @@
 namespace Spatie\EventProjector\Tests;
 
 use Spatie\EventProjector\EventSerializers\EventSerializer;
+use Spatie\EventProjector\Tests\TestClasses\Events\EventWithoutSerializedModels;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 
 class EventSerializerTest extends TestCase
 {
-    /** @var \Spatie\EventProjector\EventSerializer */
+    /** @var \Spatie\EventProjector\EventSerializers\EventSerializer */
     protected $eventSerializer;
 
     public function setUp()
@@ -52,5 +53,17 @@ class EventSerializerTest extends TestCase
             ],
             'amount' => 1234,
         ], $array);
+    }
+
+    /** @test */
+    public function it_can_serialize_events_that_do_not_implement_serializesModels()
+    {
+        $event = new EventWithoutSerializedModels('test');
+
+        $json = $this->eventSerializer->serialize($event);
+
+        $array = json_decode($json, true);
+
+        $this->assertEquals(['value' => 'test'], $array);
     }
 }

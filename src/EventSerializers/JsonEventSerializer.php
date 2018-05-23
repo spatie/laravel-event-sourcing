@@ -26,7 +26,9 @@ class JsonEventSerializer implements EventSerializer
          * We call __sleep so `Illuminate\Queue\SerializesModels` will
          * prepare all models in the event for serialization.
          */
-        $event->__sleep();
+        if (method_exists($event, '__sleep')) {
+            $event->__sleep();
+        }
 
         $json = $this->serializer->serialize($event, 'json');
 
