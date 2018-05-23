@@ -4,6 +4,9 @@ namespace DummyNamespace;
 
 class DummyClass
 {
+    /*
+     * Here you can specify which event should trigger which method.
+     */
     public $handlesEvents = [
         // EventHappened::class => 'onEventHappened',
     ];

@@ -9,6 +9,9 @@ class DummyClass implements Projector
 {
     use ProjectsEvents;
 
+    /*
+     * Here you can specify which event should trigger which method.
+     */
     public $handlesEvents = [
         // EventHappened::class => 'onEventHappened',
     ];
