@@ -11,8 +11,8 @@ return [
 
     /*
      * This class is responsible for serializing events. By default an event will be serialized
-     *  and stored as json. You can customize the class name. A valid serializer
-     *  should implement Spatie\EventProjector\EventSerializers\Serializer.
+     * and stored as json. You can customize the class name. A valid serializer
+     * should implement Spatie\EventProjector\EventSerializers\Serializer.
      */
     'event_serializer' => \Spatie\EventProjector\EventSerializers\JsonEventSerializer::class,
 
