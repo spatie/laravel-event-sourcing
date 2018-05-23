@@ -3,9 +3,9 @@
 namespace Spatie\EventProjector\Tests;
 
 use Spatie\EventProjector\EventSerializers\EventSerializer;
-use Spatie\EventProjector\Tests\TestClasses\Events\EventWithoutSerializedModels;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Events\EventWithoutSerializedModels;
 
 class EventSerializerTest extends TestCase
 {
