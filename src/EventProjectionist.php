@@ -148,14 +148,14 @@ class EventProjectionist
         $this->callMethod($projectors, 'onFinishedEventReplay');
     }
 
-    protected function guardAgainstInvalidEventHandler($projector)
+    protected function guardAgainstInvalidEventHandler($eventHandler)
     {
-        if (! is_string($projector)) {
+        if (! is_string($eventHandler)) {
             return;
         }
 
-        if (! class_exists($projector)) {
-            throw InvalidEventHandler::doesNotExist($projector);
+        if (! class_exists($eventHandler)) {
+            throw InvalidEventHandler::doesNotExist($eventHandler);
         }
     }
 

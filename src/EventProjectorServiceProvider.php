@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Spatie\EventProjector\Console\ListCommand;
 use Spatie\EventProjector\Console\MakeReactorCommand;
-use Spatie\EventProjector\Console\MakeStorableEventCommand;
 use Spatie\EventProjector\Console\ReplayEventsCommand;
 use Spatie\EventProjector\Console\MakeProjectorCommand;
+use Spatie\EventProjector\Console\MakeStorableEventCommand;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class EventProjectorServiceProvider extends ServiceProvider
@@ -40,7 +40,6 @@ class EventProjectorServiceProvider extends ServiceProvider
         $this->app->bind('command.make:projector', MakeProjectorCommand::class);
         $this->app->bind('command.make:reactor', MakeReactorCommand::class);
         $this->app->bind('command.make:storable-event', MakeStorableEventCommand::class);
-
 
         $this->commands([
             'command.event-projector:list',

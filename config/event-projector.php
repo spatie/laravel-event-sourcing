@@ -16,7 +16,6 @@ return [
      */
     'event_serializer' => \Spatie\EventProjector\EventSerializers\JsonEventSerializer::class,
 
-
     'replay' => [
 
         /*
