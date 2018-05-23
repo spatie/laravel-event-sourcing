@@ -20,6 +20,18 @@ class EventSerializerTest extends TestCase
     }
 
     /** @test */
+    public function it_can_serialize_a_plain_event()
+    {
+        $event = new EventWithoutSerializedModels('test');
+
+        $json = $this->eventSerializer->serialize($event);
+
+        $array = json_decode($json, true);
+
+        $this->assertEquals(['value' => 'test'], $array);
+    }
+
+    /** @test */
     public function it_can_serialize_an_event_containing_a_model()
     {
         $account = Account::create(['name' => 'test']);
@@ -53,17 +65,5 @@ class EventSerializerTest extends TestCase
             ],
             'amount' => 1234,
         ], $array);
-    }
-
-    /** @test */
-    public function it_can_serialize_events_that_do_not_implement_serializesModels()
-    {
-        $event = new EventWithoutSerializedModels('test');
-
-        $json = $this->eventSerializer->serialize($event);
-
-        $array = json_decode($json, true);
-
-        $this->assertEquals(['value' => 'test'], $array);
     }
 }
