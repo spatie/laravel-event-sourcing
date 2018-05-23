@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class StoredEvent extends Model
 {
@@ -15,6 +16,7 @@ class StoredEvent extends Model
 
     public $casts = [
         'event_properties' => 'array',
+        'meta_data' => 'array',
     ];
 
     public static function createForEvent(ShouldBeStored $event): self
@@ -39,5 +41,15 @@ class StoredEvent extends Model
            $this->event_class,
            $this->getOriginal('event_properties')
        );
+    }
+
+    public function getMetaDataAttribute(): SchemalessAttributes
+    {
+        return SchemalessAttributes::createForModel($this, 'extra_attributes');
+    }
+
+    public function scopeWithMetaDataAttributes(): Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
     }
 }
