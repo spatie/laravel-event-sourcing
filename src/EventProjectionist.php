@@ -118,7 +118,7 @@ class EventProjectionist
             throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
         }
 
-        app()->call([$eventHandler, $method], compact('event'));
+        app()->call([$eventHandler, $method], compact('event', 'storedEvent'));
     }
 
     public function replayEvents(Collection $projectors, callable $onEventReplayed)
