@@ -13,10 +13,10 @@ use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
 class EventProjectionist
 {
     /** @var \Illuminate\Support\Collection */
-    public $projectors;
+    protected $projectors;
 
     /** @var \Illuminate\Support\Collection */
-    public $reactors;
+    protected $reactors;
 
     /** @var bool */
     protected $isReplayingEvents = false;
@@ -56,6 +56,11 @@ class EventProjectionist
         return $this;
     }
 
+    public function getProjectors(): Collection
+    {
+        return $this->projectors;
+    }
+
     public function addReactor($reactor): self
     {
         $this->guardAgainstInvalidEventHandler($reactor);
@@ -74,7 +79,14 @@ class EventProjectionist
         return $this;
     }
 
-    public function callEventHandlers(Collection $eventHandlers, StoredEvent $storedEvent): self
+    public function handle(StoredEvent $storedEvent)
+    {
+        $this
+            ->callEventHandlers($this->projectors, $storedEvent)
+            ->callEventHandlers($this->reactors, $storedEvent);
+    }
+
+    protected function callEventHandlers(Collection $eventHandlers, StoredEvent $storedEvent): self
     {
         $eventHandlers
             ->pipe(function (Collection $eventHandler) {

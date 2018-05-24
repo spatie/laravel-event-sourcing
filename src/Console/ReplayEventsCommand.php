@@ -11,7 +11,7 @@ use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
 class ReplayEventsCommand extends Command
 {
-    protected $signature = 'event-projector:replay-events 
+    protected $signature = 'event-projector:replay-events
                             {--projector=*} : The projector that should receive the event';
 
     protected $description = 'Replay stored events';
@@ -70,7 +70,7 @@ class ReplayEventsCommand extends Command
 
         $this->guardAgainstNonExistingProjectors($onlyCallProjectors);
 
-        $allProjectors = $this->eventProjectionist->projectors;
+        $allProjectors = $this->eventProjectionist->getProjectors();
 
         if (count($onlyCallProjectors) === 0) {
             return $allProjectors;
