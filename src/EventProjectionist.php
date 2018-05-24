@@ -13,16 +13,16 @@ use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
 class EventProjectionist
 {
     /** @var \Illuminate\Support\Collection */
-    public $projectors;
+    protected $projectors;
 
     /** @var \Illuminate\Support\Collection */
-    public $reactors;
+    protected $reactors;
 
     /** @var bool */
     protected $isReplayingEvents = false;
 
-    /** @var array array */
-    protected $config;
+    /** @var int */
+    protected $replayChunkSize;
 
     public function __construct(array $config)
     {
@@ -30,7 +30,7 @@ class EventProjectionist
 
         $this->reactors = collect();
 
-        $this->config = $config;
+        $this->replayChunkSize = $config['replay_chunk_size'] ?? 1000;
     }
 
     public function isReplayingEvents(): bool
@@ -56,6 +56,11 @@ class EventProjectionist
         return $this;
     }
 
+    public function getProjectors(): Collection
+    {
+        return $this->projectors;
+    }
+
     public function addReactor($reactor): self
     {
         $this->guardAgainstInvalidEventHandler($reactor);
@@ -74,11 +79,18 @@ class EventProjectionist
         return $this;
     }
 
-    public function callEventHandlers(Collection $eventHandlers, StoredEvent $storedEvent): self
+    public function handle(StoredEvent $storedEvent)
+    {
+        $this
+            ->callEventHandlers($this->projectors, $storedEvent)
+            ->callEventHandlers($this->reactors, $storedEvent);
+    }
+
+    protected function callEventHandlers(Collection $eventHandlers, StoredEvent $storedEvent): self
     {
         $eventHandlers
             ->pipe(function (Collection $eventHandler) {
-                return $this->instanciate($eventHandler);
+                return $this->instantiate($eventHandler);
             })
             ->filter(function (object $eventHandler) use ($storedEvent) {
                 if ($eventHandler instanceof Projector) {
@@ -128,12 +140,12 @@ class EventProjectionist
         event(new StartingEventReplay());
 
         $projectors = $this
-            ->instanciate($projectors)
+            ->instantiate($projectors)
             ->each->resetStatus();
 
         $this->callMethod($projectors, 'onStartingEventReplay');
 
-        StoredEvent::chunk($this->config['replay']['chunk_amount'], function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
+        StoredEvent::chunk($this->replayChunkSize, function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
             $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
                 $this->callEventHandlers($projectors, $storedEvent);
 
@@ -159,7 +171,7 @@ class EventProjectionist
         }
     }
 
-    protected function instanciate(Collection $eventHandlers)
+    protected function instantiate(Collection $eventHandlers)
     {
         return $eventHandlers->map(function ($eventHandler) {
             if (is_string($eventHandler)) {
