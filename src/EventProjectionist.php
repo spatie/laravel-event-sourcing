@@ -78,7 +78,7 @@ class EventProjectionist
     {
         $eventHandlers
             ->pipe(function (Collection $eventHandler) {
-                return $this->instanciate($eventHandler);
+                return $this->instantiate($eventHandler);
             })
             ->filter(function (object $eventHandler) use ($storedEvent) {
                 if ($eventHandler instanceof Projector) {
@@ -128,7 +128,7 @@ class EventProjectionist
         event(new StartingEventReplay());
 
         $projectors = $this
-            ->instanciate($projectors)
+            ->instantiate($projectors)
             ->each->resetStatus();
 
         $this->callMethod($projectors, 'onStartingEventReplay');
@@ -159,7 +159,7 @@ class EventProjectionist
         }
     }
 
-    protected function instanciate(Collection $eventHandlers)
+    protected function instantiate(Collection $eventHandlers)
     {
         return $eventHandlers->map(function ($eventHandler) {
             if (is_string($eventHandler)) {
