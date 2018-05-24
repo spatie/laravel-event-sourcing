@@ -16,13 +16,10 @@ return [
      */
     'event_serializer' => \Spatie\EventProjector\EventSerializers\JsonEventSerializer::class,
 
-    'replay' => [
-
-        /*
-         * When replaying events potentially a lot of events will have to be retrieved.
-         * In order to avoid memory problems events will be retrieved in
-         * a chuncked way. You can specify the chucnk size here.
-         */
-        'chunk_amount' => 1000,
-    ],
+    /*
+     * When replaying events potentially a lot of events will have to be retrieved.
+     * In order to avoid memory problems events will be retrieved in
+     * a chuncked way. You can specify the chucnk size here.
+     */
+    'replay_chunk_size' => 1000,
 ];
