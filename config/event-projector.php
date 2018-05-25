@@ -22,4 +22,14 @@ return [
      * a chuncked way. You can specify the chunk size here.
      */
     'replay_chunk_size' => 1000,
+
+    /**
+     * A list of projector classes that should be automatically registered.
+     */
+    'projectors' => [],
+
+    /**
+     * A list of reactor classes that should be automatically registered.
+     */
+    'reactors' => [],
 ];
