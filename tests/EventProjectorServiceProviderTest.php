@@ -2,11 +2,10 @@
 
 namespace Tests\Spatie\EventProjector;
 
-use ReflectionClass;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\EventProjectionist;
-use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Projectors\ProjectsEvents;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\EmptyProjector;
+use Spatie\EventProjector\Tests\TestClasses\Reactors\EmptyReactor;
 
 class EventProjectorServiceProviderTest extends TestCase
 {
@@ -27,7 +26,7 @@ class EventProjectorServiceProviderTest extends TestCase
 
         $this->assertTrue($projectors->isNotEmpty());
 
-        $this->assertEquals(DummyProjector::class, $projectors->first());
+        $this->assertEquals(EmptyProjector::class, $projectors->first());
     }
 
     /** @test */
@@ -37,28 +36,19 @@ class EventProjectorServiceProviderTest extends TestCase
 
         $this->assertTrue($reactors->isNotEmpty());
 
-        $this->assertEquals(DummyReactor::class, $reactors->first());
+        $this->assertEquals(EmptyReactor::class, $reactors->first());
     }
 
     protected function getPackageProviders($app)
     {
         $app['config']->set('event-projector.projectors', [
-            DummyProjector::class,
+            EmptyProjector::class,
         ]);
 
         $app['config']->set('event-projector.reactors', [
-            DummyReactor::class,
+            EmptyReactor::class,
         ]);
 
         return parent::getPackageProviders($app);
     }
-}
-
-class DummyProjector implements Projector
-{
-    use ProjectsEvents;
-}
-
-class DummyReactor
-{
 }
