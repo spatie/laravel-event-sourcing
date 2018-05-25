@@ -4,7 +4,7 @@ return [
 
     /*
      * This class is responsible for storing events. To add extra behavour you
-     * can change this your a class of your own. The only restriction is that
+     * can change this to a class of your own. The only restriction is that
      * it should extend \Spatie\EventProjector\Models\StoredEvent.
      */
     'stored_event_model' => \Spatie\EventProjector\Models\StoredEvent::class,
