@@ -3,10 +3,10 @@
 namespace Tests\Spatie\EventProjector;
 
 use ReflectionClass;
+use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\EventProjectionist;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
-use Spatie\EventProjector\Tests\TestCase;
 
 class EventProjectorServiceProviderTest extends TestCase
 {
@@ -30,7 +30,6 @@ class EventProjectorServiceProviderTest extends TestCase
 
         $this->assertEquals(DummyProjector::class, $projectors->first());
     }
-
 
     /** @test */
     public function reactors_can_be_registered_via_config()
