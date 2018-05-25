@@ -23,8 +23,7 @@ class EventProjectorServiceProviderTest extends TestCase
     /** @test */
     public function projectors_can_be_registered_via_config()
     {
-        /** @var \Illuminate\Support\Collection $projectors */
-        $projectors = $this->getProtectedProperty($this->eventProjectionist, 'projectors');
+        $projectors = $this->eventProjectionist->getProjectors();
 
         $this->assertTrue($projectors->isNotEmpty());
 
@@ -34,25 +33,11 @@ class EventProjectorServiceProviderTest extends TestCase
     /** @test */
     public function reactors_can_be_registered_via_config()
     {
-        /** @var \Illuminate\Support\Collection $reactors */
-        $reactors = $this->getProtectedProperty($this->eventProjectionist, 'reactors');
+        $reactors = $this->eventProjectionist->getReactors();
 
         $this->assertTrue($reactors->isNotEmpty());
 
         $this->assertEquals(DummyReactor::class, $reactors->first());
-    }
-
-    protected function getProtectedProperty($class, $property)
-    {
-        $reflection = new ReflectionClass($class);
-
-        $property = $reflection->getProperty($property);
-
-        $property->setAccessible(true);
-
-        $propertyValue = $property->getValue($class);
-
-        return $propertyValue;
     }
 
     protected function getPackageProviders($app)

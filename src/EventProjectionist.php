@@ -61,6 +61,11 @@ class EventProjectionist
         return $this->projectors;
     }
 
+    public function getReactors(): Collection
+    {
+        return $this->reactors;
+    }
+
     public function addReactor($reactor): self
     {
         $this->guardAgainstInvalidEventHandler($reactor);
