@@ -59,19 +59,9 @@ class EventProjectorServiceProvider extends ServiceProvider
 
             $projectionist = new EventProjectionist($config);
 
-            $projectionist->addProjectors(
-                collect(config('event-projector.projectors', []))
-                    ->map(function ($class) {
-                        return $this->determineClass($class);
-                    })->toArray()
-            );
+            $projectionist->addProjectors(config('event-projector.projectors', []));
 
-            $projectionist->addReactors(
-                collect(config('event-projector.reactors', []))
-                    ->map(function ($class) {
-                        return $this->determineClass($class);
-                    })->toArray()
-            );
+            $projectionist->addReactors(config('event-projector.reactors', []));
 
             return $projectionist;
         });
@@ -89,14 +79,5 @@ class EventProjectorServiceProvider extends ServiceProvider
             ->give(config('event-projector.stored_event_model'));
 
         Event::subscribe(EventSubscriber::class);
-    }
-
-    protected function determineClass($class)
-    {
-        if (is_string($class) && class_exists($class)) {
-            return new $class;
-        }
-
-        return $class;
     }
 }

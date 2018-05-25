@@ -28,7 +28,7 @@ class EventProjectorServiceProviderTest extends TestCase
 
         $this->assertTrue($projectors->isNotEmpty());
 
-        $this->assertInstanceOf(DummyProjector::class, $projectors->first());
+        $this->assertEquals(DummyProjector::class, $projectors->first());
     }
 
 
@@ -40,7 +40,7 @@ class EventProjectorServiceProviderTest extends TestCase
 
         $this->assertTrue($reactors->isNotEmpty());
 
-        $this->assertInstanceOf(DummyReactor::class, $reactors->first());
+        $this->assertEquals(DummyReactor::class, $reactors->first());
     }
 
     protected function getProtectedProperty($class, $property)
