@@ -12,7 +12,5 @@ class CreateSnapshotsCommand extends Command
 
     public function handle()
     {
-
     }
 }
-

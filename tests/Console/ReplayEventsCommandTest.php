@@ -5,7 +5,6 @@ namespace Spatie\EventProjector\Console;
 use Mockery;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Artisan;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Events\FinishedEventReplay;

@@ -10,4 +10,3 @@ interface Snapshottable extends Projector
 
     public function restoreSnapshot(Snapshot $snapshot);
 }
-
