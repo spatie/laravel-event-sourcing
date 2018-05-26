@@ -72,7 +72,7 @@ class ReplayEventsCommandTest extends TestCase
 
         $this->artisan('event-projector:replay-events');
 
-        $this->assertSee('No events replayed!');
+        $this->assertSeeInConsoleOutput('No events replayed!');
     }
 
     /** @test */
