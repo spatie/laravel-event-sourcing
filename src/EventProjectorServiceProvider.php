@@ -10,6 +10,10 @@ use Spatie\EventProjector\Console\Make\MakeReactorCommand;
 use Spatie\EventProjector\Console\ReplayEventsCommand;
 use Spatie\EventProjector\Console\Make\MakeProjectorCommand;
 use Spatie\EventProjector\Console\Make\MakeStorableEventCommand;
+use Spatie\EventProjector\Console\Snapshots\CreateSnapshotsCommand;
+use Spatie\EventProjector\Console\Snapshots\DeleteSnapshotsCommand;
+use Spatie\EventProjector\Console\Snapshots\ListSnapshotsCommand;
+use Spatie\EventProjector\Console\Snapshots\LoadSnapshotsCommand;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class EventProjectorServiceProvider extends ServiceProvider
@@ -69,7 +73,10 @@ class EventProjectorServiceProvider extends ServiceProvider
         $this->app->bind('command.event-projector:list-projectors', ListProjectorsCommand::class);
         $this->app->bind('command.event-projector:replay-events', ReplayEventsCommand::class);
 
-        $this->app->bind('command.event-projector:create-snapshot', CreateSnapshotCommand::class);
+        $this->app->bind('command.event-projector:list-snapshots', ListSnapshotsCommand::class);
+        $this->app->bind('command.event-projector:create-snapshots', CreateSnapshotsCommand::class);
+        $this->app->bind('command.event-projector:load-snapshots', LoadSnapshotsCommand::class);
+        $this->app->bind('command.event-projector:delete-snapshots', DeleteSnapshotsCommand::class);
 
         $this->app->bind('command.make:projector', MakeProjectorCommand::class);
         $this->app->bind('command.make:reactor', MakeReactorCommand::class);
@@ -78,7 +85,12 @@ class EventProjectorServiceProvider extends ServiceProvider
         $this->commands([
             'command.event-projector:list-projectors',
             'command.event-projector:replay-events',
-            'command.event-projector:create-snapshot',
+
+            'command.event-projector:list-snapshots',
+            'command.event-projector:create-snapshots',
+            'command.event-projector:load-snapshots',
+            'command.event-projector:delete-snapshots',
+
             'command.make:projector',
             'command.make:reactor',
             'command.make:storable-event',
