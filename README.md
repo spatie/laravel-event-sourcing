@@ -16,44 +16,16 @@ Here's a traditional example to make it more clear. Imagine you're a bank. Your 
 
 This package aims to be the simple and very pragmatic way to get started with event sourcing in Laravel.
 
-## Installation
+## Requirements
 
-You can install the package via composer:
+This package requires:
+- PHP 7.2 or higher 
+- Laravel 5.6.0 or higher
+- A database that supports `json` columns, like MySQL 5.7 or higher
 
-```bash
-composer require spatie/laravel-event-projector
-```
+## Documentation
 
-Next up you should publish the migration by running
-
-```
-php artisan vendor:publish --provider="Spatie\EventProjector\EventProjectorServiceProvider" --tag="migrations"
-```
-
-After the migration has been published you can create the `stored_events` table by running the migrations:
-
-```
-php artisan migrate
-```
-
-Optionally you may publish the config file. It will be published at `config/event-projector.php`. This is the default content:
-
-```php
-// coming soon
-```
-
-
-Coming soon...
-
-## Usage
-
-Coming soon...
-
-### Testing
-
-``` bash
-composer test
-```
+You can find installation instructions and detailed instructions on how to use this package at [the dedicated documentation site](https://docs.spatie.be/laravel-event-projector).
 
 ### Changelog
 
