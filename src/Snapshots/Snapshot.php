@@ -1,0 +1,97 @@
+<?php
+
+namespace Spatie\EventProjector\Snapshots;
+
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Spatie\EventProjector\EventProjectionist;
+use Spatie\EventProjector\Projectors\Projector;
+
+class Snapshot
+{
+    /** @var \Spatie\EventProjector\EventProjectionist */
+    protected $eventProjectionist;
+
+    /** @var \Illuminate\Contracts\Filesystem\Filesystem */
+    protected $disk;
+
+    /** @var string */
+    protected $fileName;
+
+    public static function createForProjector(Projector $projector, string $name = ''): self
+    {
+        $lastEventId = $projector->getLastProcessedEventId();
+
+        $name = "{$projector->getName()}---{$lastEventId}---{$name}.txt";
+
+        return app(static::class)->setFileName($name);
+    }
+
+    public static function createForFile(Filesystem $disk, string $fileName): Snapshot
+    {
+        return (new static($disk,$fileName));
+    }
+
+    public function __construct(EventProjectionist $eventProjectionist, Filesystem $disk, string $fileName)
+    {
+        $this->eventProjectionist = $eventProjectionist;
+
+        $this->disk = $disk;
+
+        $this->fileName = $fileName;
+    }
+
+    public function getLastProcessedEventId(): int
+    {
+        return $this->getNameParts()['lastProcessedEventId'];
+    }
+
+    public function getProjectorName(): string
+    {
+        return $this->getNameParts()['projectorName'];
+    }
+
+    public function getProjector(): Projector
+    {
+        $projectorName = $this->getProjectorName();
+
+        return $this->eventProjectionist->getProjector($projectorName);
+    }
+
+    public function getName(): string
+    {
+        return $this->getNameParts()['name'];
+    }
+
+    /**
+     * @param string|resource $contents
+     */
+    public function write($contents)
+    {
+        $this->disk->put($this->fileName, $contents);
+    }
+
+    public function read(): ?string
+    {
+        return $this->disk->get($this->fileName);
+    }
+
+    public function readStream()
+    {
+        return $this->disk->readStream($this->fileName);
+    }
+
+    protected function getNameParts(): array
+    {
+        $baseName = pathinfo($this->fileName, PATHINFO_FILENAME);
+
+        $nameParts = explode('---', $baseName);
+
+        $projectorName =  $nameParts[0];
+
+        $lastProcessedEventId = (int) $nameParts[1];
+
+        $name =  $nameParts[2] ?? '';
+
+        return compact('projectorName', 'lastProcessedEventId', 'name');
+    }
+}
