@@ -22,4 +22,10 @@ return [
      * a chuncked way. You can specify the chunk size here.
      */
     'replay_chunk_size' => 1000,
+
+    /*
+     * The diskname where the snapshots are stored. You can create a disk in the
+     * default Laravel filesystems.php config file.
+     */
+    'snapshots_disk' => 'snapshots',
 ];

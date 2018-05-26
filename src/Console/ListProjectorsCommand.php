@@ -6,9 +6,9 @@ use Illuminate\Console\Command;
 use Spatie\EventProjector\EventProjectionist;
 use Spatie\EventProjector\Projectors\Projector;
 
-class ListCommand extends Command
+class ListProjectorsCommand extends Command
 {
-    protected $signature = 'event-projector:list';
+    protected $signature = 'event-projector:list-projectors';
 
     protected $description = 'List all event projectors';
 

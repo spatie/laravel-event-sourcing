@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\Console;
+namespace Spatie\EventProjector\Console\Make;
 
 use Illuminate\Console\GeneratorCommand;
 
@@ -14,7 +14,7 @@ class MakeReactorCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return __DIR__.'/../../stubs/reactor.stub';
+        return __DIR__ . '/../../stubs/reactor.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
