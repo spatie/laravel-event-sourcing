@@ -4,7 +4,7 @@ return [
 
     /*
      * This class is responsible for storing events. To add extra behavour you
-     * can change this your a class of your own. The only restriction is that
+     * can change this to a class of your own. The only restriction is that
      * it should extend \Spatie\EventProjector\Models\StoredEvent.
      */
     'stored_event_model' => \Spatie\EventProjector\Models\StoredEvent::class,
@@ -16,13 +16,10 @@ return [
      */
     'event_serializer' => \Spatie\EventProjector\EventSerializers\JsonEventSerializer::class,
 
-    'replay' => [
-
-        /*
-         * When replaying events potentially a lot of events will have to be retrieved.
-         * In order to avoid memory problems events will be retrieved in
-         * a chuncked way. You can specify the chucnk size here.
-         */
-        'chunk_amount' => 1000,
-    ],
+    /*
+     * When replaying events potentially a lot of events will have to be retrieved.
+     * In order to avoid memory problems events will be retrieved in
+     * a chuncked way. You can specify the chunk size here.
+     */
+    'replay_chunk_size' => 1000,
 ];
