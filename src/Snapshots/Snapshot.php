@@ -2,8 +2,8 @@
 
 namespace Spatie\EventProjector\Snapshots;
 
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Spatie\EventProjector\EventProjectionist;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Spatie\EventProjector\Projectors\Projector;
 
 class Snapshot
@@ -26,9 +26,9 @@ class Snapshot
         return app(static::class)->setFileName($name);
     }
 
-    public static function createForFile(Filesystem $disk, string $fileName): Snapshot
+    public static function createForFile(Filesystem $disk, string $fileName): self
     {
-        return (new static($disk,$fileName));
+        return new static($disk,$fileName);
     }
 
     public function __construct(EventProjectionist $eventProjectionist, Filesystem $disk, string $fileName)
@@ -86,11 +86,11 @@ class Snapshot
 
         $nameParts = explode('---', $baseName);
 
-        $projectorName =  $nameParts[0];
+        $projectorName = $nameParts[0];
 
         $lastProcessedEventId = (int) $nameParts[1];
 
-        $name =  $nameParts[2] ?? '';
+        $name = $nameParts[2] ?? '';
 
         return compact('projectorName', 'lastProcessedEventId', 'name');
     }

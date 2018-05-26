@@ -14,7 +14,7 @@ class MakeStorableEventCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return __DIR__ . '/../../stubs/storable-event.stub';
+        return __DIR__.'/../../stubs/storable-event.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)

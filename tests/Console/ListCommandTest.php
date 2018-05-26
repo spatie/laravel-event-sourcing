@@ -2,8 +2,8 @@
 
 namespace Spatie\EventProjector\Console;
 
-use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestCase;
+use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 
 class ListCommandTest extends TestCase

@@ -12,7 +12,5 @@ class ListSnapshotsCommand extends Command
 
     public function handle()
     {
-
     }
 }
-
