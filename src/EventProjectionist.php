@@ -65,6 +65,15 @@ class EventProjectionist
     {
         return $this->reactors;
     }
+      
+    public function getProjector(string $name): ?Projector
+    {
+        return $this
+            ->instantiate($this->projectors)
+            ->first(function (Projector $projector) use ($name) {
+                return $projector->getName() === $name;
+            });
+    }
 
     public function addReactor($reactor): self
     {

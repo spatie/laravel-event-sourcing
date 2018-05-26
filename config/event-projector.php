@@ -32,4 +32,10 @@ return [
      * A list of reactor classes that should be automatically registered.
      */
     'reactors' => [],
+
+    /*
+     * The diskname where the snapshots are stored. You can create a disk in the
+     * default Laravel filesystems.php config file.
+     */
+    'snapshots_disk' => 'snapshots',
 ];

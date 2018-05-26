@@ -4,12 +4,16 @@ namespace Spatie\EventProjector;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Spatie\EventProjector\Console\ListCommand;
-use Spatie\EventProjector\Console\MakeReactorCommand;
 use Spatie\EventProjector\Console\ReplayEventsCommand;
-use Spatie\EventProjector\Console\MakeProjectorCommand;
-use Spatie\EventProjector\Console\MakeStorableEventCommand;
+use Spatie\EventProjector\Console\ListProjectorsCommand;
+use Spatie\EventProjector\Console\Make\MakeReactorCommand;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
+use Spatie\EventProjector\Console\Make\MakeProjectorCommand;
+use Spatie\EventProjector\Console\Make\MakeStorableEventCommand;
+use Spatie\EventProjector\Console\Snapshots\ListSnapshotsCommand;
+use Spatie\EventProjector\Console\Snapshots\LoadSnapshotsCommand;
+use Spatie\EventProjector\Console\Snapshots\CreateSnapshotsCommand;
+use Spatie\EventProjector\Console\Snapshots\DeleteSnapshotsCommand;
 
 class EventProjectorServiceProvider extends ServiceProvider
 {
@@ -35,19 +39,7 @@ class EventProjectorServiceProvider extends ServiceProvider
 
         $this->app->bind(EventSerializer::class, config('event-projector.event_serializer'));
 
-        $this->app->bind('command.event-projector:list', ListCommand::class);
-        $this->app->bind('command.event-projector:replay-events', ReplayEventsCommand::class);
-        $this->app->bind('command.make:projector', MakeProjectorCommand::class);
-        $this->app->bind('command.make:reactor', MakeReactorCommand::class);
-        $this->app->bind('command.make:storable-event', MakeStorableEventCommand::class);
-
-        $this->commands([
-            'command.event-projector:list',
-            'command.event-projector:replay-events',
-            'command.make:projector',
-            'command.make:reactor',
-            'command.make:storable-event',
-        ]);
+        $this->bindCommands();
     }
 
     public function register()
@@ -79,5 +71,34 @@ class EventProjectorServiceProvider extends ServiceProvider
             ->give(config('event-projector.stored_event_model'));
 
         Event::subscribe(EventSubscriber::class);
+    }
+
+    protected function bindCommands(): void
+    {
+        $this->app->bind('command.event-projector:list-projectors', ListProjectorsCommand::class);
+        $this->app->bind('command.event-projector:replay-events', ReplayEventsCommand::class);
+
+        $this->app->bind('command.event-projector:list-snapshots', ListSnapshotsCommand::class);
+        $this->app->bind('command.event-projector:create-snapshots', CreateSnapshotsCommand::class);
+        $this->app->bind('command.event-projector:load-snapshots', LoadSnapshotsCommand::class);
+        $this->app->bind('command.event-projector:delete-snapshots', DeleteSnapshotsCommand::class);
+
+        $this->app->bind('command.make:projector', MakeProjectorCommand::class);
+        $this->app->bind('command.make:reactor', MakeReactorCommand::class);
+        $this->app->bind('command.make:storable-event', MakeStorableEventCommand::class);
+
+        $this->commands([
+            'command.event-projector:list-projectors',
+            'command.event-projector:replay-events',
+
+            'command.event-projector:list-snapshots',
+            'command.event-projector:create-snapshots',
+            'command.event-projector:load-snapshots',
+            'command.event-projector:delete-snapshots',
+
+            'command.make:projector',
+            'command.make:reactor',
+            'command.make:storable-event',
+        ]);
     }
 }

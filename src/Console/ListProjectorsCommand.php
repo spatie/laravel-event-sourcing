@@ -6,9 +6,9 @@ use Illuminate\Console\Command;
 use Spatie\EventProjector\EventProjectionist;
 use Spatie\EventProjector\Projectors\Projector;
 
-class ListCommand extends Command
+class ListProjectorsCommand extends Command
 {
-    protected $signature = 'event-projector:list';
+    protected $signature = 'event-projector:list-projectors';
 
     protected $description = 'List all event projectors';
 
@@ -26,7 +26,15 @@ class ListCommand extends Command
     {
         $titles = ['Name', 'Up to date', 'Last processed event id', 'Last event processed at'];
 
-        $rows = $this->eventProjectionist->projectors
+        $projectors = $this->eventProjectionist->getProjectors();
+
+        if ($projectors->isEmpty()) {
+            $this->warn('No projectors found. You can register projector like this : `Spatie\EventProjector\Facades\EventProjectionist::addProjector($projectorClassName)`.');
+
+            return;
+        }
+
+        $rows = $projectors
             ->map(function ($eventHandler) {
                 if (is_string($eventHandler)) {
                     $eventHandler = app($eventHandler);

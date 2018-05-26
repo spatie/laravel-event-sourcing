@@ -3,6 +3,7 @@
 namespace Spatie\EventProjector\Tests;
 
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\EventProjector\EventProjectorServiceProvider;
@@ -48,5 +49,12 @@ abstract class TestCase extends Orchestra
         (new \CreateStoredEventsTable())->up();
         include_once __DIR__.'/../stubs/create_projector_statuses_table.php.stub';
         (new \CreateProjectorStatusesTable())->up();
+    }
+
+    protected function assertSeeInConsoleOutput(string $text): self
+    {
+        $this->assertContains($text, Artisan::output());
+
+        return $this;
     }
 }

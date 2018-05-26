@@ -16,46 +16,11 @@ Here's a traditional example to make it more clear. Imagine you're a bank. Your 
 
 This package aims to be the simple and very pragmatic way to get started with event sourcing in Laravel.
 
-## Installation
+## Documentation
 
-You can install the package via composer:
+You can find installation instructions and detailed instructions on how to use this package at [the dedicated documentation site](https://docs.spatie.be/laravel-event-projector).
 
-```bash
-composer require spatie/laravel-event-projector
-```
-
-Next up you should publish the migration by running
-
-```
-php artisan vendor:publish --provider="Spatie\EventProjector\EventProjectorServiceProvider" --tag="migrations"
-```
-
-After the migration has been published you can create the `stored_events` table by running the migrations:
-
-```
-php artisan migrate
-```
-
-Optionally you may publish the config file. It will be published at `config/event-projector.php`. This is the default content:
-
-```php
-// coming soon
-```
-
-
-Coming soon...
-
-## Usage
-
-Coming soon...
-
-### Testing
-
-``` bash
-composer test
-```
-
-### Changelog
+## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
@@ -63,7 +28,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-### Security
+## Security
 
 If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
 
@@ -74,13 +39,6 @@ You're free to use this package, but if it makes it to your production environme
 Our address is: Spatie, Samberstraat 69D, 2060 Antwerp, Belgium.
 
 We publish all received postcards [on our company website](https://spatie.be/en/opensource/postcards).
-
-## Resources
-
--  [Event Sourcing made Simple](https://kickstarter.engineering/event-sourcing-made-simple-4a2625113224): the blogpost that showed us that event sourcing can be used very pragmatically as well
-- [EventSauce](https://eventsauce.io/): A pragmatic, feature rich event sourcing library for PHP made by [Frank de Jonge](https://frankdejonge.nl)
-- [prooph](https://github.com/prooph): A full blown CQRS and event sourcing solution in PHP
-- [The Many Meanings of Event-Driven Architecture](https://www.youtube.com/watch?v=STKCRSUsyP0): A recording of a cool talk by [Martin Fowler](https://martinfowler.com/)
 
 ## Credits
 
