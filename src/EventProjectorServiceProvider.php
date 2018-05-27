@@ -7,16 +7,16 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
-use Spatie\EventProjector\Console\Snapshots\CreateSnapshotCommand;
+use Spatie\EventProjector\Console\ReplayEventsCommand;
 use Spatie\EventProjector\Console\ListProjectorsCommand;
 use Spatie\EventProjector\Console\Make\MakeReactorCommand;
-use Spatie\EventProjector\Console\ReplayEventsCommand;
+use Spatie\EventProjector\Console\Snapshots\CreateSnapshotCommand;
+use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\Console\Make\MakeProjectorCommand;
 use Spatie\EventProjector\Console\Make\MakeStorableEventCommand;
 use Spatie\EventProjector\Console\Snapshots\DeleteSnapshotsCommand;
 use Spatie\EventProjector\Console\Snapshots\ListSnapshotsCommand;
 use Spatie\EventProjector\Console\Snapshots\LoadSnapshotsCommand;
-use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
 
 class EventProjectorServiceProvider extends ServiceProvider

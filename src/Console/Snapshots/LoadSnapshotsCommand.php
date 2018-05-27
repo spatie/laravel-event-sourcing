@@ -12,7 +12,5 @@ class LoadSnapshotsCommand extends Command
 
     public function handle()
     {
-
     }
 }
-

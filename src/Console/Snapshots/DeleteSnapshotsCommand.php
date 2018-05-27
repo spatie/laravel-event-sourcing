@@ -12,7 +12,5 @@ class DeleteSnapshotsCommand extends Command
 
     public function handle()
     {
-
     }
 }
-

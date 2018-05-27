@@ -2,8 +2,8 @@
 
 namespace Spatie\EventProjector\Tests;
 
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\EventProjector\EventProjectorServiceProvider;
