@@ -17,20 +17,6 @@ class Snapshot
     /** @var string */
     protected $fileName;
 
-    public static function createForProjector(Projector $projector, string $name = ''): self
-    {
-        $lastEventId = $projector->getLastProcessedEventId();
-
-        $name = "{$projector->getName()}---{$lastEventId}---{$name}.txt";
-
-        return app(static::class)->setFileName($name);
-    }
-
-    public static function createForFile(Filesystem $disk, string $fileName): self
-    {
-        return new static($disk,$fileName);
-    }
-
     public function __construct(EventProjectionist $eventProjectionist, Filesystem $disk, string $fileName)
     {
         $this->eventProjectionist = $eventProjectionist;

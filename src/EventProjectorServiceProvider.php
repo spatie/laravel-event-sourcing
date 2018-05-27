@@ -18,6 +18,7 @@ use Spatie\EventProjector\Console\Snapshots\DeleteSnapshotsCommand;
 use Spatie\EventProjector\Console\Snapshots\ListSnapshotsCommand;
 use Spatie\EventProjector\Console\Snapshots\LoadSnapshotsCommand;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
+use Spatie\EventProjector\Snapshots\SnapshotRepository;
 
 class EventProjectorServiceProvider extends ServiceProvider
 {
@@ -62,10 +63,18 @@ class EventProjectorServiceProvider extends ServiceProvider
             $eventProjectionist = app(EventProjectionist::class);
 
             $diskName = config('event-projector.snapshots_disk');
-
             $disk = Storage::disk($diskName);
 
             return new SnapshotFactory($eventProjectionist, $disk);
+        });
+
+        $this->app->bind(SnapshotRepository::class, function() {
+            $diskName = config('event-projector.snapshots_disk');
+            $disk = Storage::disk($diskName);
+
+            $eventProjectionist = app(EventProjectionist::class);
+
+            return new SnapshotRepository($disk, $eventProjectionist);
         });
 
         $this->app
