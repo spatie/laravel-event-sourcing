@@ -34,7 +34,7 @@ trait ProjectsEvents
 
     public function getLastProcessedEventId(): int
     {
-        return $this->getStatus()->last_processed_event_id;
+        return $this->getStatus()->last_processed_event_id ?? 0;
     }
 
     public function lastEventProcessedAt(): Carbon

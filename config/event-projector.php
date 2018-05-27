@@ -27,5 +27,5 @@ return [
      * The diskname where the snapshots are stored. You can create a disk in the
      * default Laravel filesystems.php config file.
      */
-    'snapshots_disk' => 'snapshots',
+    'snapshots_disk' => 'local',
 ];

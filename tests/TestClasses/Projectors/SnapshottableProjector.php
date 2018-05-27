@@ -10,7 +10,7 @@ use Spatie\EventProjector\Snapshots\Snapshottable;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 
-class BalanceProjector implements Projector, Snapshottable
+class SnapshottableProjector implements Projector, Snapshottable
 {
     use ProjectsEvents, CanTakeSnapshot;
 
@@ -31,7 +31,7 @@ class BalanceProjector implements Projector, Snapshottable
 
     public function writeToSnapshot(Snapshot $snapshot)
     {
-        // TODO: Implement writeToSnapshot() method.
+        $snapshot->write('test');
     }
 
     public function restoreSnapshot(Snapshot $snapshot)
