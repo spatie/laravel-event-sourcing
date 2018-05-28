@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjectors\Tests\Snapshots;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
@@ -40,11 +41,13 @@ class SnapshotFactoryTest extends TestCase
     {
         $snapshot = $this->snapshotFactory->createForProjector(new SnapshottableProjector());
 
-        $this->assertEquals('', $snapshot->getName());
+        $this->assertEquals('', $snapshot->name());
 
         $this->assertInstanceOf(SnapshottableProjector::class, $snapshot->getProjector());
 
-        $this->assertEquals(0, $snapshot->getLastProcessedEventId());
+        $this->assertEquals(0, $snapshot->lastProcessedEventId());
+
+        $this->assertEquals(date('Ymd'), $snapshot->createdAt()->format('Ymd'));
 
         $serializedAccounts = json_encode(Account::get()->each->toArray());
         $this->assertEquals($serializedAccounts, $snapshot->read());
@@ -61,6 +64,11 @@ class SnapshotFactoryTest extends TestCase
 
         $snapshot = $this->snapshotFactory->createForProjector(new SnapshottableProjector());
 
-        $this->assertEquals($amountOfEvents, $snapshot->getLastProcessedEventId());
+        $this->assertEquals($amountOfEvents, $snapshot->lastProcessedEventId());
+    }
+
+    public function it_can_return_the_date_is_was_created()
+    {
+
     }
 }

@@ -42,6 +42,10 @@ class EventProjectionist
     {
         $this->guardAgainstInvalidEventHandler($projector);
 
+        if ($this->alreadyAdded('projector', $projector)) {
+            return $this;
+        }
+
         $this->projectors->push($projector);
 
         return $this;
@@ -74,6 +78,10 @@ class EventProjectionist
     {
         $this->guardAgainstInvalidEventHandler($reactor);
 
+        if ($this->alreadyAdded('reactor', $reactor)) {
+            return $this;
+        }
+
         $this->reactors->push($reactor);
 
         return $this;
@@ -86,6 +94,11 @@ class EventProjectionist
         });
 
         return $this;
+    }
+
+    public function getReactors(): Collection
+    {
+        return $this->reactors;
     }
 
     public function handle(StoredEvent $storedEvent)
@@ -103,7 +116,7 @@ class EventProjectionist
             })
             ->filter(function (object $eventHandler) use ($storedEvent) {
                 if ($eventHandler instanceof Projector) {
-                    if (! $eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
+                    if (!$eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
                         event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));
 
                         return false;
@@ -125,17 +138,17 @@ class EventProjectionist
 
     protected function callEventHandler(object $eventHandler, StoredEvent $storedEvent)
     {
-        if (! isset($eventHandler->handlesEvents)) {
+        if (!isset($eventHandler->handlesEvents)) {
             throw InvalidEventHandler::cannotHandleEvents($eventHandler);
         }
 
         $event = $storedEvent->event;
 
-        if (! $method = $eventHandler->handlesEvents[get_class($event)] ?? false) {
+        if (!$method = $eventHandler->handlesEvents[get_class($event)] ?? false) {
             return;
         }
 
-        if (! method_exists($eventHandler, $method)) {
+        if (!method_exists($eventHandler, $method)) {
             throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
         }
 
@@ -171,11 +184,11 @@ class EventProjectionist
 
     protected function guardAgainstInvalidEventHandler($eventHandler)
     {
-        if (! is_string($eventHandler)) {
+        if (!is_string($eventHandler)) {
             return;
         }
 
-        if (! class_exists($eventHandler)) {
+        if (!class_exists($eventHandler)) {
             throw InvalidEventHandler::doesNotExist($eventHandler);
         }
     }
@@ -202,5 +215,35 @@ class EventProjectionist
             });
 
         return $this;
+    }
+
+
+
+    protected function alreadyAdded(string $type, $eventHandler)
+    {
+        $eventHandlerClassName = is_string($eventHandler)
+            ? $eventHandler
+            : get_class($eventHandler);
+
+        $variableName = "{$type}s";
+
+        $currentEventHandlers = $this->$variableName->toArray();
+
+        if (in_array($eventHandlerClassName, $currentEventHandlers)) {
+            return $this;
+        }
+    }
+
+    protected function getClassNames(Collection $eventHandlers): array
+    {
+        return $eventHandlers
+            ->map(function ($eventHandler) {
+                if (is_string($eventHandler)) {
+                    return $eventHandler;
+                }
+
+                return get_class($eventHandler);
+            })
+            ->toArray();
     }
 }

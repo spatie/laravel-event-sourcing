@@ -11,6 +11,7 @@ use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\InvalidProjectorThatCannotHandleEvents;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod;
+use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 
 class EventProjectionistTest extends TestCase
 {
@@ -97,5 +98,23 @@ class EventProjectionistTest extends TestCase
 
         event(new MoneyAdded($this->account, 1000));
         $this->assertEquals(1000, $this->account->refresh()->amount);
+    }
+
+    /** @test */
+    public function it_will_not_register_the_same_projector_twice()
+    {
+        EventProjectionist::addProjector(BalanceProjector::class);
+        EventProjectionist::addProjector(BalanceProjector::class);
+
+        $this->assertCount(1, EventProjectionist::getProjectors());
+    }
+
+    /** @test */
+    public function it_will_not_register_the_same_reactor_twice()
+    {
+        EventProjectionist::addReactor(BrokeReactor::class);
+        EventProjectionist::addReactor(BrokeReactor::class);
+
+        $this->assertCount(1, EventProjectionist::getReactors());
     }
 }

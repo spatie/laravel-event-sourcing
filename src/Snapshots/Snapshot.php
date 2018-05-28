@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector\Snapshots;
 
+use Carbon\Carbon;
 use Spatie\EventProjector\EventProjectionist;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Spatie\EventProjector\Projectors\Projector;
@@ -26,24 +27,24 @@ class Snapshot
         $this->fileName = $fileName;
     }
 
-    public function getLastProcessedEventId(): int
+    public function lastProcessedEventId(): int
     {
         return $this->getNameParts()['lastProcessedEventId'];
     }
 
-    public function getProjectorName(): string
+    public function projectorName(): string
     {
         return $this->getNameParts()['projectorName'];
     }
 
     public function getProjector(): Projector
     {
-        $projectorName = $this->getProjectorName();
+        $projectorName = $this->projectorName();
 
         return $this->eventProjectionist->getProjector($projectorName);
     }
 
-    public function getName(): string
+    public function name(): string
     {
         return $this->getNameParts()['name'];
     }
@@ -66,6 +67,18 @@ class Snapshot
         return $this->disk->readStream($this->fileName);
     }
 
+    public function delete()
+    {
+        $this->disk->delete($this->fileName);
+    }
+
+    public function createdAt(): Carbon
+    {
+        $timestamp = $this->disk->lastModified($this->fileName);
+
+        return Carbon::createFromTimestamp($timestamp);
+    }
+
     protected function getNameParts(): array
     {
         $baseName = pathinfo($this->fileName, PATHINFO_FILENAME);
@@ -79,10 +92,5 @@ class Snapshot
         $name =  $nameParts[3] ?? '';
 
         return compact('projectorName', 'lastProcessedEventId', 'name');
-    }
-
-    public function delete()
-    {
-        $this->disk->delete($this->fileName);
     }
 }
