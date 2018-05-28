@@ -7,9 +7,9 @@ use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Snapshots\Snapshottable;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
 use Spatie\EventProjector\Snapshots\CanTakeSnapshot;
+use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 
 class SnapshottableProjector implements Projector, Snapshottable
 {
@@ -45,7 +45,7 @@ class SnapshottableProjector implements Projector, Snapshottable
 
         $unserializedAccounts = json_decode($serializedAccounts, true);
 
-        foreach($unserializedAccounts as $accountAttributes) {
+        foreach ($unserializedAccounts as $accountAttributes) {
             Account::create($accountAttributes);
         }
     }

@@ -26,7 +26,7 @@ class ListSnapshotsCommand extends Command
     {
         $titles = ['Projector', 'Last processed event id', 'Created at', 'Name'];
 
-        $rows = $this->snapshotRepository->get()->map(function(Snapshot $snapshot) {
+        $rows = $this->snapshotRepository->get()->map(function (Snapshot $snapshot) {
             return [
                 $snapshot->projectorName(),
                 $snapshot->lastProcessedEventId(),

@@ -2,9 +2,9 @@
 
 namespace Spatie\EventProjector\Snapshots;
 
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Spatie\EventProjector\EventProjectionist;
+use Illuminate\Contracts\Filesystem\Filesystem;
 
 class SnapshotRepository
 {
@@ -28,7 +28,7 @@ class SnapshotRepository
                 return new Snapshot($this->eventProjectionist, $this->disk, $fileName);
             })
             ->filter->isValid()
-            ->sortByDesc(function(Snapshot $snapshot) {
+            ->sortByDesc(function (Snapshot $snapshot) {
                 return $snapshot->createdAt()->format('Ymdhis');
             });
     }
