@@ -21,7 +21,7 @@ class SnapshotRepository
         $this->eventProjectionist = $eventProjectionist;
     }
 
-    public function all(): Collection
+    public function get(): Collection
     {
         return collect($this->disk->allFiles())->map(function(string $fileName) {
             return new Snapshot($this->eventProjectionist, $this->disk, $fileName);

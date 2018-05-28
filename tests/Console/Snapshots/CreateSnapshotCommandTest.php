@@ -35,20 +35,10 @@ class CreateSnapshotCommandTest extends TestCase
             'projectorName' => SnapshottableProjector::class
         ]);
 
-        $allSnapshots = app(SnapshotRepository::class)->all();
+        $allSnapshots = app(SnapshotRepository::class)->get();
 
         $this->assertCount(1, $allSnapshots);
 
-        /** @var \Spatie\EventProjector\Snapshots\Snapshot $snapshot */
-        $snapshot = $allSnapshots->first();
 
-        $this->assertEquals('', $snapshot->getName());
-
-        $this->assertInstanceOf(SnapshottableProjector::class, $snapshot->getProjector());
-
-        $this->assertEquals(0, $snapshot->getLastProcessedEventId());
-
-        $serializedAccounts = json_encode(Account::get()->each->toArray());
-        $this->assertEquals($serializedAccounts, $snapshot->read());
     }
 }
