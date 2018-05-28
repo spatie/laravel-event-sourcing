@@ -23,8 +23,14 @@ class SnapshotRepository
 
     public function get(): Collection
     {
-        return collect($this->disk->allFiles())->map(function(string $fileName) {
-            return new Snapshot($this->eventProjectionist, $this->disk, $fileName);
-        });
+        return collect($this->disk->allFiles())
+            ->map(function (string $fileName) {
+                return new Snapshot($this->eventProjectionist, $this->disk, $fileName);
+            })
+            ->filter->isValid()
+            ->sortByDesc(function(Snapshot $snapshot) {
+                return $snapshot->createdAt()->format('Ymdhis');
+            });
+
     }
 }

@@ -27,6 +27,11 @@ class Snapshot
         $this->fileName = $fileName;
     }
 
+    public function isValid(): bool
+    {
+        return $this->projectorName() !== '';
+    }
+
     public function lastProcessedEventId(): int
     {
         return $this->getNameParts()['lastProcessedEventId'];
@@ -85,9 +90,9 @@ class Snapshot
 
         $nameParts = explode('---', $baseName);
 
-        $projectorName =  str_replace('+', '\\', $nameParts[1]);
+        $projectorName =  str_replace('+', '\\', $nameParts[1] ?? '');
 
-        $lastProcessedEventId = (int) $nameParts[2];
+        $lastProcessedEventId = $nameParts[2] ?? 0;
 
         $name =  $nameParts[3] ?? '';
 
