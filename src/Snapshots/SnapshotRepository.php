@@ -31,6 +31,5 @@ class SnapshotRepository
             ->sortByDesc(function(Snapshot $snapshot) {
                 return $snapshot->createdAt()->format('Ymdhis');
             });
-
     }
 }
