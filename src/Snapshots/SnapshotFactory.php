@@ -48,11 +48,14 @@ class SnapshotFactory
         }
 
         if (!$this->disk->exists($fileName)) {
+            //TODO: add test
             throw CouldNotCreateSnapshot::projectorDidNotWriteAnythingToSnapshot($projector);
         }
 
         if (!static::snapshotIsValid($lastEventId)) {
             $snapshot->delete();
+
+            //TODO: throw exception
         }
 
         return $snapshot;
@@ -65,6 +68,7 @@ class SnapshotFactory
 
     protected static function snapshotIsValid(int $lastEventId): bool
     {
+        // TODO: write function, duh
         return true;
     }
 }
