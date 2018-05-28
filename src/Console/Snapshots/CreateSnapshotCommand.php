@@ -5,7 +5,6 @@ namespace Spatie\EventProjector\Console\Snapshots;
 use Illuminate\Console\Command;
 use Spatie\EventProjector\EventProjectionist;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
-use Spatie\EventProjector\Snapshots\Snapshotter;
 
 class CreateSnapshotCommand extends Command
 {
@@ -43,4 +42,3 @@ class CreateSnapshotCommand extends Command
         $this->snapshotFactory->createForProjector($projector, $this->option('name'));
     }
 }
-

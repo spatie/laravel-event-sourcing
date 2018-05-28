@@ -3,8 +3,8 @@
 namespace Spatie\EventProjector\Snapshots;
 
 use Exception;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Spatie\EventProjector\EventProjectionist;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Spatie\EventProjector\Exceptions\CouldNotCreateSnapshot;
 
 class SnapshotFactory
@@ -47,12 +47,12 @@ class SnapshotFactory
             throw CouldNotCreateSnapshot::projectorThrewExceptionDuringWritingToSnapshot($projector, $exception);
         }
 
-        if (!$this->disk->exists($fileName)) {
+        if (! $this->disk->exists($fileName)) {
             //TODO: add test
             throw CouldNotCreateSnapshot::projectorDidNotWriteAnythingToSnapshot($projector);
         }
 
-        if (!static::snapshotIsValid($lastEventId)) {
+        if (! static::snapshotIsValid($lastEventId)) {
             $snapshot->delete();
 
             //TODO: throw exception

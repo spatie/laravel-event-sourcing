@@ -90,11 +90,11 @@ class Snapshot
 
         $nameParts = explode('---', $baseName);
 
-        $projectorName =  str_replace('+', '\\', $nameParts[1] ?? '');
+        $projectorName = str_replace('+', '\\', $nameParts[1] ?? '');
 
         $lastProcessedEventId = $nameParts[2] ?? 0;
 
-        $name =  $nameParts[3] ?? '';
+        $name = $nameParts[3] ?? '';
 
         return compact('projectorName', 'lastProcessedEventId', 'name');
     }

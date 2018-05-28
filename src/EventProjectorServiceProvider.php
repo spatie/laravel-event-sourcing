@@ -2,23 +2,21 @@
 
 namespace Spatie\EventProjector;
 
-use Illuminate\Contracts\Filesystem\Factory;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use Spatie\EventProjector\Snapshots\SnapshotFactory;
 use Spatie\EventProjector\Console\ReplayEventsCommand;
+use Spatie\EventProjector\Snapshots\SnapshotRepository;
 use Spatie\EventProjector\Console\ListProjectorsCommand;
 use Spatie\EventProjector\Console\Make\MakeReactorCommand;
-use Spatie\EventProjector\Console\Snapshots\CreateSnapshotCommand;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\Console\Make\MakeProjectorCommand;
 use Spatie\EventProjector\Console\Make\MakeStorableEventCommand;
-use Spatie\EventProjector\Console\Snapshots\DeleteSnapshotsCommand;
 use Spatie\EventProjector\Console\Snapshots\ListSnapshotsCommand;
 use Spatie\EventProjector\Console\Snapshots\LoadSnapshotsCommand;
-use Spatie\EventProjector\Snapshots\SnapshotFactory;
-use Spatie\EventProjector\Snapshots\SnapshotRepository;
+use Spatie\EventProjector\Console\Snapshots\CreateSnapshotCommand;
+use Spatie\EventProjector\Console\Snapshots\DeleteSnapshotsCommand;
 
 class EventProjectorServiceProvider extends ServiceProvider
 {
@@ -26,19 +24,19 @@ class EventProjectorServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/event-projector.php' => config_path('event-projector.php'),
+                __DIR__.'/../config/event-projector.php' => config_path('event-projector.php'),
             ], 'config');
         }
 
-        if (!class_exists('CreateStoredEventsTable')) {
+        if (! class_exists('CreateStoredEventsTable')) {
             $this->publishes([
-                __DIR__ . '/../stubs/create_stored_events_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_stored_events_table.php'),
+                __DIR__.'/../stubs/create_stored_events_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_stored_events_table.php'),
             ], 'migrations');
         }
 
-        if (!class_exists('CreateProjectorStatusesTable')) {
+        if (! class_exists('CreateProjectorStatusesTable')) {
             $this->publishes([
-                __DIR__ . '/../stubs/create_projector_statuses_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_projector_statuses_table.php'),
+                __DIR__.'/../stubs/create_projector_statuses_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_projector_statuses_table.php'),
             ], 'migrations');
         }
 
@@ -49,7 +47,7 @@ class EventProjectorServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/event-projector.php', 'event-projector');
+        $this->mergeConfigFrom(__DIR__.'/../config/event-projector.php', 'event-projector');
 
         $this->app->singleton(EventProjectionist::class, function () {
             $config = config('event-projector');
@@ -68,7 +66,7 @@ class EventProjectorServiceProvider extends ServiceProvider
             return new SnapshotFactory($eventProjectionist, $disk);
         });
 
-        $this->app->bind(SnapshotRepository::class, function() {
+        $this->app->bind(SnapshotRepository::class, function () {
             $diskName = config('event-projector.snapshots_disk');
             $disk = Storage::disk($diskName);
 

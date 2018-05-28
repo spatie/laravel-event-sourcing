@@ -2,9 +2,9 @@
 
 namespace Spatie\EventProjector\Console\Snapshots;
 
+use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Snapshots\Snapshot;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
-use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableProjector;
 

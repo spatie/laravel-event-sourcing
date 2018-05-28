@@ -2,14 +2,12 @@
 
 namespace Spatie\EventProjectors\Tests\Snapshots;
 
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-use Spatie\EventProjector\Facades\EventProjectionist;
-use Spatie\EventProjector\Snapshots\SnapshotFactory;
-use Spatie\EventProjector\Snapshots\SnapshotRepository;
 use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Snapshots\SnapshotFactory;
+use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableProjector;
 
 class SnapshotFactoryTest extends TestCase
@@ -69,6 +67,5 @@ class SnapshotFactoryTest extends TestCase
 
     public function it_can_return_the_date_is_was_created()
     {
-
     }
 }
