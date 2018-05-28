@@ -26,7 +26,9 @@ class SnapshotFactory
     {
         $lastEventId = $projector->getLastProcessedEventId();
 
-        $fileName = "Snapshot---{$projector->getName()}---{$lastEventId}---{$name}.txt";
+        $projectorName = str_replace('\\', '+', $projector->getName());
+
+        $fileName = "Snapshot---{$projectorName}---{$lastEventId}---{$name}.txt";
 
         $snapshot = new Snapshot(
             $this->eventProjectionist,

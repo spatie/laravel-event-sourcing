@@ -72,7 +72,7 @@ class Snapshot
 
         $nameParts = explode('---', $baseName);
 
-        $projectorName =  $nameParts[1];
+        $projectorName =  str_replace('+', '\\', $nameParts[1]);
 
         $lastProcessedEventId = (int) $nameParts[2];
 

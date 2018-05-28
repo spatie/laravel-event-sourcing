@@ -6,15 +6,24 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Snapshots\SnapshotRepository;
 use Spatie\EventProjector\Tests\TestCase;
+use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableProjector;
 
 class CreateSnapshotCommandTest extends TestCase
 {
+    /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
+    protected $account;
+
     public function setUp()
     {
         parent::setUp();
 
         Storage::fake();
+
+        $this->account = Account::create([
+            'name' => 'John',
+            'amount' => 1000,
+        ]);
     }
 
     /** @test */
@@ -29,5 +38,17 @@ class CreateSnapshotCommandTest extends TestCase
         $allSnapshots = app(SnapshotRepository::class)->all();
 
         $this->assertCount(1, $allSnapshots);
+
+        /** @var \Spatie\EventProjector\Snapshots\Snapshot $snapshot */
+        $snapshot = $allSnapshots->first();
+
+        $this->assertEquals('', $snapshot->getName());
+
+        $this->assertInstanceOf(SnapshottableProjector::class, $snapshot->getProjector());
+
+        $this->assertEquals(0, $snapshot->getLastProcessedEventId());
+
+        $serializedAccounts = json_encode(Account::get()->each->toArray());
+        $this->assertEquals($serializedAccounts, $snapshot->read());
     }
 }

@@ -9,6 +9,7 @@ use Spatie\EventProjector\Projectors\ProjectsEvents;
 use Spatie\EventProjector\Snapshots\CanTakeSnapshot;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
+use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 
 class SnapshottableProjector implements Projector, Snapshottable
 {
@@ -31,11 +32,21 @@ class SnapshottableProjector implements Projector, Snapshottable
 
     public function writeToSnapshot(Snapshot $snapshot)
     {
-        $snapshot->write('test');
+        $serializableAccounts = Account::get()->each->toArray();
+
+        $serializedAccounts = json_encode($serializableAccounts);
+
+        $snapshot->write($serializedAccounts);
     }
 
     public function restoreSnapshot(Snapshot $snapshot)
     {
-        // TODO: Implement restoreSnapshot() method.
+        $serializedAccounts = $snapshot->read();
+
+        $unserializedAccounts = json_decode($serializedAccounts, true);
+
+        foreach($unserializedAccounts as $accountAttributes) {
+            Account::create($accountAttributes);
+        }
     }
 }
