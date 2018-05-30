@@ -24,6 +24,14 @@ class ListSnapshotsCommand extends Command
 
     public function handle()
     {
+        $snapshots = $this->snapshotRepository->get();
+
+        if ($snapshots->isEmpty()) {
+            $this->warn("There currently are no snapshots. You can take a snapshot by running `php artisan event-projector:create-snapshot`.");
+
+            return;
+        }
+
         $titles = ['Projector', 'Last processed event id', 'Created at', 'Name'];
 
         $rows = $this->snapshotRepository->get()->map(function (Snapshot $snapshot) {

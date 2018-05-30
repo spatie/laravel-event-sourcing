@@ -40,5 +40,7 @@ class CreateSnapshotCommand extends Command
         }
 
         $this->snapshotFactory->createForProjector($projector, $this->option('name'));
+
+        $this->comment('Snapshot created!');
     }
 }

@@ -3,49 +3,49 @@
 namespace Spatie\EventProjector\Console\Snapshots;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
+use Spatie\EventProjector\Console\Snapshots\Concerns\ChooseSnapshot;
+use Spatie\EventProjector\Snapshots\Snapshot;
+use Spatie\EventProjector\Snapshots\SnapshotRepository;
 
 class DeleteSnapshotCommand extends Command
 {
+    use ChooseSnapshot;
+
     protected $signature = 'event-projector:delete-snapshot';
 
     protected $description = 'Delete snapshots';
 
-    /** @var \Illuminate\Support\Collection */
-    protected  $snapshots;
+    /** @var \Spatie\EventProjector\Snapshots\SnapshotRepository */
+    protected $snapshotRepository;
 
-    public function __construct()
+    public function __construct(SnapshotRepository $snapshotRepository)
     {
-        $this->snapshots = $this->snapshotRepository->get();
+        parent::__construct();
+
+        $this->snapshotRepository = $snapshotRepository;
     }
 
     public function handle()
     {
-        if ($this->snapshots->isEmpty()) {
-            $this->warn("There currently are no snapshots. You can take a snapshot by running `php artisan event-projector:create-snapshot`.");
+        $snapshots = $this->snapshotRepository->get();
 
-            return;
-        }
+        $snapshot = $this->chooseSnapshot('Which snapshot number would like to delete?', $snapshots);
 
-        $this->displaySnapshots();
-
-        $snapshotNumber = $this->ask('Which snapshot would you like to delete?');
-
-        if (! $snapshot = $this->snapshots->get($snapshotNumber)) {
-            $this->error("There is no snapshot for that number.");
-
+        if (! $snapshot) {
             return;
         }
 
         $snapshot->delete();
 
-        $this->comment("Snapshot number {$snapshotNumber} deleted!");
+        $this->comment("Snapshot deleted!");
     }
 
-    public function displaySnapshots()
+    public function displaySnapshots(Collection $snapshots)
     {
         $titles = ['Number', 'Projector', 'Last processed event id', 'Created at', 'Name'];
 
-        $rows = $this->snapshots->map(function (Snapshot $snapshot, int $index) {
+        $rows = $snapshots->map(function (Snapshot $snapshot, int $index) {
             return [
                 $index,
                 $snapshot->projectorName(),

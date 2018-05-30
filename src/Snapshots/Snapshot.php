@@ -42,7 +42,7 @@ class Snapshot
         return $this->getNameParts()['projectorName'];
     }
 
-    public function getProjector(): Projector
+    public function getProjector(): Snapshottable
     {
         $projectorName = $this->projectorName();
 
@@ -97,5 +97,12 @@ class Snapshot
         $name = $nameParts[3] ?? '';
 
         return compact('projectorName', 'lastProcessedEventId', 'name');
+    }
+
+    public function load(): self
+    {
+        $this->getProjector()->restoreSnapshot($this);
+
+        return $this;
     }
 }
