@@ -47,7 +47,7 @@ class DeleteSnapshotCommand extends Command
 
         $rows = $snapshots->map(function (Snapshot $snapshot, int $index) {
             return [
-                $index,
+                $index + 1,
                 $snapshot->projectorName(),
                 $snapshot->lastProcessedEventId(),
                 $snapshot->createdAt(),

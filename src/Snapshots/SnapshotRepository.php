@@ -34,7 +34,7 @@ class SnapshotRepository
             })
             ->filter->isValid()
             ->sortByDesc(function (Snapshot $snapshot) {
-                return $snapshot->createdAt()->format('Ymdhis');
+                return $snapshot->createdAt()->format('timestamp');
             })
             ->values();
     }

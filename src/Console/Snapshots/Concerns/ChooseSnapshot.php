@@ -19,7 +19,7 @@ trait ChooseSnapshot
 
         $snapshotNumber = $this->ask($question);
 
-        if (! $snapshot = $snapshots->get($snapshotNumber)) {
+        if (! $snapshot = $snapshots->get($snapshotNumber - 1)) {
             $this->error("There is no snapshot for that number.");
 
             return null;
