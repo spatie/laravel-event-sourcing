@@ -154,4 +154,20 @@ class ReplayEventsCommandTest extends TestCase
             '--projector' => [get_class($projector)],
         ]);
     }
+
+    /** @test */
+    public function it_will_not_call_certain_methods_on_the_projector_when_replaying_all_events()
+    {
+        $projector = Mockery::mock(BalanceProjector::class.'[onStartingReplayingAllEvents, onFinishedReplayingAllEvents]');
+
+        EventProjectionist::addProjector($projector);
+
+        $projector->shouldNotReceive('onStartingReplayingAllEvents');
+        $projector->shouldNotReceive('onFinishedReplayingAllEvents');
+
+        $this->artisan('event-projector:replay-events', [
+            '--projector' => [get_class($projector)],
+            '--only-new-events' => '',
+        ]);
+    }
 }

@@ -157,13 +157,13 @@ class EventProjectionist
         app()->call([$eventHandler, $method], compact('event', 'storedEvent'));
     }
 
-    public function replayEvents(Collection $projectors, $afterStoredEventId = 0, callable $onEventReplayed = null)
+    public function replayEvents(Collection $projectors, ?int $afterStoredEventId = null, callable $onEventReplayed = null)
     {
         $this->isReplayingEvents = true;
 
         event(new StartingReplayingAllEvents($projectors));
 
-        if ($afterStoredEventId === 0) {
+        if (is_null($afterStoredEventId)) {
             $projectors = $this
                 ->instantiate($projectors)
                 ->each->resetStatus();
@@ -172,7 +172,7 @@ class EventProjectionist
         }
 
         StoredEvent::query()
-            ->after($afterStoredEventId)
+            ->after($afterStoredEventId ?? 0)
             ->chunk($this->replayChunkSize, function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
                 $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
                     $this->callEventHandlers($projectors, $storedEvent);
@@ -187,7 +187,7 @@ class EventProjectionist
 
         event(new FinishedReplayingAllEvents());
 
-        if ($afterStoredEventId === 0) {
+        if (is_null($afterStoredEventId)) {
             $this->callMethod($projectors, 'onFinishedReplayingAllEvents');
         }
     }

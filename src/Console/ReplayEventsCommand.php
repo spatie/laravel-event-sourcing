@@ -53,7 +53,7 @@ class ReplayEventsCommand extends Command
             $this->warn("There are no events to replay.");
         }
 
-        $afterEventId === 0
+        is_null($afterEventId)
             ? $this->comment('Replaying all events...')
             : $this->comment("Replaying events after stored event id {$afterEventId}...");
         $this->emptyLine();
@@ -122,10 +122,10 @@ class ReplayEventsCommand extends Command
         return true;
     }
 
-    protected function determineAfterEventId(Collection $projectors): int
+    protected function determineAfterEventId(Collection $projectors): ?int
     {
         if ($this->option('only-new-events') === false) {
-            return 0;
+            return null;
         }
 
         return $projectors
