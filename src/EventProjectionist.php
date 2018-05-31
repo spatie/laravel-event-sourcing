@@ -117,7 +117,7 @@ class EventProjectionist
             })
             ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
                 if ($eventHandler instanceof Projector) {
-                    if (! $eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
+                    if (!$eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
                         event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));
 
                         return false;
@@ -139,28 +139,28 @@ class EventProjectionist
 
     protected function callEventHandler(EventHandler $eventHandler, StoredEvent $storedEvent)
     {
-        if (! isset($eventHandler->handlesEvents)) {
+        if (!isset($eventHandler->handlesEvents)) {
             throw InvalidEventHandler::cannotHandleEvents($eventHandler);
         }
 
         $event = $storedEvent->event;
 
-        if (! $method = $eventHandler->methodNameThatHandlesEvent($event)) {
+        if (!$method = $eventHandler->methodNameThatHandlesEvent($event)) {
             return;
         }
 
-        if (! method_exists($eventHandler, $method)) {
+        if (!method_exists($eventHandler, $method)) {
             throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
         }
 
         app()->call([$eventHandler, $method], compact('event', 'storedEvent'));
     }
 
-    public function replayEvents(Collection $projectors, callable $onEventReplayed)
+    public function replayEvents(Collection $projectors, $afterStoredEventId = 0, callable $onEventReplayed = null)
     {
         $this->isReplayingEvents = true;
 
-        event(new StartingEventReplay());
+        event(new StartingEventReplay($projectors));
 
         $projectors = $this
             ->instantiate($projectors)
@@ -168,13 +168,17 @@ class EventProjectionist
 
         $this->callMethod($projectors, 'onStartingEventReplay');
 
-        StoredEvent::chunk($this->replayChunkSize, function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
-            $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
-                $this->callEventHandlers($projectors, $storedEvent);
+        StoredEvent::query()
+            ->after($afterStoredEventId)
+            ->chunk($this->replayChunkSize, function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
+                $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
+                    $this->callEventHandlers($projectors, $storedEvent);
 
-                $onEventReplayed($storedEvent);
+                    if ($onEventReplayed) {
+                        $onEventReplayed($storedEvent);
+                    }
+                });
             });
-        });
 
         $this->isReplayingEvents = false;
 
@@ -185,11 +189,11 @@ class EventProjectionist
 
     protected function guardAgainstInvalidEventHandler($eventHandler)
     {
-        if (! is_string($eventHandler)) {
+        if (!is_string($eventHandler)) {
             return;
         }
 
-        if (! class_exists($eventHandler)) {
+        if (!class_exists($eventHandler)) {
             throw InvalidEventHandler::doesNotExist($eventHandler);
         }
     }
