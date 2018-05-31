@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EventProjector\ShouldBeStored;
@@ -51,5 +52,10 @@ class StoredEvent extends Model
     public function scopeWithMetaDataAttributes(): Builder
     {
         return SchemalessAttributes::scopeWithSchemalessAttributes('meta_data');
+    }
+
+    public function scopeAfter(Builder $query, int $storedEventId)
+    {
+        $query->where('id', '>', $storedEventId);
     }
 }
