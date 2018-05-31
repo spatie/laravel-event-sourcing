@@ -8,14 +8,19 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 
 class SnapshotRepository
 {
+    /** @var array */
+    protected $config;
+
     /** @var \Illuminate\Contracts\Filesystem\Filesystem */
     protected $disk;
 
     /** @var \Spatie\EventProjector\EventProjectionist */
     protected $eventProjectionist;
 
-    public function __construct(Filesystem $disk, EventProjectionist $eventProjectionist)
+    public function __construct(array $config, Filesystem $disk, EventProjectionist $eventProjectionist)
     {
+        $this->config = $config;
+
         $this->disk = $disk;
 
         $this->eventProjectionist = $eventProjectionist;
@@ -25,7 +30,7 @@ class SnapshotRepository
     {
         return collect($this->disk->allFiles())
             ->map(function (string $fileName) {
-                return new Snapshot($this->eventProjectionist, $this->disk, $fileName);
+                return new Snapshot($this->eventProjectionist, $this->config,  $this->disk, $fileName);
             })
             ->filter->isValid()
             ->sortByDesc(function (Snapshot $snapshot) {

@@ -3,11 +3,15 @@
 namespace Spatie\EventProjector\Projectors;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Concerns\HasEvents;
+use Spatie\EventProjector\EventHandler\HandlesEvents;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 
 trait ProjectsEvents
 {
+    use HandlesEvents;
+
     public function getName(): string
     {
         if (isset($this->name)) {

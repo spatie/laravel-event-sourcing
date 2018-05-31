@@ -60,19 +60,23 @@ class EventProjectorServiceProvider extends ServiceProvider
         $this->app->bind(SnapshotFactory::class, function () {
             $eventProjectionist = app(EventProjectionist::class);
 
-            $diskName = config('event-projector.snapshots_disk');
+            $config = config('event-projector');
+
+            $diskName = $config['snapshots_disk'];
             $disk = Storage::disk($diskName);
 
-            return new SnapshotFactory($eventProjectionist, $disk);
+            return new SnapshotFactory($eventProjectionist, $disk, $config);
         });
 
         $this->app->bind(SnapshotRepository::class, function () {
-            $diskName = config('event-projector.snapshots_disk');
+            $config = config('event-projector');
+
+            $diskName = $config['snapshots_disk'];
             $disk = Storage::disk($diskName);
 
             $eventProjectionist = app(EventProjectionist::class);
 
-            return new SnapshotRepository($disk, $eventProjectionist);
+            return new SnapshotRepository($config, $disk, $eventProjectionist);
         });
 
         $this->app
@@ -96,7 +100,7 @@ class EventProjectorServiceProvider extends ServiceProvider
         $this->app->bind('command.event-projector:list-snapshots', ListSnapshotsCommand::class);
         $this->app->bind('command.event-projector:create-snapshot', CreateSnapshotCommand::class);
         $this->app->bind('command.event-projector:load-snapshots', LoadSnapshotCommand::class);
-        $this->app->bind('command.event-projector:delete-snapshots', DeleteSnapshotCommand::class);
+        $this->app->bind('command.event-projector:delete-snapshot', DeleteSnapshotCommand::class);
 
         $this->app->bind('command.make:projector', MakeProjectorCommand::class);
         $this->app->bind('command.make:reactor', MakeReactorCommand::class);
@@ -109,7 +113,7 @@ class EventProjectorServiceProvider extends ServiceProvider
             'command.event-projector:list-snapshots',
             'command.event-projector:create-snapshot',
             'command.event-projector:load-snapshots',
-            'command.event-projector:delete-snapshots',
+            'command.event-projector:delete-snapshot',
 
             'command.make:projector',
             'command.make:reactor',

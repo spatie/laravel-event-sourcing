@@ -15,11 +15,16 @@ class SnapshotFactory
     /** @var \Spatie\EventProjector\Snapshots\Filesystem */
     protected $disk;
 
-    public function __construct(EventProjectionist $eventProjectionist, Filesystem $disk)
+    /** @var array */
+    protected $config;
+
+    public function __construct(EventProjectionist $eventProjectionist, Filesystem $disk, array $config)
     {
         $this->eventProjectionist = $eventProjectionist;
 
         $this->disk = $disk;
+
+        $this->config = $config;
     }
 
     public function createForProjector(Snapshottable $projector, string $name = ''): Snapshot
@@ -32,6 +37,7 @@ class SnapshotFactory
 
         $snapshot = new Snapshot(
             $this->eventProjectionist,
+            $this->config,
             $this->disk,
             $fileName
         );
@@ -48,11 +54,10 @@ class SnapshotFactory
         }
 
         if (! $this->disk->exists($fileName)) {
-            //TODO: add test
             throw CouldNotCreateSnapshot::projectorDidNotWriteAnythingToSnapshot($projector);
         }
 
-        if (! static::snapshotIsValid($lastEventId)) {
+        if (! static::snapshotIsValid($snapshot)) {
             $snapshot->delete();
 
             //TODO: throw exception
@@ -63,10 +68,14 @@ class SnapshotFactory
 
     public function createForFile(Filesystem $disk, string $fileName): Snapshot
     {
-        return new Snapshot($this->eventProjectionist, $disk, $fileName);
+        return new Snapshot(
+            $this->eventProjectionist,
+            $this->config,
+            $disk,
+            $fileName);
     }
 
-    protected static function snapshotIsValid(int $lastEventId): bool
+    protected static function snapshotIsValid(Snapshot $snapshot): bool
     {
         // TODO: write function, duh
         return true;

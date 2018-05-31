@@ -5,7 +5,8 @@ namespace Spatie\EventProjector\Snapshots;
 use Carbon\Carbon;
 use Spatie\EventProjector\EventProjectionist;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Spatie\EventProjector\Projectors\Projector;
+use Spatie\EventProjector\Exceptions\InvalidSnapshot;
+use Spatie\EventProjector\Models\StoredEvent;
 
 class Snapshot
 {
@@ -18,7 +19,11 @@ class Snapshot
     /** @var string */
     protected $fileName;
 
-    public function __construct(EventProjectionist $eventProjectionist, Filesystem $disk, string $fileName)
+    public function __construct(
+        EventProjectionist $eventProjectionist,
+        array $config,
+        Filesystem $disk,
+        string $fileName)
     {
         $this->eventProjectionist = $eventProjectionist;
 
@@ -32,26 +37,50 @@ class Snapshot
         return $this->projectorName() !== '';
     }
 
+    public function fileName(): string
+    {
+        return $this->fileName;
+    }
+
     public function lastProcessedEventId(): int
     {
-        return $this->getNameParts()['lastProcessedEventId'];
+        return $this->fileNameParts()['lastProcessedEventId'];
+    }
+
+    public function lastProcessedEvent(): StoredEvent
+    {
+        $storedEventModelClass = $this->config['stored_event_model'];
+
+        $storedEvent = $storedEventModelClass::query()
+            ->where('last_processed_event_id', $this->lastProcessedEventId())
+            ->first();
+
+        if (! $storedEvent) {
+            throw InvalidSnapshot::lastProcessedEventDoesNotExist($this);
+        }
+
+        return $storedEvent;
     }
 
     public function projectorName(): string
     {
-        return $this->getNameParts()['projectorName'];
+        return $this->fileNameParts()['projectorName'];
     }
 
-    public function getProjector(): Snapshottable
+    public function projector(): Snapshottable
     {
         $projectorName = $this->projectorName();
 
-        return $this->eventProjectionist->getProjector($projectorName);
+        if (! $projector = $this->eventProjectionist->getProjector($projectorName)) {
+            throw InvalidSnapshot::projectorDoesNotExist($this);
+        }
+
+        return $projector;
     }
 
     public function name(): string
     {
-        return $this->getNameParts()['name'];
+        return $this->fileNameParts()['name'];
     }
 
     /**
@@ -72,6 +101,15 @@ class Snapshot
         return $this->disk->readStream($this->fileName);
     }
 
+    public function load(): self
+    {
+        $storedEvent = $this->lastProcessedEvent();
+
+        $this->projector()->restoreSnapshot($this);
+
+        $this->config['projector_status_model']::rememberLastProcessedEvent($storedEvent);
+    }
+
     public function delete()
     {
         $this->disk->delete($this->fileName);
@@ -84,7 +122,7 @@ class Snapshot
         return Carbon::createFromTimestamp($timestamp);
     }
 
-    protected function getNameParts(): array
+    protected function fileNameParts(): array
     {
         $baseName = pathinfo($this->fileName, PATHINFO_FILENAME);
 
@@ -97,12 +135,5 @@ class Snapshot
         $name = $nameParts[3] ?? '';
 
         return compact('projectorName', 'lastProcessedEventId', 'name');
-    }
-
-    public function load(): self
-    {
-        $this->getProjector()->restoreSnapshot($this);
-
-        return $this;
     }
 }

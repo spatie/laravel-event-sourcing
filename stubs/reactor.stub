@@ -2,8 +2,13 @@
 
 namespace DummyNamespace;
 
-class DummyClass
+use Spatie\EventProjector\EventHandler\EventHandler;
+use Spatie\EventProjector\EventHandler\HandlesEvents;
+
+class DummyClass implements EventHandler
 {
+    use HandlesEvents;
+
     /*
      * Here you can specify which event should trigger which method.
      */

@@ -10,6 +10,13 @@ return [
     'stored_event_model' => \Spatie\EventProjector\Models\StoredEvent::class,
 
     /*
+     * This class is responsible for projector statuses. To add extra behavour you
+     * can change this to a class of your own. The only restriction is that
+     * it should extend \Spatie\EventProjector\Models\ProjectorStatus.
+     */
+    'projector_status_model' => \Spatie\EventProjector\Models\ProjectorStatus::class,
+
+    /*
      * This class is responsible for serializing events. By default an event will be serialized
      * and stored as json. You can customize the class name. A valid serializer
      * should implement Spatie\EventProjector\EventSerializers\Serializer.

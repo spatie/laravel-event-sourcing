@@ -3,11 +3,12 @@
 namespace Spatie\EventProjector\Exceptions;
 
 use Exception;
+use Spatie\EventProjector\EventHandler\EventHandler;
 use Spatie\EventProjector\ShouldBeStored;
 
 class InvalidEventHandler extends Exception
 {
-    public static function cannotHandleEvents(object $eventHandler)
+    public static function cannotHandleEvents(EventHandler $eventHandler)
     {
         $eventHandlerClass = get_class($eventHandler);
 

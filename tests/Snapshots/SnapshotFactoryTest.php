@@ -2,13 +2,17 @@
 
 namespace Spatie\EventProjectors\Tests\Snapshots;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Spatie\EventProjector\Exceptions\CouldNotCreateSnapshot;
+use Spatie\EventProjector\Exceptions\InvalidSnapshot;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableProjector;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableThatDoesNotWriteAnythingProjector;
 
 class SnapshotFactoryTest extends TestCase
 {
@@ -17,6 +21,9 @@ class SnapshotFactoryTest extends TestCase
 
     /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
     protected $account;
+
+    /** @var \Spatie\EventProjector\Snapshots\Snapshot */
+    protected $projectorSnapshot;
 
     public function setUp()
     {
@@ -32,23 +39,23 @@ class SnapshotFactoryTest extends TestCase
         ]);
 
         EventProjectionist::addProjector(SnapshottableProjector::class);
+
+        $this->projectorSnapshot = $this->snapshotFactory->createForProjector(new SnapshottableProjector());
     }
 
     /** @test */
     public function the_factory_can_create_a_snapshot_for_projector()
     {
-        $snapshot = $this->snapshotFactory->createForProjector(new SnapshottableProjector());
+        $this->assertEquals('', $this->projectorSnapshot->name());
 
-        $this->assertEquals('', $snapshot->name());
+        $this->assertInstanceOf(SnapshottableProjector::class, $this->projectorSnapshot->projector());
 
-        $this->assertInstanceOf(SnapshottableProjector::class, $snapshot->getProjector());
+        $this->assertEquals(0, $this->projectorSnapshot->lastProcessedEventId());
 
-        $this->assertEquals(0, $snapshot->lastProcessedEventId());
-
-        $this->assertEquals(date('Ymd'), $snapshot->createdAt()->format('Ymd'));
+        $this->assertEquals(date('Ymd'), $this->projectorSnapshot->createdAt()->format('Ymd'));
 
         $serializedAccounts = json_encode(Account::get()->each->toArray());
-        $this->assertEquals($serializedAccounts, $snapshot->read());
+        $this->assertEquals($serializedAccounts, $this->projectorSnapshot->read());
     }
 
     /** @test */
@@ -65,7 +72,17 @@ class SnapshotFactoryTest extends TestCase
         $this->assertEquals($amountOfEvents, $snapshot->lastProcessedEventId());
     }
 
+    /** @test */
     public function it_can_return_the_date_is_was_created()
     {
+        $this->assertInstanceOf(Carbon::class, $this->projectorSnapshot->createdAt());
+    }
+
+    /** @test */
+    public function it_will_throw_an_exception_when_a_snapshot_does_not_get_written_to()
+    {
+        $this->expectException(CouldNotCreateSnapshot::class);
+
+        $this->snapshotFactory->createForProjector(new SnapshottableThatDoesNotWriteAnythingProjector());
     }
 }

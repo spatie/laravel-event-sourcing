@@ -3,6 +3,7 @@
 namespace Spatie\EventProjector;
 
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\EventHandler\EventHandler;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Events\FinishedEventReplay;
@@ -114,7 +115,7 @@ class EventProjectionist
             ->pipe(function (Collection $eventHandler) {
                 return $this->instantiate($eventHandler);
             })
-            ->filter(function (object $eventHandler) use ($storedEvent) {
+            ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
                 if ($eventHandler instanceof Projector) {
                     if (! $eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
                         event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));
@@ -125,7 +126,7 @@ class EventProjectionist
 
                 return true;
             })
-            ->each(function (object $eventHandler) use ($storedEvent) {
+            ->each(function (EventHandler $eventHandler) use ($storedEvent) {
                 $this->callEventHandler($eventHandler, $storedEvent);
 
                 if ($eventHandler instanceof Projector) {
@@ -136,7 +137,7 @@ class EventProjectionist
         return $this;
     }
 
-    protected function callEventHandler(object $eventHandler, StoredEvent $storedEvent)
+    protected function callEventHandler(EventHandler $eventHandler, StoredEvent $storedEvent)
     {
         if (! isset($eventHandler->handlesEvents)) {
             throw InvalidEventHandler::cannotHandleEvents($eventHandler);
@@ -144,7 +145,7 @@ class EventProjectionist
 
         $event = $storedEvent->event;
 
-        if (! $method = $eventHandler->handlesEvents[get_class($event)] ?? false) {
+        if (! $method = $eventHandler->methodNameThatHandlesEvent($event)) {
             return;
         }
 
@@ -207,10 +208,10 @@ class EventProjectionist
     protected function callMethod(Collection $eventHandlers, string $method): self
     {
         $eventHandlers
-            ->filter(function (object $eventHandler) use ($method) {
+            ->filter(function (EventHandler $eventHandler) use ($method) {
                 return method_exists($eventHandler, $method);
             })
-            ->each(function (object $eventHandler) use ($method) {
+            ->each(function (EventHandler $eventHandler) use ($method) {
                 return app()->call([$eventHandler, $method]);
             });
 
