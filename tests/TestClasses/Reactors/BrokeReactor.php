@@ -3,8 +3,8 @@
 namespace Spatie\EventProjector\Tests\TestClasses\Reactors;
 
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventProjector\EventHandler\EventHandler;
-use Spatie\EventProjector\EventHandler\HandlesEvents;
+use Spatie\EventProjector\EventHandlers\EventHandler;
+use Spatie\EventProjector\EventHandlers\HandlesEvents;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
 

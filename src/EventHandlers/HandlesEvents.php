@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\EventHandler;
+namespace Spatie\EventProjector\EventHandlers;
 
 trait HandlesEvents
 {

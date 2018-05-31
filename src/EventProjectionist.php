@@ -3,7 +3,7 @@
 namespace Spatie\EventProjector;
 
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\EventHandler\EventHandler;
+use Spatie\EventProjector\EventHandlers\EventHandler;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Events\FinishedEventReplay;
