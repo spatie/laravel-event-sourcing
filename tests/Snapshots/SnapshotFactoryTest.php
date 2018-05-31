@@ -5,7 +5,6 @@ namespace Spatie\EventProjectors\Tests\Snapshots;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Spatie\EventProjector\Exceptions\CouldNotCreateSnapshot;
-use Spatie\EventProjector\Exceptions\InvalidSnapshot;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
 use Spatie\EventProjector\Facades\EventProjectionist;

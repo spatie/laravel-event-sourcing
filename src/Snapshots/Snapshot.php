@@ -13,6 +13,9 @@ class Snapshot
     /** @var \Spatie\EventProjector\EventProjectionist */
     protected $eventProjectionist;
 
+    /** @var array */
+    protected $config;
+
     /** @var \Illuminate\Contracts\Filesystem\Filesystem */
     protected $disk;
 
@@ -26,9 +29,8 @@ class Snapshot
         string $fileName)
     {
         $this->eventProjectionist = $eventProjectionist;
-
+        $this->config = $config;
         $this->disk = $disk;
-
         $this->fileName = $fileName;
     }
 
