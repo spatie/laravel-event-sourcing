@@ -20,6 +20,8 @@ class CreateSnapshotCommandTest extends TestCase
 
         Storage::fake();
 
+        EventProjectionist::addProjector(SnapshottableProjector::class);
+
         $this->account = Account::create([
             'name' => 'John',
             'amount' => 1000,
@@ -29,8 +31,6 @@ class CreateSnapshotCommandTest extends TestCase
     /** @test */
     public function it_can_create_a_snapshot()
     {
-        EventProjectionist::addProjector(SnapshottableProjector::class);
-
         $this->artisan('event-projector:create-snapshot', [
             'projectorName' => SnapshottableProjector::class,
         ]);
@@ -38,5 +38,20 @@ class CreateSnapshotCommandTest extends TestCase
         $allSnapshots = app(SnapshotRepository::class)->get();
 
         $this->assertCount(1, $allSnapshots);
+    }
+
+    /** @test */
+    public function it_can_name_a_snapshot()
+    {
+        $this->artisan('event-projector:create-snapshot', [
+            'projectorName' => SnapshottableProjector::class,
+            '--name' => 'custom-snapshot-name'
+        ]);
+
+        $allSnapshots = app(SnapshotRepository::class)->get();
+
+        $this->assertCount(1, $allSnapshots);
+
+        $this->assertEquals('custom-snapshot-name', $allSnapshots->first()->name());
     }
 }
