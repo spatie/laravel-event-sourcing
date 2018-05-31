@@ -34,6 +34,7 @@ class ReplayEventsCommand extends Command
 
     public function handle()
     {
+
         if (!$this->commandShouldRun()) {
             return;
         }

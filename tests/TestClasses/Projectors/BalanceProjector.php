@@ -25,4 +25,14 @@ class BalanceProjector implements Projector
     {
         $event->account->subtractMoney($event->amount);
     }
+
+    public function onStartingReplayingAllEvents()
+    {
+
+    }
+
+    public function onFinishedReplayingAllEvents()
+    {
+
+    }
 }

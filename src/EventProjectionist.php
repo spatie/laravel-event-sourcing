@@ -220,6 +220,7 @@ class EventProjectionist
             ->filter(function (EventHandler $eventHandler) use ($method) {
                 return method_exists($eventHandler, $method);
             })
+
             ->each(function (EventHandler $eventHandler) use ($method) {
                 return app()->call([$eventHandler, $method]);
             });

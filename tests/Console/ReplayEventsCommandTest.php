@@ -139,4 +139,19 @@ class ReplayEventsCommandTest extends TestCase
         // only one event is replayed
         $this->assertEquals(1000, $this->account->fresh()->amount);
     }
+
+    /** @test */
+    public function it_will_call_certain_methods_on_the_projector_when_replaying_all_events()
+    {
+        $projector = Mockery::mock(BalanceProjector::class.'[onStartingReplayingAllEvents, onFinishedReplayingAllEvents]');
+
+        EventProjectionist::addProjector($projector);
+
+        $projector->shouldReceive('onStartingReplayingAllEvents')->once();
+        $projector->shouldReceive('onFinishedReplayingAllEvents')->once();
+
+        $this->artisan('event-projector:replay-events', [
+            '--projector' => [get_class($projector)],
+        ]);
+    }
 }
