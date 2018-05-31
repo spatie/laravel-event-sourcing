@@ -4,7 +4,7 @@ namespace Spatie\EventProjector\Events;
 
 use Illuminate\Support\Collection;
 
-class StartingEventReplay
+class StartingReplayingAllEvents
 {
     /** @var \Illuminate\Support\Collection */
     private $projectors;

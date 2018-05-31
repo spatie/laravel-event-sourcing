@@ -12,8 +12,8 @@ use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 class ReplayEventsCommand extends Command
 {
     protected $signature = 'event-projector:replay-events
-                            {--projector=*} : The projector that should receive the event
-                            {--only-new-events} : Only replay events that were not handled yet';
+                            {--projector=* : The projector that should receive the event}
+                            {--only-new-events : Only replay events that were not handled yet}';
 
     protected $description = 'Replay stored events';
 
@@ -123,8 +123,7 @@ class ReplayEventsCommand extends Command
 
     protected function determineAfterEventId(Collection $projectors): int
     {
-        //TODO: add test
-        if (!$this->hasOption('only-new-events')) {
+        if ($this->option('only-new-events') === false) {
             return 0;
         }
 

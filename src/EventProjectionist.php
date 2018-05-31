@@ -4,10 +4,11 @@ namespace Spatie\EventProjector;
 
 use Illuminate\Support\Collection;
 use Spatie\EventProjector\EventHandlers\EventHandler;
+use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Events\FinishedEventReplay;
-use Spatie\EventProjector\Events\StartingEventReplay;
+use Spatie\EventProjector\Events\FinishedReplayingAllEvents;
+use Spatie\EventProjector\Events\StartingReplayingAllEvents;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
 
@@ -160,13 +161,15 @@ class EventProjectionist
     {
         $this->isReplayingEvents = true;
 
-        event(new StartingEventReplay($projectors));
+        event(new StartingReplayingAllEvents($projectors));
 
-        $projectors = $this
-            ->instantiate($projectors)
-            ->each->resetStatus();
+        if ($afterStoredEventId === 0) {
+            $projectors = $this
+                ->instantiate($projectors)
+                ->each->resetStatus();
 
-        $this->callMethod($projectors, 'onStartingEventReplay');
+            $this->callMethod($projectors, 'onStartingReplayingAllEvents');
+        }
 
         StoredEvent::query()
             ->after($afterStoredEventId)
@@ -182,9 +185,11 @@ class EventProjectionist
 
         $this->isReplayingEvents = false;
 
-        event(new FinishedEventReplay());
+        event(new FinishedReplayingAllEvents());
 
-        $this->callMethod($projectors, 'onFinishedEventReplay');
+        if ($afterStoredEventId === 0) {
+            $this->callMethod($projectors, 'onFinishedReplayingAllEvents');
+        }
     }
 
     protected function guardAgainstInvalidEventHandler($eventHandler)
