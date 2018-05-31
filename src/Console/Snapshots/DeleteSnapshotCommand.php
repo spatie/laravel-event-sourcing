@@ -14,7 +14,7 @@ class DeleteSnapshotCommand extends Command
 
     protected $signature = 'event-projector:delete-snapshot';
 
-    protected $description = 'Delete snapshots';
+    protected $description = 'Delete a snapshot';
 
     /** @var \Spatie\EventProjector\Snapshots\SnapshotRepository */
     protected $snapshotRepository;

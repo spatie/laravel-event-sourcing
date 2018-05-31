@@ -14,7 +14,7 @@ use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\Console\Make\MakeProjectorCommand;
 use Spatie\EventProjector\Console\Make\MakeStorableEventCommand;
 use Spatie\EventProjector\Console\Snapshots\ListSnapshotsCommand;
-use Spatie\EventProjector\Console\Snapshots\LoadSnapshotCommand;
+use Spatie\EventProjector\Console\Snapshots\RestoreSnapshotCommand;
 use Spatie\EventProjector\Console\Snapshots\CreateSnapshotCommand;
 use Spatie\EventProjector\Console\Snapshots\DeleteSnapshotCommand;
 
@@ -99,7 +99,7 @@ class EventProjectorServiceProvider extends ServiceProvider
 
         $this->app->bind('command.event-projector:list-snapshots', ListSnapshotsCommand::class);
         $this->app->bind('command.event-projector:create-snapshot', CreateSnapshotCommand::class);
-        $this->app->bind('command.event-projector:load-snapshots', LoadSnapshotCommand::class);
+        $this->app->bind('command.event-projector:restore-snapshot', RestoreSnapshotCommand::class);
         $this->app->bind('command.event-projector:delete-snapshot', DeleteSnapshotCommand::class);
 
         $this->app->bind('command.make:projector', MakeProjectorCommand::class);
@@ -112,7 +112,7 @@ class EventProjectorServiceProvider extends ServiceProvider
 
             'command.event-projector:list-snapshots',
             'command.event-projector:create-snapshot',
-            'command.event-projector:load-snapshots',
+            'command.event-projector:restore-snapshot',
             'command.event-projector:delete-snapshot',
 
             'command.make:projector',

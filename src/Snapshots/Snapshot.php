@@ -101,7 +101,7 @@ class Snapshot
         return $this->disk->readStream($this->fileName);
     }
 
-    public function load(): self
+    public function restore(): self
     {
         $storedEvent = $this->lastProcessedEvent();
 

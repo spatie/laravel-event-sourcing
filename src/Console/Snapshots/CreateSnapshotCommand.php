@@ -10,7 +10,7 @@ class CreateSnapshotCommand extends Command
 {
     protected $signature = 'event-projector:create-snapshot {projectorName} {--name}';
 
-    protected $description = 'Create new snapshots';
+    protected $description = 'Create a snapshot';
 
     /** @var \Spatie\EventProjector\EventProjectionist */
     protected $eventProjectionist;

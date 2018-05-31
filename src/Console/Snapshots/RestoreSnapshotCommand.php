@@ -5,11 +5,11 @@ namespace Spatie\EventProjector\Console\Snapshots;
 use Illuminate\Console\Command;
 use Spatie\EventProjector\Snapshots\SnapshotRepository;
 
-class LoadSnapshotCommand extends Command
+class RestoreSnapshotCommand extends Command
 {
-    protected $signature = 'event-projector:load-snapshot';
+    protected $signature = 'event-projector:restore-snapshot';
 
-    protected $description = 'Load snapshots';
+    protected $description = 'Restore a snapshot';
 
     /** @var \Spatie\EventProjector\Console\Snapshots\SnapshotRepository */
     protected $snapshotRepository;
