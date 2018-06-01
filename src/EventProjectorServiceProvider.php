@@ -5,6 +5,7 @@ namespace Spatie\EventProjector;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use Spatie\EventProjector\Console\ResetProjectorCommand;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
 use Spatie\EventProjector\Console\ReplayEventsCommand;
 use Spatie\EventProjector\Snapshots\SnapshotRepository;
@@ -95,6 +96,7 @@ class EventProjectorServiceProvider extends ServiceProvider
     protected function bindCommands(): void
     {
         $this->app->bind('command.event-projector:list-projectors', ListProjectorsCommand::class);
+        $this->app->bind('command.event-projector:reset-projector', ResetProjectorCommand::class);
         $this->app->bind('command.event-projector:replay-events', ReplayEventsCommand::class);
 
         $this->app->bind('command.event-projector:list-snapshots', ListSnapshotsCommand::class);
@@ -108,6 +110,7 @@ class EventProjectorServiceProvider extends ServiceProvider
 
         $this->commands([
             'command.event-projector:list-projectors',
+            'command.event-projector:reset-projector',
             'command.event-projector:replay-events',
 
             'command.event-projector:list-snapshots',
