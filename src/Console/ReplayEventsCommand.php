@@ -12,8 +12,7 @@ use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 class ReplayEventsCommand extends Command
 {
     protected $signature = 'event-projector:replay-events
-                            {--projector=* : The projector that should receive the event}
-                            {--only-new-events : Only replay events that were not handled yet}';
+                            {--projector=* : The projector that should receive the event}';
 
     protected $description = 'Replay stored events';
 
@@ -34,7 +33,6 @@ class ReplayEventsCommand extends Command
 
     public function handle()
     {
-
         if (!$this->commandShouldRun()) {
             return;
         }
@@ -53,12 +51,20 @@ class ReplayEventsCommand extends Command
             $this->warn("There are no events to replay.");
         }
 
-        is_null($afterEventId)
+        $replayEventsCount = StoredEvent::after($afterEventId)->count();
+
+        if ($replayEventsCount === 0) {
+            $this->warn('There are no events to replay');
+
+            return;
+        }
+
+        $afterEventId === 0
             ? $this->comment('Replaying all events...')
             : $this->comment("Replaying events after stored event id {$afterEventId}...");
         $this->emptyLine();
 
-        $bar = $this->output->createProgressBar(StoredEvent::count());
+        $bar = $this->output->createProgressBar(StoredEvent::after($afterEventId)->count());
         $onEventReplayed = function () use ($bar) {
             $bar->advance();
         };
@@ -122,12 +128,8 @@ class ReplayEventsCommand extends Command
         return true;
     }
 
-    protected function determineAfterEventId(Collection $projectors): ?int
+    protected function determineAfterEventId(Collection $projectors): int
     {
-        if ($this->option('only-new-events') === false) {
-            return null;
-        }
-
         return $projectors
             ->map(function ($projector) {
                 if (is_string($projector)) {

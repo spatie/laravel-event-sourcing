@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Event;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Models\StoredEvent;
-use Spatie\EventProjector\Events\FinishedReplayingAllEvents;
-use Spatie\EventProjector\Events\StartingReplayingAllEvents;
+use Spatie\EventProjector\Events\FinishedEventReplay;
+use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
@@ -40,7 +40,7 @@ class ReplayEventsCommandTest extends TestCase
     /** @test */
     public function it_will_replay_events_to_the_given_projectors()
     {
-        Event::fake([FinishedReplayingAllEvents::class, StartingReplayingAllEvents::class]);
+        Event::fake([FinishedEventReplay::class, StartingEventReplay::class]);
 
         $projector = Mockery::mock(BalanceProjector::class.'[onMoneyAdded]');
 
@@ -48,13 +48,13 @@ class ReplayEventsCommandTest extends TestCase
 
         EventProjectionist::addProjector($projector);
 
-        Event::assertNotDispatched(StartingReplayingAllEvents::class);
-        Event::assertNotDispatched(FinishedReplayingAllEvents::class);
+        Event::assertNotDispatched(StartingEventReplay::class);
+        Event::assertNotDispatched(FinishedEventReplay::class);
 
         $this->artisan('event-projector:replay-events', ['--projector' => [get_class($projector)]]);
 
-        Event::assertDispatched(StartingReplayingAllEvents::class);
-        Event::assertDispatched(FinishedReplayingAllEvents::class);
+        Event::assertDispatched(StartingEventReplay::class);
+        Event::assertDispatched(FinishedEventReplay::class);
     }
 
     /** @test */
@@ -126,48 +126,39 @@ class ReplayEventsCommandTest extends TestCase
 
         EventProjectionist::addProjector($projector);
 
-        //sneakely change the last processed event
-        ProjectorStatus::getForProjector($projector)->rememberLastProcessedEvent(StoredEvent::find(2));
+        $this->artisan('event-projector:replay-events', [
+            '--projector' => [BalanceProjector::class],
+        ]);
+
+        $projectorStatus = ProjectorStatus::getForProjector($projector);
+        $this->assertEquals(3, $projectorStatus->last_processed_event_id);
+
+        //sneakily change the last processed event
+        $projectorStatus->rememberLastProcessedEvent(StoredEvent::find(2));
+        $this->assertEquals(2, $projectorStatus->last_processed_event_id);
 
         $this->artisan('event-projector:replay-events', [
             '--projector' => [BalanceProjector::class],
-            '--only-new-events' => '',
         ]);
 
         $this->assertSeeInConsoleOutput('Replaying events after stored event id 2...');
 
-        // only one event is replayed
-        $this->assertEquals(1000, $this->account->fresh()->amount);
+        // 3000 from the first three events + 1000 from the replay
+        $this->assertEquals(4000, $this->account->fresh()->amount);
     }
 
     /** @test */
-    public function it_will_call_certain_methods_on_the_projector_when_replaying_all_events()
+    public function it_will_call_certain_methods_on_the_projector_when_replaying_events()
     {
-        $projector = Mockery::mock(BalanceProjector::class.'[onStartingReplayingAllEvents, onFinishedReplayingAllEvents]');
+        $projector = Mockery::mock(BalanceProjector::class.'[onStartingEventReplay, onFinishedEventReplay]');
 
         EventProjectionist::addProjector($projector);
 
-        $projector->shouldReceive('onStartingReplayingAllEvents')->once();
-        $projector->shouldReceive('onFinishedReplayingAllEvents')->once();
+        $projector->shouldReceive('onStartingEventReplay')->once();
+        $projector->shouldReceive('onFinishedEventReplay')->once();
 
         $this->artisan('event-projector:replay-events', [
             '--projector' => [get_class($projector)],
-        ]);
-    }
-
-    /** @test */
-    public function it_will_not_call_certain_methods_on_the_projector_when_replaying_all_events()
-    {
-        $projector = Mockery::mock(BalanceProjector::class.'[onStartingReplayingAllEvents, onFinishedReplayingAllEvents]');
-
-        EventProjectionist::addProjector($projector);
-
-        $projector->shouldNotReceive('onStartingReplayingAllEvents');
-        $projector->shouldNotReceive('onFinishedReplayingAllEvents');
-
-        $this->artisan('event-projector:replay-events', [
-            '--projector' => [get_class($projector)],
-            '--only-new-events' => '',
         ]);
     }
 }

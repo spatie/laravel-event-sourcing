@@ -7,8 +7,8 @@ use Spatie\EventProjector\EventHandlers\EventHandler;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Events\FinishedReplayingAllEvents;
-use Spatie\EventProjector\Events\StartingReplayingAllEvents;
+use Spatie\EventProjector\Events\FinishedEventReplay;
+use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
 
@@ -119,6 +119,7 @@ class EventProjectionist
             ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
                 if ($eventHandler instanceof Projector) {
                     if (!$eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
+
                         event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));
 
                         return false;
@@ -157,19 +158,15 @@ class EventProjectionist
         app()->call([$eventHandler, $method], compact('event', 'storedEvent'));
     }
 
-    public function replayEvents(Collection $projectors, ?int $afterStoredEventId = null, callable $onEventReplayed = null)
+    public function replayEvents(Collection $projectors, int $afterStoredEventId, callable $onEventReplayed = null)
     {
         $this->isReplayingEvents = true;
 
-        event(new StartingReplayingAllEvents($projectors));
+        event(new StartingEventReplay($projectors));
 
-        if (is_null($afterStoredEventId)) {
-            $projectors = $this
-                ->instantiate($projectors)
-                ->each->resetStatus();
+        $projectors = $this->instantiate($projectors);
 
-            $this->callMethod($projectors, 'onStartingReplayingAllEvents');
-        }
+        $this->callMethod($projectors, 'onStartingEventReplay');
 
         StoredEvent::query()
             ->after($afterStoredEventId ?? 0)
@@ -185,11 +182,9 @@ class EventProjectionist
 
         $this->isReplayingEvents = false;
 
-        event(new FinishedReplayingAllEvents());
+        event(new FinishedEventReplay());
 
-        if (is_null($afterStoredEventId)) {
-            $this->callMethod($projectors, 'onFinishedReplayingAllEvents');
-        }
+        $this->callMethod($projectors, 'onFinishedEventReplay');
     }
 
     protected function guardAgainstInvalidEventHandler($eventHandler)
@@ -220,7 +215,6 @@ class EventProjectionist
             ->filter(function (EventHandler $eventHandler) use ($method) {
                 return method_exists($eventHandler, $method);
             })
-
             ->each(function (EventHandler $eventHandler) use ($method) {
                 return app()->call([$eventHandler, $method]);
             });
