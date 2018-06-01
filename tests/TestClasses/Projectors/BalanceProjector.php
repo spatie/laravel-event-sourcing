@@ -28,11 +28,9 @@ class BalanceProjector implements Projector
 
     public function onStartingEventReplay()
     {
-
     }
 
     public function onFinishedEventReplay()
     {
-
     }
 }

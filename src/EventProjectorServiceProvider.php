@@ -5,19 +5,19 @@ namespace Spatie\EventProjector;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
-use Spatie\EventProjector\Console\ResetProjectorCommand;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
 use Spatie\EventProjector\Console\ReplayEventsCommand;
 use Spatie\EventProjector\Snapshots\SnapshotRepository;
 use Spatie\EventProjector\Console\ListProjectorsCommand;
+use Spatie\EventProjector\Console\ResetProjectorCommand;
 use Spatie\EventProjector\Console\Make\MakeReactorCommand;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\Console\Make\MakeProjectorCommand;
 use Spatie\EventProjector\Console\Make\MakeStorableEventCommand;
 use Spatie\EventProjector\Console\Snapshots\ListSnapshotsCommand;
-use Spatie\EventProjector\Console\Snapshots\RestoreSnapshotCommand;
 use Spatie\EventProjector\Console\Snapshots\CreateSnapshotCommand;
 use Spatie\EventProjector\Console\Snapshots\DeleteSnapshotCommand;
+use Spatie\EventProjector\Console\Snapshots\RestoreSnapshotCommand;
 
 class EventProjectorServiceProvider extends ServiceProvider
 {

@@ -4,11 +4,11 @@ namespace Spatie\EventProjectors\Tests\Snapshots;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-use Spatie\EventProjector\Exceptions\CouldNotCreateSnapshot;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Exceptions\CouldNotCreateSnapshot;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableThatDoesNotWriteAnythingProjector;

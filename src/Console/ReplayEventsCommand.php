@@ -33,7 +33,7 @@ class ReplayEventsCommand extends Command
 
     public function handle()
     {
-        if (!$this->commandShouldRun()) {
+        if (! $this->commandShouldRun()) {
             return;
         }
 
@@ -48,7 +48,7 @@ class ReplayEventsCommand extends Command
         $afterEventId = $this->determineAfterEventId($projectors);
 
         if ($afterEventId === StoredEvent::getMaxId()) {
-            $this->warn("There are no events to replay.");
+            $this->warn('There are no events to replay.');
         }
 
         $replayEventsCount = StoredEvent::after($afterEventId)->count();
@@ -91,7 +91,7 @@ class ReplayEventsCommand extends Command
 
         return $allProjectors
             ->filter(function ($projector) use ($onlyCallProjectors) {
-                if (!is_string($projector)) {
+                if (! is_string($projector)) {
                     $projector = get_class($projector);
                 }
 
@@ -102,7 +102,7 @@ class ReplayEventsCommand extends Command
     protected function guardAgainstNonExistingProjectors(array $onlyCallProjectors)
     {
         foreach ($onlyCallProjectors as $projector) {
-            if (!class_exists($projector)) {
+            if (! class_exists($projector)) {
                 throw InvalidEventHandler::doesNotExist($projector);
             }
         }
@@ -118,7 +118,7 @@ class ReplayEventsCommand extends Command
     protected function commandShouldRun(): bool
     {
         if (count($this->option('projector') ?? []) === 0) {
-            if (!$confirmed = $this->confirm('Are you sure you want to replay the events to all projectors?')) {
+            if (! $confirmed = $this->confirm('Are you sure you want to replay the events to all projectors?')) {
                 $this->warn('No events replayed!');
 
                 return false;

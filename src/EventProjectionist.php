@@ -3,10 +3,9 @@
 namespace Spatie\EventProjector;
 
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\EventHandlers\EventHandler;
-use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
+use Spatie\EventProjector\EventHandlers\EventHandler;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
@@ -118,8 +117,7 @@ class EventProjectionist
             })
             ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
                 if ($eventHandler instanceof Projector) {
-                    if (!$eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
-
+                    if (! $eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
                         event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));
 
                         return false;
@@ -141,17 +139,17 @@ class EventProjectionist
 
     protected function callEventHandler(EventHandler $eventHandler, StoredEvent $storedEvent)
     {
-        if (!isset($eventHandler->handlesEvents)) {
+        if (! isset($eventHandler->handlesEvents)) {
             throw InvalidEventHandler::cannotHandleEvents($eventHandler);
         }
 
         $event = $storedEvent->event;
 
-        if (!$method = $eventHandler->methodNameThatHandlesEvent($event)) {
+        if (! $method = $eventHandler->methodNameThatHandlesEvent($event)) {
             return;
         }
 
-        if (!method_exists($eventHandler, $method)) {
+        if (! method_exists($eventHandler, $method)) {
             throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
         }
 
@@ -189,11 +187,11 @@ class EventProjectionist
 
     protected function guardAgainstInvalidEventHandler($eventHandler)
     {
-        if (!is_string($eventHandler)) {
+        if (! is_string($eventHandler)) {
             return;
         }
 
-        if (!class_exists($eventHandler)) {
+        if (! class_exists($eventHandler)) {
             throw InvalidEventHandler::doesNotExist($eventHandler);
         }
     }

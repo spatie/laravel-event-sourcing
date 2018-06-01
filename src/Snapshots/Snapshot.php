@@ -4,9 +4,9 @@ namespace Spatie\EventProjector\Snapshots;
 
 use Carbon\Carbon;
 use Spatie\EventProjector\EventProjectionist;
+use Spatie\EventProjector\Models\StoredEvent;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Spatie\EventProjector\Exceptions\InvalidSnapshot;
-use Spatie\EventProjector\Models\StoredEvent;
 
 class Snapshot
 {

@@ -3,10 +3,9 @@
 namespace Spatie\EventProjector\Console\Snapshots;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
-use Spatie\EventProjector\Console\Snapshots\Concerns\ChooseSnapshot;
 use Spatie\EventProjector\Snapshots\Snapshot;
 use Spatie\EventProjector\Snapshots\SnapshotRepository;
+use Spatie\EventProjector\Console\Snapshots\Concerns\ChooseSnapshot;
 
 class DeleteSnapshotCommand extends Command
 {
@@ -38,6 +37,6 @@ class DeleteSnapshotCommand extends Command
 
         $snapshot->delete();
 
-        $this->comment("Snapshot deleted!");
+        $this->comment('Snapshot deleted!');
     }
 }

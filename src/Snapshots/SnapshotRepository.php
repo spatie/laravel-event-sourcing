@@ -30,7 +30,7 @@ class SnapshotRepository
     {
         return collect($this->disk->allFiles())
             ->map(function (string $fileName) {
-                return new Snapshot($this->eventProjectionist, $this->config,  $this->disk, $fileName);
+                return new Snapshot($this->eventProjectionist, $this->config, $this->disk, $fileName);
             })
             ->filter->isValid()
             ->sortByDesc(function (Snapshot $snapshot) {

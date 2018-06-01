@@ -27,7 +27,7 @@ class ListSnapshotsCommand extends Command
         $snapshots = $this->snapshotRepository->get();
 
         if ($snapshots->isEmpty()) {
-            $this->warn("There currently are no snapshots. You can take a snapshot by running `php artisan event-projector:create-snapshot`.");
+            $this->warn('There currently are no snapshots. You can take a snapshot by running `php artisan event-projector:create-snapshot`.');
 
             return;
         }

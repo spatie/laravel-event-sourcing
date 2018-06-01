@@ -3,8 +3,8 @@
 namespace Spatie\EventProjector\Console\Snapshots;
 
 use Illuminate\Console\Command;
-use Spatie\EventProjector\Console\Snapshots\Concerns\ChooseSnapshot;
 use Spatie\EventProjector\Snapshots\SnapshotRepository;
+use Spatie\EventProjector\Console\Snapshots\Concerns\ChooseSnapshot;
 
 class RestoreSnapshotCommand extends Command
 {

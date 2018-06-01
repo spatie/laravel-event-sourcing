@@ -2,9 +2,9 @@
 
 namespace Spatie\EventProjector\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Spatie\EventProjector\EventSerializers\EventSerializer;

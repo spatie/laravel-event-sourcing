@@ -2,14 +2,10 @@
 
 namespace Spatie\EventProjector\Console\Snapshots;
 
-use Illuminate\Support\Facades\Storage;
-use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Tests\TestCase;
+use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Facades\EventProjectionist;
-use Spatie\EventProjector\Snapshots\SnapshotRepository;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ResettableProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableProjector;
 
 class ResetProjectorCommandTest extends TestCase
 {

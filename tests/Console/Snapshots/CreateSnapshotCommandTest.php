@@ -45,7 +45,7 @@ class CreateSnapshotCommandTest extends TestCase
     {
         $this->artisan('event-projector:create-snapshot', [
             'projectorName' => SnapshottableProjector::class,
-            '--name' => 'custom-snapshot-name'
+            '--name' => 'custom-snapshot-name',
         ]);
 
         $allSnapshots = app(SnapshotRepository::class)->get();

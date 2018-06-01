@@ -11,6 +11,5 @@ class ResettableProjector implements Projector
 
     public function resetState()
     {
-
     }
 }
