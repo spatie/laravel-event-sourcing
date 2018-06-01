@@ -4,8 +4,8 @@ namespace Spatie\EventProjector\Exceptions;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Snapshots\Snapshot;
+use Spatie\EventProjector\Projectors\Projector;
 
 class CouldNotCreateSnapshot extends Exception
 {

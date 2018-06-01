@@ -2,15 +2,14 @@
 
 namespace Spatie\EventProjector\Console\Snapshots;
 
-use Illuminate\Support\Facades\Storage;
 use Mockery;
-use Spatie\EventProjector\Snapshots\SnapshotFactory;
+use Illuminate\Support\Facades\Storage;
 use Spatie\EventProjector\Tests\TestCase;
+use Spatie\EventProjector\Snapshots\SnapshotFactory;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Snapshots\SnapshotRepository;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableProjector;
 
 class RestoreSnapshotCommandTest extends TestCase
@@ -43,7 +42,7 @@ class RestoreSnapshotCommandTest extends TestCase
 
     protected function chooseSnapshot(int $chosenSnapshotNumber)
     {
-        $command = Mockery::mock(RestoreSnapshotCommand::class . '[ask]', [
+        $command = Mockery::mock(RestoreSnapshotCommand::class.'[ask]', [
             app(SnapshotRepository::class),
         ]);
 

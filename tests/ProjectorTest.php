@@ -2,15 +2,15 @@
 
 namespace Spatie\EventProjector\Tests;
 
-use Spatie\EventProjector\Exceptions\CouldNotResetProjector;
-use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Exceptions\CouldNotResetProjector;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatWritesMetaData;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ResettableProjector;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatWritesMetaData;
 
 class ProjectorTest extends TestCase
 {

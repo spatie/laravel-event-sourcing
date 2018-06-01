@@ -4,9 +4,9 @@ namespace Spatie\EventProjector\Snapshots;
 
 use Exception;
 use Spatie\EventProjector\EventProjectionist;
+use Spatie\EventProjector\Models\StoredEvent;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Spatie\EventProjector\Exceptions\CouldNotCreateSnapshot;
-use Spatie\EventProjector\Models\StoredEvent;
 
 class SnapshotFactory
 {
@@ -51,7 +51,7 @@ class SnapshotFactory
             throw CouldNotCreateSnapshot::projectorThrewExceptionDuringWritingToSnapshot($projector, $exception);
         }
 
-        if (!$this->disk->exists($fileName)) {
+        if (! $this->disk->exists($fileName)) {
             throw CouldNotCreateSnapshot::projectorDidNotWriteAnythingToSnapshot($projector);
         }
 
@@ -76,10 +76,9 @@ class SnapshotFactory
         $newEventsHandledByProjectorOfSnapshot = $newStoredEvents
             ->filter(function (StoredEvent $storedEvent) use ($snapshot) {
                 return $snapshot->projector()->handlesEvent($storedEvent->event);
-        });
+            });
 
-        if (! $newEventsHandledByProjectorOfSnapshot->isEmpty())
-        {
+        if (! $newEventsHandledByProjectorOfSnapshot->isEmpty()) {
             $this->attemptToDeleteSnapshot($snapshot);
 
             throw CouldNotCreateSnapshot::newEventsStoredDuringSnapshotCreation($snapshot, $newEventsHandledByProjectorOfSnapshot);

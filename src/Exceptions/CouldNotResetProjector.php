@@ -3,9 +3,7 @@
 namespace Spatie\EventProjector\Exceptions;
 
 use Exception;
-use Spatie\EventProjector\EventHandlers\EventHandler;
 use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\ShouldBeStored;
 
 class CouldNotResetProjector extends Exception
 {

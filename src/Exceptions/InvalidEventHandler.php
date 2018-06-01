@@ -3,8 +3,8 @@
 namespace Spatie\EventProjector\Exceptions;
 
 use Exception;
-use Spatie\EventProjector\EventHandlers\EventHandler;
 use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventProjector\EventHandlers\EventHandler;
 
 class InvalidEventHandler extends Exception
 {

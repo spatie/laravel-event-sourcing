@@ -3,8 +3,9 @@
 namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
-use Spatie\EventProjector\Console\Snapshots\Concerns\ChooseSnapshot;
 use Spatie\EventProjector\EventProjectionist;
+use Spatie\EventProjector\Console\Snapshots\Concerns\ChooseSnapshot;
+
 class ResetProjectorCommand extends Command
 {
     use ChooseSnapshot;
@@ -37,6 +38,6 @@ class ResetProjectorCommand extends Command
 
         $projector->reset();
 
-        $this->comment("Projector reset!");
+        $this->comment('Projector reset!');
     }
 }

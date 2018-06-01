@@ -2,13 +2,13 @@
 
 namespace Spatie\EventProjector\Console\Snapshots;
 
-use Illuminate\Support\Facades\Storage;
 use Mockery;
-use Spatie\EventProjector\Snapshots\SnapshotRepository;
+use Illuminate\Support\Facades\Storage;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Snapshots\Snapshot;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
 use Spatie\EventProjector\Facades\EventProjectionist;
+use Spatie\EventProjector\Snapshots\SnapshotRepository;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableProjector;
 
 class DeleteSnapshotCommandTest extends TestCase
@@ -31,7 +31,7 @@ class DeleteSnapshotCommandTest extends TestCase
 
         $leftoverSnapshotNames = app(SnapshotRepository::class)
             ->get()
-            ->map(function(Snapshot $snapshot) {
+            ->map(function (Snapshot $snapshot) {
                 return $snapshot->name();
             })
             ->toArray();
@@ -60,7 +60,7 @@ class DeleteSnapshotCommandTest extends TestCase
 
     protected function chooseSnapshot(int $chosenSnapshotNumber)
     {
-        $command = Mockery::mock(DeleteSnapshotCommand::class . '[ask]', [
+        $command = Mockery::mock(DeleteSnapshotCommand::class.'[ask]', [
             app(SnapshotRepository::class),
         ]);
 

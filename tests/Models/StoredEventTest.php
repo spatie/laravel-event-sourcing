@@ -2,12 +2,11 @@
 
 namespace Spatie\EventProjector\Tests\Models;
 
-use Spatie\EventProjector\Facades\EventProjectionist;
-use Spatie\EventProjector\Models\StoredEvent;
-use Spatie\EventProjector\Tests\Factories\AccountFactory;
 use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 
 class StoredEventTest extends TestCase

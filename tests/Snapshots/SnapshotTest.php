@@ -2,13 +2,12 @@
 
 namespace Spatie\EventProjectors\Tests\Snapshots;
 
-use Spatie\EventProjector\Facades\EventProjectionist;
-use Spatie\EventProjector\Models\ProjectorStatus;
-use Spatie\EventProjector\Models\StoredEvent;
-use Spatie\EventProjector\Snapshots\SnapshotFactory;
 use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Models\ProjectorStatus;
+use Spatie\EventProjector\Snapshots\SnapshotFactory;
+use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableProjector;
 
 class SnapshotTest extends TestCase
@@ -34,7 +33,6 @@ class SnapshotTest extends TestCase
         event(new MoneyAdded($account, 1000));
         event(new MoneyAdded($account, 1000));
         event(new MoneyAdded($account, 1000));
-
     }
 
     /** @test */
