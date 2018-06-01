@@ -27,4 +27,21 @@ trait ChooseSnapshot
 
         return $snapshot;
     }
+
+    public function displaySnapshots(Collection $snapshots)
+    {
+        $titles = ['Number', 'Projector', 'Last processed event id', 'Created at', 'Name'];
+
+        $rows = $snapshots->map(function (Snapshot $snapshot, int $index) {
+            return [
+                $index + 1,
+                $snapshot->projectorName(),
+                $snapshot->lastProcessedEventId(),
+                $snapshot->createdAt(),
+                $snapshot->name(),
+            ];
+        });
+
+        $this->table($titles, $rows);
+    }
 }

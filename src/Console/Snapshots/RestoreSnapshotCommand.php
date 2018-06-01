@@ -3,10 +3,13 @@
 namespace Spatie\EventProjector\Console\Snapshots;
 
 use Illuminate\Console\Command;
+use Spatie\EventProjector\Console\Snapshots\Concerns\ChooseSnapshot;
 use Spatie\EventProjector\Snapshots\SnapshotRepository;
 
 class RestoreSnapshotCommand extends Command
 {
+    use ChooseSnapshot;
+
     protected $signature = 'event-projector:restore-snapshot';
 
     protected $description = 'Restore a snapshot';
@@ -31,8 +34,8 @@ class RestoreSnapshotCommand extends Command
             return;
         }
 
-        $snapshot->load();
+        $snapshot->restore();
 
-        $this->info('Snapshot loaded!');
+        $this->info('Snapshot restored!');
     }
 }
