@@ -23,6 +23,7 @@
         "illuminate/database": "5.6.*",
         "illuminate/events": "5.6.*",
         "illuminate/support": "5.6.*",
+        "league/flysystem": "^1.0.45",
         "spatie/laravel-schemaless-attributes": "^1.1",
         "symfony/property-access": "^4.0",
         "symfony/serializer": "^4.0"
