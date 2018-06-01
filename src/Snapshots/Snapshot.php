@@ -54,7 +54,7 @@ class Snapshot
         $storedEventModelClass = $this->config['stored_event_model'];
 
         $storedEvent = $storedEventModelClass::query()
-            ->where('last_processed_event_id', $this->lastProcessedEventId())
+            ->where('id', $this->lastProcessedEventId())
             ->first();
 
         if (! $storedEvent) {
@@ -109,7 +109,9 @@ class Snapshot
 
         $this->projector()->restoreSnapshot($this);
 
-        $this->config['projector_status_model']::rememberLastProcessedEvent($storedEvent);
+        $projectorStatus = $this->config['projector_status_model']::getForProjector($this->projector());
+
+        $projectorStatus->rememberLastProcessedEvent($storedEvent);
     }
 
     public function delete()

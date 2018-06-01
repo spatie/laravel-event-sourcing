@@ -4,6 +4,7 @@ namespace Spatie\EventProjectors\Tests\Snapshots;
 
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Models\ProjectorStatus;
+use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
@@ -12,24 +13,41 @@ use Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableProjector;
 
 class SnapshotTest extends TestCase
 {
-    /** @test */
-    public function it_can_restore_a_snapshot()
-    {
-        $projector = new SnapshottableProjector();
+    /** @var \Spatie\EventProjector\Snapshots\SnapshotFactory */
+    protected $snapshotFactory;
 
-        EventProjectionist::addProjector($projector);
+    /** @var \Spatie\EventProjector\Tests\TestClasses\Projectors\SnapshottableProjector */
+    protected $projector;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->snapshotFactory = app(SnapshotFactory::class);
+
+        $this->projector = new SnapshottableProjector();
+
+        EventProjectionist::addProjector($this->projector);
 
         $account = Account::create();
 
-        event(new MoneyAdded($account, 1234));
+        event(new MoneyAdded($account, 1000));
+        event(new MoneyAdded($account, 1000));
+        event(new MoneyAdded($account, 1000));
 
-        $snapshot = app(SnapshotFactory::class)->createForProjector($projector);
+    }
+
+    /** @test */
+    public function it_can_restore_a_snapshot()
+    {
+        $snapshot = $this->snapshotFactory->createForProjector($this->projector);
 
         Account::truncate();
         ProjectorStatus::truncate();
 
         $snapshot->restore();
 
-        $this->assertTrue(true);
+        $this->assertCount(1, Account::get());
+        $this->assertEquals(3, ProjectorStatus::getForProjector($this->projector)->last_processed_event_id);
     }
 }
