@@ -6,7 +6,7 @@ use Exception;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 
-class ProjectorFailedHandlingEvent
+class EventHandlerFailedHandlingEvent
 {
     /** @var \Spatie\EventProjector\Projectors\Projector */
     public $projector;
