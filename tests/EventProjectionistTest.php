@@ -9,9 +9,9 @@ use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\InvalidProjectorThatCannotHandleEvents;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod;
 
@@ -123,7 +123,7 @@ class EventProjectionistTest extends TestCase
     /** @test */
     public function it_will_call_the_method_on_the_projector_when_the_projector_throws_an_exception()
     {
-        $projector = Mockery::mock(ProjectorThatThrowsAnException::class. '[handleException]');
+        $projector = Mockery::mock(ProjectorThatThrowsAnException::class.'[handleException]');
 
         $projector->shouldReceive('handleException')->once();
 

@@ -4,13 +4,13 @@ namespace Spatie\EventProjector;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Events\EventHandlerFailedHandlingEvent;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\EventHandlers\EventHandler;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\Events\EventHandlerFailedHandlingEvent;
 use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
 
 class EventProjectionist
@@ -68,6 +68,11 @@ class EventProjectionist
         return $this->projectors;
     }
 
+    public function getReactors(): Collection
+    {
+        return $this->reactors;
+    }
+      
     public function getProjector(string $name): ?Projector
     {
         return $this
@@ -166,8 +171,7 @@ class EventProjectionist
 
         try {
             app()->call([$eventHandler, $method], compact('event', 'storedEvent'));
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             $eventHandler->handleException($exception);
 
             event(new EventHandlerFailedHandlingEvent($eventHandler, $storedEvent, $exception));

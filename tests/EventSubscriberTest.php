@@ -4,18 +4,18 @@ namespace Spatie\EventProjector\Tests;
 
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
+use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\HandleStoredEventJob;
 use Spatie\EventProjector\Models\ProjectorStatus;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatShouldBeCalledImmediately;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventProjector\Tests\TestClasses\Events\DoNotStoreThisEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatShouldBeCalledImmediately;
 
 class EventSubscriberTest extends TestCase
 {
@@ -116,7 +116,5 @@ class EventSubscriberTest extends TestCase
         $status = ProjectorStatus::getForProjector($projector);
         $this->assertEquals(1, $status->last_processed_event_id);
         $this->assertEquals(1234, $this->account->refresh()->amount);
-
-
     }
 }

@@ -18,6 +18,5 @@ trait HandlesEvents
 
     public function handleException(Exception $exception)
     {
-
     }
 }
