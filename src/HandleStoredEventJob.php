@@ -14,7 +14,7 @@ class HandleStoredEventJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /** @var \Spatie\EventProjector\Models\StoredEvent */
-    protected $storedEvent;
+    public $storedEvent;
 
     public function __construct(StoredEvent $storedEvent)
     {
