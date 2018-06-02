@@ -17,7 +17,7 @@ class SnapshotRepository
     /** @var array */
     protected $config;
 
-    public function __construct(EventProjectionist $eventProjectionist, Filesystem $disk,  array $config)
+    public function __construct(EventProjectionist $eventProjectionist, Filesystem $disk, array $config)
     {
         $this->eventProjectionist = $eventProjectionist;
 
