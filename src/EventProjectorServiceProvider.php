@@ -41,15 +41,6 @@ class EventProjectorServiceProvider extends ServiceProvider
             ], 'migrations');
         }
 
-        $this->app->bind(EventSerializer::class, config('event-projector.event_serializer'));
-
-        $this->bindCommands();
-    }
-
-    public function register()
-    {
-        $this->mergeConfigFrom(__DIR__.'/../config/event-projector.php', 'event-projector');
-
         $this->app->singleton(EventProjectionist::class, function () {
             $config = config('event-projector');
 
@@ -93,6 +84,15 @@ class EventProjectorServiceProvider extends ServiceProvider
             ->give(config('event-projector.stored_event_model'));
 
         Event::subscribe(EventSubscriber::class);
+
+        $this->app->bind(EventSerializer::class, config('event-projector.event_serializer'));
+
+        $this->bindCommands();
+    }
+
+    public function register()
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/event-projector.php', 'event-projector');
     }
 
     protected function bindCommands(): void
