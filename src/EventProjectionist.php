@@ -68,6 +68,11 @@ class EventProjectionist
         return $this->projectors;
     }
 
+    public function getReactors(): Collection
+    {
+        return $this->reactors;
+    }
+      
     public function getProjector(string $name): ?Projector
     {
         return $this
