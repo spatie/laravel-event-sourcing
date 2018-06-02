@@ -3,6 +3,16 @@
 return [
 
     /*
+     * A list of projector classes that should be automatically registered.
+     */
+    'projectors' => [],
+
+    /*
+     * A list of reactor classes that should be automatically registered.
+     */
+    'reactors' => [],
+
+    /*
      * A queue is need to guarantee that all events get passed to the projectors in
      * the right order. Here you can set of the name of the queue. In production
      * environments you must use a real queue and not the sync driver.
@@ -36,16 +46,6 @@ return [
      * a chuncked way. You can specify the chunk size here.
      */
     'replay_chunk_size' => 1000,
-
-    /*
-     * A list of projector classes that should be automatically registered.
-     */
-    'projectors' => [],
-
-    /*
-     * A list of reactor classes that should be automatically registered.
-     */
-    'reactors' => [],
 
     /*
      * The diskname where the snapshots are stored. You can create a disk in the

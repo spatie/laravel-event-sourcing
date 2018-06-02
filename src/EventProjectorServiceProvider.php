@@ -46,9 +46,9 @@ class EventProjectorServiceProvider extends ServiceProvider
 
             $projectionist = new EventProjectionist($config);
 
-            $projectionist->addProjectors($config['projectors'] ?? []);
-
-            $projectionist->addReactors($config['reactors'] ?? []);
+            $projectionist
+                ->addProjectors($config['projectors'] ?? [])
+                ->addReactors($config['reactors'] ?? []);
 
             return $projectionist;
         });
