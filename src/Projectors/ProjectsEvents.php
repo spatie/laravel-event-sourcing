@@ -3,7 +3,6 @@
 namespace Spatie\EventProjector\Projectors;
 
 use Carbon\Carbon;
-use Exception;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\EventHandlers\HandlesEvents;

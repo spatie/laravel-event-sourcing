@@ -77,10 +77,10 @@ class EventProjectorServiceProvider extends ServiceProvider
             $diskName = $config['snapshots_disk'];
             $disk = Storage::disk($diskName);
 
-            return new SnapshotRepository($eventProjectionist, $disk,  $config);
+            return new SnapshotRepository($eventProjectionist, $disk, $config);
         });
 
-        $this->app->bind(EventSubscriber::class, function() {
+        $this->app->bind(EventSubscriber::class, function () {
             $eventProjectionist = app(EventProjectionist::class);
             $config = config('event-projector');
 
