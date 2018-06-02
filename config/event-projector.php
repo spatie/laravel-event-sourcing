@@ -3,9 +3,9 @@
 return [
 
     /*
-     * A queue is used to guarantee that all events get passed to the projectors in the
-     * right order. Here you can set of the name of the queue. Make sure it will
-     * only perform one job at a time.
+     * A queue is need to guarantee that all events get passed to the projectors in
+     * the right order. Here you can set of the name of the queue. In production
+     * environments you must use a real queue and not the sync driver.
      */
     'queue' => env('EVENT_PROJECTOR_QUEUE_DRIVER', 'sync'),
 

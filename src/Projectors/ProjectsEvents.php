@@ -67,9 +67,4 @@ trait ProjectsEvents
     {
         return ProjectorStatus::getForProjector($this);
     }
-
-    public function handleException(Exception $exception)
-    {
-
-    }
 }
