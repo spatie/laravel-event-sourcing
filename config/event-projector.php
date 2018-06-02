@@ -3,17 +3,21 @@
 return [
 
     /*
-     * A list of projector classes that should be automatically registered.
+     * Projectors are classes that build up projections. You can create them by
+     * performing `php artisan event-projector:create-projector`. Projectors
+     * can be registered in this array or a service provider.
      */
     'projectors' => [],
 
     /*
-     * A list of reactor classes that should be automatically registered.
+     * Reactors are classes that handle side effects. You can create them by
+     * performing `php artisan event-projector:create-reactor`. Reactors
+     * can be registered in this array or a service provider.
      */
     'reactors' => [],
 
     /*
-     * A queue is need to guarantee that all events get passed to the projectors in
+     * A queue is used to guarantee that all events get passed to the projectors in
      * the right order. Here you can set of the name of the queue. In production
      * environments you must use a real queue and not the sync driver.
      */
