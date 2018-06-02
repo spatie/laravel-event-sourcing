@@ -35,6 +35,8 @@ class EventSubscriber
     {
         $storedEvent = $this->config['stored_event_model']::createForEvent($event);
 
+        $this->eventProjectionist->handleImmediately($storedEvent);
+
         dispatch(new HandleStoredEventJob($storedEvent))->onQueue($this->config['queue']);
     }
 

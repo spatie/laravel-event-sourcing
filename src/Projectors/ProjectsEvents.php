@@ -3,6 +3,7 @@
 namespace Spatie\EventProjector\Projectors;
 
 use Carbon\Carbon;
+use Exception;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\EventHandlers\HandlesEvents;
@@ -57,8 +58,18 @@ trait ProjectsEvents
         $this->getStatus()->delete();
     }
 
+    public function shouldBeCalledImmediately(): bool
+    {
+        return $this instanceof ShouldBeCalledImmediately;
+    }
+
     protected function getStatus(): ProjectorStatus
     {
         return ProjectorStatus::getForProjector($this);
+    }
+
+    public function handleException(Exception $exception)
+    {
+
     }
 }
