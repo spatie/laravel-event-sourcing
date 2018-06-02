@@ -8,22 +8,22 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 
 class SnapshotRepository
 {
-    /** @var array */
-    protected $config;
+    /** @var \Spatie\EventProjector\EventProjectionist */
+    protected $eventProjectionist;
 
     /** @var \Illuminate\Contracts\Filesystem\Filesystem */
     protected $disk;
 
-    /** @var \Spatie\EventProjector\EventProjectionist */
-    protected $eventProjectionist;
+    /** @var array */
+    protected $config;
 
-    public function __construct(array $config, Filesystem $disk, EventProjectionist $eventProjectionist)
+    public function __construct(EventProjectionist $eventProjectionist, Filesystem $disk,  array $config)
     {
-        $this->config = $config;
+        $this->eventProjectionist = $eventProjectionist;
 
         $this->disk = $disk;
 
-        $this->eventProjectionist = $eventProjectionist;
+        $this->config = $config;
     }
 
     public function get(): Collection

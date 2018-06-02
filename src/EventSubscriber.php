@@ -7,14 +7,14 @@ class EventSubscriber
     /** @var \Spatie\EventProjector\EventProjectionist */
     protected $eventProjectionist;
 
-    /** @var string */
-    protected $storedEventModelClass;
+    /** @var array */
+    protected $config;
 
-    public function __construct(EventProjectionist $eventProjectionist, string $storedEventModelClass)
+    public function __construct(EventProjectionist $eventProjectionist, array $config)
     {
         $this->eventProjectionist = $eventProjectionist;
 
-        $this->storedEventModelClass = $storedEventModelClass;
+        $this->config = $config;
     }
 
     public function subscribe($events)
@@ -33,9 +33,9 @@ class EventSubscriber
 
     public function storeEvent(ShouldBeStored $event)
     {
-        $this->eventProjectionist->handle(
-            $this->storedEventModelClass::createForEvent($event)
-        );
+        $storedEvent = $this->config['stored_event_model']::createForEvent($event);
+
+        dispatch(new HandleStoredEventJob($storedEvent))->onQueue($this->config['queue']);
     }
 
     protected function shouldBeStored($event): bool

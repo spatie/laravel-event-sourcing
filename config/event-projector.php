@@ -3,6 +3,13 @@
 return [
 
     /*
+     * A queue is used to guarantee that all events get passed to the projectors in the
+     * right order. Here you can set of the name of the queue. Make sure it will
+     * only perform one job at a time.
+     */
+    'queue' => env('EVENT_PROJECTOR_QUEUE_DRIVER', 'sync'),
+
+    /*
      * This class is responsible for storing events. To add extra behavour you
      * can change this to a class of your own. The only restriction is that
      * it should extend \Spatie\EventProjector\Models\StoredEvent.
