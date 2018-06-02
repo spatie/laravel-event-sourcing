@@ -4,6 +4,7 @@ namespace Spatie\EventProjector;
 
 use Exception;
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\Events\ProjectorFailedHandlingEvent;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\EventHandlers\EventHandler;
@@ -168,6 +169,8 @@ class EventProjectionist
         }
         catch (Exception $exception) {
             $eventHandler->handleException($exception);
+
+            event(new ProjectorFailedHandlingEvent($eventHandler, $storedEvent, $exception));
 
             return false;
         }

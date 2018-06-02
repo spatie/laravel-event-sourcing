@@ -2,12 +2,14 @@
 
 namespace Spatie\EventProjector\Tests;
 
+use Mockery;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\InvalidProjectorThatCannotHandleEvents;
@@ -116,5 +118,34 @@ class EventProjectionistTest extends TestCase
         EventProjectionist::addReactor(BrokeReactor::class);
 
         $this->assertCount(1, EventProjectionist::getReactors());
+    }
+
+    /** @test */
+    public function it_will_call_the_method_on_the_projector_when_the_projector_throws_an_exception()
+    {
+        $projector = Mockery::mock(ProjectorThatThrowsAnException::class. '[handleException]');
+
+        $projector->shouldReceive('handleException')->once();
+
+        EventProjectionist::addProjector($projector);
+
+        event(new MoneyAdded($this->account, 1000));
+    }
+
+    /** @test */
+    public function when_a_projector_fails_it_should_still_continue_calling_other_projectors()
+    {
+        $failingProjector = new ProjectorThatThrowsAnException();
+        EventProjectionist::addProjector($failingProjector);
+
+        $workingProjector = new BalanceProjector();
+        EventProjectionist::addProjector($workingProjector);
+
+        event(new MoneyAdded($this->account, 1000));
+
+        $this->assertEquals(0, ProjectorStatus::getForProjector($failingProjector)->last_processed_event_id);
+
+        $this->assertEquals(1, ProjectorStatus::getForProjector($workingProjector)->last_processed_event_id);
+        $this->assertEquals(1000, $this->account->refresh()->amount);
     }
 }
