@@ -2,6 +2,8 @@
 
 namespace DummyNamespace;
 
+use Spatie\EventProjector\ShouldBeStored;
+
 class DummyClass implements ShouldBeStored
 {
     public function __construct()
