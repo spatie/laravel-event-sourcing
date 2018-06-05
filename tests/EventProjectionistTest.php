@@ -2,7 +2,9 @@
 
 namespace Spatie\EventProjector\Tests;
 
+use Exception;
 use Mockery;
+use Spatie\EventProjector\EventProjectorServiceProvider;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Facades\EventProjectionist;
@@ -135,6 +137,8 @@ class EventProjectionistTest extends TestCase
     /** @test */
     public function it_will_call_the_method_on_the_projector_when_the_projector_throws_an_exception()
     {
+        $this->setConfig('event-projector.catch_exceptions', true);
+
         $projector = Mockery::mock(ProjectorThatThrowsAnException::class.'[handleException]');
 
         $projector->shouldReceive('handleException')->once();
@@ -145,8 +149,10 @@ class EventProjectionistTest extends TestCase
     }
 
     /** @test */
-    public function when_a_projector_fails_it_should_still_continue_calling_other_projectors()
+    public function it_can_catch_exceptions_and_still_continue_calling_other_projectors()
     {
+        $this->setConfig('event-projector.catch_exceptions', true);
+
         $failingProjector = new ProjectorThatThrowsAnException();
         EventProjectionist::addProjector($failingProjector);
 
@@ -161,4 +167,14 @@ class EventProjectionistTest extends TestCase
         $this->assertEquals(1000, $this->account->refresh()->amount);
     }
 
+    /** @test */
+    public function it_can_not_catch_exceptions_and_not_continue()
+    {
+        $failingProjector = new ProjectorThatThrowsAnException();
+        EventProjectionist::addProjector($failingProjector);
+
+        $this->expectException(Exception::class);
+
+        event(new MoneyAdded($this->account, 1000));
+    }
 }

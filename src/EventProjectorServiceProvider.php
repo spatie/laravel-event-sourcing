@@ -41,6 +41,8 @@ class EventProjectorServiceProvider extends ServiceProvider
                 __DIR__.'/../stubs/create_projector_statuses_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_projector_statuses_table.php'),
             ], 'migrations');
         }
+
+        Event::subscribe(EventSubscriber::class);
     }
 
     public function register()
@@ -83,7 +85,7 @@ class EventProjectorServiceProvider extends ServiceProvider
             return new SnapshotRepository($eventProjectionist, $disk, $config);
         });
 
-        $this->app->bind(EventSubscriber::class, function () {
+        $this->app->singleton(EventSubscriber::class, function () {
             $eventProjectionist = app(EventProjectionist::class);
             $config = config('event-projector');
 
@@ -94,8 +96,6 @@ class EventProjectorServiceProvider extends ServiceProvider
             ->when(ReplayEventsCommand::class)
             ->needs('$storedEventModelClass')
             ->give(config('event-projector.stored_event_model'));
-
-        Event::subscribe(EventSubscriber::class);
 
         $this->app->bind(EventSerializer::class, config('event-projector.event_serializer'));
 

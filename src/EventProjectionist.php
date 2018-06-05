@@ -25,7 +25,7 @@ class EventProjectionist
     protected $isReplayingEvents = false;
 
     /** @var int */
-    protected $replayChunkSize;
+    protected $config;
 
     public function __construct(array $config)
     {
@@ -33,7 +33,7 @@ class EventProjectionist
 
         $this->reactors = collect();
 
-        $this->replayChunkSize = $config['replay_chunk_size'] ?? 1000;
+        $this->config = $config;
     }
 
     public function isReplayingEvents(): bool
@@ -167,6 +167,10 @@ class EventProjectionist
         try {
             app()->call([$eventHandler, $method], compact('event', 'storedEvent'));
         } catch (Exception $exception) {
+            if (! $this->config['catch_exceptions']) {
+                throw $exception;
+            }
+
             $eventHandler->handleException($exception);
 
             event(new EventHandlerFailedHandlingEvent($eventHandler, $storedEvent, $exception));
@@ -189,7 +193,7 @@ class EventProjectionist
 
         StoredEvent::query()
             ->after($afterStoredEventId ?? 0)
-            ->chunk($this->replayChunkSize, function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
+            ->chunk($this->config['replay_chunk_size'], function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
                 $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
                     $this->callEventHandlers($projectors, $storedEvent);
 

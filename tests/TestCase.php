@@ -57,4 +57,10 @@ abstract class TestCase extends Orchestra
 
         return $this;
     }
+
+    protected function setConfig(string $name, $value)
+    {
+        config()->set($name, $value);
+        (new EventProjectorServiceProvider($this->app))->register();
+    }
 }
