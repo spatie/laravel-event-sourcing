@@ -28,8 +28,8 @@ return [
     'queue' => env('EVENT_PROJECTOR_QUEUE_DRIVER', 'sync'),
 
     /*
-     * When a projector or reactor throws an exception the event projectionist can catch
-     * it so all projectors and reactors can still do their work. The exception will
+     * When a projector or reactor throws an exception the event projectionist can catch it
+     * so all other projectors and reactors can still do their work. The exception will
      * be passed to the `handleException` method on that projector or reactor.
      */
     'catch_exceptions' => env('EVENT_PROJECTOR_CATCH_EXCEPTIONS', false),
