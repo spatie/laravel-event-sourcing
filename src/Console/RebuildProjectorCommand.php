@@ -4,8 +4,8 @@ namespace Spatie\EventProjector\Console;
 
 use Exception;
 use Illuminate\Console\Command;
-use Spatie\EventProjector\Console\Concerns\ReplaysEvents;
 use Spatie\EventProjector\EventProjectionist;
+use Spatie\EventProjector\Console\Concerns\ReplaysEvents;
 
 class RebuildProjectorCommand extends Command
 {
@@ -31,7 +31,7 @@ class RebuildProjectorCommand extends Command
 
         $projectors = collect($projectorNames)
             ->map(function (string $projectorName) {
-                if (!$projector = $this->eventProjectionist->getProjector($projectorName)) {
+                if (! $projector = $this->eventProjectionist->getProjector($projectorName)) {
                     throw new Exception("Projector {$projectorName} not found. Did you register?");
                 }
 

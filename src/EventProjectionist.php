@@ -67,7 +67,7 @@ class EventProjectionist
     {
         return $this->projectors;
     }
-      
+
     public function getProjector(string $name): ?Projector
     {
         return $this
