@@ -15,7 +15,7 @@ class EventProjectorServiceProviderTest extends TestCase
         config()->set('event-projector.projectors', [BalanceProjector::class]);
         config()->set('event-projector.reactors', [BrokeReactor::class]);
 
-        (new EventProjectorServiceProvider($this->app))->boot();
+        (new EventProjectorServiceProvider($this->app))->register();
 
         $this->assertCount(1, EventProjectionist::getProjectors());
         $this->assertCount(1, EventProjectionist::getReactors());

@@ -40,6 +40,11 @@ class EventProjectorServiceProvider extends ServiceProvider
                 __DIR__.'/../stubs/create_projector_statuses_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_projector_statuses_table.php'),
             ], 'migrations');
         }
+    }
+
+    public function register()
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/event-projector.php', 'event-projector');
 
         $this->app->singleton(EventProjectionist::class, function () {
             $config = config('event-projector');
@@ -96,12 +101,7 @@ class EventProjectorServiceProvider extends ServiceProvider
         $this->bindCommands();
     }
 
-    public function register()
-    {
-        $this->mergeConfigFrom(__DIR__.'/../config/event-projector.php', 'event-projector');
-    }
-
-    protected function bindCommands(): void
+    protected function bindCommands()
     {
         $this->app->bind('command.event-projector:list-projectors', ListProjectorsCommand::class);
         $this->app->bind('command.event-projector:reset-projector', ResetProjectorCommand::class);
