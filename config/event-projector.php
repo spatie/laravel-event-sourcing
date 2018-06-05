@@ -7,14 +7,18 @@ return [
      * performing `php artisan event-projector:create-projector`. Projectors
      * can be registered in this array or a service provider.
      */
-    'projectors' => [],
+    'projectors' => [
+        // App\Projectors\YourProjector::class
+    ],
 
     /*
      * Reactors are classes that handle side effects. You can create them by
      * performing `php artisan event-projector:create-reactor`. Reactors
      * can be registered in this array or a service provider.
      */
-    'reactors' => [],
+    'reactors' => [
+        // App\Reactors\YourReactors::class
+    ],
 
     /*
      * A queue is used to guarantee that all events get passed to the projectors in
