@@ -13,7 +13,19 @@ trait HandlesEvents
 
     public function methodNameThatHandlesEvent(object $event): string
     {
-        return $this->handlesEvents[get_class($event)] ?? '';
+        $methodName =  $this->handlesEvents[get_class($event)] ?? '';
+
+        if ($methodName !== '') {
+            return $methodName;
+        }
+
+        $wildcardMethod = $this->handlesEvents['*'] ?? '';
+
+        if ($wildcardMethod !== '') {
+           return $wildcardMethod;
+        }
+
+        return '';
     }
 
     public function handleException(Exception $exception)

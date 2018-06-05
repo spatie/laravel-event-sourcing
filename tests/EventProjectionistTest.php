@@ -9,6 +9,7 @@ use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\WildcardProjector;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
@@ -28,7 +29,7 @@ class EventProjectionistTest extends TestCase
     }
 
     /** @test */
-    public function it_will_thrown_an_exception_when_trying_to_add_a_non_existing_projector()
+    public function it_will_throw_an_exception_when_trying_to_add_a_non_existing_projector()
     {
         $this->expectException(InvalidEventHandler::class);
 
@@ -78,6 +79,17 @@ class EventProjectionistTest extends TestCase
 
         $status = ProjectorStatus::getForProjector($projector);
         $this->assertEquals(2, $status->last_processed_event_id);
+    }
+
+
+    /** @test */
+    public function it_can_handle_a_wildcard_in_handlesEvents()
+    {
+        EventProjectionist::addProjector(WildcardProjector::class);
+
+        event(new MoneyAdded($this->account, 1234));
+
+        $this->assertEquals(1234, $this->account->refresh()->amount);
     }
 
     /** @test */
@@ -148,4 +160,5 @@ class EventProjectionistTest extends TestCase
         $this->assertEquals(1, ProjectorStatus::getForProjector($workingProjector)->last_processed_event_id);
         $this->assertEquals(1000, $this->account->refresh()->amount);
     }
+
 }
