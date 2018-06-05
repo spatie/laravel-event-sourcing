@@ -5,7 +5,6 @@ namespace Spatie\EventProjector\Console;
 use Exception;
 use Illuminate\Console\Command;
 use Spatie\EventProjector\EventProjectionist;
-use Spatie\EventProjector\Console\Snapshots\Concerns\ChooseSnapshot;
 
 class ResetProjectorCommand extends Command
 {
@@ -29,7 +28,7 @@ class ResetProjectorCommand extends Command
 
         collect($projectorNames)
             ->map(function (string $projectorName) {
-                if (!$projector = $this->eventProjectionist->getProjector($projectorName)) {
+                if (! $projector = $this->eventProjectionist->getProjector($projectorName)) {
                     throw new Exception("Projector {$projectorName} not found. Did you register?");
                 }
 

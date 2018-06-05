@@ -2,10 +2,10 @@
 
 namespace Spatie\EventProjector\Tests;
 
-use Spatie\EventProjector\EventProjectorServiceProvider;
 use Spatie\EventProjector\Facades\EventProjectionist;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventProjector\EventProjectorServiceProvider;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 
 class EventProjectorServiceProviderTest extends TestCase
 {

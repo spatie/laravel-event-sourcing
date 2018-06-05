@@ -13,7 +13,7 @@ trait HandlesEvents
 
     public function methodNameThatHandlesEvent(object $event): string
     {
-        $methodName =  $this->handlesEvents[get_class($event)] ?? '';
+        $methodName = $this->handlesEvents[get_class($event)] ?? '';
 
         if ($methodName !== '') {
             return $methodName;
@@ -22,7 +22,7 @@ trait HandlesEvents
         $wildcardMethod = $this->handlesEvents['*'] ?? '';
 
         if ($wildcardMethod !== '') {
-           return $wildcardMethod;
+            return $wildcardMethod;
         }
 
         return '';

@@ -4,10 +4,9 @@ namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Console\Concerns\ReplaysEvents;
 use Spatie\EventProjector\EventProjectionist;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
+use Spatie\EventProjector\Console\Concerns\ReplaysEvents;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
 class ReplayEventsCommand extends Command
@@ -48,7 +47,7 @@ class ReplayEventsCommand extends Command
             return;
         }
 
-       $this->replayEvents($projectors);
+        $this->replayEvents($projectors);
     }
 
     protected function getProjectors(): Collection
