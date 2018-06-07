@@ -9,11 +9,11 @@ use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Console\Concerns\ReplaysEvents;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
-class ReplayEventsCommand extends Command
+class ReplayCommand extends Command
 {
     use ReplaysEvents;
 
-    protected $signature = 'event-projector:replay-events
+    protected $signature = 'event-projector:replay
                             {--projector=* : The projector that should receive the event}';
 
     protected $description = 'Replay stored events';

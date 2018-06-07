@@ -51,7 +51,7 @@ class ReplayEventsCommandTest extends TestCase
         Event::assertNotDispatched(StartingEventReplay::class);
         Event::assertNotDispatched(FinishedEventReplay::class);
 
-        $this->artisan('event-projector:replay-events', ['--projector' => [get_class($projector)]]);
+        $this->artisan('event-projector:replay', ['--projector' => [get_class($projector)]]);
 
         Event::assertDispatched(StartingEventReplay::class);
         Event::assertDispatched(FinishedEventReplay::class);
@@ -62,18 +62,18 @@ class ReplayEventsCommandTest extends TestCase
     {
         EventProjectionist::addProjector(BalanceProjector::class);
 
-        $command = Mockery::mock(ReplayEventsCommand::class.'[confirm]', [
+        $command = Mockery::mock(ReplayCommand::class.'[confirm]', [
             app(BoundEventProjectionist::class),
             config('event-projector.stored_event_model'),
         ]);
 
         $command->shouldReceive('confirm')->andReturn(false);
 
-        $this->app->bind('command.event-projector:replay-events', function () use ($command) {
+        $this->app->bind('command.event-projector:replay', function () use ($command) {
             return $command;
         });
 
-        $this->artisan('event-projector:replay-events');
+        $this->artisan('event-projector:replay');
 
         $this->assertSeeInConsoleOutput('No events replayed!');
     }
@@ -83,18 +83,18 @@ class ReplayEventsCommandTest extends TestCase
     {
         EventProjectionist::addProjector(BalanceProjector::class);
 
-        $command = Mockery::mock(ReplayEventsCommand::class.'[confirm]', [
+        $command = Mockery::mock(ReplayCommand::class.'[confirm]', [
             app(BoundEventProjectionist::class),
             config('event-projector.stored_event_model'),
         ]);
 
         $command->shouldReceive('confirm')->andReturn(true);
 
-        $this->app->bind('command.event-projector:replay-events', function () use ($command) {
+        $this->app->bind('command.event-projector:replay', function () use ($command) {
             return $command;
         });
 
-        $this->artisan('event-projector:replay-events');
+        $this->artisan('event-projector:replay');
 
         $this->assertSeeInConsoleOutput('Replaying all events...');
     }
@@ -114,7 +114,7 @@ class ReplayEventsCommandTest extends TestCase
 
         Account::create();
 
-        $this->artisan('event-projector:replay-events', ['--projector' => [BalanceProjector::class]]);
+        $this->artisan('event-projector:replay', ['--projector' => [BalanceProjector::class]]);
 
         Mail::assertSent(AccountBroke::class, 1);
     }
@@ -126,7 +126,7 @@ class ReplayEventsCommandTest extends TestCase
 
         EventProjectionist::addProjector($projector);
 
-        $this->artisan('event-projector:replay-events', [
+        $this->artisan('event-projector:replay', [
             '--projector' => [BalanceProjector::class],
         ]);
 
@@ -137,7 +137,7 @@ class ReplayEventsCommandTest extends TestCase
         $projectorStatus->rememberLastProcessedEvent(StoredEvent::find(2));
         $this->assertEquals(2, $projectorStatus->last_processed_event_id);
 
-        $this->artisan('event-projector:replay-events', [
+        $this->artisan('event-projector:replay', [
             '--projector' => [BalanceProjector::class],
         ]);
 
@@ -157,7 +157,7 @@ class ReplayEventsCommandTest extends TestCase
         $projector->shouldReceive('onStartingEventReplay')->once();
         $projector->shouldReceive('onFinishedEventReplay')->once();
 
-        $this->artisan('event-projector:replay-events', [
+        $this->artisan('event-projector:replay', [
             '--projector' => [get_class($projector)],
         ]);
     }

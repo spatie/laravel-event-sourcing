@@ -13,7 +13,7 @@ class ListProjectorsCommandTest extends TestCase
     {
         EventProjectionist::addProjector(BalanceProjector::class);
 
-        $this->artisan('event-projector:list-projectors');
+        $this->artisan('event-projector:list');
 
         $this
             ->assertSeeInConsoleOutput(BalanceProjector::class);
@@ -22,7 +22,7 @@ class ListProjectorsCommandTest extends TestCase
     /** @test */
     public function it_works_when_no_projectors_are_added_to_the_projectionist()
     {
-        $this->artisan('event-projector:list-projectors');
+        $this->artisan('event-projector:list');
 
         $this->assertSeeInConsoleOutput('No projectors found.');
     }

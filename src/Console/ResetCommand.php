@@ -5,15 +5,12 @@ namespace Spatie\EventProjector\Console;
 use Exception;
 use Illuminate\Console\Command;
 use Spatie\EventProjector\EventProjectionist;
-use Spatie\EventProjector\Console\Concerns\ReplaysEvents;
 
-class RebuildProjectorCommand extends Command
+class ResetCommand extends Command
 {
-    use ReplaysEvents;
+    protected $signature = 'event-projector:reset {projectorName*}';
 
-    protected $signature = 'event-projector:rebuild-projector {projectorName*}';
-
-    protected $description = 'Rebuild a projector';
+    protected $description = 'Reset a projector';
 
     /** @var \Spatie\EventProjector\EventProjectionist */
     protected $eventProjectionist;
@@ -29,7 +26,7 @@ class RebuildProjectorCommand extends Command
     {
         $projectorNames = $this->argument('projectorName');
 
-        $projectors = collect($projectorNames)
+        collect($projectorNames)
             ->map(function (string $projectorName) {
                 if (! $projector = $this->eventProjectionist->getProjector($projectorName)) {
                     throw new Exception("Projector {$projectorName} not found. Did you register?");
@@ -39,8 +36,6 @@ class RebuildProjectorCommand extends Command
             })
             ->each->reset();
 
-        $this->replayEvents($projectors);
-
-        $this->comment('Projector(s) rebuild!');
+        $this->comment('Projector(s) reset!');
     }
 }

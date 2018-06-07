@@ -6,12 +6,12 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Spatie\EventProjector\Snapshots\SnapshotFactory;
-use Spatie\EventProjector\Console\ReplayEventsCommand;
+use Spatie\EventProjector\Console\ReplayCommand;
 use Spatie\EventProjector\Snapshots\SnapshotRepository;
-use Spatie\EventProjector\Console\ListProjectorsCommand;
-use Spatie\EventProjector\Console\ResetProjectorCommand;
+use Spatie\EventProjector\Console\ListCommand;
+use Spatie\EventProjector\Console\ResetCommand;
 use Spatie\EventProjector\Console\Make\MakeReactorCommand;
-use Spatie\EventProjector\Console\RebuildProjectorCommand;
+use Spatie\EventProjector\Console\RebuildCommand;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\Console\Make\MakeProjectorCommand;
 use Spatie\EventProjector\Console\Make\MakeStorableEventCommand;
@@ -93,7 +93,7 @@ class EventProjectorServiceProvider extends ServiceProvider
         });
 
         $this->app
-            ->when(ReplayEventsCommand::class)
+            ->when(ReplayCommand::class)
             ->needs('$storedEventModelClass')
             ->give(config('event-projector.stored_event_model'));
 
@@ -104,10 +104,10 @@ class EventProjectorServiceProvider extends ServiceProvider
 
     protected function bindCommands()
     {
-        $this->app->bind('command.event-projector:list-projectors', ListProjectorsCommand::class);
-        $this->app->bind('command.event-projector:reset-projector', ResetProjectorCommand::class);
-        $this->app->bind('command.event-projector:rebuild-projector', RebuildProjectorCommand::class);
-        $this->app->bind('command.event-projector:replay-events', ReplayEventsCommand::class);
+        $this->app->bind('command.event-projector:list', ListCommand::class);
+        $this->app->bind('command.event-projector:reset', ResetCommand::class);
+        $this->app->bind('command.event-projector:rebuild', RebuildCommand::class);
+        $this->app->bind('command.event-projector:replay', ReplayCommand::class);
 
         $this->app->bind('command.event-projector:list-snapshots', ListSnapshotsCommand::class);
         $this->app->bind('command.event-projector:create-snapshot', CreateSnapshotCommand::class);
@@ -119,10 +119,10 @@ class EventProjectorServiceProvider extends ServiceProvider
         $this->app->bind('command.make:storable-event', MakeStorableEventCommand::class);
 
         $this->commands([
-            'command.event-projector:list-projectors',
-            'command.event-projector:reset-projector',
-            'command.event-projector:rebuild-projector',
-            'command.event-projector:replay-events',
+            'command.event-projector:list',
+            'command.event-projector:reset',
+            'command.event-projector:rebuild',
+            'command.event-projector:replay',
 
             'command.event-projector:list-snapshots',
             'command.event-projector:create-snapshot',

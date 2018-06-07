@@ -17,7 +17,7 @@ class RebuildProjectorCommandTest extends TestCase
         ProjectorStatus::getForProjector(new ResettableProjector());
         $this->assertCount(1, ProjectorStatus::get());
 
-        $this->artisan('event-projector:rebuild-projector', [
+        $this->artisan('event-projector:rebuild', [
             'projectorName' => [ResettableProjector::class],
         ]);
 
