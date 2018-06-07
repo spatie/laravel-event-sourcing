@@ -19,7 +19,7 @@ class SnapshottableThatDoesNotWriteAnythingProjector implements Projector, Snaps
     {
     }
 
-    public function restoreSnapshot(Snapshot $snapshot)
+    public function restoreFromSnapshot(Snapshot $snapshot)
     {
     }
 }

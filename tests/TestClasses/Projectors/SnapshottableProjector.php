@@ -17,7 +17,7 @@ class SnapshottableProjector extends BalanceProjector implements Snapshottable
         $snapshot->write($serializedAccounts);
     }
 
-    public function restoreSnapshot(Snapshot $snapshot)
+    public function restoreFromSnapshot(Snapshot $snapshot)
     {
         $serializedAccounts = $snapshot->read();
 

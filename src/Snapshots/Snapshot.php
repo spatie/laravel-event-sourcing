@@ -107,7 +107,7 @@ class Snapshot
     {
         $storedEvent = $this->lastProcessedEvent();
 
-        $this->projector()->restoreSnapshot($this);
+        $this->projector()->restoreFromSnapshot($this);
 
         $projectorStatus = $this->config['projector_status_model']::getForProjector($this->projector());
 
