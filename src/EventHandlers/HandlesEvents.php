@@ -6,20 +6,25 @@ use Exception;
 
 trait HandlesEvents
 {
+    public function handlesEvents(): array
+    {
+        return $this->handlesEvents ?? [];
+    }
+
     public function handlesEvent(object $event): bool
     {
-        return array_key_exists(get_class($event), $this->handlesEvents);
+        return array_key_exists(get_class($event), $this->handlesEvents());
     }
 
     public function methodNameThatHandlesEvent(object $event): string
     {
-        $methodName = $this->handlesEvents[get_class($event)] ?? '';
+        $methodName = $this->handlesEvents()[get_class($event)] ?? '';
 
         if ($methodName !== '') {
             return $methodName;
         }
 
-        $wildcardMethod = $this->handlesEvents['*'] ?? '';
+        $wildcardMethod = $this->handlesEvents()['*'] ?? '';
 
         if ($wildcardMethod !== '') {
             return $wildcardMethod;

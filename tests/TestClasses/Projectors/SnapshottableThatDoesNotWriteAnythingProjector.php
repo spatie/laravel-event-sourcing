@@ -12,7 +12,7 @@ class SnapshottableThatDoesNotWriteAnythingProjector implements Projector, Snaps
 {
     use ProjectsEvents, CanTakeSnapshot;
 
-    public $handlesEvents = [
+    protected $handlesEvents = [
     ];
 
     public function writeToSnapshot(Snapshot $snapshot)

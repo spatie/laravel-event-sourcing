@@ -10,7 +10,7 @@ class InvalidProjectThatDoesNotHaveTheRightEventHandlingMethod implements Projec
 {
     use ProjectsEvents;
 
-    public $handlesEvents = [
+    protected $handlesEvents = [
         MoneyAdded::class => 'hahaThisMethodDoesNotExist',
     ];
 }

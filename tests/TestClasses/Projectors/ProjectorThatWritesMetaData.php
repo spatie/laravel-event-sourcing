@@ -11,7 +11,7 @@ class ProjectorThatWritesMetaData implements Projector
 {
     use ProjectsEvents;
 
-    public $handlesEvents = [
+    protected $handlesEvents = [
         MoneyAdded::class => 'onMoneyAdded',
     ];
 

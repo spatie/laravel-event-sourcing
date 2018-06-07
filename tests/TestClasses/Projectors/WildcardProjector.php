@@ -10,7 +10,7 @@ class WildcardProjector implements Projector
 {
     use ProjectsEvents;
 
-    public $handlesEvents = [
+    protected $handlesEvents = [
         '*' => 'onAnyEvent',
     ];
 

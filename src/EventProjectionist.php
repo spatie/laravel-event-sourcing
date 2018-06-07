@@ -150,10 +150,6 @@ class EventProjectionist
 
     protected function callEventHandler(EventHandler $eventHandler, StoredEvent $storedEvent): bool
     {
-        if (! isset($eventHandler->handlesEvents)) {
-            throw InvalidEventHandler::cannotHandleEvents($eventHandler);
-        }
-
         $event = $storedEvent->event;
 
         if (! $method = $eventHandler->methodNameThatHandlesEvent($event)) {
