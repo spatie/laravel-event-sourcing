@@ -7,22 +7,22 @@ use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ResettableProjector;
 
-class RebuildProjectorCommandTest extends TestCase
+class ResetCommandTest extends TestCase
 {
     /** @test */
-    public function it_can_rebuild_a_projector()
+    public function it_can_reset_a_projector()
     {
         EventProjectionist::addProjector(ResettableProjector::class);
 
         ProjectorStatus::getForProjector(new ResettableProjector());
         $this->assertCount(1, ProjectorStatus::get());
 
-        $this->artisan('event-projector:rebuild', [
-            'projectorName' => [ResettableProjector::class],
+        $this->artisan('event-projector:reset', [
+            'projector' => [ResettableProjector::class],
         ]);
 
-        $this->assertSeeInConsoleOutput('Projector(s) rebuild!');
+        $this->assertSeeInConsoleOutput('Projector(s) reset');
 
-        $this->assertCount(1, ProjectorStatus::get());
+        $this->assertCount(0, ProjectorStatus::get());
     }
 }

@@ -4,6 +4,7 @@ namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\Console\Concerns\SelectsProjectors;
 use Spatie\EventProjector\EventProjectionist;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Console\Concerns\ReplaysEvents;
@@ -11,10 +12,9 @@ use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
 class ReplayCommand extends Command
 {
-    use ReplaysEvents;
+    use ReplaysEvents, SelectsProjectors;
 
-    protected $signature = 'event-projector:replay
-                            {--projector=* : The projector that should receive the event}';
+    protected $signature = 'event-projector:replay {projector?*}';
 
     protected $description = 'Replay stored events';
 
@@ -35,62 +35,14 @@ class ReplayCommand extends Command
 
     public function handle()
     {
-        if (! $this->commandShouldRun()) {
-            return;
-        }
+        $projectors = $this->selectsProjectors($this->argument('projector'), 'Are you sure you want to replay events to all projectors?');
 
-        $projectors = $this->getProjectors();
-
-        if ($projectors->isEmpty()) {
-            $this->warn('No projectors found to replay events to...');
+        if (is_null($projectors)) {
+            $this->warn('No events replayed!');
 
             return;
         }
 
         $this->replayEvents($projectors);
-    }
-
-    protected function getProjectors(): Collection
-    {
-        $onlyCallProjectors = $this->option('projector');
-
-        $this->guardAgainstNonExistingProjectors($onlyCallProjectors);
-
-        $allProjectors = $this->eventProjectionist->getProjectors();
-
-        if (count($onlyCallProjectors) === 0) {
-            return $allProjectors;
-        }
-
-        return $allProjectors
-            ->filter(function ($projector) use ($onlyCallProjectors) {
-                if (! is_string($projector)) {
-                    $projector = get_class($projector);
-                }
-
-                return in_array($projector, $onlyCallProjectors);
-            });
-    }
-
-    protected function guardAgainstNonExistingProjectors(array $onlyCallProjectors)
-    {
-        foreach ($onlyCallProjectors as $projector) {
-            if (! class_exists($projector)) {
-                throw InvalidEventHandler::doesNotExist($projector);
-            }
-        }
-    }
-
-    protected function commandShouldRun(): bool
-    {
-        if (count($this->option('projector') ?? []) === 0) {
-            if (! $confirmed = $this->confirm('Are you sure you want to replay the events to all projectors?')) {
-                $this->warn('No events replayed!');
-
-                return false;
-            }
-        }
-
-        return true;
     }
 }

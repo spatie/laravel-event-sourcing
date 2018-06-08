@@ -19,7 +19,7 @@ use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventProjector\EventProjectionist as BoundEventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 
-class ReplayEventsCommandTest extends TestCase
+class ReplayCommandTest extends TestCase
 {
     /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
     protected $account;
@@ -51,7 +51,7 @@ class ReplayEventsCommandTest extends TestCase
         Event::assertNotDispatched(StartingEventReplay::class);
         Event::assertNotDispatched(FinishedEventReplay::class);
 
-        $this->artisan('event-projector:replay', ['--projector' => [get_class($projector)]]);
+        $this->artisan('event-projector:replay', ['projector' => [get_class($projector)]]);
 
         Event::assertDispatched(StartingEventReplay::class);
         Event::assertDispatched(FinishedEventReplay::class);
@@ -114,7 +114,7 @@ class ReplayEventsCommandTest extends TestCase
 
         Account::create();
 
-        $this->artisan('event-projector:replay', ['--projector' => [BalanceProjector::class]]);
+        $this->artisan('event-projector:replay', ['projector' => [BalanceProjector::class]]);
 
         Mail::assertSent(AccountBroke::class, 1);
     }
@@ -127,7 +127,7 @@ class ReplayEventsCommandTest extends TestCase
         EventProjectionist::addProjector($projector);
 
         $this->artisan('event-projector:replay', [
-            '--projector' => [BalanceProjector::class],
+            'projector' => [BalanceProjector::class],
         ]);
 
         $projectorStatus = ProjectorStatus::getForProjector($projector);
@@ -138,7 +138,7 @@ class ReplayEventsCommandTest extends TestCase
         $this->assertEquals(2, $projectorStatus->last_processed_event_id);
 
         $this->artisan('event-projector:replay', [
-            '--projector' => [BalanceProjector::class],
+            'projector' => [BalanceProjector::class],
         ]);
 
         $this->assertSeeInConsoleOutput('Replaying events after stored event id 2...');
@@ -158,7 +158,7 @@ class ReplayEventsCommandTest extends TestCase
         $projector->shouldReceive('onFinishedEventReplay')->once();
 
         $this->artisan('event-projector:replay', [
-            '--projector' => [get_class($projector)],
+            'projector' => [get_class($projector)],
         ]);
     }
 }

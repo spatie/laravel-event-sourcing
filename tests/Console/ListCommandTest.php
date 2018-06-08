@@ -6,7 +6,7 @@ use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 
-class ListProjectorsCommandTest extends TestCase
+class ListCommandTest extends TestCase
 {
     /** @test */
     public function it_can_list_all_existing_projectors()

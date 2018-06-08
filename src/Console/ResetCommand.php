@@ -4,11 +4,14 @@ namespace Spatie\EventProjector\Console;
 
 use Exception;
 use Illuminate\Console\Command;
+use Spatie\EventProjector\Console\Concerns\SelectsProjectors;
 use Spatie\EventProjector\EventProjectionist;
 
 class ResetCommand extends Command
 {
-    protected $signature = 'event-projector:reset {projectorName*}';
+    use SelectsProjectors;
+
+    protected $signature = 'event-projector:reset {projector*}';
 
     protected $description = 'Reset a projector';
 
@@ -24,17 +27,15 @@ class ResetCommand extends Command
 
     public function handle()
     {
-        $projectorNames = $this->argument('projectorName');
+        $projectors = $this->selectsProjectors($this->argument('projector'), 'Are you sure to reset all projectors?');
 
-        collect($projectorNames)
-            ->map(function (string $projectorName) {
-                if (! $projector = $this->eventProjectionist->getProjector($projectorName)) {
-                    throw new Exception("Projector {$projectorName} not found. Did you register?");
-                }
+        if (is_null($projectors)) {
+            $this->warn('No projectors reset!');
 
-                return $projector;
-            })
-            ->each->reset();
+            return;
+        }
+
+        $projectors->each->reset();
 
         $this->comment('Projector(s) reset!');
     }

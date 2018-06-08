@@ -4,14 +4,15 @@ namespace Spatie\EventProjector\Console;
 
 use Exception;
 use Illuminate\Console\Command;
+use Spatie\EventProjector\Console\Concerns\SelectsProjectors;
 use Spatie\EventProjector\EventProjectionist;
 use Spatie\EventProjector\Console\Concerns\ReplaysEvents;
 
 class RebuildCommand extends Command
 {
-    use ReplaysEvents;
+    use ReplaysEvents, SelectsProjectors;
 
-    protected $signature = 'event-projector:rebuild {projectorName*}';
+    protected $signature = 'event-projector:rebuild {projector?*}';
 
     protected $description = 'Rebuild a projector';
 
@@ -27,17 +28,15 @@ class RebuildCommand extends Command
 
     public function handle()
     {
-        $projectorNames = $this->argument('projectorName');
+        $projectors = $this->selectsProjectors($this->argument('projector'), 'Are you sure to rebuild all projectors?');
 
-        $projectors = collect($projectorNames)
-            ->map(function (string $projectorName) {
-                if (! $projector = $this->eventProjectionist->getProjector($projectorName)) {
-                    throw new Exception("Projector {$projectorName} not found. Did you register?");
-                }
+        if (is_null($projectors)) {
+            $this->warn('No projectors rebuild!');
 
-                return $projector;
-            })
-            ->each->reset();
+            return;
+        }
+
+        $projectors->each->reset();
 
         $this->replayEvents($projectors);
 
