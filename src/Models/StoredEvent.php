@@ -58,4 +58,12 @@ class StoredEvent extends Model
     {
         $query->where('id', '>', $storedEventId);
     }
+
+    public function scopePrevious(Builder $query, StoredEvent $storedEvent): ?StoredEvent
+    {
+        $query
+            ->where('event_class', $storedEvent->event_class)
+            ->latest()
+            ->first();
+    }
 }

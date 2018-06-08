@@ -45,6 +45,8 @@ We publish all received postcards [on our company website](https://spatie.be/en/
 - [Freek Van der Herten](https://github.com/freekmurze)
 - [All Contributors](../../contributors)
 
+A big thank you to [Dries Vints](https://github.com/driesvints) for giving lots of valuable feedback while we were developing the package.
+
 ## Support us
 
 Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
