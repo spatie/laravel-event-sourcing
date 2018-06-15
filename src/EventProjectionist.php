@@ -4,6 +4,7 @@ namespace Spatie\EventProjector;
 
 use Exception;
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\EventHandlers\EventHandler;
@@ -123,10 +124,28 @@ class EventProjectionist
     protected function callEventHandlers(Collection $eventHandlers, StoredEvent $storedEvent): self
     {
         $eventHandlers
-            ->pipe(function (Collection $eventHandler) {
-                return $this->instantiate($eventHandler);
+            ->pipe(function (Collection $eventHandlers) {
+                return $this->instantiate($eventHandlers);
+            })
+            ->filter(function(EventHandler $eventHandler) use ($storedEvent) {
+                if (! $eventHandler instanceof Projector) {
+                    return true;
+                }
+
+                $event = $storedEvent->event;
+
+                if (! $method = $eventHandler->methodNameThatHandlesEvent($event)) {
+                    return false;
+                }
+
+                if (! method_exists($eventHandler, $method)) {
+                    throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
+                }
+                
+                return true;
             })
             ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
+
                 if ($eventHandler instanceof Projector) {
                     if (! $eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
                         event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));
@@ -156,10 +175,6 @@ class EventProjectionist
             return true;
         }
 
-        if (! method_exists($eventHandler, $method)) {
-            throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
-        }
-
         try {
             app()->call([$eventHandler, $method], compact('event', 'storedEvent'));
         } catch (Exception $exception) {
@@ -177,7 +192,7 @@ class EventProjectionist
         return true;
     }
 
-    public function replayEvents(Collection $projectors, int $afterStoredEventId, callable $onEventReplayed = null)
+    public function replayEvents(Collection $projectors, int $afterStoredEventId = 0, callable $onEventReplayed = null)
     {
         $this->isReplayingEvents = true;
 

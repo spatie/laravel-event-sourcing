@@ -26,6 +26,15 @@ class StoredEvent extends Model
         $storedEvent->event_class = get_class($event);
         $storedEvent->attributes['event_properties'] = app(EventSerializer::class)->serialize(clone $event);
         $storedEvent->created_at = now();
+
+        if (method_exists($event, 'getStreamName')) {
+            $storedEvent->stream_name = $event->getStreamName();
+        }
+
+        if (method_exists($event, 'getStreamId')) {
+            $storedEvent->stream_id = $event->getStreamId();
+        }
+
         $storedEvent->save();
 
         return $storedEvent;
@@ -34,6 +43,11 @@ class StoredEvent extends Model
     public static function getMaxId(): int
     {
         return DB::table((new static())->getTable())->max('id') ?? 0;
+    }
+
+    public static function last(): ?StoredEvent
+    {
+        return static::find(self::getMaxId());
     }
 
     public function getEventAttribute(): ShouldBeStored
@@ -61,9 +75,20 @@ class StoredEvent extends Model
 
     public function scopePrevious(Builder $query, StoredEvent $storedEvent): ?StoredEvent
     {
-        $query
+        static::query()
             ->where('event_class', $storedEvent->event_class)
             ->latest()
+            ->first();
+    }
+
+    public function previousInStream(): ?StoredEvent
+    {
+        return static::query()
+            ->where('event_class', $this->event_class)
+            ->where('stream_name', $this->stream_name)
+            ->where('stream_id', $this->stream_id)
+            ->where('id','<>', $this->id)
+            ->orderBy('id', 'desc')
             ->first();
     }
 }

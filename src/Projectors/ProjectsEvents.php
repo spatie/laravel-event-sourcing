@@ -21,19 +21,36 @@ trait ProjectsEvents
         return get_class($this);
     }
 
+    public function streambased(): bool
+    {
+        if (! isset($this->streamBased)) {
+            return false;
+        }
+
+        return $this->streamBased;
+    }
+
     public function rememberReceivedEvent(StoredEvent $storedEvent)
     {
-        $this->getStatus()->rememberLastProcessedEvent($storedEvent);
+        $this->getStatus($storedEvent)->rememberLastProcessedEvent($storedEvent, $this);
     }
 
     public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool
     {
-        return $storedEvent->id === $this->getStatus()->last_processed_event_id + 1;
+        if (! $this->streamBased()) {
+            return $storedEvent->id === $this->getStatus()->last_processed_event_id + 1;
+        }
+
+        $previousEvent = $storedEvent->previousInStream();
+        $previousEventId = optional($previousEvent)->id ?? 0;
+
+        $lastProcessedEventId = (int)$this->getStatus($storedEvent)->last_processed_event_id ?? 0;
+        return $previousEventId === $lastProcessedEventId;
     }
 
     public function hasReceivedAllEvents(): bool
     {
-        return (int) $this->getStatus()->last_processed_event_id === StoredEvent::getMaxId();
+        return ProjectorStatus::hasReceivedAllEvents($this);
     }
 
     public function getLastProcessedEventId(): int
@@ -62,8 +79,8 @@ trait ProjectsEvents
         return $this instanceof ShouldBeCalledImmediately;
     }
 
-    protected function getStatus(): ProjectorStatus
+    protected function getStatus(StoredEvent $storedEvent = null): ProjectorStatus
     {
-        return ProjectorStatus::getForProjector($this);
+        return ProjectorStatus::getForProjector($this, $storedEvent);
     }
 }
