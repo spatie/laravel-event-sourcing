@@ -4,8 +4,8 @@ namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
 
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
-use Spatie\EventProjector\Tests\TestClasses\Events\Streamable\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Tests\TestClasses\Events\Streamable\MoneyAdded;
 
 class StreambasedProjector implements Projector
 {
