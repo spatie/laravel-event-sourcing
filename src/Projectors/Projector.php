@@ -10,6 +10,8 @@ interface Projector extends EventHandler
 {
     public function getName(): string;
 
+    public function streamBased(): bool;
+
     public function rememberReceivedEvent(StoredEvent $storedEvent);
 
     public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool;

@@ -12,6 +12,8 @@ class CreateProjectorStatusesTable extends Migration
             $table->increments('id');
             $table->string('projector_name');
             $table->integer('last_processed_event_id')->default(0);
+            $table->string('stream_name')->nullable();
+            $table->string('stream_id')->nullable();
             $table->timestamps();
         });
     }

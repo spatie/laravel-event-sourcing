@@ -34,4 +34,22 @@ class StoredEventTest extends TestCase
             event(new MoneyAdded($account, 1234));
         }
     }
+
+    /** @test */
+    public function it_can_get_the_previous_event_in_a_stream()
+    {
+        $this->fireEvents(1);
+
+        $firstStoredEvent = StoredEvent::last();
+
+        $this->assertNull($firstStoredEvent->previousInStream());
+
+        $this->fireEvents(1);
+
+        $storedEvent = StoredEvent::last();
+
+        $this->assertEquals($firstStoredEvent->id, optional($storedEvent->previousInStream())->id);
+
+
+    }
 }

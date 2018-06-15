@@ -13,6 +13,8 @@ class CreateStoredEventsTable extends Migration
             $table->string('event_class');
             $table->text('event_properties');
             $table->schemalessAttributes('meta_data');
+            $table->string('stream_name')->nullable();
+            $table->string('stream_id')->nullable();
             $table->timestamp('created_at')->nullable();
         });
     }
