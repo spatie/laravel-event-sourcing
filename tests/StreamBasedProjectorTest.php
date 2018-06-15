@@ -56,12 +56,14 @@ class StreamBasedProjectorTest extends TestCase
         event(new MoneyAdded($this->account, 1000));
         $this->assertEquals(1000, $this->account->refresh()->amount);
 
-        //sneakily delete the projector status
+        // simulate that the event hasn't been receveid yet
         ProjectorStatus::truncate();
+        $this->account->update(['amount' => 0]);
+
         event(new MoneyAdded($this->account, 1000));
 
         //projector not up to date for that account stream, still old amount
-        $this->assertEquals(1000, $this->account->refresh()->amount);
+        $this->assertEquals(0, $this->account->refresh()->amount);
         Event::assertDispatched(ProjectorDidNotHandlePriorEvents::class);
 
         // other accounts still get updated
@@ -73,7 +75,7 @@ class StreamBasedProjectorTest extends TestCase
 
         // first account still won't get updated
         event(new MoneyAdded($this->account, 1000));
-        $this->assertEquals(1000, $this->account->refresh()->amount);
+        $this->assertEquals(0, $this->account->refresh()->amount);
 
         EventProjectionist::replayEvents(collect($this->projector));
         // all events of first account are now applied

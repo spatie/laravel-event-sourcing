@@ -87,7 +87,7 @@ class StoredEvent extends Model
             ->where('event_class', $this->event_class)
             ->where('stream_name', $this->stream_name)
             ->where('stream_id', $this->stream_id)
-            ->where('id','<>', $this->id)
+            ->where('id','<', $this->id)
             ->orderBy('id', 'desc')
             ->first();
     }
