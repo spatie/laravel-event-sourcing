@@ -80,6 +80,6 @@ class StreamBasedProjectorTest extends TestCase
         EventProjectionist::replayEvents(collect($this->projector));
         // all events of first account are now applied
         $this->assertEquals(3000, $this->account->refresh()->amount);
-        $this->assertEquals(2000, $otherAccount->amount);
+        $this->assertEquals(2000, $otherAccount->refresh()->amount);
     }
 }
