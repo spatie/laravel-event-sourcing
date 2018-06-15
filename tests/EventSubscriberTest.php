@@ -15,7 +15,7 @@ use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventProjector\Tests\TestClasses\Events\DoNotStoreThisEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatShouldBeCalledImmediately;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\SyncProjector;
 
 class EventSubscriberTest extends TestCase
 {
@@ -105,11 +105,11 @@ class EventSubscriberTest extends TestCase
     }
 
     /** @test */
-    public function a_projector_that_implements_ShouldBeCalledImmediately_will_not_be_queued()
+    public function a_sync_projector_will_not_be_queued()
     {
         Bus::fake();
 
-        $projector = new ProjectorThatShouldBeCalledImmediately();
+        $projector = new SyncProjector();
         EventProjectionist::addProjector($projector);
 
         event(new MoneyAdded($this->account, 1234));

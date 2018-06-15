@@ -2,6 +2,6 @@
 
 namespace Spatie\EventProjector\Projectors;
 
-interface ShouldBeCalledImmediately
+interface SyncProjector extends Projector
 {
 }
