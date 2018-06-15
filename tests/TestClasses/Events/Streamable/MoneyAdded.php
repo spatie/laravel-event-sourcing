@@ -28,7 +28,7 @@ class MoneyAdded implements ShouldBeStored
         return 'accounts';
     }
 
-    public function getStreamId(): int
+    public function getStreamId()
     {
         return $this->account->id;
     }
