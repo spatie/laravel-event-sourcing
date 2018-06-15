@@ -20,4 +20,8 @@ class StreambasedProjector implements Projector
     {
         $event->account->addMoney($event->amount);
     }
+
+    public function resetState()
+    {
+    }
 }
