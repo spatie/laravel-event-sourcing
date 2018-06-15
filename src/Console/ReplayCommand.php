@@ -3,12 +3,10 @@
 namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
-use Spatie\EventProjector\Console\Concerns\SelectsProjectors;
 use Spatie\EventProjector\EventProjectionist;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Console\Concerns\ReplaysEvents;
-use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\Console\Concerns\SelectsProjectors;
 
 class ReplayCommand extends Command
 {

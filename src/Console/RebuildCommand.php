@@ -2,11 +2,10 @@
 
 namespace Spatie\EventProjector\Console;
 
-use Exception;
 use Illuminate\Console\Command;
-use Spatie\EventProjector\Console\Concerns\SelectsProjectors;
 use Spatie\EventProjector\EventProjectionist;
 use Spatie\EventProjector\Console\Concerns\ReplaysEvents;
+use Spatie\EventProjector\Console\Concerns\SelectsProjectors;
 
 class RebuildCommand extends Command
 {

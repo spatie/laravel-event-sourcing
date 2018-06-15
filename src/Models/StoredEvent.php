@@ -45,7 +45,7 @@ class StoredEvent extends Model
         return DB::table((new static())->getTable())->max('id') ?? 0;
     }
 
-    public static function last(): ?StoredEvent
+    public static function last(): ?self
     {
         return static::find(self::getMaxId());
     }
@@ -73,7 +73,7 @@ class StoredEvent extends Model
         $query->where('id', '>', $storedEventId);
     }
 
-    public function scopePrevious(Builder $query, StoredEvent $storedEvent): ?StoredEvent
+    public function scopePrevious(Builder $query, self $storedEvent): ?self
     {
         static::query()
             ->where('event_class', $storedEvent->event_class)
@@ -81,13 +81,13 @@ class StoredEvent extends Model
             ->first();
     }
 
-    public function previousInStream(): ?StoredEvent
+    public function previousInStream(): ?self
     {
         return static::query()
             ->where('event_class', $this->event_class)
             ->where('stream_name', $this->stream_name)
             ->where('stream_id', $this->stream_id)
-            ->where('id','<', $this->id)
+            ->where('id', '<', $this->id)
             ->orderBy('id', 'desc')
             ->first();
     }

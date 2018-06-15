@@ -12,14 +12,14 @@ trait SelectsProjectors
         if (count($projectorClassNames ?? []) === 0) {
             if (! $confirmed = $this->confirm($allProjectorsWarning)) {
                 return null;
-            };
+            }
 
             return EventProjectionist::getProjectors();
         }
 
         return collect($projectorClassNames)
             ->map(function (string $projectorName) {
-                if (!$projector = $this->eventProjectionist->getProjector($projectorName)) {
+                if (! $projector = $this->eventProjectionist->getProjector($projectorName)) {
                     throw new Exception("Projector {$projectorName} not found. Did you register it?");
                 }
 

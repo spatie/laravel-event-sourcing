@@ -2,10 +2,10 @@
 
 namespace Spatie\EventProjector\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Facades\EventProjectionist;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\EventProjector\Projectors\Projector;
+use Spatie\EventProjector\Facades\EventProjectionist;
 
 class ProjectorStatus extends Model
 {
@@ -52,7 +52,7 @@ class ProjectorStatus extends Model
 
     public static function hasReceivedAllEvents(Projector $projector): bool
     {
-        $highestEventId = (int) ProjectorStatus::query()
+        $highestEventId = (int) self::query()
             ->where('projector_name', $projector->getName())
             ->max('last_processed_event_id') ?? 0;
 
