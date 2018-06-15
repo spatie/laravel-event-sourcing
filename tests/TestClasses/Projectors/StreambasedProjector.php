@@ -5,6 +5,7 @@ namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
 use Spatie\EventProjector\Tests\TestClasses\Events\Streamable\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 
 class StreambasedProjector implements Projector
 {
@@ -23,5 +24,6 @@ class StreambasedProjector implements Projector
 
     public function resetState()
     {
+        Account::truncate();
     }
 }

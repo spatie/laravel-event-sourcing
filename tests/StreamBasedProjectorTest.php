@@ -56,7 +56,7 @@ class StreamBasedProjectorTest extends TestCase
         event(new MoneyAdded($this->account, 1000));
         $this->assertEquals(1000, $this->account->refresh()->amount);
 
-        // simulate that the event hasn't been receveid yet
+        // simulate that the event hasn't been received yet
         ProjectorStatus::truncate();
         $this->account->update(['amount' => 0]);
 
