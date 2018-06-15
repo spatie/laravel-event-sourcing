@@ -3,6 +3,7 @@
 namespace Spatie\EventProjector\Projectors;
 
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\EventHandlers\HandlesEvents;
@@ -71,7 +72,7 @@ trait ProjectsEvents
 
         $this->resetState();
 
-        $this->getStatus()->delete();
+        $this->getAllStatuses()->each->delete();
     }
 
     public function shouldBeCalledImmediately(): bool
@@ -82,5 +83,10 @@ trait ProjectsEvents
     protected function getStatus(StoredEvent $storedEvent = null): ProjectorStatus
     {
         return ProjectorStatus::getForProjector($this, $storedEvent);
+    }
+
+    protected function getAllStatuses(): Collection
+    {
+        return ProjectorStatus::getAllForProjector($this);
     }
 }

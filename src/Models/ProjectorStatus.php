@@ -3,6 +3,7 @@
 namespace Spatie\EventProjector\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Projectors\Projector;
 
@@ -22,6 +23,11 @@ class ProjectorStatus extends Model
         }
 
         return self::firstOrCreate($attributes);
+    }
+
+    public static function getAllForProjector(Projector $projector): Collection
+    {
+        return static::where('projector_name', $projector->getName())->get();
     }
 
     public function rememberLastProcessedEvent(StoredEvent $storedEvent): self
