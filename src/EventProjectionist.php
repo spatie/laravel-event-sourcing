@@ -104,6 +104,15 @@ class EventProjectionist
         return $this->reactors;
     }
 
+    public function storeEvent(ShouldBeStored $event)
+    {
+        $storedEvent = $this->config['stored_event_model']::createForEvent($event);
+
+        $this->handleImmediately($storedEvent);
+
+        dispatch(new HandleStoredEventJob($storedEvent))->onQueue($this->config['queue']);
+    }
+
     public function handle(StoredEvent $storedEvent)
     {
         $this
