@@ -81,5 +81,9 @@ class StreamBasedProjectorTest extends TestCase
         // all events of first account are now applied
         $this->assertEquals(3000, $this->account->refresh()->amount);
         $this->assertEquals(2000, $otherAccount->refresh()->amount);
+
+        // projector is up to date for the first account, new events will be applied
+        event(new MoneyAdded($this->account, 1000));
+        $this->assertEquals(4000, $this->account->refresh()->amount);
     }
 }
