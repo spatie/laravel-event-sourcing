@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 class StartingEventReplay
 {
     /** @var \Illuminate\Support\Collection */
-    protected $projectors;
+    public $projectors;
 
     public function __construct(Collection $projectors)
     {
