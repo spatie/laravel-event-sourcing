@@ -14,7 +14,6 @@ use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\WildcardProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\InvalidProjectorThatCannotHandleEvents;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod;
 
 class EventProjectionistTest extends TestCase

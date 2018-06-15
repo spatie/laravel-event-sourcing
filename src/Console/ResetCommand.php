@@ -2,10 +2,9 @@
 
 namespace Spatie\EventProjector\Console;
 
-use Exception;
 use Illuminate\Console\Command;
-use Spatie\EventProjector\Console\Concerns\SelectsProjectors;
 use Spatie\EventProjector\EventProjectionist;
+use Spatie\EventProjector\Console\Concerns\SelectsProjectors;
 
 class ResetCommand extends Command
 {

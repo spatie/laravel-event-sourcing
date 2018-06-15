@@ -49,7 +49,5 @@ class StoredEventTest extends TestCase
         $storedEvent = StoredEvent::last();
 
         $this->assertEquals($firstStoredEvent->id, optional($storedEvent->previousInStream())->id);
-
-
     }
 }

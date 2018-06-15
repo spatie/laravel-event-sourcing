@@ -4,7 +4,6 @@ namespace Spatie\EventProjector;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\EventHandlers\EventHandler;
@@ -127,7 +126,7 @@ class EventProjectionist
             ->pipe(function (Collection $eventHandlers) {
                 return $this->instantiate($eventHandlers);
             })
-            ->filter(function(EventHandler $eventHandler) use ($storedEvent) {
+            ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
                 if (! $eventHandler instanceof Projector) {
                     return true;
                 }
@@ -141,11 +140,10 @@ class EventProjectionist
                 if (! method_exists($eventHandler, $method)) {
                     throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
                 }
-                
+
                 return true;
             })
             ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
-
                 if ($eventHandler instanceof Projector) {
                     if (! $eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
                         event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));

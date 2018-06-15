@@ -3,12 +3,12 @@
 namespace Spatie\EventProjector\Tests;
 
 use Illuminate\Support\Facades\Event;
-use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
-use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Facades\EventProjectionist;
-use Spatie\EventProjector\Tests\TestClasses\Events\Streamable\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
+use Spatie\EventProjector\Tests\TestClasses\Events\Streamable\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\StreambasedProjector;
 
 class StreamBasedProjectorTest extends TestCase

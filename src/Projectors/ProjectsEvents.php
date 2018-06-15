@@ -45,7 +45,8 @@ trait ProjectsEvents
         $previousEvent = $storedEvent->previousInStream();
         $previousEventId = optional($previousEvent)->id ?? 0;
 
-        $lastProcessedEventId = (int)$this->getStatus($storedEvent)->last_processed_event_id ?? 0;
+        $lastProcessedEventId = (int) $this->getStatus($storedEvent)->last_processed_event_id ?? 0;
+
         return $previousEventId === $lastProcessedEventId;
     }
 
