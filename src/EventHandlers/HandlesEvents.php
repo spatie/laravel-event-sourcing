@@ -27,7 +27,7 @@ trait HandlesEvents
         $methodName = $this->getAssociativeMethodName($handlesEvents, $eventClass);
 
         if ($methodName === '') {
-            $methodName = $this->getIndexedMethodName($handlesEvents, $eventClass);
+            $methodName = $this->getNonAssociativeMethodName($handlesEvents, $eventClass);
         }
 
         return $methodName;
@@ -55,7 +55,7 @@ trait HandlesEvents
         return '';
     }
 
-    private function getIndexedMethodName(array $handlesEvents, string $eventClass)
+    private function getNonAssociativeMethodName(array $handlesEvents, string $eventClass)
     {
         if (isset(array_flip($handlesEvents)[$eventClass])) {
             return 'on'.ucfirst(class_basename($eventClass));
