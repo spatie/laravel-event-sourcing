@@ -13,18 +13,47 @@ trait HandlesEvents
 
     public function handlesEvent(object $event): bool
     {
-        return array_key_exists(get_class($event), $this->handlesEvents());
+        $handlesEvents = $this->handlesEvents();
+        $eventClass = get_class($event);
+
+        return array_key_exists($eventClass, $handlesEvents)
+            || $this->checkNonAssociativeEvent($handlesEvents, $eventClass);
     }
 
     public function methodNameThatHandlesEvent(object $event): string
     {
-        $methodName = $this->handlesEvents()[get_class($event)] ?? '';
+        $handlesEvents = $this->handlesEvents();
+
+        $eventClass = get_class($event);
+
+        $methodName = $this->getAssociativeMethodName($handlesEvents, $eventClass);
+
+        if ($methodName === '') {
+            $methodName = $this->getNonAssociativeMethodName($handlesEvents, $eventClass);
+        }
+
+        return $methodName;
+    }
+
+    public function handleException(Exception $exception)
+    {
+        report($exception);
+    }
+
+    protected function checkNonAssociativeEvent(array $handlesEvents, string $eventClass): bool
+    {
+        return array_key_exists($eventClass, array_flip($handlesEvents));
+    }
+
+    protected function getAssociativeMethodName(array $handlesEvents, string $eventClass): string
+    {
+        $methodName = $handlesEvents[$eventClass] ?? '';
 
         if ($methodName !== '') {
             return $methodName;
         }
 
-        $wildcardMethod = $this->handlesEvents()['*'] ?? '';
+        $wildcardMethod = $handlesEvents['*'] ?? '';
 
         if ($wildcardMethod !== '') {
             return $wildcardMethod;
@@ -33,8 +62,12 @@ trait HandlesEvents
         return '';
     }
 
-    public function handleException(Exception $exception)
+    protected function getNonAssociativeMethodName(array $handlesEvents, string $eventClass): string
     {
-        report($exception);
+        if ($this->checkNonAssociativeEvent($handlesEvents, $eventClass)) {
+            return 'on'.ucfirst(class_basename($eventClass));
+        }
+
+        return '';
     }
 }
