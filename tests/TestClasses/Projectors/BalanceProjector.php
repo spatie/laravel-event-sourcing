@@ -12,7 +12,7 @@ class BalanceProjector implements Projector
     use ProjectsEvents;
 
     protected $handlesEvents = [
-        MoneyAdded::class => 'onMoneyAdded',
+        MoneyAdded::class,
         MoneySubtracted::class => 'onMoneySubtracted',
     ];
 
