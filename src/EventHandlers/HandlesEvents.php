@@ -11,15 +11,6 @@ trait HandlesEvents
         return $this->handlesEvents ?? [];
     }
 
-    public function handlesEvent(object $event): bool
-    {
-        $handlesEvents = $this->handlesEvents();
-        $eventClass = get_class($event);
-
-        return array_key_exists($eventClass, $handlesEvents)
-            || $this->checkNonAssociativeEvent($handlesEvents, $eventClass);
-    }
-
     public function methodNameThatHandlesEvent(object $event): string
     {
         $handlesEvents = $this->handlesEvents();
