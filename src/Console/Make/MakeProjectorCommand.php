@@ -42,8 +42,8 @@ class MakeProjectorCommand extends GeneratorCommand
 
         $content = file_get_contents($path);
 
-        $content = str_replace('implements Projector', 'implements SyncProjector', $content);
-        $content = str_replace('use Spatie\EventProjector\Projectors\Projector;', 'use Spatie\EventProjector\Projectors\SyncProjector;', $content);
+        $content = str_replace('implements Projector', 'implements QueuedProjector', $content);
+        $content = str_replace('use Spatie\EventProjector\Projectors\Projector;', 'use Spatie\EventProjector\Projectors\QueuedProjector;', $content);
 
         file_put_contents($path, $content);
     }
@@ -51,7 +51,7 @@ class MakeProjectorCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['sync','s', InputOption::VALUE_NONE, 'Create a SyncProjector'],
+            ['queued','q', InputOption::VALUE_NONE, 'Create a QueuedProjector'],
         ];
     }
 }
