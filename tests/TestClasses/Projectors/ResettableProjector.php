@@ -9,6 +9,8 @@ class ResettableProjector implements Projector
 {
     use ProjectsEvents;
 
+    protected $trackStream = '*';
+
     public function resetState()
     {
     }

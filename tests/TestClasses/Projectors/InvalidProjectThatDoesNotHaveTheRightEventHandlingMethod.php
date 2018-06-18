@@ -13,4 +13,6 @@ class InvalidProjectThatDoesNotHaveTheRightEventHandlingMethod implements Projec
     protected $handlesEvents = [
         MoneyAdded::class => 'hahaThisMethodDoesNotExist',
     ];
+
+    protected $trackStream = '*';
 }

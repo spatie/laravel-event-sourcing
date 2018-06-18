@@ -11,10 +11,14 @@ class BalanceProjector implements Projector
 {
     use ProjectsEvents;
 
+    protected $trackStream = '*';
+
     protected $handlesEvents = [
         MoneyAdded::class => 'onMoneyAdded',
         MoneySubtracted::class => 'onMoneySubtracted',
     ];
+
+
 
     public function onMoneyAdded(MoneyAdded $event)
     {

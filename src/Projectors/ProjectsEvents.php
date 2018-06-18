@@ -22,13 +22,14 @@ trait ProjectsEvents
         return get_class($this);
     }
 
-    public function streambased(): bool
+    public function streamNamesToTrack(): array
     {
-        if (! isset($this->streamBased)) {
-            return false;
-        }
+        return array_wrap($this->trackStream ?? []);
+    }
 
-        return $this->streamBased;
+    public function trackEventsByStreamNameAndId(): bool
+    {
+        return count($this->streamNamesToTrack()) === 0;
     }
 
     public function rememberReceivedEvent(StoredEvent $storedEvent)
@@ -38,7 +39,7 @@ trait ProjectsEvents
 
     public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool
     {
-        if (! $this->streamBased()) {
+        if (! $this->trackEventsByStreamNameAndId()) {
             return $storedEvent->id === $this->getStatus()->last_processed_event_id + 1;
         }
 

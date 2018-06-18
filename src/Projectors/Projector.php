@@ -10,8 +10,6 @@ interface Projector extends EventHandler
 {
     public function getName(): string;
 
-    public function streamBased(): bool;
-
     public function rememberReceivedEvent(StoredEvent $storedEvent);
 
     public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool;
@@ -21,4 +19,8 @@ interface Projector extends EventHandler
     public function getLastProcessedEventId(): int;
 
     public function lastEventProcessedAt(): Carbon;
+
+    public function streamNamesToTrack(): array;
+
+    public function trackEventsByStreamNameAndId(): bool;
 }

@@ -15,6 +15,8 @@ class SnapshottableThatDoesNotWriteAnythingProjector implements Projector, Snaps
     protected $handlesEvents = [
     ];
 
+    protected $trackStream = '*';
+
     public function writeToSnapshot(Snapshot $snapshot)
     {
     }

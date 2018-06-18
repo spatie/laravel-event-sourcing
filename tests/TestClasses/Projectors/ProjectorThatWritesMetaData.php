@@ -15,6 +15,8 @@ class ProjectorThatWritesMetaData implements Projector
         MoneyAdded::class => 'onMoneyAdded',
     ];
 
+    protected $trackStream = '*';
+
     public function onMoneyAdded(StoredEvent $storedEvent, MoneyAdded $event)
     {
         $storedEvent->meta_data['user_id'] = 1;

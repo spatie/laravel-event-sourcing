@@ -14,6 +14,8 @@ class WildcardProjector implements Projector
         '*' => 'onAnyEvent',
     ];
 
+    protected $trackStream = '*';
+
     public function onAnyEvent(MoneyAdded $event)
     {
         $event->account->addMoney($event->amount);

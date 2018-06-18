@@ -15,8 +15,6 @@ class StreambasedProjector implements Projector
         MoneyAdded::class => 'onMoneyAdded',
     ];
 
-    protected $streamBased = true;
-
     public function onMoneyAdded(MoneyAdded $event)
     {
         $event->account->addMoney($event->amount);

@@ -15,7 +15,7 @@ class ProjectorStatus extends Model
     {
         $attributes = ['projector_name' => $projector->getName()];
 
-        if ($projector->streamBased()) {
+        if ($projector->trackEventsByStreamNameAndId()) {
             $attributes += [
                 'stream_name' => $storedEvent->stream_name,
                 'stream_id' => $storedEvent->stream_id,
@@ -38,7 +38,7 @@ class ProjectorStatus extends Model
             'last_processed_event_id' => $storedEvent->id,
         ];
 
-        if ($this->getProjector()->streamBased()) {
+        if ($this->getProjector()->trackEventsByStreamNameAndId()) {
             $attributes += [
                 'stream_name' => $storedEvent->stream_name,
                 'stream_id' => $storedEvent->stream_id,
