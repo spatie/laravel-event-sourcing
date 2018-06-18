@@ -2,6 +2,6 @@
 
 namespace Spatie\EventProjector\Projectors;
 
-interface SyncProjector extends Projector
+interface QueuedProjector extends Projector
 {
 }

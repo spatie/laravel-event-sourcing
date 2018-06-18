@@ -78,7 +78,7 @@ trait ProjectsEvents
 
     public function shouldBeCalledImmediately(): bool
     {
-        return $this instanceof SyncProjector;
+        return ! $this instanceof QueuedProjector;
     }
 
     protected function getStatus(StoredEvent $storedEvent = null): ProjectorStatus

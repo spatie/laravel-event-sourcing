@@ -15,7 +15,7 @@ use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventProjector\Tests\TestClasses\Events\DoNotStoreThisEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\SyncProjector;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\QueuedProjector;
 
 class EventSubscriberTest extends TestCase
 {
@@ -86,11 +86,26 @@ class EventSubscriberTest extends TestCase
     }
 
     /** @test */
-    public function it_will_queue_event_handling_by_default()
+    public function it_will_not_queue_event_handling_by_default()
     {
         Bus::fake();
 
         $projector = new BalanceProjector();
+        EventProjectionist::addProjector($projector);
+
+        event(new MoneyAdded($this->account, 1000));
+
+        $status = ProjectorStatus::getForProjector($projector);
+        $this->assertEquals(1, $status->last_processed_event_id);
+        $this->assertEquals(1000, $this->account->refresh()->amount);
+    }
+
+    /** @test */
+    public function a_queued_projector_will_be_queued()
+    {
+        Bus::fake();
+
+        $projector = new QueuedProjector();
         EventProjectionist::addProjector($projector);
 
         event(new MoneyAdded($this->account, 1234));
@@ -102,19 +117,5 @@ class EventSubscriberTest extends TestCase
         $status = ProjectorStatus::getForProjector($projector);
         $this->assertEquals(0, $status->last_processed_event_id);
         $this->assertEquals(0, $this->account->refresh()->amount);
-    }
-
-    /** @test */
-    public function a_sync_projector_will_not_be_queued()
-    {
-        Bus::fake();
-
-        $projector = new SyncProjector();
-        EventProjectionist::addProjector($projector);
-
-        event(new MoneyAdded($this->account, 1234));
-        $status = ProjectorStatus::getForProjector($projector);
-        $this->assertEquals(1, $status->last_processed_event_id);
-        $this->assertEquals(1234, $this->account->refresh()->amount);
     }
 }
