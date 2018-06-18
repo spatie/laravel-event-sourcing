@@ -14,9 +14,10 @@ trait HandlesEvents
     public function handlesEvent(object $event): bool
     {
         $handlesEvents = $this->handlesEvents();
+        $eventClass = get_class($event);
 
-        return array_key_exists(get_class($event), $handlesEvents)
-            || isset($handlesEvents);
+        return array_key_exists($eventClass, $handlesEvents)
+            || $this->checkNonAssociativeEvent($handlesEvents, $eventClass);
     }
 
     public function methodNameThatHandlesEvent(object $event): string
@@ -38,7 +39,12 @@ trait HandlesEvents
         report($exception);
     }
 
-    private function getAssociativeMethodName(array $handlesEvents, string $eventClass)
+    private function checkNonAssociativeEvent(array $handlesEvents, string $eventClass): bool
+    {
+        return array_key_exists($eventClass, array_flip($handlesEvents));
+    }
+
+    private function getAssociativeMethodName(array $handlesEvents, string $eventClass): string
     {
         $methodName = $handlesEvents[$eventClass] ?? '';
 
@@ -55,9 +61,9 @@ trait HandlesEvents
         return '';
     }
 
-    private function getNonAssociativeMethodName(array $handlesEvents, string $eventClass)
+    private function getNonAssociativeMethodName(array $handlesEvents, string $eventClass): string
     {
-        if (isset(array_flip($handlesEvents)[$eventClass])) {
+        if ($this->checkNonAssociativeEvent($handlesEvents, $eventClass)) {
             return 'on'.ucfirst(class_basename($eventClass));
         }
 
