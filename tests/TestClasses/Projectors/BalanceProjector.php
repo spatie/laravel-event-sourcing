@@ -18,8 +18,6 @@ class BalanceProjector implements Projector
         MoneySubtracted::class => 'onMoneySubtracted',
     ];
 
-
-
     public function onMoneyAdded(MoneyAdded $event)
     {
         $event->account->addMoney($event->amount);

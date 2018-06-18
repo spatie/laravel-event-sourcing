@@ -51,7 +51,7 @@ class MakeProjectorCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['queued','q', InputOption::VALUE_NONE, 'Create a QueuedProjector'],
+            ['queued', 'q', InputOption::VALUE_NONE, 'Create a QueuedProjector'],
         ];
     }
 }
