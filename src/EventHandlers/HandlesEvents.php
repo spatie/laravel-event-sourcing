@@ -58,7 +58,7 @@ trait HandlesEvents
     private function getIndexedMethodName(array $handlesEvents, string $eventClass)
     {
         if (isset(array_flip($handlesEvents)[$eventClass])) {
-            return 'on' . ucfirst(class_basename($eventClass));
+            return 'on'.ucfirst(class_basename($eventClass));
         }
 
         return '';
