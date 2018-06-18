@@ -84,7 +84,6 @@ class StoredEvent extends Model
     public function previousInStream(): ?self
     {
         return static::query()
-            ->where('event_class', $this->event_class)
             ->where('stream_name', $this->stream_name)
             ->where('stream_id', $this->stream_id)
             ->where('id', '<', $this->id)
