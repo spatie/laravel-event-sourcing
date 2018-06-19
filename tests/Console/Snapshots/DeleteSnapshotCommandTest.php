@@ -31,6 +31,9 @@ class DeleteSnapshotCommandTest extends TestCase
 
         $leftoverSnapshotNames = app(SnapshotRepository::class)
             ->get()
+            ->sortBy(function (Snapshot $snapshot) {
+                return $snapshot->name();
+            })
             ->map(function (Snapshot $snapshot) {
                 return $snapshot->name();
             })
