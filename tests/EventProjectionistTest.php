@@ -8,8 +8,10 @@ use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\UnrelatedProjector;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
@@ -174,5 +176,19 @@ class EventProjectionistTest extends TestCase
         event(new MoneyAdded($this->account, 1000));
 
         $this->assertCount(0, ProjectorStatus::get());
+    }
+
+    /** @test */
+    public function it_will_still_send_events_to_projectors_that_are_not_interested_in_all_events_of_a_stream()
+    {
+        EventProjectionist::addProjector(BalanceProjector::class);
+        EventProjectionist::addProjector(MoneyAddedCountProjector::class);
+
+        event(new MoneyAdded($this->account, 1000));
+        event(new MoneySubtracted($this->account, 500));
+        event(new MoneyAdded($this->account, 1000));
+
+        $this->assertEquals(1500, $this->account->fresh()->amount);
+        $this->assertEquals(2, $this->account->fresh()->addition_count);
     }
 }

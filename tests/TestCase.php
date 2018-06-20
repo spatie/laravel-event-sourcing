@@ -42,6 +42,7 @@ abstract class TestCase extends Orchestra
             $table->increments('id');
             $table->string('name')->nullable();
             $table->integer('amount')->default(0);
+            $table->integer('addition_count')->default(0);
             $table->timestamps();
         });
 
