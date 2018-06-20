@@ -23,4 +23,6 @@ interface Projector extends EventHandler
     public function streamNamesToTrack(): array;
 
     public function trackEventsByStreamNameAndId(): bool;
+
+    public function handlesStreamOfStoredEvent(StoredEvent $storedEvent): bool;
 }

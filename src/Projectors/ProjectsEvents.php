@@ -32,6 +32,29 @@ trait ProjectsEvents
         return count($this->streamNamesToTrack()) === 0;
     }
 
+    public function handlesStreamOfStoredEvent(StoredEvent $storedEvent): bool
+    {
+        $trackedStreamNames = $this->streamNamesToTrack();
+
+        /*
+        if ($trackedStreamNames === []) {
+            return true;
+        }
+        */
+
+        $event = $storedEvent->event;
+
+        $streamNameOfEvent = method_exists($event, 'getStreamName')
+            ? $event->getStreamName()
+            : 'main';
+
+        if (in_array('*', $trackedStreamNames)) {
+            return true;
+        }
+
+        return in_array($streamNameOfEvent, $trackedStreamNames);
+    }
+
     public function rememberReceivedEvent(StoredEvent $storedEvent)
     {
         $this->getStatus($storedEvent)->rememberLastProcessedEvent($storedEvent, $this);
