@@ -36,11 +36,9 @@ trait ProjectsEvents
     {
         $trackedStreamNames = $this->streamNamesToTrack();
 
-        /*
         if ($trackedStreamNames === []) {
             return true;
         }
-        */
 
         $event = $storedEvent->event;
 

@@ -11,6 +11,8 @@ class ProjectorWithAssociativeAndNonAssociativeHandleEvents implements Projector
 {
     use ProjectsEvents;
 
+    protected $trackStream = '*';
+
     protected $handlesEvents = [
         MoneyAdded::class,
         MoneySubtracted::class => 'onMoneySubtracted',
