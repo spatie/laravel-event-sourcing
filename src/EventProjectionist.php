@@ -142,6 +142,7 @@ class EventProjectionist
 
                 $event = $storedEvent->event;
 
+                /*
                 if (! $method = $eventHandler->methodNameThatHandlesEvent($event)) {
                     return false;
                 }
@@ -149,6 +150,7 @@ class EventProjectionist
                 if (! method_exists($eventHandler, $method)) {
                     throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $event, $method);
                 }
+                */
 
                 return true;
             })

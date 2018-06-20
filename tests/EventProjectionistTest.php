@@ -10,6 +10,7 @@ use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\UnrelatedProjector;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\WildcardProjector;
@@ -163,5 +164,15 @@ class EventProjectionistTest extends TestCase
         $this->expectException(Exception::class);
 
         event(new MoneyAdded($this->account, 1000));
+    }
+
+    /** @test */
+    public function it_will_not_create_projector_statuses_for_projectors_that_are_not_interested_in_the_fired_events()
+    {
+        EventProjectionist::addProjector(UnrelatedProjector::class);
+
+        event(new MoneyAdded($this->account, 1000));
+
+        $this->assertCount(0, ProjectorStatus::get());
     }
 }
