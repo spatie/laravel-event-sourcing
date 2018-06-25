@@ -30,14 +30,14 @@ trait ProjectsEvents
     public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool
     {
         $lastStoredEvent = StoredEvent::query()
-            ->whereIn('event_name', $this->handlesEventClassNames())
+            ->whereIn('event_class', $this->handlesEventClassNames())
             ->where('id', '<', $storedEvent->id)
             ->orderBy('id', 'desc')
             ->first();
 
         $lastStoredEventId = (int) optional($lastStoredEvent)->id ?? 0;
 
-        $lastProcessedEventId = $this->getStatus()->last_processed_event_id;
+        $lastProcessedEventId = (int) $this->getStatus()->last_processed_event_id ?? 0;
 
         return $lastStoredEventId === $lastProcessedEventId;
 

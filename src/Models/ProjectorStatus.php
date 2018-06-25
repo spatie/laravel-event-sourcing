@@ -15,7 +15,7 @@ class ProjectorStatus extends Model
     {
         return self::firstOrCreate([
             'projector_name' => $projector->getName(),
-            'stream' => $stream
+            'stream' => $stream,
         ]);
     }
 

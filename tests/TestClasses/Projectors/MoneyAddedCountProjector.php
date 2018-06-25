@@ -11,8 +11,6 @@ class MoneyAddedCountProjector implements Projector
 {
     use ProjectsEvents;
 
-    protected $trackStream = '*';
-
     protected $handlesEvents = [
         MoneyAdded::class => 'onMoneyAdded',
     ];

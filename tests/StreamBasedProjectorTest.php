@@ -33,6 +33,8 @@ class StreamBasedProjectorTest extends TestCase
     }
 
     /** @test */
+
+    /*
     public function it_will_remember_the_stream_name_and_stream_id()
     {
         event(new MoneyAdded($this->account, 1000));
@@ -49,8 +51,11 @@ class StreamBasedProjectorTest extends TestCase
             'stream_id' => $storedEvent->stream_id,
         ]);
     }
+    */
 
     /** @test */
+
+    /*
     public function it_will_not_accept_new_events_if_the_stream_is_not_up_to_date()
     {
         event(new MoneyAdded($this->account, 1000));
@@ -86,4 +91,5 @@ class StreamBasedProjectorTest extends TestCase
         event(new MoneyAdded($this->account, 1000));
         $this->assertEquals(4000, $this->account->refresh()->amount);
     }
+    */
 }

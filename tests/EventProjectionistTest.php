@@ -74,15 +74,6 @@ class EventProjectionistTest extends TestCase
         $this->assertEquals(2, $status->last_processed_event_id);
     }
 
-    /** @test */
-    public function it_can_handle_a_wildcard_in_handlesEvents()
-    {
-        EventProjectionist::addProjector(WildcardProjector::class);
-
-        event(new MoneyAdded($this->account, 1234));
-
-        $this->assertEquals(1234, $this->account->refresh()->amount);
-    }
 
     /** @test */
     public function it_will_not_let_the_projector_handle_an_event_if_the_projector_hasnt_received_all_events()
@@ -179,16 +170,12 @@ class EventProjectionistTest extends TestCase
     }
 
     /** @test */
-    public function it_will_still_send_events_to_projectors_that_are_not_interested_in_all_events_of_a_stream()
+    public function projectors_that_dont_handle_fired_events_are_handled_correctly()
     {
-        EventProjectionist::addProjector(BalanceProjector::class);
         EventProjectionist::addProjector(MoneyAddedCountProjector::class);
 
-        event(new MoneyAdded($this->account, 1000));
         event(new MoneySubtracted($this->account, 500));
-        event(new MoneyAdded($this->account, 1000));
 
-        $this->assertEquals(1500, $this->account->fresh()->amount);
-        $this->assertEquals(2, $this->account->fresh()->addition_count);
+        $this->assertEquals(0, $this->account->fresh()->addition_count);
     }
 }
