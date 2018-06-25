@@ -19,7 +19,7 @@ class StoredEvent extends Model
         'meta_data' => 'array',
     ];
 
-    public static function createForEvent(ShouldBeStored $event): self
+    public static function createForEvent(ShouldBeStored $event): StoredEvent
     {
         $storedEvent = new static();
         $storedEvent->event_class = get_class($event);
