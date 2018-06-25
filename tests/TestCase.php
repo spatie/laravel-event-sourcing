@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\EventProjector\EventProjectorServiceProvider;
-use Spatie\SchemalessAttributes\SchemalessAttributesServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -22,7 +21,6 @@ abstract class TestCase extends Orchestra
     {
         return [
             EventProjectorServiceProvider::class,
-            SchemalessAttributesServiceProvider::class,
         ];
     }
 
