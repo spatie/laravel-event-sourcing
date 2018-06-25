@@ -9,8 +9,6 @@ class DummyClass implements Projector
 {
     use ProjectsEvents;
 
-    protected $trackStream = '*';
-
     /*
      * Here you can specify which event should trigger which method.
      */
