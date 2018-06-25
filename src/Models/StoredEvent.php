@@ -37,11 +37,6 @@ class StoredEvent extends Model
         return DB::table((new static())->getTable())->max('id') ?? 0;
     }
 
-    public static function last(): ?self
-    {
-        return static::find(self::getMaxId());
-    }
-
     public function getEventAttribute(): ShouldBeStored
     {
         return app(EventSerializer::class)->deserialize(
@@ -53,28 +48,5 @@ class StoredEvent extends Model
     public function scopeAfter(Builder $query, int $storedEventId)
     {
         $query->where('id', '>', $storedEventId);
-    }
-
-    public function scopePrevious(Builder $query, self $storedEvent): ?self
-    {
-        static::query()
-            ->where('event_class', $storedEvent->event_class)
-            ->latest()
-            ->first();
-    }
-
-    public function previousInStream(): ?self
-    {
-        return static::query()
-            ->where('stream_name', $this->stream_name)
-            ->where('stream_id', $this->stream_id)
-            ->where('id', '<', $this->id)
-            ->orderBy('id', 'desc')
-            ->first();
-    }
-
-    public function groupProjectorStatusBy(): array
-    {
-        return [];
     }
 }
