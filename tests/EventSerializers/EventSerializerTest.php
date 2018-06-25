@@ -62,7 +62,7 @@ class EventSerializerTest extends TestCase
                 'class' => get_class($account),
                 'id' => 1,
                 'relations' => [],
-                'connection' => 'sqlite',
+                'connection' => 'mysql',
             ],
             'amount' => 1234,
         ], $array);

@@ -26,18 +26,10 @@ abstract class TestCase extends Orchestra
         ];
     }
 
-    protected function getEnvironmentSetUp($app)
+    protected function setUpDatabase()
     {
-        $app['config']->set('database.default', 'sqlite');
-        $app['config']->set('database.connections.sqlite', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
-    }
+        Schema::dropIfExists('accounts');
 
-    protected function setUpDatabase($app)
-    {
         Schema::create('accounts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
@@ -46,8 +38,11 @@ abstract class TestCase extends Orchestra
             $table->timestamps();
         });
 
+        Schema::dropIfExists('stored_events');
         include_once __DIR__.'/../stubs/create_stored_events_table.php.stub';
         (new \CreateStoredEventsTable())->up();
+
+        Schema::dropIfExists('projector_statuses');
         include_once __DIR__.'/../stubs/create_projector_statuses_table.php.stub';
         (new \CreateProjectorStatusesTable())->up();
     }

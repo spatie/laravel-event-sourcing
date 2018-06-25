@@ -11,8 +11,8 @@ class CreateStoredEventsTable extends Migration
         Schema::create('stored_events', function (Blueprint $table) {
             $table->increments('id');
             $table->string('event_class');
-            $table->json('event_properties')->default('[]');
-            $table->json('meta_data')->default('[]');
+            $table->json('event_properties');
+            $table->json('meta_data');
             $table->timestamp('created_at');
         });
     }

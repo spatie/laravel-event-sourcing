@@ -54,12 +54,12 @@ trait ProjectsEvents
         }
 
         foreach ($streams as $streamName => $streamValue) {
-            $streamName = str_replace('.', '->', $streamName);
+            $whereJsonClause = str_replace('.', '->', $streamName);
 
             $lastStoredEvent = StoredEvent::query()
                 ->whereIn('event_class', $this->handlesEventClassNames())
                 ->where('id', '<', $storedEvent->id)
-                ->where("event_properties->{$streamName}", $streamValue)
+                ->where("event_properties->{$whereJsonClause}", $streamValue)
                 ->orderBy('id', 'desc')
                 ->first();
 
@@ -73,16 +73,6 @@ trait ProjectsEvents
         }
 
         return true;
-        /*
-                $streams = $this->groupProjectorStatusBy();
-
-                return [
-                    'account_id' => $storedEvent->event->account_id,
-                ];
-
-                //$query->where('event_properties->account_id', $storedEvent->event->account_id);
-                //under the hood ook where met alle event classes waar projector naar luistert
-        */
     }
 
     public function hasReceivedAllEvents(): bool

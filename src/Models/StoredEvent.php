@@ -25,15 +25,8 @@ class StoredEvent extends Model
         $storedEvent = new static();
         $storedEvent->event_class = get_class($event);
         $storedEvent->attributes['event_properties'] = app(EventSerializer::class)->serialize(clone $event);
+        $storedEvent->meta_data = [];
         $storedEvent->created_at = now();
-
-        if (method_exists($event, 'getStreamName')) {
-            $storedEvent->stream_name = $event->getStreamName();
-        }
-
-        if (method_exists($event, 'getStreamId')) {
-            $storedEvent->stream_id = $event->getStreamId();
-        }
 
         $storedEvent->save();
 
