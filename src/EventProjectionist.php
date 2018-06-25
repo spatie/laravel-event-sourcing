@@ -138,7 +138,15 @@ class EventProjectionist
             })
             ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
                 if (!$eventHandler instanceof Projector) {
-                    return true;
+
+                    if (! $method = $eventHandler->methodNameThatHandlesEvent($storedEvent->event)) {
+                        return false;
+                    }
+
+                    if (!method_exists($eventHandler, $method)) {
+                        throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $storedEvent->event, $method);
+                    }
+
                 }
 
                 return true;
@@ -146,14 +154,6 @@ class EventProjectionist
             ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
                 if (!$eventHandler instanceof Projector) {
                     return true;
-                }
-
-                if (!$method = $eventHandler->methodNameThatHandlesEvent($storedEvent->event)) {
-                    return true;
-                }
-
-                if (!method_exists($eventHandler, $method)) {
-                    throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $storedEvent->event, $method);
                 }
 
                 if (!$eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
@@ -166,6 +166,7 @@ class EventProjectionist
 
             })
             ->each(function (EventHandler $eventHandler) use ($storedEvent) {
+
                 $eventWasHandledSuccessfully = $this->callEventHandler($eventHandler, $storedEvent);
 
                 if (! $eventHandler instanceof Projector) {
@@ -173,10 +174,6 @@ class EventProjectionist
                 }
 
                 if (! $eventWasHandledSuccessfully) {
-                    return;
-                }
-
-                if (! $eventHandler->handlesStreamOfStoredEvent($storedEvent)) {
                     return;
                 }
 
@@ -190,9 +187,7 @@ class EventProjectionist
     {
         $event = $storedEvent->event;
 
-        if (!$method = $eventHandler->methodNameThatHandlesEvent($event)) {
-            return true;
-        }
+        $method = $eventHandler->methodNameThatHandlesEvent($event);
 
         try {
             app()->call([$eventHandler, $method], compact('event', 'storedEvent'));
