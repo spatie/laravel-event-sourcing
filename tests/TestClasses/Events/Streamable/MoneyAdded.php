@@ -23,13 +23,8 @@ class MoneyAdded implements ShouldBeStored
         $this->amount = $amount;
     }
 
-    public function getStreamName(): string
+    public function getStreamNames(): array
     {
-        return 'accounts';
-    }
-
-    public function getStreamId()
-    {
-        return $this->account->id;
+        return ['accounts', 'accounts-' . $this->account->id];
     }
 }

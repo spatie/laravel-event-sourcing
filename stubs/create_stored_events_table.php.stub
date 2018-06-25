@@ -11,11 +11,10 @@ class CreateStoredEventsTable extends Migration
         Schema::create('stored_events', function (Blueprint $table) {
             $table->increments('id');
             $table->string('event_class');
-            $table->text('event_properties');
-            $table->schemalessAttributes('meta_data');
-            $table->string('stream_name')->default('main');
-            $table->string('stream_id')->nullable();
-            $table->timestamp('created_at')->nullable();
+            $table->json('event_properties');
+            $table->json('streams'); // will always be filled, default "main"
+            $table->json('meta_data');
+            $table->timestamp('created_at');
         });
     }
 

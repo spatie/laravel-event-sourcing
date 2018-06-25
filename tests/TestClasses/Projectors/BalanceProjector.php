@@ -2,6 +2,8 @@
 
 namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
 
+use Illuminate\Database\Eloquent\Builder;
+use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
@@ -10,8 +12,6 @@ use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 class BalanceProjector implements Projector
 {
     use ProjectsEvents;
-
-    protected $trackStream = '*';
 
     protected $handlesEvents = [
         MoneyAdded::class => 'onMoneyAdded',
@@ -34,5 +34,16 @@ class BalanceProjector implements Projector
 
     public function onFinishedEventReplay()
     {
+    }
+
+    public function groupProjectorStatusBy(Builder $query, StoredEvent $storedEvent)
+    {
+        return [
+            'account_id' => $storedEvent->event->account_id,
+        ];
+
+        //$query->where('event_properties->account_id', $storedEvent->event->account_id);
+        //under the hood ook where met alle event classes waar projector naar luistert
+
     }
 }

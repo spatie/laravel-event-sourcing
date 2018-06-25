@@ -60,9 +60,12 @@ trait ProjectsEvents
 
     public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool
     {
+        // main stream
         if (! $this->trackEventsByStreamNameAndId()) {
             return $storedEvent->id === $this->getStatus()->last_processed_event_id + 1;
         }
+
+        // TODO: add logic for account level streams
 
         $previousEvent = $storedEvent->previousInStream();
         $previousEventId = optional($previousEvent)->id ?? 0;
