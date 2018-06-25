@@ -11,7 +11,7 @@ class ProjectorStatus extends Model
 {
     public $guarded = [];
 
-    public static function getForProjector(Projector $projector, string $stream = 'main'): self
+    public static function getForProjector(Projector $projector, string $stream = 'main'): ProjectorStatus
     {
         return self::firstOrCreate([
             'projector_name' => $projector->getName(),
@@ -24,7 +24,7 @@ class ProjectorStatus extends Model
         return static::where('projector_name', $projector->getName())->get();
     }
 
-    public function rememberLastProcessedEvent(StoredEvent $storedEvent): self
+    public function rememberLastProcessedEvent(StoredEvent $storedEvent): ProjectorStatus
     {
         $this->last_processed_event_id = $storedEvent->id;
         $this->save();

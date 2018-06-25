@@ -41,7 +41,7 @@ class EventProjectionist
         return $this->isReplayingEvents;
     }
 
-    public function addProjector($projector): self
+    public function addProjector($projector): EventProjectionist
     {
         $this->guardAgainstInvalidEventHandler($projector);
 
@@ -54,7 +54,7 @@ class EventProjectionist
         return $this;
     }
 
-    public function addProjectors(array $projectors): self
+    public function addProjectors(array $projectors): EventProjectionist
     {
         collect($projectors)->each(function ($projector) {
             $this->addProjector($projector);
@@ -77,7 +77,7 @@ class EventProjectionist
             });
     }
 
-    public function addReactor($reactor): self
+    public function addReactor($reactor): EventProjectionist
     {
         $this->guardAgainstInvalidEventHandler($reactor);
 
@@ -90,7 +90,7 @@ class EventProjectionist
         return $this;
     }
 
-    public function addReactors(array $reactors): self
+    public function addReactors(array $reactors): EventProjectionist
     {
         collect($reactors)->each(function ($reactor) {
             $this->addReactor($reactor);
@@ -129,7 +129,7 @@ class EventProjectionist
         $this->callEventHandlers($projectors, $storedEvent);
     }
 
-    protected function callEventHandlers(Collection $eventHandlers, StoredEvent $storedEvent): self
+    protected function callEventHandlers(Collection $eventHandlers, StoredEvent $storedEvent): EventProjectionist
     {
         $eventHandlers
             ->pipe(function (Collection $eventHandlers) {
@@ -250,7 +250,7 @@ class EventProjectionist
         });
     }
 
-    protected function callMethod(Collection $eventHandlers, string $method): self
+    protected function callMethod(Collection $eventHandlers, string $method): EventProjectionist
     {
         $eventHandlers
             ->filter(function (EventHandler $eventHandler) use ($method) {
