@@ -42,13 +42,11 @@ class StreamBasedProjectorTest extends TestCase
 
         $this->assertDatabaseHas('projector_statuses', [
             'projector_name' => GroupByProjector::class,
-            'stream' => 'account.id',
+            'stream' => "account.id-{$this->account->id}",
         ]);
     }
 
     /** @test */
-
-    /*
     public function it_will_not_accept_new_events_if_the_stream_is_not_up_to_date()
     {
         event(new MoneyAdded($this->account, 1000));
@@ -76,13 +74,13 @@ class StreamBasedProjectorTest extends TestCase
         $this->assertEquals(0, $this->account->refresh()->amount);
 
         EventProjectionist::replayEvents(collect($this->projector));
+
         // all events of first account are now applied
-        $this->assertEquals(3000, $this->account->refresh()->amount);
         $this->assertEquals(2000, $otherAccount->refresh()->amount);
+        $this->assertEquals(3000, $this->account->refresh()->amount);
 
         // projector is up to date for the first account, new events will be applied
         event(new MoneyAdded($this->account, 1000));
         $this->assertEquals(4000, $this->account->refresh()->amount);
     }
-    */
 }

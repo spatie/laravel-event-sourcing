@@ -24,13 +24,17 @@ trait ProjectsEvents
 
     public function rememberReceivedEvent(StoredEvent $storedEvent)
     {
-        $streamNames = array_keys($this->groupProjectorStatusBy($storedEvent));
+        $streamFullNames = collect($this->groupProjectorStatusBy($storedEvent))
+            ->map(function($streamValue, $streamName) {
+                return "{$streamName}-{$streamValue}";
+            })
+            ->toArray();
 
-        if (count($streamNames) === 0) {
-            $streamNames = ['main'];
+        if (count($streamFullNames) === 0) {
+            $streamFullNames = ['main'];
         }
 
-        foreach($streamNames as $streamName) {
+        foreach($streamFullNames as $streamName) {
             $this->getStatus($streamName)->rememberLastProcessedEvent($storedEvent, $this);
         }
     }
@@ -54,6 +58,7 @@ trait ProjectsEvents
         }
 
         foreach ($streams as $streamName => $streamValue) {
+            $streamFullName = "{$streamName}-{$streamValue}";
             $whereJsonClause = str_replace('.', '->', $streamName);
 
             $lastStoredEvent = StoredEvent::query()
@@ -65,7 +70,7 @@ trait ProjectsEvents
 
             $lastStoredEventId = (int)optional($lastStoredEvent)->id ?? 0;
 
-            $lastProcessedEventId = (int)$this->getStatus($streamName)->last_processed_event_id ?? 0;
+            $lastProcessedEventId = (int)$this->getStatus($streamFullName)->last_processed_event_id ?? 0;
 
             if ($lastStoredEventId !== $lastProcessedEventId) {
                 return false;
