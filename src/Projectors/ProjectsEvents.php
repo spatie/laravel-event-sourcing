@@ -25,7 +25,7 @@ trait ProjectsEvents
     public function rememberReceivedEvent(StoredEvent $storedEvent)
     {
         $streamFullNames = collect($this->groupProjectorStatusBy($storedEvent))
-            ->map(function($streamValue, $streamName) {
+            ->map(function ($streamValue, $streamName) {
                 return "{$streamName}-{$streamValue}";
             })
             ->toArray();
@@ -34,7 +34,7 @@ trait ProjectsEvents
             $streamFullNames = ['main'];
         }
 
-        foreach($streamFullNames as $streamName) {
+        foreach ($streamFullNames as $streamName) {
             $this->getStatus($streamName)->rememberLastProcessedEvent($storedEvent, $this);
         }
     }
@@ -50,9 +50,9 @@ trait ProjectsEvents
                 ->orderBy('id', 'desc')
                 ->first();
 
-            $lastStoredEventId = (int)optional($lastStoredEvent)->id ?? 0;
+            $lastStoredEventId = (int) optional($lastStoredEvent)->id ?? 0;
 
-            $lastProcessedEventId = (int)$this->getStatus()->last_processed_event_id ?? 0;
+            $lastProcessedEventId = (int) $this->getStatus()->last_processed_event_id ?? 0;
 
             return $lastStoredEventId === $lastProcessedEventId;
         }
@@ -68,9 +68,9 @@ trait ProjectsEvents
                 ->orderBy('id', 'desc')
                 ->first();
 
-            $lastStoredEventId = (int)optional($lastStoredEvent)->id ?? 0;
+            $lastStoredEventId = (int) optional($lastStoredEvent)->id ?? 0;
 
-            $lastProcessedEventId = (int)$this->getStatus($streamFullName)->last_processed_event_id ?? 0;
+            $lastProcessedEventId = (int) $this->getStatus($streamFullName)->last_processed_event_id ?? 0;
 
             if ($lastStoredEventId !== $lastProcessedEventId) {
                 return false;
@@ -97,7 +97,7 @@ trait ProjectsEvents
 
     public function reset()
     {
-        if (!method_exists($this, 'resetState')) {
+        if (! method_exists($this, 'resetState')) {
             throw CouldNotResetProjector::doesNotHaveResetStateMethod($this);
         }
 
@@ -108,7 +108,7 @@ trait ProjectsEvents
 
     public function shouldBeCalledImmediately(): bool
     {
-        return !$this instanceof QueuedProjector;
+        return ! $this instanceof QueuedProjector;
     }
 
     public function groupProjectorStatusBy(StoredEvent $storedEvent): array
@@ -125,6 +125,4 @@ trait ProjectsEvents
     {
         return ProjectorStatus::getAllForProjector($this);
     }
-
-
 }

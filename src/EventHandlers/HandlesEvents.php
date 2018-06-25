@@ -12,7 +12,7 @@ trait HandlesEvents
             ->mapWithKeys(function ($methodName, $eventClass) {
                 if (is_numeric($eventClass)) {
                     $eventClass = $methodName;
-                    $methodName = 'on' . ucfirst(class_basename($eventClass));
+                    $methodName = 'on'.ucfirst(class_basename($eventClass));
                 }
 
                 return [$eventClass => $methodName];

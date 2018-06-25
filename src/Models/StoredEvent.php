@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\EventProjector\ShouldBeStored;
-use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class StoredEvent extends Model

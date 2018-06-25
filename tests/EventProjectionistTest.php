@@ -8,14 +8,13 @@ use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\UnrelatedProjector;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\WildcardProjector;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\UnrelatedProjector;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod;
 
@@ -73,7 +72,6 @@ class EventProjectionistTest extends TestCase
         $status = ProjectorStatus::getForProjector($projector);
         $this->assertEquals(2, $status->last_processed_event_id);
     }
-
 
     /** @test */
     public function it_will_not_let_the_projector_handle_an_event_if_the_projector_hasnt_received_all_events()
