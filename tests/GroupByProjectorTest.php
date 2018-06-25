@@ -6,9 +6,10 @@ use Illuminate\Support\Facades\Event;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Facades\EventProjectionist;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
-use Spatie\EventProjector\Tests\TestClasses\Events\Streamable\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\GroupByProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\StreambasedProjector;
 
 class StreamBasedProjectorTest extends TestCase
@@ -25,7 +26,7 @@ class StreamBasedProjectorTest extends TestCase
 
         Event::fake([ProjectorDidNotHandlePriorEvents::class]);
 
-        $this->projector = StreamBasedProjector::class;
+        $this->projector = GroupByProjector::class;
 
         EventProjectionist::addProjector($this->projector);
 
@@ -33,20 +34,15 @@ class StreamBasedProjectorTest extends TestCase
     }
 
     /** @test */
-    public function it_will_remember_the_stream_name_and_stream_id()
+    public function it_will_track_events_using_the_stream_name()
     {
         event(new MoneyAdded($this->account, 1000));
 
         $this->assertCount(1, StoredEvent::get());
 
-        $storedEvent = StoredEvent::first();
-        $this->assertEquals('accounts', $storedEvent->stream_name);
-        $this->assertEquals($this->account->id, $storedEvent->stream_id);
-
         $this->assertDatabaseHas('projector_statuses', [
-            'projector_name' => StreambasedProjector::class,
-            'stream_name' => 'accounts',
-            'stream_id' => $storedEvent->stream_id,
+            'projector_name' => GroupByProjector::class,
+            'stream' => "account.id-{$this->account->id}",
         ]);
     }
 
@@ -78,9 +74,10 @@ class StreamBasedProjectorTest extends TestCase
         $this->assertEquals(0, $this->account->refresh()->amount);
 
         EventProjectionist::replayEvents(collect($this->projector));
+
         // all events of first account are now applied
-        $this->assertEquals(3000, $this->account->refresh()->amount);
         $this->assertEquals(2000, $otherAccount->refresh()->amount);
+        $this->assertEquals(3000, $this->account->refresh()->amount);
 
         // projector is up to date for the first account, new events will be applied
         event(new MoneyAdded($this->account, 1000));

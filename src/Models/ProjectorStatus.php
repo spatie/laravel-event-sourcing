@@ -11,18 +11,12 @@ class ProjectorStatus extends Model
 {
     public $guarded = [];
 
-    public static function getForProjector(Projector $projector, StoredEvent $storedEvent = null): self
+    public static function getForProjector(Projector $projector, string $stream = 'main'): self
     {
-        $attributes = ['projector_name' => $projector->getName()];
-
-        if ($projector->trackEventsByStreamNameAndId()) {
-            $attributes += [
-                'stream_name' => $storedEvent->stream_name,
-                'stream_id' => $storedEvent->stream_id,
-            ];
-        }
-
-        return self::firstOrCreate($attributes);
+        return self::firstOrCreate([
+            'projector_name' => $projector->getName(),
+            'stream' => $stream,
+        ]);
     }
 
     public static function getAllForProjector(Projector $projector): Collection
@@ -33,19 +27,7 @@ class ProjectorStatus extends Model
     public function rememberLastProcessedEvent(StoredEvent $storedEvent): self
     {
         $this->last_processed_event_id = $storedEvent->id;
-
-        $attributes = [
-            'last_processed_event_id' => $storedEvent->id,
-        ];
-
-        if ($this->getProjector()->trackEventsByStreamNameAndId()) {
-            $attributes += [
-                'stream_name' => $storedEvent->stream_name,
-                'stream_id' => $storedEvent->stream_id,
-            ];
-        }
-
-        $this->update($attributes);
+        $this->save();
 
         return $this;
     }

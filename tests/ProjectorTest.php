@@ -10,9 +10,7 @@ use Spatie\EventProjector\Exceptions\CouldNotResetProjector;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ResettableProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\StreambasedProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatWritesMetaData;
-use Spatie\EventProjector\Tests\TestClasses\Events\Streamable\MoneyAdded as StreamableMoneyAdded;
 
 class ProjectorTest extends TestCase
 {
@@ -25,7 +23,7 @@ class ProjectorTest extends TestCase
 
         $this->assertCount(1, StoredEvent::get());
 
-        $this->assertEquals(1, StoredEvent::first()->meta_data->get('user_id'));
+        $this->assertEquals(1, StoredEvent::first()->meta_data['user_id']);
     }
 
     /** @test */
@@ -45,6 +43,8 @@ class ProjectorTest extends TestCase
     }
 
     /** @test */
+
+    /*
     public function a_stream_based_projector_can_be_reset()
     {
         $projector = new StreambasedProjector();
@@ -60,6 +60,7 @@ class ProjectorTest extends TestCase
 
         $this->assertCount(0, ProjectorStatus::get());
     }
+    */
 
     /** @test */
     public function it_will_throw_an_exception_if_it_does_not_have_the_needed_method_to_reset()

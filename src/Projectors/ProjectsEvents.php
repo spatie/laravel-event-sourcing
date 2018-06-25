@@ -22,54 +22,62 @@ trait ProjectsEvents
         return get_class($this);
     }
 
-    public function streamNamesToTrack(): array
-    {
-        return array_wrap($this->trackStream ?? []);
-    }
-
-    public function trackEventsByStreamNameAndId(): bool
-    {
-        return count($this->streamNamesToTrack()) === 0;
-    }
-
-    public function handlesStreamOfStoredEvent(StoredEvent $storedEvent): bool
-    {
-        $trackedStreamNames = $this->streamNamesToTrack();
-
-        if ($trackedStreamNames === []) {
-            return true;
-        }
-
-        $event = $storedEvent->event;
-
-        $streamNameOfEvent = method_exists($event, 'getStreamName')
-            ? $event->getStreamName()
-            : 'main';
-
-        if (in_array('*', $trackedStreamNames)) {
-            return true;
-        }
-
-        return in_array($streamNameOfEvent, $trackedStreamNames);
-    }
-
     public function rememberReceivedEvent(StoredEvent $storedEvent)
     {
-        $this->getStatus($storedEvent)->rememberLastProcessedEvent($storedEvent, $this);
+        $streamFullNames = collect($this->groupProjectorStatusBy($storedEvent))
+            ->map(function($streamValue, $streamName) {
+                return "{$streamName}-{$streamValue}";
+            })
+            ->toArray();
+
+        if (count($streamFullNames) === 0) {
+            $streamFullNames = ['main'];
+        }
+
+        foreach($streamFullNames as $streamName) {
+            $this->getStatus($streamName)->rememberLastProcessedEvent($storedEvent, $this);
+        }
     }
 
     public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool
     {
-        if (! $this->trackEventsByStreamNameAndId()) {
-            return $storedEvent->id === $this->getStatus()->last_processed_event_id + 1;
+        $streams = collect($this->groupProjectorStatusBy($storedEvent));
+
+        if ($streams->isEmpty()) {
+            $lastStoredEvent = StoredEvent::query()
+                ->whereIn('event_class', $this->handlesEventClassNames())
+                ->where('id', '<', $storedEvent->id)
+                ->orderBy('id', 'desc')
+                ->first();
+
+            $lastStoredEventId = (int)optional($lastStoredEvent)->id ?? 0;
+
+            $lastProcessedEventId = (int)$this->getStatus()->last_processed_event_id ?? 0;
+
+            return $lastStoredEventId === $lastProcessedEventId;
         }
 
-        $previousEvent = $storedEvent->previousInStream();
-        $previousEventId = optional($previousEvent)->id ?? 0;
+        foreach ($streams as $streamName => $streamValue) {
+            $streamFullName = "{$streamName}-{$streamValue}";
+            $whereJsonClause = str_replace('.', '->', $streamName);
 
-        $lastProcessedEventId = (int) $this->getStatus($storedEvent)->last_processed_event_id ?? 0;
+            $lastStoredEvent = StoredEvent::query()
+                ->whereIn('event_class', $this->handlesEventClassNames())
+                ->where('id', '<', $storedEvent->id)
+                ->where("event_properties->{$whereJsonClause}", $streamValue)
+                ->orderBy('id', 'desc')
+                ->first();
 
-        return $previousEventId === $lastProcessedEventId;
+            $lastStoredEventId = (int)optional($lastStoredEvent)->id ?? 0;
+
+            $lastProcessedEventId = (int)$this->getStatus($streamFullName)->last_processed_event_id ?? 0;
+
+            if ($lastStoredEventId !== $lastProcessedEventId) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function hasReceivedAllEvents(): bool
@@ -89,7 +97,7 @@ trait ProjectsEvents
 
     public function reset()
     {
-        if (! method_exists($this, 'resetState')) {
+        if (!method_exists($this, 'resetState')) {
             throw CouldNotResetProjector::doesNotHaveResetStateMethod($this);
         }
 
@@ -100,16 +108,23 @@ trait ProjectsEvents
 
     public function shouldBeCalledImmediately(): bool
     {
-        return ! $this instanceof QueuedProjector;
+        return !$this instanceof QueuedProjector;
     }
 
-    protected function getStatus(StoredEvent $storedEvent = null): ProjectorStatus
+    public function groupProjectorStatusBy(StoredEvent $storedEvent): array
     {
-        return ProjectorStatus::getForProjector($this, $storedEvent);
+        return [];
+    }
+
+    protected function getStatus(string $stream = 'main'): ProjectorStatus
+    {
+        return ProjectorStatus::getForProjector($this, $stream);
     }
 
     protected function getAllStatuses(): Collection
     {
         return ProjectorStatus::getAllForProjector($this);
     }
+
+
 }

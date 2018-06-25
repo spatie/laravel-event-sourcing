@@ -9,6 +9,4 @@ use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 class UnrelatedProjector implements Projector
 {
     use ProjectsEvents;
-
-    protected $trackStream = 'unrelated-stream';
 }

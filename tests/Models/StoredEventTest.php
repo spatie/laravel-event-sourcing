@@ -32,34 +32,6 @@ class StoredEventTest extends TestCase
         $this->assertEquals([3, 4], StoredEvent::after(2)->pluck('id')->toArray());
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider eventClassNameProvider
-     */
-    public function it_can_get_the_previous_event_in_a_stream(string $className)
-    {
-        $this->fireEvents(1, $className);
-
-        $firstStoredEvent = StoredEvent::last();
-
-        $this->assertNull($firstStoredEvent->previousInStream());
-
-        $this->fireEvents(1, $className);
-
-        $storedEvent = StoredEvent::last();
-
-        $this->assertEquals($firstStoredEvent->id, optional($storedEvent->previousInStream())->id);
-    }
-
-    public function eventClassNameProvider()
-    {
-        return [
-            [MoneyAdded::class],
-            [StreamableMoneyAdded::class],
-        ];
-    }
-
     public function fireEvents(int $number = 1, string $className = MoneyAdded::class)
     {
         foreach (range(1, $number) as $i) {

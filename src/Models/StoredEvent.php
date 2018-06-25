@@ -25,15 +25,8 @@ class StoredEvent extends Model
         $storedEvent = new static();
         $storedEvent->event_class = get_class($event);
         $storedEvent->attributes['event_properties'] = app(EventSerializer::class)->serialize(clone $event);
+        $storedEvent->meta_data = [];
         $storedEvent->created_at = now();
-
-        if (method_exists($event, 'getStreamName')) {
-            $storedEvent->stream_name = $event->getStreamName();
-        }
-
-        if (method_exists($event, 'getStreamId')) {
-            $storedEvent->stream_id = $event->getStreamId();
-        }
 
         $storedEvent->save();
 
@@ -58,16 +51,6 @@ class StoredEvent extends Model
        );
     }
 
-    public function getMetaDataAttribute(): SchemalessAttributes
-    {
-        return SchemalessAttributes::createForModel($this, 'meta_data');
-    }
-
-    public function scopeWithMetaDataAttributes(): Builder
-    {
-        return SchemalessAttributes::scopeWithSchemalessAttributes('meta_data');
-    }
-
     public function scopeAfter(Builder $query, int $storedEventId)
     {
         $query->where('id', '>', $storedEventId);
@@ -89,5 +72,10 @@ class StoredEvent extends Model
             ->where('id', '<', $this->id)
             ->orderBy('id', 'desc')
             ->first();
+    }
+
+    public function groupProjectorStatusBy(): array
+    {
+        return [];
     }
 }

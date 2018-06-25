@@ -11,9 +11,8 @@ class CreateProjectorStatusesTable extends Migration
         Schema::create('projector_statuses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('projector_name');
+            $table->string('stream')->nullable();
             $table->integer('last_processed_event_id')->default(0);
-            $table->string('stream_name')->nullable();
-            $table->string('stream_id')->nullable();
             $table->timestamps();
         });
     }

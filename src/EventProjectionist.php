@@ -137,23 +137,20 @@ class EventProjectionist
                 return $this->instantiate($eventHandlers);
             })
             ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
-                if (!$eventHandler instanceof Projector) {
-                    return true;
+                if (!$method = $eventHandler->methodNameThatHandlesEvent($storedEvent->event)) {
+                    return false;
+                }
+
+                if (!method_exists($eventHandler, $method)) {
+                    throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $storedEvent->event, $method);
                 }
 
                 return true;
             })
             ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
+
                 if (!$eventHandler instanceof Projector) {
                     return true;
-                }
-
-                if (!$method = $eventHandler->methodNameThatHandlesEvent($storedEvent->event)) {
-                    return true;
-                }
-
-                if (!method_exists($eventHandler, $method)) {
-                    throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $storedEvent->event, $method);
                 }
 
                 if (!$eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
@@ -165,18 +162,16 @@ class EventProjectionist
                 return true;
 
             })
-            ->each(function (EventHandler $eventHandler) use ($storedEvent) {
+            ->
+            each(function (EventHandler $eventHandler) use ($storedEvent) {
+
                 $eventWasHandledSuccessfully = $this->callEventHandler($eventHandler, $storedEvent);
 
-                if (! $eventHandler instanceof Projector) {
+                if (!$eventHandler instanceof Projector) {
                     return;
                 }
 
-                if (! $eventWasHandledSuccessfully) {
-                    return;
-                }
-
-                if (! $eventHandler->handlesStreamOfStoredEvent($storedEvent)) {
+                if (!$eventWasHandledSuccessfully) {
                     return;
                 }
 
@@ -186,13 +181,12 @@ class EventProjectionist
         return $this;
     }
 
-    protected function callEventHandler(EventHandler $eventHandler, StoredEvent $storedEvent): bool
+    protected
+    function callEventHandler(EventHandler $eventHandler, StoredEvent $storedEvent): bool
     {
         $event = $storedEvent->event;
 
-        if (!$method = $eventHandler->methodNameThatHandlesEvent($event)) {
-            return true;
-        }
+        $method = $eventHandler->methodNameThatHandlesEvent($event);
 
         try {
             app()->call([$eventHandler, $method], compact('event', 'storedEvent'));
@@ -211,7 +205,8 @@ class EventProjectionist
         return true;
     }
 
-    public function replayEvents(Collection $projectors, int $afterStoredEventId = 0, callable $onEventReplayed = null)
+    public
+    function replayEvents(Collection $projectors, int $afterStoredEventId = 0, callable $onEventReplayed = null)
     {
         $this->isReplayingEvents = true;
 
@@ -240,7 +235,8 @@ class EventProjectionist
         $this->callMethod($projectors, 'onFinishedEventReplay');
     }
 
-    protected function guardAgainstInvalidEventHandler($eventHandler)
+    protected
+    function guardAgainstInvalidEventHandler($eventHandler)
     {
         if (!is_string($eventHandler)) {
             return;
@@ -251,7 +247,8 @@ class EventProjectionist
         }
     }
 
-    protected function instantiate(Collection $eventHandlers)
+    protected
+    function instantiate(Collection $eventHandlers)
     {
         return $eventHandlers->map(function ($eventHandler) {
             if (is_string($eventHandler)) {
@@ -262,7 +259,8 @@ class EventProjectionist
         });
     }
 
-    protected function callMethod(Collection $eventHandlers, string $method): self
+    protected
+    function callMethod(Collection $eventHandlers, string $method): self
     {
         $eventHandlers
             ->filter(function (EventHandler $eventHandler) use ($method) {
@@ -275,7 +273,8 @@ class EventProjectionist
         return $this;
     }
 
-    protected function alreadyAdded(string $type, $eventHandler)
+    protected
+    function alreadyAdded(string $type, $eventHandler)
     {
         $eventHandlerClassName = is_string($eventHandler)
             ? $eventHandler
@@ -290,7 +289,8 @@ class EventProjectionist
         }
     }
 
-    protected function getClassNames(Collection $eventHandlers): array
+    protected
+    function getClassNames(Collection $eventHandlers): array
     {
         return $eventHandlers
             ->map(function ($eventHandler) {
