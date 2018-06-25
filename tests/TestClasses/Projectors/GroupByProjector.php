@@ -5,8 +5,8 @@ namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 
 class GroupByProjector implements Projector
 {

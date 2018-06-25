@@ -30,6 +30,4 @@ class Account extends Model
     {
         return $this->amount < 0;
     }
-
-
 }
