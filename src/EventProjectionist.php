@@ -159,8 +159,7 @@ class EventProjectionist
 
                 return true;
             })
-            ->
-            each(function (EventHandler $eventHandler) use ($storedEvent) {
+            ->each(function (EventHandler $eventHandler) use ($storedEvent) {
                 $eventWasHandledSuccessfully = $this->callEventHandler($eventHandler, $storedEvent);
 
                 if (! $eventHandler instanceof Projector) {
