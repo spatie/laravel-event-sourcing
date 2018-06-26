@@ -17,7 +17,7 @@ class MakeProjectorCommand extends GeneratorCommand
     {
         parent::handle();
 
-        if (! $this->option('qeueud')) {
+        if (! $this->option('queued')) {
             return;
         }
 
