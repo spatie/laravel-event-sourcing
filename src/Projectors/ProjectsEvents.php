@@ -24,7 +24,7 @@ trait ProjectsEvents
 
     public function rememberReceivedEvent(StoredEvent $storedEvent)
     {
-        $streamFullNames = collect($this->streamEventsBy($storedEvent))
+        $streamFullNames =  $this->getEventStreams($storedEvent)
             ->map(function ($streamValue, $streamName) {
                 return "{$streamName}-{$streamValue}";
             })
@@ -41,7 +41,7 @@ trait ProjectsEvents
 
     public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool
     {
-        $streams = collect($this->streamEventsBy($storedEvent));
+        $streams = $this->getEventStreams($storedEvent);
 
         if ($streams->isEmpty()) {
             $lastStoredEvent = StoredEvent::query()
@@ -111,9 +111,22 @@ trait ProjectsEvents
         return ! $this instanceof QueuedProjector;
     }
 
-    public function streamEventsBy(StoredEvent $storedEvent): array
+    protected function getEventStreams(StoredEvent $storedEvent): Collection
     {
-        return [];
+        $streams = method_exists($this, 'streamEventsBy')
+            ? $this->streamEventsBy($storedEvent)
+            : [];
+
+        return collect(array_wrap($streams))
+            ->mapWithKeys(function ($streamValue, $streamName) use ($storedEvent) {
+                if (is_numeric($streamName)) {
+                    $streamName = $streamValue;
+
+                    $streamValue = array_get($storedEvent->event_properties, $streamName);
+                }
+
+                return [$streamName => $streamValue];
+            });
     }
 
     protected function getStatus(string $stream = 'main'): ProjectorStatus
