@@ -20,5 +20,5 @@ interface Projector extends EventHandler
 
     public function lastEventProcessedAt(): Carbon;
 
-    public function streamEventsBy(StoredEvent $storedEvent): array;
+    public function streamEventsBy(StoredEvent $storedEvent);
 }

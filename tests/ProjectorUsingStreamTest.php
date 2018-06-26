@@ -9,9 +9,9 @@ use Spatie\EventProjector\Facades\EventProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\GroupByProjector;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatUsesStream;
 
-class GroupByProjectorTest extends TestCase
+class ProjectorUsingStreamTest extends TestCase
 {
     /** @var \Spatie\EventProjector\Projectors\Projector */
     protected $projector;
@@ -25,7 +25,7 @@ class GroupByProjectorTest extends TestCase
 
         Event::fake([ProjectorDidNotHandlePriorEvents::class]);
 
-        $this->projector = GroupByProjector::class;
+        $this->projector = ProjectorThatUsesStream::class;
 
         EventProjectionist::addProjector($this->projector);
 
@@ -40,7 +40,7 @@ class GroupByProjectorTest extends TestCase
         $this->assertCount(1, StoredEvent::get());
 
         $this->assertDatabaseHas('projector_statuses', [
-            'projector_name' => GroupByProjector::class,
+            'projector_name' => ProjectorThatUsesStream::class,
             'stream' => "account.id-{$this->account->id}",
         ]);
     }
