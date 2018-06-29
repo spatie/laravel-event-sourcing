@@ -65,7 +65,7 @@ class EventProjectionist
 
     public function getProjectors(): Collection
     {
-        return $this->projectors;
+        return $this->instantiate($this->projectors);
     }
 
     public function getProjector(string $name): ?Projector
