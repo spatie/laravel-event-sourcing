@@ -24,7 +24,7 @@ trait ProjectsEvents
 
     public function rememberReceivedEvent(StoredEvent $storedEvent)
     {
-        $streamFullNames =  $this->getEventStreams($storedEvent)
+        $streamFullNames = $this->getEventStreams($storedEvent)
             ->map(function ($streamValue, $streamName) {
                 return "{$streamName}-{$streamValue}";
             })
