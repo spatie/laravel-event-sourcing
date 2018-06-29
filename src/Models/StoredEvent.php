@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class StoredEvent extends Model
 {
@@ -48,5 +49,15 @@ class StoredEvent extends Model
     public function scopeAfter(Builder $query, int $storedEventId)
     {
         $query->where('id', '>', $storedEventId);
+    }
+
+    public function getMetaDataAttribute(): SchemalessAttributes
+    {
+        return SchemalessAttributes::createForModel($this, 'meta_data');
+    }
+
+    public function scopeWithMetaDataAttributes(): Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('meta_data');
     }
 }

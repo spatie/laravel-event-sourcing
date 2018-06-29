@@ -19,11 +19,7 @@ class ProjectorThatWritesMetaData implements Projector
 
     public function onMoneyAdded(StoredEvent $storedEvent, MoneyAdded $event)
     {
-        $metaData = $storedEvent['meta_data'];
-
-        $metaData['user_id'] = 1;
-
-        $storedEvent->meta_data = $metaData;
+        $storedEvent->meta_data['user_id'] = 1;
 
         $storedEvent->save();
     }
