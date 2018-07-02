@@ -52,9 +52,20 @@ trait ProjectsEvents
 
             $lastStoredEventId = (int) optional($lastStoredEvent)->id ?? 0;
 
-            $lastProcessedEventId = (int) $this->getStatus()->last_processed_event_id ?? 0;
+            $status = $this->getStatus();
 
-            return $lastStoredEventId === $lastProcessedEventId;
+            $lastProcessedEventId = (int) $status->last_processed_event_id ?? 0;
+
+            if ($lastStoredEventId !== $lastProcessedEventId) {
+                $status->has_received_all_prior_events = false;
+
+                $status->save();
+
+                return false;
+            }
+
+            $status->has_received_all_prior_events = true;
+            $status->save();
         }
 
         foreach ($streams as $streamName => $streamValue) {
