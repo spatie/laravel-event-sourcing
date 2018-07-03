@@ -44,6 +44,8 @@ class ProjectorUsingStreamTest extends TestCase
         $this->assertDatabaseHas('projector_statuses', [
             'projector_name' => $projectorClass,
             'stream' => "account.id-{$this->account->id}",
+            'has_received_all_events' => true,
+            'last_processed_event_id' => 1,
         ]);
     }
 
@@ -91,6 +93,20 @@ class ProjectorUsingStreamTest extends TestCase
         // projectorClass is up to date for the first account, new events will be applied
         event(new MoneyAdded($this->account, 1000));
         $this->assertEquals(4000, $this->account->refresh()->amount);
+
+        $this->assertDatabaseHas('projector_statuses', [
+            'projector_name' => $projectorClass,
+            'stream' => "account.id-{$this->account->id}",
+            'has_received_all_events' => true,
+            'last_processed_event_id' => 6,
+        ]);
+
+        $this->assertDatabaseHas('projector_statuses', [
+            'projector_name' => $projectorClass,
+            'stream' => "account.id-{$otherAccount->id}",
+            'has_received_all_events' => true,
+            'last_processed_event_id' => 4,
+        ]);
     }
 
     public function projectorProvider(): array
