@@ -131,6 +131,9 @@ class ReplayCommandTest extends TestCase
         ]);
 
         $projectorStatus = ProjectorStatus::getForProjector($projector);
+
+        $projectorStatus = $projectorStatus->refresh();
+
         $this->assertTrue($projectorStatus->has_received_all_prior_events);
         $this->assertEquals(3, $projectorStatus->last_processed_event_id);
 

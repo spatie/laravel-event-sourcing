@@ -49,4 +49,22 @@ class ProjectorStatus extends Model
     {
         return EventProjectionist::getProjector($this->projector_name);
     }
+
+    public function rememberHasReceivedAllPriorEvents(): self
+    {
+        $this->has_received_all_prior_events = true;
+
+        $this->save();
+
+        return $this;
+    }
+
+    public function rememberHasNotReceivedAllPriorEvents(): self
+    {
+        $this->has_received_all_prior_events = false;
+
+        $this->save();
+
+        return $this;
+    }
 }

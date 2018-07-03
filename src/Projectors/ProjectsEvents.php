@@ -57,14 +57,14 @@ trait ProjectsEvents
             $lastProcessedEventId = (int) $status->last_processed_event_id ?? 0;
 
             if ($lastStoredEventId !== $lastProcessedEventId) {
-                $status->has_received_all_prior_events = false;
-                $status->save();
+                $status->rememberHasNotReceivedAllPriorEvents();
 
                 return false;
             }
 
-            $status->has_received_all_prior_events = true;
-            $status->save();
+            $status->rememberHasReceivedAllPriorEvents();
+
+            return true;
         }
 
         foreach ($streams as $streamName => $streamValue) {
@@ -80,11 +80,17 @@ trait ProjectsEvents
 
             $lastStoredEventId = (int) optional($lastStoredEvent)->id ?? 0;
 
-            $lastProcessedEventId = (int) $this->getStatus($streamFullName)->last_processed_event_id ?? 0;
+            $status = $this->getStatus($streamFullName);
+            
+            $lastProcessedEventId = (int) $status->last_processed_event_id ?? 0;
 
             if ($lastStoredEventId !== $lastProcessedEventId) {
+                $status->rememberHasNotReceivedAllPriorEvents();
+                
                 return false;
             }
+
+            $status->rememberHasReceivedAllPriorEvents();
         }
 
         return true;
