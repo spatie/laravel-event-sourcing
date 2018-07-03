@@ -2,12 +2,11 @@
 
 namespace Spatie\EventProjector\Console\Concerns;
 
-use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
+use Spatie\EventProjector\Models\ProjectorStatus;
 
 trait ReplaysEvents
 {
@@ -53,7 +52,6 @@ trait ReplaysEvents
                         ->where('projector_name', $projector->getName())
                         ->exists();
             });
-
 
         if ($projectorsWithoutStatus->isNotEmpty()) {
             return 0;

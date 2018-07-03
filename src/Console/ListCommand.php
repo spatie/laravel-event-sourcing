@@ -6,8 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Spatie\EventProjector\EventProjectionist;
-use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Projectors\Projector;
+use Spatie\EventProjector\Models\ProjectorStatus;
 
 class ListCommand extends Command
 {
