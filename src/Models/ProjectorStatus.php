@@ -11,6 +11,10 @@ class ProjectorStatus extends Model
 {
     public $guarded = [];
 
+    public $casts = [
+        'has_received_all_prior_events' => 'boolean',
+    ];
+
     public static function getForProjector(Projector $projector, string $stream = 'main'): ProjectorStatus
     {
         return self::firstOrCreate([

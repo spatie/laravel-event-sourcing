@@ -4,6 +4,7 @@ namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
 use Spatie\EventProjector\EventProjectionist;
+use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Projectors\Projector;
 
 class ListCommand extends Command
@@ -24,7 +25,41 @@ class ListCommand extends Command
 
     public function handle()
     {
-        $titles = ['Name', 'Up to date', 'Last processed event id', 'Last event processed at'];
+        $this->listProjectorsWithMissingEvents();
+
+        $this->listAllProjectors();
+    }
+
+    private function listProjectorsWithMissingEvents()
+    {
+        $this->title('Projectors that have not receveived all events yet');
+
+        $header = ['Name', 'Last processed event id', 'Stream', 'Last event received at'];
+
+        $rows = ProjectorStatus::query()
+            ->where('has_received_all_prior_events', false)
+            ->get()
+            ->map(function(ProjectorStatus $projectorStatus) {
+                return [
+                    $projectorStatus->getProjector()->getName(),
+                    $projectorStatus->last_processed_event_id,
+                    $projectorStatus->stream,
+                    $projectorStatus->updated_at,
+                ];
+            })
+            ->sortBy(function(array $projectorStatusRow) {
+                return $projectorStatusRow[0];
+            })
+            ->toArray();
+
+        $this->table($header, $rows);
+    }
+
+    protected function listAllProjectors(): void
+    {
+        $this->title('All projectors');
+
+        $header = ['Name', 'Up to date', 'Last processed event id', 'Last event processed at'];
 
         $projectors = $this->eventProjectionist->getProjectors();
 
@@ -35,13 +70,6 @@ class ListCommand extends Command
         }
 
         $rows = $projectors
-            ->map(function ($eventHandler) {
-                if (is_string($eventHandler)) {
-                    $eventHandler = app($eventHandler);
-                }
-
-                return $eventHandler;
-            })
             ->map(function (Projector $projector) {
                 return [
                     $projector->getName(),
@@ -52,6 +80,17 @@ class ListCommand extends Command
             })
             ->toArray();
 
-        $this->table($titles, $rows);
+        $this->table($header, $rows);
     }
+
+    protected function title(string $title)
+    {
+        $this->warn('');
+        $this->warn($title);
+        $this->warn(str_repeat('-', strlen($title)));
+    }
+
+
+
+
 }
