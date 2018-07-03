@@ -50,7 +50,7 @@ class ProjectorStatus extends Model
         return EventProjectionist::getProjector($this->projector_name);
     }
 
-    public function rememberHasReceivedAllEvents(): self
+    public function markAsReceivedAllEvents(): self
     {
         $this->has_received_all_events = true;
 
@@ -59,7 +59,7 @@ class ProjectorStatus extends Model
         return $this;
     }
 
-    public function rememberHasNotReceivedAllEvents(): self
+    public function markasAsNotReceivedAllEvents(): self
     {
         $this->has_received_all_events = false;
 

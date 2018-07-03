@@ -160,7 +160,7 @@ class EventProjectionist
                 if (! $eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
                     event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));
 
-                    $eventHandler->rememberNotUpToDate($storedEvent);
+                    $eventHandler->markAsNotUpToDate($storedEvent);
 
                     return false;
                 }

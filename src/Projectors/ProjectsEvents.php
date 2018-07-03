@@ -42,8 +42,8 @@ trait ProjectsEvents
                 $status = $this->getStatus();
 
                 $status->last_processed_event_id === $lastStoredEventId
-                    ? $status->rememberHasReceivedAllEvents()
-                    : $status->rememberHasNotReceivedAllEvents();
+                    ? $status->markAsReceivedAllEvents()
+                    : $status->markasAsNotReceivedAllEvents();
 
                 return;
             }
@@ -63,8 +63,8 @@ trait ProjectsEvents
                 $status = $this->getStatus($streamFullName);
 
                 $status->last_processed_event_id === $lastStoredEventId
-                    ? $status->rememberHasReceivedAllEvents()
-                    : $status->rememberHasNotReceivedAllEvents();
+                    ? $status->markAsReceivedAllEvents()
+                    : $status->markasAsNotReceivedAllEvents();
             }
         }
     }
@@ -138,12 +138,12 @@ trait ProjectsEvents
         return ProjectorStatus::hasReceivedAllEvents($this);
     }
 
-    public function rememberNotUpToDate(StoredEvent $storedEvent)
+    public function markAsNotUpToDate(StoredEvent $storedEvent)
     {
         foreach($this->getEventStreamFullNames($storedEvent) as $streamName) {
             $status = $this->getStatus($streamName);
 
-            $status->rememberHasNotReceivedAllEvents();
+            $status->markasAsNotReceivedAllEvents();
         }
     }
 
