@@ -58,7 +58,6 @@ trait ProjectsEvents
 
             if ($lastStoredEventId !== $lastProcessedEventId) {
                 $status->has_received_all_prior_events = false;
-
                 $status->save();
 
                 return false;
