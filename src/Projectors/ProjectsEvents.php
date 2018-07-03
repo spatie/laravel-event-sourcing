@@ -58,7 +58,7 @@ trait ProjectsEvents
                     ->orderBy('id', 'desc')
                     ->first();
 
-                $lastStoredEventId = (int)optional($lastStoredEvent)->id ?? 0;
+                $lastStoredEventId = (int) optional($lastStoredEvent)->id ?? 0;
 
                 $status = $this->getStatus($streamFullName);
 
@@ -71,8 +71,7 @@ trait ProjectsEvents
 
     public function hasAlreadyReceivedEvent(StoredEvent $storedEvent): bool
     {
-        foreach($this->getEventStreamFullNames($storedEvent) as $streamFullName)
-        {
+        foreach ($this->getEventStreamFullNames($storedEvent) as $streamFullName) {
             $status = $this->getStatus($streamFullName);
 
             $lastProcessedEventId = (int) optional($status)->last_processed_event_id ?? 0;
@@ -104,8 +103,8 @@ trait ProjectsEvents
 
             if ($lastStoredEventId !== $lastProcessedEventId) {
                 return false;
-
             }
+
             return true;
         }
 
@@ -140,7 +139,7 @@ trait ProjectsEvents
 
     public function markAsNotUpToDate(StoredEvent $storedEvent)
     {
-        foreach($this->getEventStreamFullNames($storedEvent) as $streamName) {
+        foreach ($this->getEventStreamFullNames($storedEvent) as $streamName) {
             $status = $this->getStatus($streamName);
 
             $status->markasAsNotReceivedAllEvents();

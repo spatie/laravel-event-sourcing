@@ -2,9 +2,9 @@
 
 namespace Spatie\EventProjector\Console\Concerns;
 
+use Exception;
 use Illuminate\Support\Collection;
 use Spatie\EventProjector\Facades\EventProjectionist;
-use Exception;
 
 trait SelectsProjectors
 {

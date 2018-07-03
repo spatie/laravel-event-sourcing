@@ -5,8 +5,8 @@ namespace Spatie\EventProjector\Console\Snapshots;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Facades\EventProjectionist;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ResettableProjector;
 
 class RebuildCommandTest extends TestCase
