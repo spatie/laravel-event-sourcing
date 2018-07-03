@@ -24,18 +24,20 @@ trait ProjectsEvents
 
     public function rememberReceivedEvent(StoredEvent $storedEvent)
     {
-        $streamFullNames = $this->getEventStreams($storedEvent)
-            ->map(function ($streamValue, $streamName) {
-                return "{$streamName}-{$streamValue}";
-            })
-            ->toArray();
+        foreach ($this->getEventStreamFullNames($storedEvent) as $streamName) {
+            $status = $this->getStatus($streamName);
 
-        if (count($streamFullNames) === 0) {
-            $streamFullNames = ['main'];
-        }
+            $status->rememberLastProcessedEvent($storedEvent, $this);
 
-        foreach ($streamFullNames as $streamName) {
-            $this->getStatus($streamName)->rememberLastProcessedEvent($storedEvent, $this);
+            $highestEventIdForStream = StoredEvent::query()
+                    ->whereIn('event_class', $this->handlesEventClassNames())
+                    ->orderBy('id', 'desc')
+                    ->first() ?? 0;
+
+            $status->last_processed_event_id === $highestEventIdForStream
+                ? $status->rememberHasReceivedAllEvents()
+                : $status->rememberHasNotReceivedAllEvents();
+
         }
     }
 
@@ -57,12 +59,8 @@ trait ProjectsEvents
             $lastProcessedEventId = (int) $status->last_processed_event_id ?? 0;
 
             if ($lastStoredEventId !== $lastProcessedEventId) {
-                $status->rememberHasNotReceivedAllPriorEvents();
-
                 return false;
             }
-
-            $status->rememberHasReceivedAllPriorEvents();
 
             return true;
         }
@@ -81,16 +79,11 @@ trait ProjectsEvents
             $lastStoredEventId = (int) optional($lastStoredEvent)->id ?? 0;
 
             $status = $this->getStatus($streamFullName);
-            
             $lastProcessedEventId = (int) $status->last_processed_event_id ?? 0;
 
             if ($lastStoredEventId !== $lastProcessedEventId) {
-                $status->rememberHasNotReceivedAllPriorEvents();
-                
                 return false;
             }
-
-            $status->rememberHasReceivedAllPriorEvents();
         }
 
         return true;
@@ -99,6 +92,15 @@ trait ProjectsEvents
     public function hasReceivedAllEvents(): bool
     {
         return ProjectorStatus::hasReceivedAllEvents($this);
+    }
+
+    public function rememberNotUpToDate(StoredEvent $storedEvent)
+    {
+        foreach($this->getEventStreamFullNames($storedEvent) as $streamName) {
+            $status = $this->getStatus($streamName);
+
+            $status->rememberHasNotReceivedAllEvents();
+        }
     }
 
     public function getLastProcessedEventId(): int
@@ -143,6 +145,21 @@ trait ProjectsEvents
 
                 return [$streamName => $streamValue];
             });
+    }
+
+    protected function getEventStreamFullNames(StoredEvent $storedEvent): array
+    {
+        $streamFullNames = $this->getEventStreams($storedEvent)
+            ->map(function ($streamValue, $streamName) {
+                return "{$streamName}-{$streamValue}";
+            })
+            ->toArray();
+
+        if (count($streamFullNames) === 0) {
+            $streamFullNames = ['main'];
+        }
+
+        return $streamFullNames;
     }
 
     protected function getStatus(string $stream = 'main'): ProjectorStatus

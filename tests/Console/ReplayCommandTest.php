@@ -134,12 +134,11 @@ class ReplayCommandTest extends TestCase
 
         $projectorStatus = $projectorStatus->refresh();
 
-        $this->assertTrue($projectorStatus->has_received_all_prior_events);
         $this->assertEquals(3, $projectorStatus->last_processed_event_id);
 
         //sneakily change the last processed event
         $projectorStatus->rememberLastProcessedEvent(StoredEvent::find(2));
-        $projectorStatus->has_received_all_prior_events = false;
+        $projectorStatus->has_received_all_events = false;
         $projectorStatus->save();
 
         $this->assertEquals(2, $projectorStatus->last_processed_event_id);

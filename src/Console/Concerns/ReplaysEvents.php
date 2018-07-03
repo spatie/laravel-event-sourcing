@@ -65,7 +65,7 @@ trait ReplaysEvents
 
         $allUpToDateProjectorStatusesCount = DB::table('projector_statuses')
             ->whereIn('projector_name', $projectors->map->getName()->toArray())
-            ->where('has_received_all_prior_events', true)
+            ->where('has_received_all_events', true)
             ->count();
 
         if ($allProjectorStatusesCount === $allUpToDateProjectorStatusesCount) {
@@ -74,7 +74,7 @@ trait ReplaysEvents
 
         return DB::table('projector_statuses')
                 ->whereIn('projector_name', $projectors->map->getName()->toArray())
-                ->where('has_received_all_prior_events', false)
+                ->where('has_received_all_events', false)
                 ->min('last_processed_event_id') ?? 0;
     }
 

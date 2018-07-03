@@ -37,7 +37,7 @@ class ListCommand extends Command
         $header = ['Name', 'Last processed event id', 'Stream', 'Last event received at'];
 
         $rows = ProjectorStatus::query()
-            ->where('has_received_all_prior_events', false)
+            ->where('has_received_all_events', false)
             ->get()
             ->map(function(ProjectorStatus $projectorStatus) {
                 return [

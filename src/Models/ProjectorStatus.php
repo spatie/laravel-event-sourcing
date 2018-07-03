@@ -12,7 +12,7 @@ class ProjectorStatus extends Model
     public $guarded = [];
 
     public $casts = [
-        'has_received_all_prior_events' => 'boolean',
+        'has_received_all_events' => 'boolean',
     ];
 
     public static function getForProjector(Projector $projector, string $stream = 'main'): ProjectorStatus
@@ -50,18 +50,18 @@ class ProjectorStatus extends Model
         return EventProjectionist::getProjector($this->projector_name);
     }
 
-    public function rememberHasReceivedAllPriorEvents(): self
+    public function rememberHasReceivedAllEvents(): self
     {
-        $this->has_received_all_prior_events = true;
+        $this->has_received_all_events = true;
 
         $this->save();
 
         return $this;
     }
 
-    public function rememberHasNotReceivedAllPriorEvents(): self
+    public function rememberHasNotReceivedAllEvents(): self
     {
-        $this->has_received_all_prior_events = false;
+        $this->has_received_all_events = false;
 
         $this->save();
 

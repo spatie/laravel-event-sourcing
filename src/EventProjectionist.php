@@ -107,9 +107,9 @@ class EventProjectionist
     public function storeEvent(ShouldBeStored $event)
     {
         $storedEvent = $this->config['stored_event_model']::createForEvent($event);
-
+        
         $this->handleImmediately($storedEvent);
-
+        
         dispatch(new HandleStoredEventJob($storedEvent))->onQueue($this->config['queue']);
     }
 
@@ -151,8 +151,11 @@ class EventProjectionist
                 if (! $eventHandler instanceof Projector) {
                     return true;
                 }
-
+                
                 if (! $eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
+
+                    $eventHandler->rememberNotUpToDate($storedEvent);
+
                     event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));
 
                     return false;
@@ -170,7 +173,7 @@ class EventProjectionist
                 if (! $eventWasHandledSuccessfully) {
                     return;
                 }
-
+                
                 $eventHandler->rememberReceivedEvent($storedEvent);
             });
 
