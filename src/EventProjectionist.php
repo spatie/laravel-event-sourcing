@@ -107,12 +107,9 @@ class EventProjectionist
     public function storeEvent(ShouldBeStored $event)
     {
         $storedEvent = $this->config['stored_event_model']::createForEvent($event);
-        dump('STORED EVENT: ' . $storedEvent->id);
 
-        dump('immediately');
         $this->handleImmediately($storedEvent);
 
-        dump('queued');
         dispatch(new HandleStoredEventJob($storedEvent))->onQueue($this->config['queue']);
     }
 
@@ -159,7 +156,7 @@ class EventProjectionist
                     return false;
                 }
 
-                dump('did not already receive');
+
                 if (! $eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
                     event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));
 
@@ -180,7 +177,7 @@ class EventProjectionist
                 if (! $eventWasHandledSuccessfully) {
                     return;
                 }
-                
+
                 $eventHandler->rememberReceivedEvent($storedEvent);
             });
 
@@ -225,7 +222,7 @@ class EventProjectionist
             ->chunk($this->config['replay_chunk_size'], function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
                 $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
                     $this->callEventHandlers($projectors, $storedEvent);
-                    dump('Stored Event count: ' . StoredEvent::count());
+
                     if ($onEventReplayed) {
                         $onEventReplayed($storedEvent);
                     }

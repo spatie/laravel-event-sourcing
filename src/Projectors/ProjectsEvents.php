@@ -29,18 +29,43 @@ trait ProjectsEvents
 
             $status->rememberLastProcessedEvent($storedEvent, $this);
 
-            $latestEventForStream = StoredEvent::query()
+            $streams = $this->getEventStreams($storedEvent);
+
+            if ($streams->isEmpty()) {
+                $lastStoredEvent = StoredEvent::query()
                     ->whereIn('event_class', $this->handlesEventClassNames())
                     ->orderBy('id', 'desc')
                     ->first();
 
-            $lastestEventIdForStream = (int) optional($latestEventForStream)->id ?? 0;
+                $lastStoredEventId = (int) optional($lastStoredEvent)->id ?? 0;
 
-            dump('last_processed_event_id: ' . $status->last_processed_event_id . ' $lastestEventIdForStream: ' . $lastestEventIdForStream);
-            dump('here');
-            (int) $status->last_processed_event_id === $lastestEventIdForStream
-                ? $status->rememberHasReceivedAllEvents()
-                : $status->rememberHasNotReceivedAllEvents();
+                $status = $this->getStatus();
+
+                $status->last_processed_event_id === $lastStoredEventId
+                    ? $status->rememberHasReceivedAllEvents()
+                    : $status->rememberHasNotReceivedAllEvents();
+
+                return;
+            }
+
+            foreach ($streams as $streamName => $streamValue) {
+                $streamFullName = "{$streamName}-{$streamValue}";
+                $whereJsonClause = str_replace('.', '->', $streamName);
+
+                $lastStoredEvent = StoredEvent::query()
+                    ->whereIn('event_class', $this->handlesEventClassNames())
+                    ->where("event_properties->{$whereJsonClause}", $streamValue)
+                    ->orderBy('id', 'desc')
+                    ->first();
+
+                $lastStoredEventId = (int)optional($lastStoredEvent)->id ?? 0;
+
+                $status = $this->getStatus($streamFullName);
+
+                $status->last_processed_event_id === $lastStoredEventId
+                    ? $status->rememberHasReceivedAllEvents()
+                    : $status->rememberHasNotReceivedAllEvents();
+            }
         }
     }
 
@@ -52,7 +77,6 @@ trait ProjectsEvents
 
             $lastProcessedEventId = (int) optional($status)->last_processed_event_id ?? 0;
 
-            dump('$storedEvent: ' . $storedEvent->id . ' $lastProcessedEventId: ' . $lastProcessedEventId);
             if ($storedEvent->id <= $lastProcessedEventId) {
                 return true;
             }

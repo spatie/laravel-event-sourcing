@@ -52,8 +52,6 @@ class ProjectorStatus extends Model
 
     public function rememberHasReceivedAllEvents(): self
     {
-        dump('received all');
-
         $this->has_received_all_events = true;
 
         $this->save();
@@ -63,8 +61,6 @@ class ProjectorStatus extends Model
 
     public function rememberHasNotReceivedAllEvents(): self
     {
-        dump('NOT received all');
-
         $this->has_received_all_events = false;
 
         $this->save();
