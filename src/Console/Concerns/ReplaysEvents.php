@@ -13,6 +13,7 @@ trait ReplaysEvents
 {
     public function replayEvents(Collection $projectors)
     {
+        dump('replaying');
         $afterEventId = $this->determineAfterEventId($projectors);
 
         if ($afterEventId === StoredEvent::getMaxId()) {

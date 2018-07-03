@@ -29,16 +29,36 @@ trait ProjectsEvents
 
             $status->rememberLastProcessedEvent($storedEvent, $this);
 
-            $highestEventIdForStream = StoredEvent::query()
+            $latestEventForStream = StoredEvent::query()
                     ->whereIn('event_class', $this->handlesEventClassNames())
                     ->orderBy('id', 'desc')
-                    ->first() ?? 0;
+                    ->first();
 
-            $status->last_processed_event_id === $highestEventIdForStream
+            $lastestEventIdForStream = (int) optional($latestEventForStream)->id ?? 0;
+
+            dump('last_processed_event_id: ' . $status->last_processed_event_id . ' $lastestEventIdForStream: ' . $lastestEventIdForStream);
+            dump('here');
+            (int) $status->last_processed_event_id === $lastestEventIdForStream
                 ? $status->rememberHasReceivedAllEvents()
                 : $status->rememberHasNotReceivedAllEvents();
-
         }
+    }
+
+    public function hasAlreadyReceivedEvent(StoredEvent $storedEvent): bool
+    {
+        foreach($this->getEventStreamFullNames($storedEvent) as $streamFullName)
+        {
+            $status = $this->getStatus($streamFullName);
+
+            $lastProcessedEventId = (int) optional($status)->last_processed_event_id ?? 0;
+
+            dump('$storedEvent: ' . $storedEvent->id . ' $lastProcessedEventId: ' . $lastProcessedEventId);
+            if ($storedEvent->id <= $lastProcessedEventId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool
@@ -60,8 +80,8 @@ trait ProjectsEvents
 
             if ($lastStoredEventId !== $lastProcessedEventId) {
                 return false;
-            }
 
+            }
             return true;
         }
 
