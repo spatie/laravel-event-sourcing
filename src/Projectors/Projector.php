@@ -12,6 +12,10 @@ interface Projector extends EventHandler
 
     public function rememberReceivedEvent(StoredEvent $storedEvent);
 
+    public function markAsNotUpToDate(StoredEvent $storedEvent);
+    
+    public function hasAlreadyReceivedEvent(StoredEvent $storedEvent): bool;
+
     public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool;
 
     public function hasReceivedAllEvents(): bool;

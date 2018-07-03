@@ -131,12 +131,17 @@ class ReplayCommandTest extends TestCase
         ]);
 
         $projectorStatus = ProjectorStatus::getForProjector($projector);
+
+        $projectorStatus = $projectorStatus->refresh();
+
         $this->assertEquals(3, $projectorStatus->last_processed_event_id);
 
         //sneakily change the last processed event
         $projectorStatus->rememberLastProcessedEvent(StoredEvent::find(2));
-        $this->assertEquals(2, $projectorStatus->last_processed_event_id);
+        $projectorStatus->has_received_all_events = false;
+        $projectorStatus->save();
 
+        $this->assertEquals(2, $projectorStatus->last_processed_event_id);
         $this->artisan('event-projector:replay', [
             'projector' => [BalanceProjector::class],
         ]);

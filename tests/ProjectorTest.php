@@ -5,10 +5,12 @@ namespace Spatie\EventProjector\Tests;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Facades\EventProjectionist;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Exceptions\CouldNotResetProjector;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorWithAssociativeAndNonAssociativeHandleEvents;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ResettableProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatWritesMetaData;
 
@@ -43,30 +45,40 @@ class ProjectorTest extends TestCase
     }
 
     /** @test */
-
-    /*
-    public function a_stream_based_projector_can_be_reset()
-    {
-        $projector = new StreambasedProjector();
-
-        EventProjectionist::addProjector($projector);
-
-        event(new StreamableMoneyAdded(Account::create(), 1000));
-        event(new StreamableMoneyAdded(Account::create(), 1000));
-
-        $this->assertCount(2, ProjectorStatus::get());
-
-        $projector->reset();
-
-        $this->assertCount(0, ProjectorStatus::get());
-    }
-    */
-
-    /** @test */
     public function it_will_throw_an_exception_if_it_does_not_have_the_needed_method_to_reset()
     {
         $this->expectException(CouldNotResetProjector::class);
 
         (new BalanceProjector())->reset();
+    }
+
+    /** @test */
+    public function it_can_handle_non_associative_handle_events()
+    {
+        $account = Account::create();
+
+        $projector = new ProjectorWithAssociativeAndNonAssociativeHandleEvents();
+
+        EventProjectionist::addProjector($projector);
+
+        event(new MoneyAdded($account, 1234));
+
+        $this->assertEquals(1234, $account->refresh()->amount);
+    }
+
+    /** @test */
+    public function it_can_handle_mixed_handle_events()
+    {
+        $account = Account::create();
+
+        $projector = new ProjectorWithAssociativeAndNonAssociativeHandleEvents();
+
+        EventProjectionist::addProjector($projector);
+
+        event(new MoneyAdded($account, 1234));
+
+        event(new MoneySubtracted($account, 4321));
+
+        $this->assertEquals(-3087, $account->refresh()->amount);
     }
 }

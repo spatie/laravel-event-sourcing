@@ -24,19 +24,65 @@ trait ProjectsEvents
 
     public function rememberReceivedEvent(StoredEvent $storedEvent)
     {
-        $streamFullNames = $this->getEventStreams($storedEvent)
-            ->map(function ($streamValue, $streamName) {
-                return "{$streamName}-{$streamValue}";
-            })
-            ->toArray();
+        foreach ($this->getEventStreamFullNames($storedEvent) as $streamName) {
+            $status = $this->getStatus($streamName);
 
-        if (count($streamFullNames) === 0) {
-            $streamFullNames = ['main'];
+            $status->rememberLastProcessedEvent($storedEvent, $this);
+
+            $streams = $this->getEventStreams($storedEvent);
+
+            if ($streams->isEmpty()) {
+                $lastStoredEvent = StoredEvent::query()
+                    ->whereIn('event_class', $this->handlesEventClassNames())
+                    ->orderBy('id', 'desc')
+                    ->first();
+
+                $lastStoredEventId = (int) optional($lastStoredEvent)->id ?? 0;
+
+                $status = $this->getStatus();
+
+                $status->last_processed_event_id === $lastStoredEventId
+                    ? $status->markAsReceivedAllEvents()
+                    : $status->markasAsNotReceivedAllEvents();
+
+                return;
+            }
+
+            foreach ($streams as $streamName => $streamValue) {
+                $streamFullName = "{$streamName}-{$streamValue}";
+                $whereJsonClause = str_replace('.', '->', $streamName);
+
+                $lastStoredEvent = StoredEvent::query()
+                    ->whereIn('event_class', $this->handlesEventClassNames())
+                    ->where("event_properties->{$whereJsonClause}", $streamValue)
+                    ->orderBy('id', 'desc')
+                    ->first();
+
+                $lastStoredEventId = (int)optional($lastStoredEvent)->id ?? 0;
+
+                $status = $this->getStatus($streamFullName);
+
+                $status->last_processed_event_id === $lastStoredEventId
+                    ? $status->markAsReceivedAllEvents()
+                    : $status->markasAsNotReceivedAllEvents();
+            }
+        }
+    }
+
+    public function hasAlreadyReceivedEvent(StoredEvent $storedEvent): bool
+    {
+        foreach($this->getEventStreamFullNames($storedEvent) as $streamFullName)
+        {
+            $status = $this->getStatus($streamFullName);
+
+            $lastProcessedEventId = (int) optional($status)->last_processed_event_id ?? 0;
+
+            if ($storedEvent->id <= $lastProcessedEventId) {
+                return true;
+            }
         }
 
-        foreach ($streamFullNames as $streamName) {
-            $this->getStatus($streamName)->rememberLastProcessedEvent($storedEvent, $this);
-        }
+        return false;
     }
 
     public function hasReceivedAllPriorEvents(StoredEvent $storedEvent): bool
@@ -52,9 +98,15 @@ trait ProjectsEvents
 
             $lastStoredEventId = (int) optional($lastStoredEvent)->id ?? 0;
 
-            $lastProcessedEventId = (int) $this->getStatus()->last_processed_event_id ?? 0;
+            $status = $this->getStatus();
 
-            return $lastStoredEventId === $lastProcessedEventId;
+            $lastProcessedEventId = (int) $status->last_processed_event_id ?? 0;
+
+            if ($lastStoredEventId !== $lastProcessedEventId) {
+                return false;
+
+            }
+            return true;
         }
 
         foreach ($streams as $streamName => $streamValue) {
@@ -70,7 +122,8 @@ trait ProjectsEvents
 
             $lastStoredEventId = (int) optional($lastStoredEvent)->id ?? 0;
 
-            $lastProcessedEventId = (int) $this->getStatus($streamFullName)->last_processed_event_id ?? 0;
+            $status = $this->getStatus($streamFullName);
+            $lastProcessedEventId = (int) $status->last_processed_event_id ?? 0;
 
             if ($lastStoredEventId !== $lastProcessedEventId) {
                 return false;
@@ -83,6 +136,15 @@ trait ProjectsEvents
     public function hasReceivedAllEvents(): bool
     {
         return ProjectorStatus::hasReceivedAllEvents($this);
+    }
+
+    public function markAsNotUpToDate(StoredEvent $storedEvent)
+    {
+        foreach($this->getEventStreamFullNames($storedEvent) as $streamName) {
+            $status = $this->getStatus($streamName);
+
+            $status->markasAsNotReceivedAllEvents();
+        }
     }
 
     public function getLastProcessedEventId(): int
@@ -127,6 +189,21 @@ trait ProjectsEvents
 
                 return [$streamName => $streamValue];
             });
+    }
+
+    protected function getEventStreamFullNames(StoredEvent $storedEvent): array
+    {
+        $streamFullNames = $this->getEventStreams($storedEvent)
+            ->map(function ($streamValue, $streamName) {
+                return "{$streamName}-{$streamValue}";
+            })
+            ->toArray();
+
+        if (count($streamFullNames) === 0) {
+            $streamFullNames = ['main'];
+        }
+
+        return $streamFullNames;
     }
 
     protected function getStatus(string $stream = 'main'): ProjectorStatus

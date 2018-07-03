@@ -2,7 +2,10 @@
 
 namespace Spatie\EventProjector\Console\Concerns;
 
+use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 
@@ -44,18 +47,35 @@ trait ReplaysEvents
 
     protected function determineAfterEventId(Collection $projectors): int
     {
-        return $projectors
-            ->map(function ($projector) {
-                if (is_string($projector)) {
-                    $projector = app($projector);
-                }
+        $projectorsWithoutStatus = collect($projectors)
+            ->filter(function (Projector $projector) {
+                return ! ProjectorStatus::query()
+                        ->where('projector_name', $projector->getName())
+                        ->exists();
+            });
 
-                return $projector;
-            })
-            ->map(function (Projector $projector) {
-                return $projector->getLastProcessedEventId();
-            })
-            ->min();
+
+        if ($projectorsWithoutStatus->isNotEmpty()) {
+            return 0;
+        }
+
+        $allProjectorStatusesCount = DB::table('projector_statuses')
+            ->whereIn('projector_name', $projectors->map->getName()->toArray())
+            ->count();
+
+        $allUpToDateProjectorStatusesCount = DB::table('projector_statuses')
+            ->whereIn('projector_name', $projectors->map->getName()->toArray())
+            ->where('has_received_all_events', true)
+            ->count();
+
+        if ($allProjectorStatusesCount === $allUpToDateProjectorStatusesCount) {
+            return StoredEvent::getMaxId();
+        }
+
+        return DB::table('projector_statuses')
+                ->whereIn('projector_name', $projectors->map->getName()->toArray())
+                ->where('has_received_all_events', false)
+                ->min('last_processed_event_id') ?? 0;
     }
 
     protected function emptyLine(int $amount = 1)

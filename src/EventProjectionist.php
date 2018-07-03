@@ -136,6 +136,7 @@ class EventProjectionist
                 return $this->instantiate($eventHandlers);
             })
             ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
+
                 if (! $method = $eventHandler->methodNameThatHandlesEvent($storedEvent->event)) {
                     return false;
                 }
@@ -151,8 +152,15 @@ class EventProjectionist
                     return true;
                 }
 
+                if ($eventHandler->hasAlreadyReceivedEvent($storedEvent)) {
+                    return false;
+                }
+
+
                 if (! $eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
                     event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));
+
+                    $eventHandler->markAsNotUpToDate($storedEvent);
 
                     return false;
                 }
