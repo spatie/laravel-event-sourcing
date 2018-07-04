@@ -63,28 +63,6 @@ class EventProjectorServiceProvider extends ServiceProvider
 
         $this->app->alias(EventProjectionist::class, 'event-projector');
 
-        $this->app->bind(SnapshotFactory::class, function () {
-            $eventProjectionist = app(EventProjectionist::class);
-
-            $config = config('event-projector');
-
-            $diskName = $config['snapshots_disk'];
-            $disk = Storage::disk($diskName);
-
-            return new SnapshotFactory($eventProjectionist, $disk, $config);
-        });
-
-        $this->app->bind(SnapshotRepository::class, function () {
-            $eventProjectionist = app(EventProjectionist::class);
-
-            $config = config('event-projector');
-
-            $diskName = $config['snapshots_disk'];
-            $disk = Storage::disk($diskName);
-
-            return new SnapshotRepository($eventProjectionist, $disk, $config);
-        });
-
         $this->app->singleton(EventSubscriber::class, function () {
             $eventProjectionist = app(EventProjectionist::class);
             $config = config('event-projector');
@@ -109,11 +87,6 @@ class EventProjectorServiceProvider extends ServiceProvider
         $this->app->bind('command.event-projector:rebuild', RebuildCommand::class);
         $this->app->bind('command.event-projector:replay', ReplayCommand::class);
 
-        $this->app->bind('command.event-projector:list-snapshots', ListSnapshotsCommand::class);
-        $this->app->bind('command.event-projector:create-snapshot', CreateSnapshotCommand::class);
-        $this->app->bind('command.event-projector:restore-snapshot', RestoreSnapshotCommand::class);
-        $this->app->bind('command.event-projector:delete-snapshot', DeleteSnapshotCommand::class);
-
         $this->app->bind('command.make:projector', MakeProjectorCommand::class);
         $this->app->bind('command.make:reactor', MakeReactorCommand::class);
         $this->app->bind('command.make:storable-event', MakeStorableEventCommand::class);
@@ -123,11 +96,6 @@ class EventProjectorServiceProvider extends ServiceProvider
             'command.event-projector:reset',
             'command.event-projector:rebuild',
             'command.event-projector:replay',
-
-            'command.event-projector:list-snapshots',
-            'command.event-projector:create-snapshot',
-            'command.event-projector:restore-snapshot',
-            'command.event-projector:delete-snapshot',
 
             'command.make:projector',
             'command.make:reactor',
