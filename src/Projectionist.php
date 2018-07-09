@@ -136,15 +136,7 @@ class Projectionist
                 return $this->instantiate($eventHandlers);
             })
             ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
-                if (! $method = $eventHandler->methodNameThatHandlesEvent($storedEvent->event)) {
-                    return false;
-                }
-
-                if (! method_exists($eventHandler, $method)) {
-                    throw InvalidEventHandler::eventHandlingMethodDoesNotExist($eventHandler, $storedEvent->event, $method);
-                }
-
-                return true;
+                return $eventHandler->handlesEvents()->has($storedEvent->event_class);
             })
             ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
                 if (! $eventHandler instanceof Projector) {
@@ -184,12 +176,8 @@ class Projectionist
 
     protected function callEventHandler(EventHandler $eventHandler, StoredEvent $storedEvent): bool
     {
-        $event = $storedEvent->event;
-
-        $method = $eventHandler->methodNameThatHandlesEvent($event);
-
         try {
-            app()->call([$eventHandler, $method], compact('event', 'storedEvent'));
+            $eventHandler->handleEvent($storedEvent);
         } catch (Exception $exception) {
             if (! $this->config['catch_exceptions']) {
                 throw $exception;

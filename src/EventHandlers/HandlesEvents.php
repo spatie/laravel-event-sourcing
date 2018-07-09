@@ -3,35 +3,43 @@
 namespace Spatie\EventProjector\EventHandlers;
 
 use Exception;
+use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\Models\StoredEvent;
+use Illuminate\Support\Collection;
 
 trait HandlesEvents
 {
-    public function handlesEvents(): array
+    public function handlesEvents(): Collection
     {
         return collect($this->handlesEvents ?? [])
-            ->mapWithKeys(function ($methodName, $eventClass) {
+            ->mapWithKeys(function (string $handlerMethod, $eventClass) {
                 if (is_numeric($eventClass)) {
-                    $eventClass = $methodName;
-                    $methodName = 'on'.ucfirst(class_basename($eventClass));
+                    return [$handlerMethod => 'on'.ucfirst(class_basename($handlerMethod))];
                 }
 
-                return [$eventClass => $methodName];
-            })
-            ->toArray();
+                return [$eventClass => $handlerMethod];
+            });
     }
 
-    public function handlesEventClassNames(): array
+    public function handleEvent(StoredEvent $storedEvent)
     {
-        return array_keys($this->handlesEvents());
-    }
-
-    public function methodNameThatHandlesEvent(object $event): string
-    {
+        $eventClass = $storedEvent->event_class;
         $handlesEvents = $this->handlesEvents();
 
-        $eventClass = get_class($event);
+        if (! $handlesEvents->has($eventClass)) {
+            return;
+        }
 
-        return $handlesEvents[$eventClass] ?? '';
+        $handlerMethod = $handlesEvents[$eventClass];
+
+        if (! method_exists($this, $handlerMethod)) {
+            throw InvalidEventHandler::eventHandlingMethodDoesNotExist($this, $storedEvent->event, $handlerMethod);
+        }
+
+        app()->call([$this, $handlerMethod], [
+            'event' => $storedEvent->event,
+            'storedEvent' => $storedEvent,
+        ]);
     }
 
     public function handleException(Exception $exception)
