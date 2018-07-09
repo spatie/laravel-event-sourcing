@@ -2,7 +2,7 @@
 
 namespace Spatie\EventProjector\Tests;
 
-use Spatie\EventProjector\Facades\EventProjectionist;
+use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\EventProjectorServiceProvider;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
@@ -17,7 +17,7 @@ class EventProjectorServiceProviderTest extends TestCase
 
         (new EventProjectorServiceProvider($this->app))->register();
 
-        $this->assertCount(1, EventProjectionist::getProjectors());
-        $this->assertCount(1, EventProjectionist::getReactors());
+        $this->assertCount(1, Projectionist::getProjectors());
+        $this->assertCount(1, Projectionist::getReactors());
     }
 }

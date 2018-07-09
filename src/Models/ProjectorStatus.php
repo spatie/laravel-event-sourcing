@@ -5,7 +5,7 @@ namespace Spatie\EventProjector\Models;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Facades\EventProjectionist;
+use Spatie\EventProjector\Facades\Projectionist;
 
 class ProjectorStatus extends Model
 {
@@ -47,7 +47,7 @@ class ProjectorStatus extends Model
 
     public function getProjector(): Projector
     {
-        return EventProjectionist::getProjector($this->projector_name);
+        return Projectionist::getProjector($this->projector_name);
     }
 
     public function markAsReceivedAllEvents(): self

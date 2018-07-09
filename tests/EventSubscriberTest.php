@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\HandleStoredEventJob;
 use Spatie\EventProjector\Models\ProjectorStatus;
-use Spatie\EventProjector\Facades\EventProjectionist;
+use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
@@ -58,7 +58,7 @@ class EventSubscriberTest extends TestCase
     /** @test */
     public function it_will_call_registered_projectors()
     {
-        EventProjectionist::addProjector(BalanceProjector::class);
+        Projectionist::addProjector(BalanceProjector::class);
 
         event(new MoneyAdded($this->account, 1234));
         $this->account->refresh();
@@ -72,8 +72,8 @@ class EventSubscriberTest extends TestCase
     /** @test */
     public function it_will_call_registered_reactors()
     {
-        EventProjectionist::addProjector(BalanceProjector::class);
-        EventProjectionist::addReactor(BrokeReactor::class);
+        Projectionist::addProjector(BalanceProjector::class);
+        Projectionist::addReactor(BrokeReactor::class);
 
         event(new MoneyAdded($this->account, 1234));
         Mail::assertNotSent(AccountBroke::class);
@@ -91,7 +91,7 @@ class EventSubscriberTest extends TestCase
         Bus::fake();
 
         $projector = new BalanceProjector();
-        EventProjectionist::addProjector($projector);
+        Projectionist::addProjector($projector);
 
         event(new MoneyAdded($this->account, 1000));
 
@@ -107,7 +107,7 @@ class EventSubscriberTest extends TestCase
         Bus::fake();
 
         $projector = new QueuedProjector();
-        EventProjectionist::addProjector($projector);
+        Projectionist::addProjector($projector);
 
         event(new MoneyAdded($this->account, 1234));
 

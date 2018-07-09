@@ -4,15 +4,15 @@ namespace Spatie\EventProjector;
 
 class EventSubscriber
 {
-    /** @var \Spatie\EventProjector\EventProjectionist */
-    protected $eventProjectionist;
+    /** @var \Spatie\EventProjector\Projectionist */
+    protected $Projectionist;
 
     /** @var array */
     protected $config;
 
-    public function __construct(EventProjectionist $eventProjectionist, array $config)
+    public function __construct(Projectionist $Projectionist, array $config)
     {
-        $this->eventProjectionist = $eventProjectionist;
+        $this->Projectionist = $Projectionist;
 
         $this->config = $config;
     }
@@ -33,7 +33,7 @@ class EventSubscriber
 
     public function storeEvent(ShouldBeStored $event)
     {
-        $this->eventProjectionist->storeEvent($event);
+        $this->Projectionist->storeEvent($event);
     }
 
     protected function shouldBeStored($event): bool

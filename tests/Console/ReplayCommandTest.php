@@ -10,13 +10,13 @@ use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
-use Spatie\EventProjector\Facades\EventProjectionist;
+use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
-use Spatie\EventProjector\EventProjectionist as BoundEventProjectionist;
+use Spatie\EventProjector\Projectionist as BoundProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 
 class ReplayCommandTest extends TestCase
@@ -46,7 +46,7 @@ class ReplayCommandTest extends TestCase
 
         $projector->shouldReceive('onMoneyAdded')->andReturnNull()->times(3);
 
-        EventProjectionist::addProjector($projector);
+        Projectionist::addProjector($projector);
 
         Event::assertNotDispatched(StartingEventReplay::class);
         Event::assertNotDispatched(FinishedEventReplay::class);
@@ -60,10 +60,10 @@ class ReplayCommandTest extends TestCase
     /** @test */
     public function if_no_projectors_are_given_it_will_ask_if_it_should_run_events_againts_all_of_them()
     {
-        EventProjectionist::addProjector(BalanceProjector::class);
+        Projectionist::addProjector(BalanceProjector::class);
 
         $command = Mockery::mock(ReplayCommand::class.'[confirm]', [
-            app(BoundEventProjectionist::class),
+            app(BoundProjectionist::class),
             config('event-projector.stored_event_model'),
         ]);
 
@@ -81,10 +81,10 @@ class ReplayCommandTest extends TestCase
     /** @test */
     public function it_will_run_events_agains_all_projectors_when_no_projectors_are_given_and_confirming()
     {
-        EventProjectionist::addProjector(BalanceProjector::class);
+        Projectionist::addProjector(BalanceProjector::class);
 
         $command = Mockery::mock(ReplayCommand::class.'[confirm]', [
-            app(BoundEventProjectionist::class),
+            app(BoundProjectionist::class),
             config('event-projector.stored_event_model'),
         ]);
 
@@ -102,8 +102,8 @@ class ReplayCommandTest extends TestCase
     /** @test */
     public function it_will_not_call_any_reactors()
     {
-        EventProjectionist::addProjector(BalanceProjector::class);
-        EventProjectionist::addReactor(BrokeReactor::class);
+        Projectionist::addProjector(BalanceProjector::class);
+        Projectionist::addReactor(BrokeReactor::class);
 
         StoredEvent::truncate();
 
@@ -124,7 +124,7 @@ class ReplayCommandTest extends TestCase
     {
         $projector = new BalanceProjector();
 
-        EventProjectionist::addProjector($projector);
+        Projectionist::addProjector($projector);
 
         $this->artisan('event-projector:replay', [
             'projector' => [BalanceProjector::class],
@@ -157,7 +157,7 @@ class ReplayCommandTest extends TestCase
     {
         $projector = Mockery::mock(BalanceProjector::class.'[onStartingEventReplay, onFinishedEventReplay]');
 
-        EventProjectionist::addProjector($projector);
+        Projectionist::addProjector($projector);
 
         $projector->shouldReceive('onStartingEventReplay')->once();
         $projector->shouldReceive('onFinishedEventReplay')->once();

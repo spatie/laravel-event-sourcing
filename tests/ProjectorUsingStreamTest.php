@@ -5,7 +5,7 @@ namespace Spatie\EventProjector\Tests;
 use Illuminate\Support\Facades\Event;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
-use Spatie\EventProjector\Facades\EventProjectionist;
+use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
@@ -35,7 +35,7 @@ class ProjectorUsingStreamTest extends TestCase
      */
     public function it_will_track_events_using_the_stream_name(string $projectorClass)
     {
-        EventProjectionist::addProjector($projectorClass);
+        Projectionist::addProjector($projectorClass);
 
         event(new MoneyAdded($this->account, 1000));
 
@@ -58,7 +58,7 @@ class ProjectorUsingStreamTest extends TestCase
      */
     public function it_will_not_accept_new_events_if_the_stream_is_not_up_to_date(string $projectorClass)
     {
-        EventProjectionist::addProjector($projectorClass);
+        Projectionist::addProjector($projectorClass);
 
         event(new MoneyAdded($this->account, 1000));
         $this->assertEquals(1000, $this->account->refresh()->amount);
@@ -84,7 +84,7 @@ class ProjectorUsingStreamTest extends TestCase
         event(new MoneyAdded($this->account, 1000));
         $this->assertEquals(0, $this->account->refresh()->amount);
 
-        EventProjectionist::replayEvents(collect($projectorClass));
+        Projectionist::replayEvents(collect($projectorClass));
 
         // all events of first account are now applied
         $this->assertEquals(2000, $otherAccount->refresh()->amount);

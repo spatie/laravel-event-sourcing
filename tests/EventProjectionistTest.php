@@ -6,7 +6,7 @@ use Mockery;
 use Exception;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
-use Spatie\EventProjector\Facades\EventProjectionist;
+use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
@@ -18,7 +18,7 @@ use Spatie\EventProjector\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod;
 
-class EventProjectionistTest extends TestCase
+class ProjectionistTest extends TestCase
 {
     /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
     protected $account;
@@ -35,7 +35,7 @@ class EventProjectionistTest extends TestCase
     {
         $this->expectException(InvalidEventHandler::class);
 
-        EventProjectionist::addProjector('non-exising-class-name');
+        Projectionist::addProjector('non-exising-class-name');
     }
 
     /** @test */
@@ -43,7 +43,7 @@ class EventProjectionistTest extends TestCase
     {
         $this->expectException(InvalidEventHandler::class);
 
-        EventProjectionist::addReactor('non-exising-class-name');
+        Projectionist::addReactor('non-exising-class-name');
     }
 
     /** @test */
@@ -51,7 +51,7 @@ class EventProjectionistTest extends TestCase
     {
         $this->expectException(InvalidEventHandler::class);
 
-        EventProjectionist::addProjector(InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod::class);
+        Projectionist::addProjector(InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod::class);
 
         event(new MoneyAdded($this->account, 1234));
     }
@@ -61,7 +61,7 @@ class EventProjectionistTest extends TestCase
     {
         $projector = new BalanceProjector();
 
-        EventProjectionist::addProjector($projector);
+        Projectionist::addProjector($projector);
 
         event(new MoneyAdded($this->account, 1234));
         $this->assertTrue($projector->hasReceivedAllEvents());
@@ -78,7 +78,7 @@ class EventProjectionistTest extends TestCase
     {
         $projector = new BalanceProjector();
 
-        EventProjectionist::addProjector($projector);
+        Projectionist::addProjector($projector);
 
         event(new MoneyAdded($this->account, 1000));
 
@@ -98,19 +98,19 @@ class EventProjectionistTest extends TestCase
     /** @test */
     public function it_will_not_register_the_same_projector_twice()
     {
-        EventProjectionist::addProjector(BalanceProjector::class);
-        EventProjectionist::addProjector(BalanceProjector::class);
+        Projectionist::addProjector(BalanceProjector::class);
+        Projectionist::addProjector(BalanceProjector::class);
 
-        $this->assertCount(1, EventProjectionist::getProjectors());
+        $this->assertCount(1, Projectionist::getProjectors());
     }
 
     /** @test */
     public function it_will_not_register_the_same_reactor_twice()
     {
-        EventProjectionist::addReactor(BrokeReactor::class);
-        EventProjectionist::addReactor(BrokeReactor::class);
+        Projectionist::addReactor(BrokeReactor::class);
+        Projectionist::addReactor(BrokeReactor::class);
 
-        $this->assertCount(1, EventProjectionist::getReactors());
+        $this->assertCount(1, Projectionist::getReactors());
     }
 
     /** @test */
@@ -122,7 +122,7 @@ class EventProjectionistTest extends TestCase
 
         $projector->shouldReceive('handleException')->once();
 
-        EventProjectionist::addProjector($projector);
+        Projectionist::addProjector($projector);
 
         event(new MoneyAdded($this->account, 1000));
     }
@@ -133,10 +133,10 @@ class EventProjectionistTest extends TestCase
         $this->setConfig('event-projector.catch_exceptions', true);
 
         $failingProjector = new ProjectorThatThrowsAnException();
-        EventProjectionist::addProjector($failingProjector);
+        Projectionist::addProjector($failingProjector);
 
         $workingProjector = new BalanceProjector();
-        EventProjectionist::addProjector($workingProjector);
+        Projectionist::addProjector($workingProjector);
 
         event(new MoneyAdded($this->account, 1000));
 
@@ -150,7 +150,7 @@ class EventProjectionistTest extends TestCase
     public function it_can_not_catch_exceptions_and_not_continue()
     {
         $failingProjector = new ProjectorThatThrowsAnException();
-        EventProjectionist::addProjector($failingProjector);
+        Projectionist::addProjector($failingProjector);
 
         $this->expectException(Exception::class);
 
@@ -160,7 +160,7 @@ class EventProjectionistTest extends TestCase
     /** @test */
     public function it_will_not_create_projector_statuses_for_projectors_that_are_not_interested_in_the_fired_events()
     {
-        EventProjectionist::addProjector(UnrelatedProjector::class);
+        Projectionist::addProjector(UnrelatedProjector::class);
 
         event(new MoneyAdded($this->account, 1000));
 
@@ -170,7 +170,7 @@ class EventProjectionistTest extends TestCase
     /** @test */
     public function projectors_that_dont_handle_fired_events_are_handled_correctly()
     {
-        EventProjectionist::addProjector(MoneyAddedCountProjector::class);
+        Projectionist::addProjector(MoneyAddedCountProjector::class);
 
         event(new MoneySubtracted($this->account, 500));
 

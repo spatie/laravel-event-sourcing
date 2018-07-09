@@ -42,10 +42,10 @@ class EventProjectorServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/event-projector.php', 'event-projector');
 
-        $this->app->singleton(EventProjectionist::class, function () {
+        $this->app->singleton(Projectionist::class, function () {
             $config = config('event-projector');
 
-            $projectionist = new EventProjectionist($config);
+            $projectionist = new Projectionist($config);
 
             $projectionist
                 ->addProjectors($config['projectors'] ?? [])
@@ -54,13 +54,13 @@ class EventProjectorServiceProvider extends ServiceProvider
             return $projectionist;
         });
 
-        $this->app->alias(EventProjectionist::class, 'event-projector');
+        $this->app->alias(Projectionist::class, 'event-projector');
 
         $this->app->singleton(EventSubscriber::class, function () {
-            $eventProjectionist = app(EventProjectionist::class);
+            $Projectionist = app(Projectionist::class);
             $config = config('event-projector');
 
-            return new EventSubscriber($eventProjectionist, $config);
+            return new EventSubscriber($Projectionist, $config);
         });
 
         $this->app

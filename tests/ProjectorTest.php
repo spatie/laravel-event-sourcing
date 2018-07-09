@@ -4,7 +4,7 @@ namespace Spatie\EventProjector\Tests;
 
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
-use Spatie\EventProjector\Facades\EventProjectionist;
+use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Exceptions\CouldNotResetProjector;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
@@ -19,7 +19,7 @@ class ProjectorTest extends TestCase
     /** @test */
     public function it_can_reach_the_stored_event_and_write_meta_data_to_it()
     {
-        EventProjectionist::addProjector(ProjectorThatWritesMetaData::class);
+        Projectionist::addProjector(ProjectorThatWritesMetaData::class);
 
         event(new MoneyAdded(Account::create(), 1234));
 
@@ -33,7 +33,7 @@ class ProjectorTest extends TestCase
     {
         $projector = new ResettableProjector();
 
-        EventProjectionist::addProjector($projector);
+        Projectionist::addProjector($projector);
 
         ProjectorStatus::getForProjector($projector);
 
@@ -59,7 +59,7 @@ class ProjectorTest extends TestCase
 
         $projector = new ProjectorWithAssociativeAndNonAssociativeHandleEvents();
 
-        EventProjectionist::addProjector($projector);
+        Projectionist::addProjector($projector);
 
         event(new MoneyAdded($account, 1234));
 
@@ -73,7 +73,7 @@ class ProjectorTest extends TestCase
 
         $projector = new ProjectorWithAssociativeAndNonAssociativeHandleEvents();
 
-        EventProjectionist::addProjector($projector);
+        Projectionist::addProjector($projector);
 
         event(new MoneyAdded($account, 1234));
 

@@ -4,7 +4,7 @@ namespace Spatie\EventProjector\Console\Concerns;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Facades\EventProjectionist;
+use Spatie\EventProjector\Facades\Projectionist;
 
 trait SelectsProjectors
 {
@@ -15,12 +15,12 @@ trait SelectsProjectors
                 return null;
             }
 
-            return EventProjectionist::getProjectors();
+            return Projectionist::getProjectors();
         }
 
         return collect($projectorClassNames)
             ->map(function (string $projectorName) {
-                if (! $projector = $this->eventProjectionist->getProjector($projectorName)) {
+                if (! $projector = $this->Projectionist->getProjector($projectorName)) {
                     throw new Exception("Projector {$projectorName} not found. Did you register it?");
                 }
 

@@ -5,7 +5,7 @@ namespace Spatie\EventProjector\Console;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\EventProjectionist;
+use Spatie\EventProjector\Projectionist;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Models\ProjectorStatus;
 
@@ -15,22 +15,22 @@ class ListCommand extends Command
 
     protected $description = 'List all event projectors';
 
-    /** @var \Spatie\EventProjector\EventProjectionist */
-    protected $eventProjectionist;
+    /** @var \Spatie\EventProjector\Projectionist */
+    protected $Projectionist;
 
-    public function __construct(EventProjectionist $eventProjectionist)
+    public function __construct(Projectionist $Projectionist)
     {
         parent::__construct();
 
-        $this->eventProjectionist = $eventProjectionist;
+        $this->Projectionist = $Projectionist;
     }
 
     public function handle()
     {
-        $projectors = $this->eventProjectionist->getProjectors();
+        $projectors = $this->Projectionist->getProjectors();
 
         if ($projectors->isEmpty()) {
-            $this->warn('No projectors found. You can register projector like this : `Spatie\EventProjector\Facades\EventProjectionist::addProjector($projectorClassName)`.');
+            $this->warn('No projectors found. You can register projector like this : `Spatie\EventProjector\Facades\Projectionist::addProjector($projectorClassName)`.');
 
             return;
         }

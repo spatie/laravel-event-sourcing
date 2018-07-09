@@ -14,6 +14,6 @@ class InvalidSnapshot extends Exception
 
     public static function projectorDoesNotExist(Snapshot $snapshot)
     {
-        return new static("Snapshot `{$snapshot->fileName()}` was taken for a projector named `{$snapshot->projectorName()}` but no such projector was found. Make sure you add all projectors to the EventProjectionist.");
+        return new static("Snapshot `{$snapshot->fileName()}` was taken for a projector named `{$snapshot->projectorName()}` but no such projector was found. Make sure you add all projectors to the Projectionist.");
     }
 }

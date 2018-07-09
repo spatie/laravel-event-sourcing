@@ -3,7 +3,7 @@
 namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
-use Spatie\EventProjector\EventProjectionist;
+use Spatie\EventProjector\Projectionist;
 use Spatie\EventProjector\Console\Concerns\SelectsProjectors;
 
 class ResetCommand extends Command
@@ -14,14 +14,14 @@ class ResetCommand extends Command
 
     protected $description = 'Reset a projector';
 
-    /** @var \Spatie\EventProjector\EventProjectionist */
-    protected $eventProjectionist;
+    /** @var \Spatie\EventProjector\Projectionist */
+    protected $Projectionist;
 
-    public function __construct(EventProjectionist $eventProjectionist)
+    public function __construct(Projectionist $Projectionist)
     {
         parent::__construct();
 
-        $this->eventProjectionist = $eventProjectionist;
+        $this->Projectionist = $Projectionist;
     }
 
     public function handle()

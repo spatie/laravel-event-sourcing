@@ -13,7 +13,7 @@ use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Events\EventHandlerFailedHandlingEvent;
 use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
 
-class EventProjectionist
+class Projectionist
 {
     /** @var \Illuminate\Support\Collection */
     protected $projectors;
@@ -41,7 +41,7 @@ class EventProjectionist
         return $this->isReplayingEvents;
     }
 
-    public function addProjector($projector): EventProjectionist
+    public function addProjector($projector): Projectionist
     {
         $this->guardAgainstInvalidEventHandler($projector);
 
@@ -54,7 +54,7 @@ class EventProjectionist
         return $this;
     }
 
-    public function addProjectors(array $projectors): EventProjectionist
+    public function addProjectors(array $projectors): Projectionist
     {
         collect($projectors)->each(function ($projector) {
             $this->addProjector($projector);
@@ -77,7 +77,7 @@ class EventProjectionist
             });
     }
 
-    public function addReactor($reactor): EventProjectionist
+    public function addReactor($reactor): Projectionist
     {
         $this->guardAgainstInvalidEventHandler($reactor);
 
@@ -90,7 +90,7 @@ class EventProjectionist
         return $this;
     }
 
-    public function addReactors(array $reactors): EventProjectionist
+    public function addReactors(array $reactors): Projectionist
     {
         collect($reactors)->each(function ($reactor) {
             $this->addReactor($reactor);
@@ -129,7 +129,7 @@ class EventProjectionist
         $this->callEventHandlers($projectors, $storedEvent);
     }
 
-    protected function callEventHandlers(Collection $eventHandlers, StoredEvent $storedEvent): EventProjectionist
+    protected function callEventHandlers(Collection $eventHandlers, StoredEvent $storedEvent): Projectionist
     {
         $eventHandlers
             ->pipe(function (Collection $eventHandlers) {
@@ -256,7 +256,7 @@ class EventProjectionist
         });
     }
 
-    protected function callMethod(Collection $eventHandlers, string $method): EventProjectionist
+    protected function callMethod(Collection $eventHandlers, string $method): Projectionist
     {
         $eventHandlers
             ->filter(function (EventHandler $eventHandler) use ($method) {
