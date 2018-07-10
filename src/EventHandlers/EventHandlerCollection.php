@@ -2,11 +2,7 @@
 
 namespace Spatie\EventProjector\EventHandlers;
 
-use Exception;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\EventHandlers\EventHandler;
-use Spatie\EventProjector\Events\EventHandlerFailedHandlingEvent;
-use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Models\StoredEvent;
 
 class EventHandlerCollection

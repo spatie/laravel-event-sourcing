@@ -29,6 +29,4 @@ class InvalidEventHandler extends Exception
     {
         return new static('`'.get_class($object).'` must implement Spatie\EventProjector\EventHandlers\EventHandler');
     }
-
-
 }

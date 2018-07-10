@@ -7,16 +7,16 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
-use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Projectionist as BoundProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
-use Spatie\EventProjector\Projectionist as BoundProjectionist;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 
 class ReplayCommandTest extends TestCase
