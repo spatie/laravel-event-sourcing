@@ -26,7 +26,7 @@ class Projectionist
     protected $reactors;
 
     /** @var bool */
-    protected $isReplayingEvents = false;
+    protected $isReplaying = false;
 
     public function __construct(array $config)
     {
@@ -185,14 +185,14 @@ class Projectionist
         return true;
     }
 
-    public function isReplayingEvents(): bool
+    public function isReplaying(): bool
     {
-        return $this->isReplayingEvents;
+        return $this->isReplaying;
     }
 
-    public function replayEvents(Collection $projectors, int $afterStoredEventId = 0, callable $onEventReplayed = null)
+    public function replay(Collection $projectors, int $afterStoredEventId = 0, callable $onEventReplayed = null)
     {
-        $this->isReplayingEvents = true;
+        $this->isReplaying = true;
 
         event(new StartingEventReplay($projectors));
 
@@ -210,7 +210,7 @@ class Projectionist
                 });
             });
 
-        $this->isReplayingEvents = false;
+        $this->isReplaying = false;
 
         event(new FinishedEventReplay());
 

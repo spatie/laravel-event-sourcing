@@ -41,6 +41,6 @@ class ReplayCommand extends Command
             return;
         }
 
-        $this->replayEvents($projectors);
+        $this->replay($projectors);
     }
 }

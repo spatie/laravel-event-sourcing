@@ -10,7 +10,7 @@ use Spatie\EventProjector\Models\ProjectorStatus;
 
 trait ReplaysEvents
 {
-    public function replayEvents(Collection $projectors)
+    public function replay(Collection $projectors)
     {
         $afterEventId = $this->determineAfterEventId($projectors);
 
@@ -18,9 +18,9 @@ trait ReplaysEvents
             $this->warn('There are no events to replay.');
         }
 
-        $replayEventsCount = StoredEvent::after($afterEventId)->count();
+        $replayCount = StoredEvent::after($afterEventId)->count();
 
-        if ($replayEventsCount === 0) {
+        if ($replayCount === 0) {
             $this->warn('There are no events to replay');
 
             return;
@@ -36,7 +36,7 @@ trait ReplaysEvents
             $bar->advance();
         };
 
-        $this->Projectionist->replayEvents($projectors, $afterEventId, $onEventReplayed);
+        $this->Projectionist->replay($projectors, $afterEventId, $onEventReplayed);
 
         $bar->finish();
 
