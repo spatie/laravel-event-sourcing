@@ -3,39 +3,47 @@
 namespace Spatie\EventProjector\EventHandlers;
 
 use Exception;
+use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\Models\StoredEvent;
+use Illuminate\Support\Collection;
 
 trait HandlesEvents
 {
-    public function handlesEvents(): array
+    public function handles(): Collection
     {
-        return collect($this->handlesEvents ?? [])
-            ->mapWithKeys(function ($methodName, $eventClass) {
-                if (is_numeric($eventClass)) {
-                    $eventClass = $methodName;
-                    $methodName = 'on'.ucfirst(class_basename($eventClass));
-                }
-
-                return [$eventClass => $methodName];
-            })
-            ->toArray();
+        return $this->getEventHandlingMethods()->keys();
     }
 
-    public function handlesEventClassNames(): array
+    public function handle(StoredEvent $storedEvent)
     {
-        return array_keys($this->handlesEvents());
-    }
+        $eventClass = $storedEvent->event_class;
 
-    public function methodNameThatHandlesEvent(object $event): string
-    {
-        $handlesEvents = $this->handlesEvents();
+        $handlerMethod = $this->getEventHandlingMethods()->get($eventClass);
 
-        $eventClass = get_class($event);
+        if (! method_exists($this, $handlerMethod)) {
+            throw InvalidEventHandler::eventHandlingMethodDoesNotExist($this, $storedEvent->event, $handlerMethod);
+        }
 
-        return $handlesEvents[$eventClass] ?? '';
+        app()->call([$this, $handlerMethod], [
+            'event' => $storedEvent->event,
+            'storedEvent' => $storedEvent,
+        ]);
     }
 
     public function handleException(Exception $exception)
     {
         report($exception);
+    }
+
+    protected function getEventHandlingMethods(): Collection
+    {
+        return collect($this->handlesEvents ?? [])
+            ->mapWithKeys(function (string $handlerMethod, $eventClass) {
+                if (is_numeric($eventClass)) {
+                    return [$handlerMethod => 'on'.ucfirst(class_basename($handlerMethod))];
+                }
+
+                return [$eventClass => $handlerMethod];
+            });
     }
 }

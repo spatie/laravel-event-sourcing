@@ -16,18 +16,18 @@ class ListCommand extends Command
     protected $description = 'List all event projectors';
 
     /** @var \Spatie\EventProjector\Projectionist */
-    protected $Projectionist;
+    protected $projectionist;
 
-    public function __construct(Projectionist $Projectionist)
+    public function __construct(Projectionist $projectionist)
     {
         parent::__construct();
 
-        $this->Projectionist = $Projectionist;
+        $this->projectionist = $projectionist;
     }
 
     public function handle()
     {
-        $projectors = $this->Projectionist->getProjectors();
+        $projectors = $this->projectionist->getProjectors();
 
         if ($projectors->isEmpty()) {
             $this->warn('No projectors found. You can register projector like this : `Spatie\EventProjector\Facades\Projectionist::addProjector($projectorClassName)`.');

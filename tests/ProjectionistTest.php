@@ -4,6 +4,7 @@ namespace Spatie\EventProjector\Tests;
 
 use Mockery;
 use Exception;
+use ReflectionException;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Facades\Projectionist;
@@ -33,7 +34,7 @@ class ProjectionistTest extends TestCase
     /** @test */
     public function it_will_throw_an_exception_when_trying_to_add_a_non_existing_projector()
     {
-        $this->expectException(InvalidEventHandler::class);
+        $this->expectException(ReflectionException::class);
 
         Projectionist::addProjector('non-exising-class-name');
     }
@@ -41,7 +42,7 @@ class ProjectionistTest extends TestCase
     /** @test */
     public function it_will_thrown_an_exception_when_trying_to_add_a_non_existing_reactor()
     {
-        $this->expectException(InvalidEventHandler::class);
+        $this->expectException(ReflectionException::class);
 
         Projectionist::addReactor('non-exising-class-name');
     }
@@ -49,7 +50,7 @@ class ProjectionistTest extends TestCase
     /** @test */
     public function it_will_thrown_an_exception_when_an_event_handler_does_not_have_the_expected_event_handling_method()
     {
-        $this->expectException(InvalidEventHandler::class);
+        $this->expectException(ReflectionException::class);
 
         Projectionist::addProjector(InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod::class);
 

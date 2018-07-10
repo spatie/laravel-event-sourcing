@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\EventProjector\EventHandlers;
+namespace Spatie\EventProjector\EventSubscribers;
 
 use Exception;
 use Spatie\EventProjector\Models\StoredEvent;
 use Illuminate\Support\Collection;
 
-interface EventHandler
+interface EventSubscriber
 {
     public function handles(): Collection;
 
