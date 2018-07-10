@@ -17,6 +17,9 @@ use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
 class Projectionist
 {
+    /** @var array */
+    protected $config;
+
     /** @var \Spatie\EventProjector\EventHandlers\EventHandlerCollection */
     protected $projectors;
 
@@ -25,9 +28,6 @@ class Projectionist
 
     /** @var bool */
     protected $isReplayingEvents = false;
-
-    /** @var int */
-    protected $config;
 
     public function __construct(array $config)
     {
@@ -115,11 +115,15 @@ class Projectionist
 
     public function handle(StoredEvent $storedEvent)
     {
-        $projectors = $this->projectors->forEvent($storedEvent);
-        $this->applyStoredEventToProjectors($storedEvent, $projectors);
+        $this->applyStoredEventToProjectors(
+            $storedEvent,
+            $this->projectors->forEvent($storedEvent)
+        );
 
-        $reactors = $this->reactors->forEvent($storedEvent);
-        $this->applyStoredEventToReactors($storedEvent, $reactors);
+        $this->applyStoredEventToReactors(
+            $storedEvent,
+            $this->reactors->forEvent($storedEvent)
+        );
     }
 
     public function handleImmediately(StoredEvent $storedEvent)
