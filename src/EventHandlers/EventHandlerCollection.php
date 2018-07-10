@@ -50,11 +50,4 @@ class EventHandlerCollection
                 return app()->call([$eventHandler, $method]);
             });
     }
-
-    protected function alreadyAdded(EventHandler $eventHandler): bool
-    {
-        $eventHandlerClassName = get_class($eventHandler);
-
-        return $this->eventHandlers->has($eventHandlerClassName);
-    }
 }
