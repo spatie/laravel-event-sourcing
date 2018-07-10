@@ -4,16 +4,15 @@ namespace Spatie\EventProjector;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\EventHandlers\EventHandler;
-use Spatie\EventProjector\EventHandlers\EventHandlerCollection;
-use Spatie\EventProjector\Events\EventHandlerFailedHandlingEvent;
-use Spatie\EventProjector\Events\FinishedEventReplay;
-use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
-use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
-use Illuminate\Contracts\Container\Container;
+use Spatie\EventProjector\EventHandlers\EventHandler;
+use Spatie\EventProjector\Events\FinishedEventReplay;
+use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\EventHandlers\EventHandlerCollection;
+use Spatie\EventProjector\Events\EventHandlerFailedHandlingEvent;
+use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
 
 class Projectionist
 {
@@ -55,7 +54,7 @@ class Projectionist
 
     public function addProjectors(array $projectors): Projectionist
     {
-        foreach($projectors as $projector) {
+        foreach ($projectors as $projector) {
             $this->addProjector($projector);
         }
 

@@ -3,8 +3,8 @@
 namespace Spatie\EventProjector\EventSubscribers;
 
 use Exception;
-use Spatie\EventProjector\Models\StoredEvent;
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\Models\StoredEvent;
 
 interface EventSubscriber
 {
