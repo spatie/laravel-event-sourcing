@@ -36,7 +36,7 @@ class EventHandlerCollection
     public function forEvent(StoredEvent $storedEvent): Collection
     {
         return $this->eventHandlers->filter(function (EventHandler $eventHandler) use ($storedEvent) {
-            return $eventHandler->handlesEvents()->has($storedEvent->event_class);
+            return $eventHandler->handles()->contains($storedEvent->event_class);
         });
     }
 

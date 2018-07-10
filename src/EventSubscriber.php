@@ -5,24 +5,24 @@ namespace Spatie\EventProjector;
 class EventSubscriber
 {
     /** @var \Spatie\EventProjector\Projectionist */
-    protected $Projectionist;
+    protected $projectionist;
 
     /** @var array */
     protected $config;
 
-    public function __construct(Projectionist $Projectionist, array $config)
+    public function __construct(Projectionist $projectionist, array $config)
     {
-        $this->Projectionist = $Projectionist;
+        $this->projectionist = $projectionist;
 
         $this->config = $config;
     }
 
     public function subscribe($events)
     {
-        $events->listen('*', static::class.'@handleEvent');
+        $events->listen('*', static::class.'@handle');
     }
 
-    public function handleEvent(string $eventName, $payload)
+    public function handle(string $eventName, $payload)
     {
         if (! $this->shouldBeStored($eventName)) {
             return;
@@ -33,7 +33,7 @@ class EventSubscriber
 
     public function storeEvent(ShouldBeStored $event)
     {
-        $this->Projectionist->storeEvent($event);
+        $this->projectionist->storeEvent($event);
     }
 
     protected function shouldBeStored($event): bool

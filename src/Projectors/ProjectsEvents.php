@@ -33,7 +33,7 @@ trait ProjectsEvents
 
             if ($streams->isEmpty()) {
                 $lastStoredEvent = StoredEvent::query()
-                    ->whereIn('event_class', $this->handlesEvents()->keys())
+                    ->whereIn('event_class', $this->handles())
                     ->orderBy('id', 'desc')
                     ->first();
 
@@ -53,7 +53,7 @@ trait ProjectsEvents
                 $whereJsonClause = str_replace('.', '->', $streamName);
 
                 $lastStoredEvent = StoredEvent::query()
-                    ->whereIn('event_class', $this->handlesEvents()->keys())
+                    ->whereIn('event_class', $this->handles())
                     ->where("event_properties->{$whereJsonClause}", $streamValue)
                     ->orderBy('id', 'desc')
                     ->first();
@@ -90,7 +90,7 @@ trait ProjectsEvents
 
         if ($streams->isEmpty()) {
             $lastStoredEvent = StoredEvent::query()
-                ->whereIn('event_class', $this->handlesEvents()->keys())
+                ->whereIn('event_class', $this->handles())
                 ->where('id', '<', $storedEvent->id)
                 ->orderBy('id', 'desc')
                 ->first();
@@ -113,7 +113,7 @@ trait ProjectsEvents
             $whereJsonClause = str_replace('.', '->', $streamName);
 
             $lastStoredEvent = StoredEvent::query()
-                ->whereIn('event_class', $this->handlesEvents()->keys())
+                ->whereIn('event_class', $this->handles())
                 ->where('id', '<', $storedEvent->id)
                 ->where("event_properties->{$whereJsonClause}", $streamValue)
                 ->orderBy('id', 'desc')

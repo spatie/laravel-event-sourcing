@@ -9,28 +9,16 @@ use Illuminate\Support\Collection;
 
 trait HandlesEvents
 {
-    public function handlesEvents(): Collection
+    public function handles(): Collection
     {
-        return collect($this->handlesEvents ?? [])
-            ->mapWithKeys(function (string $handlerMethod, $eventClass) {
-                if (is_numeric($eventClass)) {
-                    return [$handlerMethod => 'on'.ucfirst(class_basename($handlerMethod))];
-                }
-
-                return [$eventClass => $handlerMethod];
-            });
+        return $this->getEventHandlers()->keys();
     }
 
-    public function handleEvent(StoredEvent $storedEvent)
+    public function handle(StoredEvent $storedEvent)
     {
         $eventClass = $storedEvent->event_class;
-        $handlesEvents = $this->handlesEvents();
 
-        if (! $handlesEvents->has($eventClass)) {
-            return;
-        }
-
-        $handlerMethod = $handlesEvents[$eventClass];
+        $handlerMethod = $this->getEventHandlers()->get($eventClass);
 
         if (! method_exists($this, $handlerMethod)) {
             throw InvalidEventHandler::eventHandlingMethodDoesNotExist($this, $storedEvent->event, $handlerMethod);
@@ -45,5 +33,17 @@ trait HandlesEvents
     public function handleException(Exception $exception)
     {
         report($exception);
+    }
+
+    protected function getEventHandlers(): Collection
+    {
+        return collect($this->handlesEvents ?? [])
+            ->mapWithKeys(function (string $handlerMethod, $eventClass) {
+                if (is_numeric($eventClass)) {
+                    return [$handlerMethod => 'on'.ucfirst(class_basename($handlerMethod))];
+                }
+
+                return [$eventClass => $handlerMethod];
+            });
     }
 }
