@@ -11,14 +11,14 @@ trait HandlesEvents
 {
     public function handles(): Collection
     {
-        return $this->getEventHandlers()->keys();
+        return $this->getEventHandlingMethods()->keys();
     }
 
     public function handle(StoredEvent $storedEvent)
     {
         $eventClass = $storedEvent->event_class;
 
-        $handlerMethod = $this->getEventHandlers()->get($eventClass);
+        $handlerMethod = $this->getEventHandlingMethods()->get($eventClass);
 
         if (! method_exists($this, $handlerMethod)) {
             throw InvalidEventHandler::eventHandlingMethodDoesNotExist($this, $storedEvent->event, $handlerMethod);
@@ -35,7 +35,7 @@ trait HandlesEvents
         report($exception);
     }
 
-    protected function getEventHandlers(): Collection
+    protected function getEventHandlingMethods(): Collection
     {
         return collect($this->handlesEvents ?? [])
             ->mapWithKeys(function (string $handlerMethod, $eventClass) {
