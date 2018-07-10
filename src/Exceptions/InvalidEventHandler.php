@@ -19,4 +19,16 @@ class InvalidEventHandler extends Exception
     {
         return new static("The event handler class `{$eventHandlerClass}` does not exist.");
     }
+
+    public static function notAProjector(object $object)
+    {
+        return new static('`'.get_class($object).'` must implement Spatie\EventProcjetor\Projectors\Projector');
+    }
+
+    public static function notAnEventHandler(object $object)
+    {
+        return new static('`'.get_class($object).'` must implement Spatie\EventProjector\EventHandlers\EventHandler');
+    }
+
+
 }

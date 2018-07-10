@@ -4,21 +4,23 @@ namespace Spatie\EventProjector;
 
 use Exception;
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\EventHandlers\EventHandler;
+use Spatie\EventProjector\EventHandlers\EventHandlerCollection;
+use Spatie\EventProjector\Events\EventHandlerFailedHandlingEvent;
+use Spatie\EventProjector\Events\FinishedEventReplay;
+use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
+use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\EventHandlers\EventHandler;
-use Spatie\EventProjector\Events\FinishedEventReplay;
-use Spatie\EventProjector\Events\StartingEventReplay;
+use Illuminate\Contracts\Container\Container;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
-use Spatie\EventProjector\Events\EventHandlerFailedHandlingEvent;
-use Spatie\EventProjector\Events\ProjectorDidNotHandlePriorEvents;
 
 class Projectionist
 {
-    /** @var \Illuminate\Support\Collection */
+    /** @var \Spatie\EventProjector\EventHandlers\EventHandlerCollection */
     protected $projectors;
 
-    /** @var \Illuminate\Support\Collection */
+    /** @var \Spatie\EventProjector\EventHandlers\EventHandlerCollection */
     protected $reactors;
 
     /** @var bool */
@@ -29,79 +31,76 @@ class Projectionist
 
     public function __construct(array $config)
     {
-        $this->projectors = collect();
+        $this->projectors = new EventHandlerCollection();
 
-        $this->reactors = collect();
+        $this->reactors = new EventHandlerCollection();
 
         $this->config = $config;
     }
 
-    public function isReplayingEvents(): bool
-    {
-        return $this->isReplayingEvents;
-    }
-
     public function addProjector($projector): Projectionist
     {
-        $this->guardAgainstInvalidEventHandler($projector);
-
-        if ($this->alreadyAdded('projector', $projector)) {
-            return $this;
+        if (is_string($projector)) {
+            $projector = app($projector);
         }
 
-        $this->projectors->push($projector);
+        if (! $projector instanceof Projector) {
+            throw InvalidEventHandler::notAProjector($projector);
+        }
+
+        $this->projectors->add($projector);
 
         return $this;
     }
 
     public function addProjectors(array $projectors): Projectionist
     {
-        collect($projectors)->each(function ($projector) {
+        foreach($projectors as $projector) {
             $this->addProjector($projector);
-        });
+        }
 
         return $this;
     }
 
     public function getProjectors(): Collection
     {
-        return $this->instantiate($this->projectors);
+        return $this->projectors->all();
     }
 
     public function getProjector(string $name): ?Projector
     {
-        return $this
-            ->instantiate($this->projectors)
-            ->first(function (Projector $projector) use ($name) {
-                return $projector->getName() === $name;
-            });
+        return $this->projectors->all()->first(function (Projector $projector) use ($name) {
+            return $projector->getName() === $name;
+        });
     }
 
     public function addReactor($reactor): Projectionist
     {
-        $this->guardAgainstInvalidEventHandler($reactor);
-
-        if ($this->alreadyAdded('reactor', $reactor)) {
-            return $this;
+        if (is_string($reactor)) {
+            $reactor = app($reactor);
         }
 
-        $this->reactors->push($reactor);
+        if (! $reactor instanceof EventHandler) {
+            throw InvalidEventHandler::notAnEventHandler($reactor);
+        }
+
+        $this->reactors->add($reactor);
 
         return $this;
     }
 
     public function addReactors(array $reactors): Projectionist
     {
-        collect($reactors)->each(function ($reactor) {
+        foreach ($reactors as $reactor) {
             $this->addReactor($reactor);
-        });
+        }
 
         return $this;
     }
 
     public function getReactors(): Collection
     {
-        return $this->reactors;
+        return $this->reactors->all();
     }
 
     public function storeEvent(ShouldBeStored $event)
@@ -110,68 +109,58 @@ class Projectionist
 
         $this->handleImmediately($storedEvent);
 
-        dispatch(new HandleStoredEventJob($storedEvent))->onQueue($this->config['queue']);
+        dispatch(new HandleStoredEventJob($storedEvent))
+            ->onQueue($this->config['queue']);
     }
 
     public function handle(StoredEvent $storedEvent)
     {
-        $this
-            ->callEventHandlers($this->projectors, $storedEvent)
-            ->callEventHandlers($this->reactors, $storedEvent);
+        $projectors = $this->projectors->forEvent($storedEvent);
+        $this->applyStoredEventToProjectors($storedEvent, $projectors);
+
+        $reactors = $this->reactors->forEvent($storedEvent);
+        $this->applyStoredEventToReactors($storedEvent, $reactors);
     }
 
     public function handleImmediately(StoredEvent $storedEvent)
     {
-        $projectors = $this->instantiate($this->projectors);
-
-        $projectors = $projectors->filter->shouldBeCalledImmediately();
-
-        $this->callEventHandlers($projectors, $storedEvent);
-    }
-
-    protected function callEventHandlers(Collection $eventHandlers, StoredEvent $storedEvent): Projectionist
-    {
-        $eventHandlers
-            ->pipe(function (Collection $eventHandlers) {
-                return $this->instantiate($eventHandlers);
-            })
-            ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
-                return $eventHandler->handlesEvents()->has($storedEvent->event_class);
-            })
-            ->filter(function (EventHandler $eventHandler) use ($storedEvent) {
-                if (! $eventHandler instanceof Projector) {
-                    return true;
-                }
-
-                if ($eventHandler->hasAlreadyReceivedEvent($storedEvent)) {
-                    return false;
-                }
-
-                if (! $eventHandler->hasReceivedAllPriorEvents($storedEvent)) {
-                    event(new ProjectorDidNotHandlePriorEvents($eventHandler, $storedEvent));
-
-                    $eventHandler->markAsNotUpToDate($storedEvent);
-
-                    return false;
-                }
-
-                return true;
-            })
-            ->each(function (EventHandler $eventHandler) use ($storedEvent) {
-                $eventWasHandledSuccessfully = $this->callEventHandler($eventHandler, $storedEvent);
-
-                if (! $eventHandler instanceof Projector) {
-                    return;
-                }
-
-                if (! $eventWasHandledSuccessfully) {
-                    return;
-                }
-
-                $eventHandler->rememberReceivedEvent($storedEvent);
+        $projectors = $this->projectors
+            ->forEvent($storedEvent)
+            ->filter(function (Projector $projector) {
+                return $projector->shouldBeCalledImmediately();
             });
 
-        return $this;
+        $this->applyStoredEventToProjectors($storedEvent, $projectors);
+    }
+
+    protected function applyStoredEventToProjectors(StoredEvent $storedEvent, Collection $projectors)
+    {
+        foreach ($projectors as $projector) {
+            if ($projector->hasAlreadyReceivedEvent($storedEvent)) {
+                continue;
+            }
+
+            if (! $projector->hasReceivedAllPriorEvents($storedEvent)) {
+                event(new ProjectorDidNotHandlePriorEvents($projector, $storedEvent));
+
+                $projector->markAsNotUpToDate($storedEvent);
+
+                continue;
+            }
+
+            if (! $this->callEventHandler($projector, $storedEvent)) {
+                continue;
+            }
+
+            $projector->rememberReceivedEvent($storedEvent);
+        }
+    }
+
+    protected function applyStoredEventToReactors(StoredEvent $storedEvent, Collection $reactors)
+    {
+        foreach ($reactors as $reactor) {
+            $this->callEventHandler($reactor, $storedEvent);
+        }
     }
 
     protected function callEventHandler(EventHandler $eventHandler, StoredEvent $storedEvent): bool
@@ -193,21 +182,24 @@ class Projectionist
         return true;
     }
 
+    public function isReplayingEvents(): bool
+    {
+        return $this->isReplayingEvents;
+    }
+
     public function replayEvents(Collection $projectors, int $afterStoredEventId = 0, callable $onEventReplayed = null)
     {
         $this->isReplayingEvents = true;
 
         event(new StartingEventReplay($projectors));
 
-        $projectors = $this->instantiate($projectors);
-
-        $this->callMethod($projectors, 'onStartingEventReplay');
+        $this->projectors->call('onStartingEventReplay');
 
         StoredEvent::query()
             ->after($afterStoredEventId ?? 0)
             ->chunk($this->config['replay_chunk_size'], function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
                 $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
-                    $this->callEventHandlers($projectors, $storedEvent);
+                    $this->applyStoredEventToProjectors($storedEvent, $this->projectors->all());
 
                     if ($onEventReplayed) {
                         $onEventReplayed($storedEvent);
@@ -219,69 +211,6 @@ class Projectionist
 
         event(new FinishedEventReplay());
 
-        $this->callMethod($projectors, 'onFinishedEventReplay');
-    }
-
-    protected function guardAgainstInvalidEventHandler($eventHandler)
-    {
-        if (! is_string($eventHandler)) {
-            return;
-        }
-
-        if (! class_exists($eventHandler)) {
-            throw InvalidEventHandler::doesNotExist($eventHandler);
-        }
-    }
-
-    protected function instantiate(Collection $eventHandlers)
-    {
-        return $eventHandlers->map(function ($eventHandler) {
-            if (is_string($eventHandler)) {
-                $eventHandler = app($eventHandler);
-            }
-
-            return $eventHandler;
-        });
-    }
-
-    protected function callMethod(Collection $eventHandlers, string $method): Projectionist
-    {
-        $eventHandlers
-            ->filter(function (EventHandler $eventHandler) use ($method) {
-                return method_exists($eventHandler, $method);
-            })
-            ->each(function (EventHandler $eventHandler) use ($method) {
-                return app()->call([$eventHandler, $method]);
-            });
-
-        return $this;
-    }
-
-    protected function alreadyAdded(string $type, $eventHandler)
-    {
-        $eventHandlerClassName = is_string($eventHandler)
-            ? $eventHandler
-            : get_class($eventHandler);
-
-        $variableName = "{$type}s";
-
-        $currentEventHandlers = $this->$variableName->toArray();
-
-        if (in_array($eventHandlerClassName, $currentEventHandlers)) {
-            return $this;
-        }
-    }
-
-    protected function getClassNames(Collection $eventHandlers): array
-    {
-        return $eventHandlers
-            ->map(function ($eventHandler) {
-                if (is_string($eventHandler)) {
-                    return $eventHandler;
-                }
-
-                return get_class($eventHandler);
-            })
-            ->toArray();
+        $this->projectors->call('onFinishedEventReplay');
     }
 }
