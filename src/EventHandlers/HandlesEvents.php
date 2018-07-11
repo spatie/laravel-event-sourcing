@@ -9,9 +9,9 @@ use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
 trait HandlesEvents
 {
-    public function handles(): Collection
+    public function handles(): array
     {
-        return $this->getEventHandlingMethods()->keys();
+        return $this->getEventHandlingMethods()->keys()->toArray();
     }
 
     public function handle(StoredEvent $storedEvent)

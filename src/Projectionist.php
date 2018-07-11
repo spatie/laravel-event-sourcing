@@ -75,14 +75,6 @@ class Projectionist
 
     public function addReactor($reactor): Projectionist
     {
-        if (is_string($reactor)) {
-            $reactor = app($reactor);
-        }
-
-        if (! $reactor instanceof EventHandler) {
-            throw InvalidEventHandler::notAnEventHandler($reactor);
-        }
-
         $this->reactors->add($reactor);
 
         return $this;
@@ -192,17 +184,22 @@ class Projectionist
 
     public function replayEvents(Collection $projectors, int $afterStoredEventId = 0, callable $onEventReplayed = null)
     {
+        $projectors = new EventHandlerCollection($projectors);
+
         $this->isReplayingEvents = true;
 
-        event(new StartingEventReplay($projectors));
+        event(new StartingEventReplay($projectors->all()));
 
-        $this->projectors->call('onStartingEventReplay');
+        $projectors->call('onStartingEventReplay');
 
         StoredEvent::query()
             ->after($afterStoredEventId ?? 0)
             ->chunk($this->config['replay_chunk_size'], function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
                 $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
-                    $this->applyStoredEventToProjectors($storedEvent, $this->projectors->all());
+                    $this->applyStoredEventToProjectors(
+                        $storedEvent,
+                        $projectors->forEvent($storedEvent)
+                    );
 
                     if ($onEventReplayed) {
                         $onEventReplayed($storedEvent);
@@ -214,6 +211,6 @@ class Projectionist
 
         event(new FinishedEventReplay());
 
-        $this->projectors->call('onFinishedEventReplay');
+        $projectors->call('onFinishedEventReplay');
     }
 }
