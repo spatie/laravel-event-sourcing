@@ -16,6 +16,7 @@ use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventProjector\Tests\TestClasses\Events\DoNotStoreThisEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatInvokesAnObject;
 
 class EventSubscriberTest extends TestCase
 {
