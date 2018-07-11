@@ -70,6 +70,16 @@ class EventSubscriberTest extends TestCase
     }
 
     /** @test */
+    public function it_will_call_registered_projectors_that_invokes_an_object()
+    {
+        Projectionist::addProjector(ProjectorThatInvokesAnObject::class);
+
+        event(new MoneyAdded($this->account, 1234));
+        $this->account->refresh();
+        $this->assertEquals(1234, $this->account->amount);
+    }
+
+    /** @test */
     public function it_will_call_registered_reactors()
     {
         Projectionist::addProjector(BalanceProjector::class);
