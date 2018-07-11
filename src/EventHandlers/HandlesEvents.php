@@ -4,8 +4,8 @@ namespace Spatie\EventProjector\EventHandlers;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
 trait HandlesEvents
 {
@@ -29,7 +29,7 @@ trait HandlesEvents
             return app()->call([app($handlerClassOrMethod), '__invoke'], $parameters);
         }
 
-        if (!method_exists($this, $handlerClassOrMethod)) {
+        if (! method_exists($this, $handlerClassOrMethod)) {
             throw InvalidEventHandler::eventHandlingMethodDoesNotExist($this, $storedEvent->event, $handlerClassOrMethod);
         }
 
