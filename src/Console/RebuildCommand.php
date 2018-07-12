@@ -37,7 +37,7 @@ class RebuildCommand extends Command
 
         $projectors->each->reset();
 
-        $this->replayEvents($projectors);
+        $this->replay($projectors);
 
         $this->comment('Projector(s) rebuild!');
     }

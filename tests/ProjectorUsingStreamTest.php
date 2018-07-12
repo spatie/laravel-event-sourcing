@@ -84,7 +84,7 @@ class ProjectorUsingStreamTest extends TestCase
         event(new MoneyAdded($this->account, 1000));
         $this->assertEquals(0, $this->account->refresh()->amount);
 
-        Projectionist::replayEvents(collect($projectorClass));
+        Projectionist::replay(collect($projectorClass));
 
         // all events of first account are now applied
         $this->assertEquals(2000, $otherAccount->refresh()->amount);
