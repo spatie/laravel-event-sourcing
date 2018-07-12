@@ -11,7 +11,8 @@ class RebuildCommand extends Command
 {
     use ReplaysEvents, SelectsProjectors;
 
-    protected $signature = 'event-projector:rebuild {projector?*}';
+    protected $signature = 'event-projector:rebuild {projector?*}
+                            {--force : Force the operation to run when in production}';
 
     protected $description = 'Rebuild a projector';
 

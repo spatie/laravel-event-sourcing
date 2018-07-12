@@ -10,7 +10,8 @@ class ResetCommand extends Command
 {
     use SelectsProjectors;
 
-    protected $signature = 'event-projector:reset {projector*}';
+    protected $signature = 'event-projector:reset {projector*}
+                            {--force : Force the operation to run when in production}';
 
     protected $description = 'Reset a projector';
 

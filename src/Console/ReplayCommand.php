@@ -12,7 +12,8 @@ class ReplayCommand extends Command
 {
     use ReplaysEvents, SelectsProjectors;
 
-    protected $signature = 'event-projector:replay {projector?*}';
+    protected $signature = 'event-projector:replay {projector?*}
+                            {--force : Force the operation to run when in production}';
 
     protected $description = 'Replay stored events';
 
