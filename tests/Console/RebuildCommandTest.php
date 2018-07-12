@@ -38,6 +38,19 @@ class RebuildCommandTest extends TestCase
     }
 
     /** @test */
+    public function it_allows_leading_slashes()
+    {
+        Projectionist::addProjector(ResettableProjector::class);
+
+        $this->artisan('event-projector:rebuild', [
+            'projector' => ['\\' . ResettableProjector::class],
+        ]);
+
+        $this->assertSeeInConsoleOutput('Projector(s) rebuild!');
+
+    }
+
+    /** @test */
     public function a_projector_status_will_not_be_created_after_a_projector_is_rebuild_without_any_events()
     {
         Projectionist::addProjector(ResettableProjector::class);

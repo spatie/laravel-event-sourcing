@@ -77,7 +77,7 @@ class ListCommand extends Command
                 return [
                     $projector->getName(),
                     $this->getLastProcessedEventId($projector),
-                    optional($this->getLastEventProcessedAt($projector))->format('Y-m-d H:i:s') ?? '',
+                    optional($this->getLastEventProcessedAt($projector))->format('Y-m-d H:i:s') ?? '/',
                 ];
             })
             ->toArray();

@@ -11,7 +11,7 @@ trait SelectsProjectors
     public function selectsProjectors(array $projectorClassNames, string $allProjectorsWarning): ?Collection
     {
         if (count($projectorClassNames ?? []) === 0) {
-            if (! $confirmed = $this->confirm($allProjectorsWarning)) {
+            if (!$confirmed = $this->confirm($allProjectorsWarning)) {
                 return null;
             }
 
@@ -19,6 +19,9 @@ trait SelectsProjectors
         }
 
         return collect($projectorClassNames)
+            ->map(function (string $projectorName) {
+                return ltrim($projectorName, '\\');
+            })
             ->map(function (string $projectorName) {
                 if (! $projector = $this->projectionist->getProjector($projectorName)) {
                     throw new Exception("Projector {$projectorName} not found. Did you register it?");
