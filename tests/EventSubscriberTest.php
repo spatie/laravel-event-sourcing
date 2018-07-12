@@ -16,6 +16,7 @@ use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventProjector\Tests\TestClasses\Events\DoNotStoreThisEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatInvokesAnObject;
 
 class EventSubscriberTest extends TestCase
 {
@@ -67,6 +68,16 @@ class EventSubscriberTest extends TestCase
         event(new MoneySubtracted($this->account, 34));
         $this->account->refresh();
         $this->assertEquals(1200, $this->account->amount);
+    }
+
+    /** @test */
+    public function it_will_call_registered_projectors_that_invokes_an_object()
+    {
+        Projectionist::addProjector(ProjectorThatInvokesAnObject::class);
+
+        event(new MoneyAdded($this->account, 1234));
+        $this->account->refresh();
+        $this->assertEquals(1234, $this->account->amount);
     }
 
     /** @test */

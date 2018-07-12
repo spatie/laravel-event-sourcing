@@ -8,7 +8,7 @@ use Spatie\EventProjector\Models\StoredEvent;
 
 interface EventHandler
 {
-    public function handles(): Collection;
+    public function handles(): array;
 
     public function handle(StoredEvent $event);
 
