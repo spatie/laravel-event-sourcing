@@ -20,7 +20,7 @@ trait SelectsProjectors
 
         return collect($projectorClassNames)
             ->map(function (string $projectorName) {
-                if (! $projector = $this->Projectionist->getProjector($projectorName)) {
+                if (! $projector = $this->projectionist->getProjector($projectorName)) {
                     throw new Exception("Projector {$projectorName} not found. Did you register it?");
                 }
 

@@ -16,13 +16,13 @@ class RebuildCommand extends Command
     protected $description = 'Rebuild a projector';
 
     /** @var \Spatie\EventProjector\Projectionist */
-    protected $Projectionist;
+    protected $projectionist;
 
-    public function __construct(Projectionist $Projectionist)
+    public function __construct(Projectionist $projectionist)
     {
         parent::__construct();
 
-        $this->Projectionist = $Projectionist;
+        $this->projectionist = $projectionist;
     }
 
     public function handle()

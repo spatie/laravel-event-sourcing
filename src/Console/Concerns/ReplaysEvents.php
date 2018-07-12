@@ -36,7 +36,7 @@ trait ReplaysEvents
             $bar->advance();
         };
 
-        $this->Projectionist->replay($projectors, $afterEventId, $onEventReplayed);
+        $this->projectionist->replay($projectors, $afterEventId, $onEventReplayed);
 
         $bar->finish();
 

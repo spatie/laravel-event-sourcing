@@ -17,16 +17,16 @@ class ReplayCommand extends Command
     protected $description = 'Replay stored events';
 
     /** @var \Spatie\EventProjector\Projectionist */
-    protected $Projectionist;
+    protected $projectionist;
 
     /** @var string */
     protected $storedEventModelClass;
 
-    public function __construct(Projectionist $Projectionist, string $storedEventModelClass)
+    public function __construct(Projectionist $projectionist, string $storedEventModelClass)
     {
         parent::__construct();
 
-        $this->Projectionist = $Projectionist;
+        $this->projectionist = $projectionist;
 
         $this->storedEventModelClass = $storedEventModelClass;
     }

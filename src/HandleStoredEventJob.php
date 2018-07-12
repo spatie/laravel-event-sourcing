@@ -21,8 +21,8 @@ class HandleStoredEventJob implements ShouldQueue
         $this->storedEvent = $storedEvent;
     }
 
-    public function handle(Projectionist $Projectionist)
+    public function handle(Projectionist $projectionist)
     {
-        $Projectionist->handle($this->storedEvent);
+        $projectionist->handle($this->storedEvent);
     }
 }
