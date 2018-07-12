@@ -2,9 +2,11 @@
 
 namespace Spatie\EventProjector\Models;
 
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
@@ -40,10 +42,17 @@ class StoredEvent extends Model
 
     public function getEventAttribute(): ShouldBeStored
     {
-        return app(EventSerializer::class)->deserialize(
-           $this->event_class,
-           $this->getOriginal('event_properties')
-       );
+        try {
+            $event = app(EventSerializer::class)->deserialize(
+                $this->event_class,
+                $this->getOriginal('event_properties')
+            );
+        } catch (Exception $exception) {
+            throw InvalidStoredEvent::couldNotUnserializeEvent($this, $exception);
+        }
+
+
+        return $event;
     }
 
     public function scopeAfter(Builder $query, int $storedEventId)
