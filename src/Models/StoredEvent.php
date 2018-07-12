@@ -6,9 +6,9 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
+use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class StoredEvent extends Model
@@ -50,7 +50,6 @@ class StoredEvent extends Model
         } catch (Exception $exception) {
             throw InvalidStoredEvent::couldNotUnserializeEvent($this, $exception);
         }
-
 
         return $event;
     }

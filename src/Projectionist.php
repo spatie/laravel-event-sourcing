@@ -184,7 +184,6 @@ class Projectionist
 
     public function replay(Collection $projectors, int $afterStoredEventId = 0, callable $onEventReplayed = null)
     {
-
         $this->isReplaying = true;
 
         $projectors = new EventHandlerCollection($projectors);

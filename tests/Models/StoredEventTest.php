@@ -2,10 +2,10 @@
 
 namespace Spatie\EventProjector\Tests\Models;
 
-use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
+use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
@@ -40,7 +40,7 @@ class StoredEventTest extends TestCase
         // sneakily change the stored event class
         StoredEvent::first()->update(['event_class' => 'NonExistingClass']);
 
-       $this->expectException(InvalidStoredEvent::class);
+        $this->expectException(InvalidStoredEvent::class);
 
         StoredEvent::first()->event;
     }
@@ -51,6 +51,4 @@ class StoredEventTest extends TestCase
             event(new $className($this->account, 1234));
         }
     }
-
-
 }
