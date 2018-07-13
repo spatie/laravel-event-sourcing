@@ -11,7 +11,7 @@ trait SelectsProjectors
     public function selectsProjectors(array $projectorClassNames, string $allProjectorsWarning): ?Collection
     {
         if (count($projectorClassNames ?? []) === 0) {
-            if (!$confirmed = $this->confirm($allProjectorsWarning)) {
+            if (! $confirmed = $this->confirm($allProjectorsWarning)) {
                 return null;
             }
 

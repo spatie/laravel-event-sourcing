@@ -43,11 +43,10 @@ class RebuildCommandTest extends TestCase
         Projectionist::addProjector(ResettableProjector::class);
 
         $this->artisan('event-projector:rebuild', [
-            'projector' => ['\\' . ResettableProjector::class],
+            'projector' => ['\\'.ResettableProjector::class],
         ]);
 
         $this->assertSeeInConsoleOutput('Projector(s) rebuild!');
-
     }
 
     /** @test */
