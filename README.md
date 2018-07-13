@@ -1,5 +1,3 @@
-**THIS PACKAGE IS STILL IN DEVELOPMENT**
-
 # Event sourcing for Artisans 📽
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-event-projector.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-projector)
