@@ -2,8 +2,8 @@
 
 namespace DummyNamespace;
 
-use Spatie\EventProjector\EventHandler\EventHandler;
-use Spatie\EventProjector\EventHandler\HandlesEvents;
+use Spatie\EventProjector\EventHandlers\EventHandler;
+use Spatie\EventProjector\EventHandlers\HandlesEvents;
 
 class DummyClass implements EventHandler
 {
