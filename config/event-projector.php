@@ -22,10 +22,9 @@ return [
 
     /*
      * A queue is used to guarantee that all events get passed to the projectors in
-     * the right order. Here you can set of the name of the queue. In production
-     * environments you must use a real queue and not the sync driver.
+     * the right order. Here you can set of the name of the queue.
      */
-    'queue' => env('EVENT_PROJECTOR_QUEUE_DRIVER', 'sync'),
+    'queue' => env('EVENT_PROJECTOR_QUEUE_NAME', null),
 
     /*
      * When a projector or reactor throws an exception the event projectionist can catch it
