@@ -2,6 +2,11 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+
+## 1.0.2 - 2018-07-29
+
+- fix name of used env variable that determines the queue name
+
 ## 1.0.1 - 2018-07-28
 
 - fix reactor stub
