@@ -26,6 +26,9 @@ class Projectionist
     protected $reactors;
 
     /** @var bool */
+    protected $isProjecting = false;
+
+    /** @var bool */
     protected $isReplaying = false;
 
     public function __construct(array $config)
@@ -128,8 +131,15 @@ class Projectionist
         $this->applyStoredEventToProjectors($storedEvent, $projectors);
     }
 
+    public function isProjecting(): bool
+    {
+        return $this->isProjecting;
+    }
+
     protected function applyStoredEventToProjectors(StoredEvent $storedEvent, Collection $projectors)
     {
+        $this->isProjecting = true;
+
         foreach ($projectors as $projector) {
             if ($projector->hasAlreadyReceivedEvent($storedEvent)) {
                 continue;
@@ -149,6 +159,8 @@ class Projectionist
 
             $projector->rememberReceivedEvent($storedEvent);
         }
+
+        $this->isProjecting = false;
     }
 
     protected function applyStoredEventToReactors(StoredEvent $storedEvent, Collection $reactors)
