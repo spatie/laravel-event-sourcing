@@ -16,13 +16,28 @@ class HandleStoredEventJob implements ShouldQueue
     /** @var \Spatie\EventProjector\Models\StoredEvent */
     public $storedEvent;
 
-    public function __construct(StoredEvent $storedEvent)
+    /** @var array */
+    public $tags;
+
+    public function __construct(StoredEvent $storedEvent, array $tags)
     {
         $this->storedEvent = $storedEvent;
+        $this->tags = $tags;
     }
 
     public function handle(Projectionist $projectionist)
     {
         $projectionist->handle($this->storedEvent);
+    }
+
+    public function tags(): array
+    {
+        if (empty($this->tags)) {
+            return [
+                $this->storedEvent['event_class'],
+            ];
+        }
+
+        return $this->tags;
     }
 }
