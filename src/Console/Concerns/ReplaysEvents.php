@@ -4,7 +4,6 @@ namespace Spatie\EventProjector\Console\Concerns;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Models\ProjectorStatus;
 
@@ -48,7 +47,7 @@ trait ReplaysEvents
     {
         $projectorsWithoutStatus = collect($projectors)
             ->filter(function (Projector $projector) {
-                return !ProjectorStatus::query()
+                return ! ProjectorStatus::query()
                     ->where('projector_name', $projector->getName())
                     ->exists();
             });
