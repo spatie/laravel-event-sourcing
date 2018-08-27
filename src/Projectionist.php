@@ -96,7 +96,7 @@ class Projectionist
 
     public function storeEvent(ShouldBeStored $event)
     {
-        $storedEvent = $this->config['stored_event_model']::createForEvent($event);
+        $storedEvent = $this->getStoredEventClass()::createForEvent($event);
 
         $this->handleImmediately($storedEvent);
 
@@ -192,7 +192,7 @@ class Projectionist
 
         $projectors->call('onStartingEventReplay');
 
-        StoredEvent::query()
+        $this->getStoredEventClass()::query()
             ->after($afterStoredEventId ?? 0)
             ->chunk($this->config['replay_chunk_size'], function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
                 $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
@@ -212,5 +212,10 @@ class Projectionist
         event(new FinishedEventReplay());
 
         $projectors->call('onFinishedEventReplay');
+    }
+
+    protected function getStoredEventClass(): string
+    {
+        return config('event-projector.stored_event_model');
     }
 }
