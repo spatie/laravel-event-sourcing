@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 1.0.5 - 2018-08-13
+
+- moaarrr fixes for replaying events using a custom `StoredEvent` model
+
 ## 1.0.4 - 2018-08-13
 
 - fix replaying events using a custom `StoredEvent` model
