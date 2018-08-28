@@ -100,7 +100,7 @@ class Projectionist
 
         $this->handleImmediately($storedEvent);
 
-        if(method_exists($event, 'tags')) {
+        if (method_exists($event, 'tags')) {
             $tags = $event->tags();
         }
 
