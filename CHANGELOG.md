@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 1.1.0 - 2018-09-01
+
+- add ability to add tags to be displayed in Horizon
+
 ## 1.0.5 - 2018-08-13
 
 - moaarrr fixes for replaying events using a custom `StoredEvent` model
