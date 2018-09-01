@@ -5,6 +5,8 @@ namespace Spatie\EventProjector\Tests;
 use Mockery;
 use Exception;
 use ReflectionException;
+use Illuminate\Support\Facades\Queue;
+use Spatie\EventProjector\HandleStoredEventJob;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Models\ProjectorStatus;
@@ -175,5 +177,24 @@ class ProjectionistTest extends TestCase
         event(new MoneySubtracted($this->account, 500));
 
         $this->assertEquals(0, $this->account->fresh()->addition_count);
+    }
+
+    /** @test */
+    public function it_propagates_custom_event_tags_to_event_job()
+    {
+        Queue::fake();
+
+        Projectionist::addProjector(MoneyAddedCountProjector::class);
+
+        event(new MoneyAdded($this->account, 500));
+
+        Queue::assertPushed(HandleStoredEventJob::class, function (HandleStoredEventJob $job) {
+            $expected = [
+                'Account:'. $this->account->id,
+                MoneyAdded::class,
+            ];
+
+            return $expected === $job->tags();
+        });
     }
 }

@@ -22,4 +22,12 @@ class MoneyAdded implements ShouldBeStored
 
         $this->amount = $amount;
     }
+
+    public function tags(): array
+    {
+        return [
+            'Account:'. $this->account->id,
+            self::class,
+        ];
+    }
 }

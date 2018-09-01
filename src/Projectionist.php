@@ -100,7 +100,11 @@ class Projectionist
 
         $this->handleImmediately($storedEvent);
 
-        dispatch(new HandleStoredEventJob($storedEvent))
+        if (method_exists($event, 'tags')) {
+            $tags = $event->tags();
+        }
+
+        dispatch(new HandleStoredEventJob($storedEvent, $tags ?? []))
             ->onQueue($this->config['queue']);
     }
 
