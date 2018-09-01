@@ -26,7 +26,7 @@ class MoneyAdded implements ShouldBeStored
     public function tags(): array
     {
         return [
-            'Account:'. $this->account->id,
+            'Account:'.$this->account->id,
             self::class,
         ];
     }
