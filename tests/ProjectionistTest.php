@@ -6,8 +6,8 @@ use Mockery;
 use Exception;
 use ReflectionException;
 use Illuminate\Support\Facades\Queue;
-use Spatie\EventProjector\HandleStoredEventJob;
 use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\HandleStoredEventJob;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
@@ -190,7 +190,7 @@ class ProjectionistTest extends TestCase
 
         Queue::assertPushed(HandleStoredEventJob::class, function (HandleStoredEventJob $job) {
             $expected = [
-                'Account:'. $this->account->id,
+                'Account:'.$this->account->id,
                 MoneyAdded::class,
             ];
 
