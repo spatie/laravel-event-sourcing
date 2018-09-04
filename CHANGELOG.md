@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 1.1.1 - 2018-09-01
+
+- add support for Laravel 5.7
+
 ## 1.1.0 - 2018-09-01
 
 - add ability to add tags to be displayed in Horizon
