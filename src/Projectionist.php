@@ -28,7 +28,7 @@ class Projectionist
     /** @var bool */
     protected $isReplaying = false;
 
-    public function __construct(array $config)
+    public function __construct(array $config = [])
     {
         $this->projectors = new EventHandlerCollection();
 
