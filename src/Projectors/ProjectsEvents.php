@@ -32,7 +32,7 @@ trait ProjectsEvents
             $streams = $this->getEventStreams($storedEvent);
 
             if ($streams->isEmpty()) {
-                $lastStoredEvent = StoredEvent::query()
+                $lastStoredEvent = $this->getStoredEventClass()::query()
                     ->whereIn('event_class', $this->handles())
                     ->orderBy('id', 'desc')
                     ->first();
@@ -52,7 +52,7 @@ trait ProjectsEvents
                 $streamFullName = "{$streamName}-{$streamValue}";
                 $whereJsonClause = str_replace('.', '->', $streamName);
 
-                $lastStoredEvent = StoredEvent::query()
+                $lastStoredEvent = $this->getStoredEventClass()::query()
                     ->whereIn('event_class', $this->handles())
                     ->where("event_properties->{$whereJsonClause}", $streamValue)
                     ->orderBy('id', 'desc')
@@ -89,7 +89,7 @@ trait ProjectsEvents
         $streams = $this->getEventStreams($storedEvent);
 
         if ($streams->isEmpty()) {
-            $lastStoredEvent = StoredEvent::query()
+            $lastStoredEvent = $this->getStoredEventClass()::query()
                 ->whereIn('event_class', $this->handles())
                 ->where('id', '<', $storedEvent->id)
                 ->orderBy('id', 'desc')
@@ -112,7 +112,7 @@ trait ProjectsEvents
             $streamFullName = "{$streamName}-{$streamValue}";
             $whereJsonClause = str_replace('.', '->', $streamName);
 
-            $lastStoredEvent = StoredEvent::query()
+            $lastStoredEvent = $this->getStoredEventClass()::query()
                 ->whereIn('event_class', $this->handles())
                 ->where('id', '<', $storedEvent->id)
                 ->where("event_properties->{$whereJsonClause}", $streamValue)
@@ -134,7 +134,7 @@ trait ProjectsEvents
 
     public function hasReceivedAllEvents(): bool
     {
-        return ProjectorStatus::hasReceivedAllEvents($this);
+        return $this->getProjectorStatusClass()::hasReceivedAllEvents($this);
     }
 
     public function markAsNotUpToDate(StoredEvent $storedEvent)
@@ -207,11 +207,21 @@ trait ProjectsEvents
 
     protected function getStatus(string $stream = 'main'): ProjectorStatus
     {
-        return ProjectorStatus::getForProjector($this, $stream);
+        return $this->getProjectorStatusClass()::getForProjector($this, $stream);
     }
 
     protected function getAllStatuses(): Collection
     {
-        return ProjectorStatus::getAllForProjector($this);
+        return $this->getProjectorStatusClass()::getAllForProjector($this);
+    }
+
+    protected function getStoredEventClass(): string
+    {
+        return config('event-projector.stored_event_model');
+    }
+
+    protected function getProjectorStatusClass(): string
+    {
+        return config('event-projector.projector_status_model');
     }
 }
