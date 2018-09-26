@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector\Console;
 
+use Illuminate\Support\Facades\Artisan;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
@@ -13,16 +14,15 @@ class ListCommandTest extends TestCase
     {
         Projectionist::addProjector(BalanceProjector::class);
 
-        $this->artisan('event-projector:list');
+        Artisan::call('event-projector:list');
 
-        $this
-            ->assertSeeInConsoleOutput(BalanceProjector::class);
+        $this->assertSeeInConsoleOutput(BalanceProjector::class);
     }
 
     /** @test */
     public function it_works_when_no_projectors_are_added_to_the_projectionist()
     {
-        $this->artisan('event-projector:list');
+        Artisan::call('event-projector:list');
 
         $this->assertSeeInConsoleOutput('No projectors found.');
     }
