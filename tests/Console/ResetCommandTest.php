@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector\Console\Snapshots;
 
+use Illuminate\Support\Facades\Artisan;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Models\ProjectorStatus;
@@ -17,7 +18,7 @@ class ResetCommandTest extends TestCase
         ProjectorStatus::getForProjector(new ResettableProjector());
         $this->assertCount(1, ProjectorStatus::get());
 
-        $this->artisan('event-projector:reset', [
+        Artisan::call('event-projector:reset', [
             'projector' => [ResettableProjector::class],
         ]);
 

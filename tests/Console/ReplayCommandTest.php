@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector\Console;
 
+use Illuminate\Support\Facades\Artisan;
 use Mockery;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
@@ -73,7 +74,7 @@ class ReplayCommandTest extends TestCase
             return $command;
         });
 
-        $this->artisan('event-projector:replay');
+        Artisan::call('event-projector:replay');
 
         $this->assertSeeInConsoleOutput('No events replayed!');
     }
@@ -94,7 +95,7 @@ class ReplayCommandTest extends TestCase
             return $command;
         });
 
-        $this->artisan('event-projector:replay');
+        Artisan::call('event-projector:replay');
 
         $this->assertSeeInConsoleOutput('Replaying all events...');
     }
@@ -114,7 +115,7 @@ class ReplayCommandTest extends TestCase
 
         Account::create();
 
-        $this->artisan('event-projector:replay', ['projector' => [BalanceProjector::class]]);
+        Artisan::call('event-projector:replay', ['projector' => [BalanceProjector::class]]);
 
         Mail::assertSent(AccountBroke::class, 1);
     }
@@ -126,7 +127,7 @@ class ReplayCommandTest extends TestCase
 
         Projectionist::addProjector($projector);
 
-        $this->artisan('event-projector:replay', [
+        Artisan::call('event-projector:replay', [
             'projector' => [BalanceProjector::class],
         ]);
 
@@ -142,7 +143,7 @@ class ReplayCommandTest extends TestCase
         $projectorStatus->save();
 
         $this->assertEquals(2, $projectorStatus->last_processed_event_id);
-        $this->artisan('event-projector:replay', [
+        Artisan::call('event-projector:replay', [
             'projector' => [BalanceProjector::class],
         ]);
 
@@ -162,7 +163,7 @@ class ReplayCommandTest extends TestCase
         $projector->shouldReceive('onStartingEventReplay')->once();
         $projector->shouldReceive('onFinishedEventReplay')->once();
 
-        $this->artisan('event-projector:replay', [
+        Artisan::call('event-projector:replay', [
             'projector' => [get_class($projector)],
         ]);
     }

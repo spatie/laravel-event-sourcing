@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector\Console\Snapshots;
 
+use Illuminate\Support\Facades\Artisan;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Models\ProjectorStatus;
@@ -28,7 +29,7 @@ class RebuildCommandTest extends TestCase
 
         event(new MoneyAdded($this->account, 1000));
 
-        $this->artisan('event-projector:rebuild', [
+        Artisan::call('event-projector:rebuild', [
             'projector' => [ResettableProjector::class],
         ]);
 
@@ -42,7 +43,7 @@ class RebuildCommandTest extends TestCase
     {
         Projectionist::addProjector(ResettableProjector::class);
 
-        $this->artisan('event-projector:rebuild', [
+        Artisan::call('event-projector:rebuild', [
             'projector' => ['\\'.ResettableProjector::class],
         ]);
 
@@ -58,7 +59,7 @@ class RebuildCommandTest extends TestCase
 
         $this->assertCount(1, ProjectorStatus::get());
 
-        $this->artisan('event-projector:rebuild', [
+        Artisan::call('event-projector:rebuild', [
             'projector' => [ResettableProjector::class],
         ]);
 
