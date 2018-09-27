@@ -10,7 +10,7 @@ class EventSubscriber
     /** @var array */
     protected $config;
 
-    public function __construct(Projectionist $projectionist, array $config)
+    public function __construct(Projectionist $projectionist, array $config = [])
     {
         $this->projectionist = $projectionist;
 
