@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 1.1.2 - 2018-09-27
+
+- fix for working with a custom `StoredEvent`, `ProjectorStatus`
+
 ## 1.1.1 - 2018-09-01
 
 - add support for Laravel 5.7
