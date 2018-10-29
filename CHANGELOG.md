@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 1.2.0 - 2018-10-30
+
+- added `isProjecting`
+
 ## 1.1.2 - 2018-09-27
 
 - fix for working with a custom `StoredEvent`, `ProjectorStatus`
