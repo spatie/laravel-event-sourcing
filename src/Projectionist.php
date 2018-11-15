@@ -107,8 +107,9 @@ class Projectionist
             $tags = $event->tags();
         }
 
-        dispatch(new HandleStoredEventJob($storedEvent, $tags ?? []))
-            ->onQueue($this->config['queue']);
+        $storedEventJob = $this->getStoredEventJob()::createForEvent($storedEvent, $tags ?? []);
+
+        dispatch($storedEventJob->onQueue($this->config['queue']));
     }
 
     public function handle(StoredEvent $storedEvent)
@@ -233,5 +234,10 @@ class Projectionist
     protected function getStoredEventClass(): string
     {
         return config('event-projector.stored_event_model');
+    }
+
+    protected function getStoredEventJob(): string
+    {
+        return config('event-projector.stored_event_job');
     }
 }

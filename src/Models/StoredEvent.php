@@ -3,13 +3,13 @@
 namespace Spatie\EventProjector\Models;
 
 use Exception;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
+use Carbon\Carbon;
 
 class StoredEvent extends Model
 {
@@ -28,7 +28,7 @@ class StoredEvent extends Model
         $storedEvent->event_class = get_class($event);
         $storedEvent->attributes['event_properties'] = app(EventSerializer::class)->serialize(clone $event);
         $storedEvent->meta_data = [];
-        $storedEvent->created_at = now();
+        $storedEvent->created_at = Carbon::now();
 
         $storedEvent->save();
 
@@ -37,7 +37,7 @@ class StoredEvent extends Model
 
     public static function getMaxId(): int
     {
-        return DB::table((new static())->getTable())->max('id') ?? 0;
+        return static::query()->max('id') ?? 0;
     }
 
     public function getEventAttribute(): ShouldBeStored

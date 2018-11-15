@@ -6,12 +6,11 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Spatie\EventProjector\Models\StoredEvent;
 
 class HandleStoredEventJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue, Queueable, SerializesModels;
 
     /** @var \Spatie\EventProjector\Models\StoredEvent */
     public $storedEvent;
@@ -39,5 +38,10 @@ class HandleStoredEventJob implements ShouldQueue
         }
 
         return $this->tags;
+    }
+
+    public static function createForEvent(StoredEvent $event, array $tags)
+    {
+        return new static($event, $tags);
     }
 }
