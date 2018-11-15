@@ -48,7 +48,7 @@ trait ReplaysEvents
     {
         $projectorsWithoutStatus = collect($projectors)
             ->filter(function (Projector $projector) {
-                return !$this->getProjectorStatusClass()::query()
+                return ! $this->getProjectorStatusClass()::query()
                     ->where('projector_name', $projector->getName())
                     ->exists();
             });
