@@ -8,9 +8,12 @@ use Illuminate\Support\Collection;
 use Spatie\EventProjector\Projectionist;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Models\ProjectorStatus;
+use Spatie\EventProjector\Projectors\ProjectsEvents;
 
 class ListCommand extends Command
 {
+    use ProjectsEvents;
+
     protected $signature = 'event-projector:list';
 
     protected $description = 'List all event projectors';
@@ -44,7 +47,7 @@ class ListCommand extends Command
     {
         $header = ['Name', 'Last processed event id', 'Stream', 'Last event received at'];
 
-        $rows = ProjectorStatus::query()
+        $rows = $this->getProjectorStatusClass()::query()
             ->where('has_received_all_events', false)
             ->get()
             ->map(function (ProjectorStatus $projectorStatus) {
@@ -87,14 +90,14 @@ class ListCommand extends Command
 
     public function getLastProcessedEventId(Projector $projector): int
     {
-        return ProjectorStatus::query()
+        return $this->getProjectorStatusClass()::query()
                 ->where('projector_name', $projector->getName())
                 ->max('last_processed_event_id') ?? 0;
     }
 
     public function getLastEventProcessedAt(Projector $projector): ?Carbon
     {
-        $status = ProjectorStatus::query()
+        $status = $this->getProjectorStatusClass()::query()
             ->where('projector_name', $projector->getName())
             ->orderBy('updated_at', 'desc')
             ->first();
