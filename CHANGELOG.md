@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 1.3.0 - 2018-11-19
+
+- add `stored_event_job` to config file
+
 ## 1.2.0 - 2018-10-30
 
 - added `isProjecting`
