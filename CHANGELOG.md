@@ -2,6 +2,9 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+# 1.3.1 - 2018-12-06
+- fixed missing `use` statement in `EventHandlerCollection`
+
 ## 1.3.0 - 2018-11-19
 
 - add `stored_event_job` to config file
