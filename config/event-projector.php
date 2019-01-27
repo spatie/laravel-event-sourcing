@@ -64,7 +64,7 @@ return [
     /*
      * When replaying events potentially a lot of events will have to be retrieved.
      * In order to avoid memory problems events will be retrieved in
-     * a chuncked way. You can specify the chunk size here.
+     * a chunked way. You can specify the chunk size here.
      */
     'replay_chunk_size' => 1000,
 ];
