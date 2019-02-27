@@ -2,9 +2,22 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
-## 1.1.3 - 2018-02-27
+
+## 1.3.2 - 2018-02-27
 
 - add support for Laravel 5.8
+
+# 1.3.1 - 2018-12-06
+
+- fixed missing `use` statement in `EventHandlerCollection`
+
+## 1.3.0 - 2018-11-19
+
+- add `stored_event_job` to config file
+
+## 1.2.0 - 2018-10-30
+
+- added `isProjecting`
 
 ## 1.1.2 - 2018-09-27
 

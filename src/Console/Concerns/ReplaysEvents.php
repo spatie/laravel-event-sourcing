@@ -3,12 +3,13 @@
 namespace Spatie\EventProjector\Console\Concerns;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Models\ProjectorStatus;
+use Spatie\EventProjector\Projectors\ProjectsEvents;
 
 trait ReplaysEvents
 {
+    use ProjectsEvents;
+
     public function replay(Collection $projectors)
     {
         $afterEventId = $this->determineAfterEventId($projectors);
@@ -47,7 +48,7 @@ trait ReplaysEvents
     {
         $projectorsWithoutStatus = collect($projectors)
             ->filter(function (Projector $projector) {
-                return ! ProjectorStatus::query()
+                return ! $this->getProjectorStatusClass()::query()
                     ->where('projector_name', $projector->getName())
                     ->exists();
             });
@@ -56,11 +57,11 @@ trait ReplaysEvents
             return 0;
         }
 
-        $allProjectorStatusesCount = DB::table('projector_statuses')
+        $allProjectorStatusesCount = $this->getProjectorStatusClass()::query()
             ->whereIn('projector_name', $projectors->map->getName()->toArray())
             ->count();
 
-        $allUpToDateProjectorStatusesCount = DB::table('projector_statuses')
+        $allUpToDateProjectorStatusesCount = $this->getProjectorStatusClass()::query()
             ->whereIn('projector_name', $projectors->map->getName()->toArray())
             ->where('has_received_all_events', true)
             ->count();
@@ -69,7 +70,7 @@ trait ReplaysEvents
             return $this->getStoredEventClass()::getMaxId();
         }
 
-        return DB::table('projector_statuses')
+        return $this->getProjectorStatusClass()::query()
                 ->whereIn('projector_name', $projectors->map->getName()->toArray())
                 ->where('has_received_all_events', false)
                 ->min('last_processed_event_id') ?? 0;

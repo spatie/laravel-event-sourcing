@@ -4,7 +4,6 @@ namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
 use Spatie\EventProjector\Projectionist;
-use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Console\Concerns\ReplaysEvents;
 use Spatie\EventProjector\Console\Concerns\SelectsProjectors;
 
@@ -23,13 +22,13 @@ class ReplayCommand extends Command
     /** @var string */
     protected $storedEventModelClass;
 
-    public function __construct(Projectionist $projectionist, string $storedEventModelClass)
+    public function __construct(Projectionist $projectionist)
     {
         parent::__construct();
 
         $this->projectionist = $projectionist;
 
-        $this->storedEventModelClass = $storedEventModelClass;
+        $this->storedEventModelClass = $this->getStoredEventClass();
     }
 
     public function handle()

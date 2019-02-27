@@ -2,10 +2,10 @@
 
 namespace Spatie\EventProjector\Console;
 
-use Illuminate\Support\Facades\Artisan;
 use Mockery;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;

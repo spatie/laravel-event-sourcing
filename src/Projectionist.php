@@ -26,6 +26,9 @@ class Projectionist
     protected $reactors;
 
     /** @var bool */
+    protected $isProjecting = false;
+
+    /** @var bool */
     protected $isReplaying = false;
 
     public function __construct(array $config = [])
@@ -104,8 +107,9 @@ class Projectionist
             $tags = $event->tags();
         }
 
-        dispatch(new HandleStoredEventJob($storedEvent, $tags ?? []))
-            ->onQueue($this->config['queue']);
+        $storedEventJob = $this->getStoredEventJob()::createForEvent($storedEvent, $tags ?? []);
+
+        dispatch($storedEventJob->onQueue($this->config['queue']));
     }
 
     public function handle(StoredEvent $storedEvent)
@@ -132,8 +136,15 @@ class Projectionist
         $this->applyStoredEventToProjectors($storedEvent, $projectors);
     }
 
+    public function isProjecting(): bool
+    {
+        return $this->isProjecting;
+    }
+
     protected function applyStoredEventToProjectors(StoredEvent $storedEvent, Collection $projectors)
     {
+        $this->isProjecting = true;
+
         foreach ($projectors as $projector) {
             if ($projector->hasAlreadyReceivedEvent($storedEvent)) {
                 continue;
@@ -153,6 +164,8 @@ class Projectionist
 
             $projector->rememberReceivedEvent($storedEvent);
         }
+
+        $this->isProjecting = false;
     }
 
     protected function applyStoredEventToReactors(StoredEvent $storedEvent, Collection $reactors)
@@ -221,5 +234,10 @@ class Projectionist
     protected function getStoredEventClass(): string
     {
         return config('event-projector.stored_event_model');
+    }
+
+    protected function getStoredEventJob(): string
+    {
+        return config('event-projector.stored_event_job');
     }
 }
