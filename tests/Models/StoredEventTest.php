@@ -15,7 +15,7 @@ class StoredEventTest extends TestCase
     /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
     protected $account;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

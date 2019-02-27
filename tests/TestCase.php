@@ -10,7 +10,7 @@ use Spatie\EventProjector\EventProjectorServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -47,7 +47,7 @@ abstract class TestCase extends Orchestra
 
     protected function assertSeeInConsoleOutput(string $text): self
     {
-        $this->assertContains($text, Artisan::output());
+        $this->assertStringContainsString($text, Artisan::output());
 
         return $this;
     }

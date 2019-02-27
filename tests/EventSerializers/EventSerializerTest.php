@@ -13,7 +13,7 @@ class EventSerializerTest extends TestCase
     /** @var \Spatie\EventProjector\EventSerializers\EventSerializer */
     protected $eventSerializer;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
