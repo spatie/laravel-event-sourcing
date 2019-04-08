@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 2.0.1 - 2019-04-09
+
+- fix `HandleStoredEventJob`
+
 ## 2.0.0 - 2019-04-08
 
 - added support for aggregates

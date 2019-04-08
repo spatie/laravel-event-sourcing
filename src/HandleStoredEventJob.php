@@ -33,7 +33,7 @@ final class HandleStoredEventJob implements ShouldQueue
     public function tags(): array
     {
         return empty($this->tags)
-            ? $this->storedEvent['event_class']
+            ? [$this->storedEvent['event_class']]
             : $this->tags;
     }
 
