@@ -3,9 +3,12 @@
     "description": "Event sourcing for artisans",
     "keywords": [
         "spatie",
-        "laravel-event-sourcerer",
+        "laravel-event-projector",
         "event",
-        "sourcing"
+        "sourcing",
+        "aggregates",
+        "projectors",
+        "reactors"
     ],
     "homepage": "https://github.com/spatie/laravel-event-projector",
     "license": "MIT",
