@@ -1,0 +1,12 @@
+<?php
+
+namespace DummyNamespace;
+
+use Spatie\EventProjector\DomainEvent;
+
+final class DummyClass implements ShouldBeStored
+{
+    public function __construct()
+    {
+    }
+}

@@ -11,5 +11,5 @@ interface EventHandler
 
     public function handle(StoredEvent $event);
 
-    public function handleException(Exception $exception);
+    public function handleException(Exception $exception): void;
 }

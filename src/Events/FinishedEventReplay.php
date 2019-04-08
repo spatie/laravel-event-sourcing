@@ -2,6 +2,6 @@
 
 namespace Spatie\EventProjector\Events;
 
-class FinishedEventReplay
+final class FinishedEventReplay
 {
 }

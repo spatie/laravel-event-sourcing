@@ -2,6 +2,6 @@
 
 namespace Spatie\EventProjector\Tests\TestClasses\Events;
 
-class DoNotStoreThisEvent
+final class DoNotStoreThisEvent
 {
 }

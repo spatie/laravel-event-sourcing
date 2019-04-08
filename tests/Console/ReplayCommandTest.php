@@ -9,18 +9,16 @@ use Illuminate\Support\Facades\Artisan;
 use Spatie\EventProjector\Tests\TestCase;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
-use Spatie\EventProjector\Models\ProjectorStatus;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
-use Spatie\EventProjector\Projectionist as BoundProjectionist;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 
-class ReplayCommandTest extends TestCase
+final class ReplayCommandTest extends TestCase
 {
     /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
     protected $account;
@@ -32,7 +30,7 @@ class ReplayCommandTest extends TestCase
         $this->account = Account::create();
 
         foreach (range(1, 3) as $i) {
-            event(new MoneyAdded($this->account, 1000));
+            event(new MoneyAddedEvent($this->account, 1000));
         }
 
         Mail::fake();
@@ -52,7 +50,7 @@ class ReplayCommandTest extends TestCase
         Event::assertNotDispatched(StartingEventReplay::class);
         Event::assertNotDispatched(FinishedEventReplay::class);
 
-        $this->artisan('event-projector:replay', ['projector' => [get_class($projector)]]);
+        $this->artisan('event-projector:replay '.get_class($projector));
 
         Event::assertDispatched(StartingEventReplay::class);
         Event::assertDispatched(FinishedEventReplay::class);
@@ -63,41 +61,22 @@ class ReplayCommandTest extends TestCase
     {
         Projectionist::addProjector(BalanceProjector::class);
 
-        $command = Mockery::mock(ReplayCommand::class.'[confirm]', [
-            app(BoundProjectionist::class),
-            config('event-projector.stored_event_model'),
-        ]);
-
-        $command->shouldReceive('confirm')->andReturn(false);
-
-        $this->app->bind('command.event-projector:replay', function () use ($command) {
-            return $command;
-        });
-
-        Artisan::call('event-projector:replay');
-
-        $this->assertSeeInConsoleOutput('No events replayed!');
+        $this->artisan('event-projector:replay')
+            ->expectsQuestion('Are you sure you want to replay events to all projectors?', 'Y')
+            ->expectsOutput('Replaying 3 events...')
+            ->assertExitCode(0);
     }
 
     /** @test */
-    public function it_will_run_events_agains_all_projectors_when_no_projectors_are_given_and_confirming()
+    public function it_can_replay_events_starting_from_a_specific_number()
     {
-        Projectionist::addProjector(BalanceProjector::class);
+        $projectorClass = BalanceProjector::class;
 
-        $command = Mockery::mock(ReplayCommand::class.'[confirm]', [
-            app(BoundProjectionist::class),
-            config('event-projector.stored_event_model'),
-        ]);
+        Projectionist::addProjector($projectorClass);
 
-        $command->shouldReceive('confirm')->andReturn(true);
-
-        $this->app->bind('command.event-projector:replay', function () use ($command) {
-            return $command;
-        });
-
-        Artisan::call('event-projector:replay');
-
-        $this->assertSeeInConsoleOutput('Replaying all events...');
+        $this->artisan('event-projector:replay', ['projector' => [BalanceProjector::class], '--from' => 2])
+            ->expectsOutput('Replaying 2 events...')
+            ->assertExitCode(0);
     }
 
     /** @test */
@@ -109,7 +88,7 @@ class ReplayCommandTest extends TestCase
         StoredEvent::truncate();
 
         $account = Account::create();
-        event(new MoneySubtracted($account, 2000));
+        event(new MoneySubtractedEvent($account, 2000));
 
         Mail::assertSent(AccountBroke::class, 1);
 
@@ -118,39 +97,6 @@ class ReplayCommandTest extends TestCase
         Artisan::call('event-projector:replay', ['projector' => [BalanceProjector::class]]);
 
         Mail::assertSent(AccountBroke::class, 1);
-    }
-
-    /** @test */
-    public function it_can_only_replay_events_that_the_projector_did_not_handle_yet()
-    {
-        $projector = new BalanceProjector();
-
-        Projectionist::addProjector($projector);
-
-        Artisan::call('event-projector:replay', [
-            'projector' => [BalanceProjector::class],
-        ]);
-
-        $projectorStatus = ProjectorStatus::getForProjector($projector);
-
-        $projectorStatus = $projectorStatus->refresh();
-
-        $this->assertEquals(3, $projectorStatus->last_processed_event_id);
-
-        //sneakily change the last processed event
-        $projectorStatus->rememberLastProcessedEvent(StoredEvent::find(2));
-        $projectorStatus->has_received_all_events = false;
-        $projectorStatus->save();
-
-        $this->assertEquals(2, $projectorStatus->last_processed_event_id);
-        Artisan::call('event-projector:replay', [
-            'projector' => [BalanceProjector::class],
-        ]);
-
-        $this->assertSeeInConsoleOutput('Replaying events after stored event id 2...');
-
-        // 3000 from the first three events + 1000 from the replay
-        $this->assertEquals(4000, $this->account->fresh()->amount);
     }
 
     /** @test */

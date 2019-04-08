@@ -4,7 +4,7 @@ namespace Spatie\EventProjector\Tests\TestClasses\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Account extends Model
+final class Account extends Model
 {
     public $guarded = [];
 

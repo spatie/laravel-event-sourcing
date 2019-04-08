@@ -4,7 +4,7 @@ namespace Spatie\EventProjector\Tests\TestClasses\Events;
 
 use Spatie\EventProjector\ShouldBeStored;
 
-class EventWithoutSerializedModels implements ShouldBeStored
+final class EventWithoutSerializedModels implements ShouldBeStored
 {
     /** @var string */
     public $value;

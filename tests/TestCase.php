@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\EventProjector\Tests\TestClasses\FakeUuid;
 use Spatie\EventProjector\EventProjectorServiceProvider;
 
 abstract class TestCase extends Orchestra
@@ -15,6 +16,8 @@ abstract class TestCase extends Orchestra
         parent::setUp();
 
         $this->setUpDatabase();
+
+        FakeUuid::reset();
     }
 
     protected function getPackageProviders($app)
@@ -31,6 +34,7 @@ abstract class TestCase extends Orchestra
         Schema::create('accounts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
+            $table->string('uuid')->nullable();
             $table->integer('amount')->default(0);
             $table->integer('addition_count')->default(0);
             $table->timestamps();
@@ -39,10 +43,6 @@ abstract class TestCase extends Orchestra
         Schema::dropIfExists('stored_events');
         include_once __DIR__.'/../stubs/create_stored_events_table.php.stub';
         (new \CreateStoredEventsTable())->up();
-
-        Schema::dropIfExists('projector_statuses');
-        include_once __DIR__.'/../stubs/create_projector_statuses_table.php.stub';
-        (new \CreateProjectorStatusesTable())->up();
     }
 
     protected function assertSeeInConsoleOutput(string $text): self

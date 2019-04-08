@@ -5,9 +5,9 @@ namespace Spatie\EventProjector\Exceptions;
 use Exception;
 use Spatie\EventProjector\ShouldBeStored;
 
-class InvalidEventHandler extends Exception
+final class InvalidEventHandler extends Exception
 {
-    public static function eventHandlingMethodDoesNotExist(object $eventHandler, ShouldBeStored $event, string $methodName)
+    public static function eventHandlingMethodDoesNotExist(object $eventHandler, ShouldBeStored $event, string $methodName): self
     {
         $eventHandlerClass = get_class($eventHandler);
         $eventClass = get_class($event);

@@ -4,9 +4,9 @@ namespace Spatie\EventProjector\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Projectionist extends Facade
+final class Projectionist extends Facade
 {
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
         return 'event-projector';
     }

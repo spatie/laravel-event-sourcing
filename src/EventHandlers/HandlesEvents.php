@@ -21,8 +21,9 @@ trait HandlesEvents
         $handlerClassOrMethod = $this->getEventHandlingMethods()->get($eventClass);
 
         $parameters = [
-            'event'       => $storedEvent->event,
+            'event' => $storedEvent->event,
             'storedEvent' => $storedEvent,
+            'aggregateUuid' => $storedEvent->aggregate_uuid,
         ];
 
         if (class_exists($handlerClassOrMethod)) {
@@ -36,14 +37,14 @@ trait HandlesEvents
         app()->call([$this, $handlerClassOrMethod], $parameters);
     }
 
-    public function handleException(Exception $exception)
+    public function handleException(Exception $exception): void
     {
         report($exception);
     }
 
-    protected function getEventHandlingMethods(): Collection
+    private function getEventHandlingMethods(): Collection
     {
-        return collect($this->handlesEvents ?? [])
+        $handlesEvents = collect($this->handlesEvents ?? [])
             ->mapWithKeys(function (string $handlerMethod, $eventClass) {
                 if (is_numeric($eventClass)) {
                     return [$handlerMethod => 'on'.ucfirst(class_basename($handlerMethod))];
@@ -51,5 +52,11 @@ trait HandlesEvents
 
                 return [$eventClass => $handlerMethod];
             });
+
+        if ($this->handleEvent ?? false) {
+            $handlesEvents->put($this->handleEvent, get_class($this));
+        }
+
+        return $handlesEvents;
     }
 }

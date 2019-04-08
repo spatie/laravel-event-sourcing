@@ -8,7 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Spatie\EventProjector\Models\StoredEvent;
 
-class HandleStoredEventJob implements ShouldQueue
+final class HandleStoredEventJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
@@ -21,26 +21,23 @@ class HandleStoredEventJob implements ShouldQueue
     public function __construct(StoredEvent $storedEvent, array $tags)
     {
         $this->storedEvent = $storedEvent;
+
         $this->tags = $tags;
     }
 
-    public function handle(Projectionist $projectionist)
+    public function handle(Projectionist $projectionist): void
     {
         $projectionist->handle($this->storedEvent);
     }
 
     public function tags(): array
     {
-        if (empty($this->tags)) {
-            return [
-                $this->storedEvent['event_class'],
-            ];
-        }
-
-        return $this->tags;
+        return empty($this->tags)
+            ? $this->storedEvent['event_class']
+            : $this->tags;
     }
 
-    public static function createForEvent(StoredEvent $event, array $tags)
+    public static function createForEvent(StoredEvent $event, array $tags): self
     {
         return new static($event, $tags);
     }

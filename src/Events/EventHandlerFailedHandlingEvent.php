@@ -6,7 +6,7 @@ use Exception;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\EventHandlers\EventHandler;
 
-class EventHandlerFailedHandlingEvent
+final class EventHandlerFailedHandlingEvent
 {
     /** @var \Spatie\EventProjector\EventHandlers\EventHandler */
     public $eventHandler;

@@ -4,18 +4,16 @@ namespace Spatie\EventProjector;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Spatie\EventProjector\Console\ListCommand;
-use Spatie\EventProjector\Console\ResetCommand;
 use Spatie\EventProjector\Console\ReplayCommand;
-use Spatie\EventProjector\Console\RebuildCommand;
-use Spatie\EventProjector\Console\Make\MakeReactorCommand;
+use Spatie\EventProjector\Console\MakeReactorCommand;
+use Spatie\EventProjector\Console\MakeAggregateCommand;
+use Spatie\EventProjector\Console\MakeProjectorCommand;
+use Spatie\EventProjector\Console\MakeStorableEventCommand;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
-use Spatie\EventProjector\Console\Make\MakeProjectorCommand;
-use Spatie\EventProjector\Console\Make\MakeStorableEventCommand;
 
-class EventProjectorServiceProvider extends ServiceProvider
+final class EventProjectorServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -29,16 +27,10 @@ class EventProjectorServiceProvider extends ServiceProvider
             ], 'migrations');
         }
 
-        if (! class_exists('CreateProjectorStatusesTable')) {
-            $this->publishes([
-                __DIR__.'/../stubs/create_projector_statuses_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_projector_statuses_table.php'),
-            ], 'migrations');
-        }
-
         Event::subscribe(EventSubscriber::class);
     }
 
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/event-projector.php', 'event-projector');
 
@@ -73,26 +65,20 @@ class EventProjectorServiceProvider extends ServiceProvider
         $this->bindCommands();
     }
 
-    protected function bindCommands()
+    private function bindCommands()
     {
-        $this->app->bind('command.event-projector:list', ListCommand::class);
-        $this->app->bind('command.event-projector:reset', ResetCommand::class);
-        $this->app->bind('command.event-projector:rebuild', RebuildCommand::class);
         $this->app->bind('command.event-projector:replay', ReplayCommand::class);
-
         $this->app->bind('command.make:projector', MakeProjectorCommand::class);
         $this->app->bind('command.make:reactor', MakeReactorCommand::class);
-        $this->app->bind('command.make:storable-event', MakeStorableEventCommand::class);
+        $this->app->bind('command.make:aggregate', MakeAggregateCommand::class);
+        $this->app->bind('command.make:domain-event', MakeStorableEventCommand::class);
 
         $this->commands([
-            'command.event-projector:list',
-            'command.event-projector:reset',
-            'command.event-projector:rebuild',
             'command.event-projector:replay',
-
             'command.make:projector',
             'command.make:reactor',
-            'command.make:storable-event',
+            'command.make:aggregate',
+            'command.make:domain-event',
         ]);
     }
 }

@@ -5,19 +5,19 @@ namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
 
-class ProjectorThatWritesMetaData implements Projector
+final class ProjectorThatWritesMetaData implements Projector
 {
     use ProjectsEvents;
 
     protected $handlesEvents = [
-        MoneyAdded::class => 'onMoneyAdded',
+        MoneyAddedEvent::class => 'onMoneyAdded',
     ];
 
     protected $trackStream = '*';
 
-    public function onMoneyAdded(StoredEvent $storedEvent, MoneyAdded $event)
+    public function onMoneyAdded(StoredEvent $storedEvent, MoneyAddedEvent $event)
     {
         $storedEvent->meta_data['user_id'] = 1;
 

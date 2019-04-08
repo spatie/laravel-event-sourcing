@@ -4,24 +4,24 @@ namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
 
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAdded;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtracted;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
 
-class ProjectorWithAssociativeAndNonAssociativeHandleEvents implements Projector
+final class ProjectorWithAssociativeAndNonAssociativeHandleEvents implements Projector
 {
     use ProjectsEvents;
 
     protected $handlesEvents = [
-        MoneyAdded::class,
-        MoneySubtracted::class => 'onMoneySubtracted',
+        MoneyAddedEvent::class,
+        MoneySubtractedEvent::class => 'onMoneySubtracted',
     ];
 
-    public function onMoneyAdded(MoneyAdded $event)
+    public function onMoneyAddedEvent(MoneyAddedEvent $event)
     {
         $event->account->addMoney($event->amount);
     }
 
-    public function onMoneySubtracted(MoneySubtracted $event)
+    public function onMoneySubtracted(MoneySubtractedEvent $event)
     {
         $event->account->subtractMoney($event->amount);
     }

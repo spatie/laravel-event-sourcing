@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
@@ -22,9 +23,10 @@ class StoredEvent extends Model
         'meta_data' => 'array',
     ];
 
-    public static function createForEvent(ShouldBeStored $event): StoredEvent
+    public static function createForEvent(ShouldBeStored $event, string $uuid = null): StoredEvent
     {
         $storedEvent = new static();
+        $storedEvent->aggregate_uuid = $uuid;
         $storedEvent->event_class = get_class($event);
         $storedEvent->attributes['event_properties'] = app(EventSerializer::class)->serialize(clone $event);
         $storedEvent->meta_data = [];
@@ -33,11 +35,6 @@ class StoredEvent extends Model
         $storedEvent->save();
 
         return $storedEvent;
-    }
-
-    public static function getMaxId(): int
-    {
-        return static::query()->max('id') ?? 0;
     }
 
     public function getEventAttribute(): ShouldBeStored
@@ -54,9 +51,14 @@ class StoredEvent extends Model
         return $event;
     }
 
-    public function scopeAfter(Builder $query, int $storedEventId)
+    public function scopeStartingFrom(Builder $query, int $storedEventId): void
     {
-        $query->where('id', '>', $storedEventId);
+        $query->where('id', '>=', $storedEventId);
+    }
+
+    public function scopeUuid(Builder $query, string $uuid): void
+    {
+        $query->where('aggregate_uuid', $uuid);
     }
 
     public function getMetaDataAttribute(): SchemalessAttributes
@@ -67,5 +69,35 @@ class StoredEvent extends Model
     public function scopeWithMetaDataAttributes(): Builder
     {
         return SchemalessAttributes::scopeWithSchemalessAttributes('meta_data');
+    }
+
+    public static function storeMany(array $events, string $uuid = null): void
+    {
+        collect($events)
+            ->map(function (ShouldBeStored $domainEvent) use ($uuid) {
+                $storedEvent = static::createForEvent($domainEvent, $uuid);
+
+                return [$domainEvent, $storedEvent];
+            })
+            ->eachSpread(function (ShouldBeStored $event, StoredEvent $storedEvent) {
+                Projectionist::handleWithSyncProjectors($storedEvent);
+
+                if (method_exists($event, 'tags')) {
+                    $tags = $event->tags();
+                }
+
+                $storedEventJob = call_user_func(
+                    [config('event-projector.stored_event_job'), 'createForEvent'],
+                    $storedEvent,
+                    $tags ?? []
+                );
+
+                dispatch($storedEventJob->onQueue(config('event-projector.queue')));
+            });
+    }
+
+    public static function store(ShouldBeStored $event, string $uuid = null): void
+    {
+        static::storeMany([$event], $uuid);
     }
 }

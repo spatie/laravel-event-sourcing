@@ -1,0 +1,9 @@
+<?php
+
+namespace DummyNamespace;
+
+use Spatie\EventProjector\AggregateRoot;
+
+final class DummyClass implements AggregateRoot
+{
+}

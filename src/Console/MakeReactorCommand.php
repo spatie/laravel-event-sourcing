@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\EventProjector\Console\Make;
+namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\GeneratorCommand;
 
-class MakeReactorCommand extends GeneratorCommand
+final class MakeReactorCommand extends GeneratorCommand
 {
     protected $name = 'make:reactor';
 
