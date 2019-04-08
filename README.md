@@ -6,13 +6,21 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-event-projector.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-event-projector)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-event-projector.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-projector)
 
-Event sourcing is to data what Git is to code <sup>[1](#footnote1)</sup>. Most applications have their current state stored in a database. By storing only the current state a lot of information is lost. You don't know how the application got in this state.
+This package aims to be the entry point to get started with event sourcing in Laravel. It can help you setting up aggregates, projectors and reactors. 
 
-Event sourcing tries to solve that problem by saving all events that happen in your app. The state of your application is built by listening to those events. 
+If you've never worked with event sourcing, or are uncertain about what aggregates, projectors and reactors are, head over to the getting familiar with event sourcing section [in our docs](https://docs.spatie.be/laravel-event-projector/v2/getting-familiar-with-event-sourcing/introduction).
 
-Here's a traditional example to make it more clear. Imagine you're a bank. Your clients have accounts. Instead of storing the balance of the accounts, you could store all the transactions. That way you not only know the balance of the account but also the reason why it's that specific number. There are many other benefits of storing events.
+Event sourcing might be a good choice for your project if:
 
-This package aims to be the simple and very pragmatic way to get started with event sourcing in Laravel.
+- your app needs to make decisions based on the past
+- your app has auditing requirments: the reason why your app is in a certain state is equally as important as the state itself
+- you foresee that there will be a reporting need in the future, but you don't know yet which data you need to collect for those reports
+
+If you want to skip to reading code immediately, here are same example app. In each of them, you can create accounts and deposit or withdraw money. 
+
+- [Larabank built traditionally without event sourcing](https://github.com/spatie/larabank-traditional)
+- [Larabank built with projectors](https://github.com/spatie/larabank-event-projector)
+- [Larabank built with aggregates and projectors](https://github.com/spatie/larabank-event-projector-aggregates)
 
 ## Documentation
 
