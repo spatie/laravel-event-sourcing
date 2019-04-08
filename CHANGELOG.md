@@ -2,7 +2,7 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
-## 2.0.0 - 2019-04-XX
+## 2.0.0 - 2019-04-08
 
 - added support for aggregates
 - support a new `handleEvent` property for event handlers
