@@ -13,7 +13,7 @@ All notable changes to `laravel-event-projector` will be documented in this file
 
 - add support for Laravel 5.8
 
-# 1.3.1 - 2018-12-06
+## 1.3.1 - 2018-12-06
 
 - fix missing `use` statement in `EventHandlerCollection`
 
