@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 2.0.4 - 2019-04-09
+
+- fix `make` commands
+
 ## 2.0.3 - 2019-04-09
 
 - make service provider final
