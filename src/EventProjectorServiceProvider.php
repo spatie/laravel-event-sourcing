@@ -11,7 +11,7 @@ use Spatie\EventProjector\Console\MakeProjectorCommand;
 use Spatie\EventProjector\Console\MakeStorableEventCommand;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 
-final class EventProjectorServiceProvider extends ServiceProvider
+class EventProjectorServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
