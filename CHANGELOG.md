@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 2.0.5 - 2019-04-09
+
+- fix storable event command
+
 ## 2.0.4 - 2019-04-09
 
 - fix `make` commands
