@@ -2,7 +2,7 @@
 
 namespace DummyNamespace;
 
-use Spatie\EventProjector\DomainEvent;
+use Spatie\EventProjector\ShouldBeStored;
 
 final class DummyClass implements ShouldBeStored
 {

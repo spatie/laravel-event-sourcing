@@ -6,7 +6,7 @@ use Illuminate\Console\GeneratorCommand;
 
 final class MakeStorableEventCommand extends GeneratorCommand
 {
-    protected $name = 'make:domain-event';
+    protected $name = 'make:storable-event';
 
     protected $description = 'Create a storable event';
 
