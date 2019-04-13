@@ -4,17 +4,12 @@ namespace Spatie\EventProjector;
 
 final class EventSubscriber
 {
-    /** @var \Spatie\EventProjector\Projectionist */
-    private $projectionist;
+    /** @var string */
+    private $storedEventModel;
 
-    /** @var array */
-    private $config;
-
-    public function __construct(Projectionist $projectionist, array $config = [])
+    public function __construct(string $storedEventModel)
     {
-        $this->projectionist = $projectionist;
-
-        $this->config = $config;
+        $this->storedEventModel = $storedEventModel;
     }
 
     public function subscribe($events): void
@@ -33,7 +28,7 @@ final class EventSubscriber
 
     public function storeEvent(ShouldBeStored $event): void
     {
-        call_user_func([config('event-projector.stored_event_model'), 'store'], $event);
+        $this->storedEventModel::store($event);
     }
 
     private function shouldBeStored($event): bool

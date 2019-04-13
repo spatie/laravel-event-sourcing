@@ -49,10 +49,7 @@ final class EventProjectorServiceProvider extends ServiceProvider
         $this->app->alias(Projectionist::class, 'event-projector');
 
         $this->app->singleton(EventSubscriber::class, function () {
-            $projectionist = app(Projectionist::class);
-            $config = config('event-projector');
-
-            return new EventSubscriber($projectionist, $config);
+            return new EventSubscriber(config('event-projector.stored_event_model'));
         });
 
         $this->app
