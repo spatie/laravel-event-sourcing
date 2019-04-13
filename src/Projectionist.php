@@ -233,7 +233,7 @@ final class Projectionist
 
         $projectors->call('onStartingEventReplay');
 
-        $this->getStoredEventClass()::query()
+        $this->storedEventClass::query()
             ->startingFrom($startingFromEventId ?? 0)
             ->chunk($this->replayChunkSize, function (Collection $storedEvents) use ($projectors, $onEventReplayed) {
                 $storedEvents->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
@@ -253,10 +253,5 @@ final class Projectionist
         event(new FinishedEventReplay());
 
         $projectors->call('onFinishedEventReplay');
-    }
-
-    private function getStoredEventClass(): string
-    {
-        return $this->storedEventClass;
     }
 }
