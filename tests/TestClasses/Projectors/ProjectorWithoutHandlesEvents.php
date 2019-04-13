@@ -24,11 +24,9 @@ class ProjectorWithoutHandlesEvents implements Projector
 
     public function functionWithoutTypeHint($parameter)
     {
-
     }
 
     public function functionWithUnreleatedClassTypeHint(Collection $test)
     {
-
     }
 }

@@ -9,9 +9,9 @@ use Spatie\EventProjector\Exceptions\CouldNotResetProjector;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorWithoutHandlesEvents;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ResettableProjector;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatWritesMetaData;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorWithoutHandlesEvents;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectThatHandlesASingleEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorWithAssociativeAndNonAssociativeHandleEvents;
 
