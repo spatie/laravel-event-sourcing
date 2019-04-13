@@ -4,8 +4,12 @@ namespace Spatie\EventProjector\EventHandlers;
 
 use Exception;
 use Illuminate\Support\Collection;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionParameter;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\ShouldBeStored;
 
 trait HandlesEvents
 {
@@ -30,7 +34,7 @@ trait HandlesEvents
             return app()->call([app($handlerClassOrMethod), '__invoke'], $parameters);
         }
 
-        if (! method_exists($this, $handlerClassOrMethod)) {
+        if (!method_exists($this, $handlerClassOrMethod)) {
             throw InvalidEventHandler::eventHandlingMethodDoesNotExist($this, $storedEvent->event, $handlerClassOrMethod);
         }
 
@@ -57,6 +61,33 @@ trait HandlesEvents
             $handlesEvents->put($this->handleEvent, get_class($this));
         }
 
+        if (! isset($this->handlesEvents) && ! isset($this->handleEvent)) {
+            $handlesEvents = $this->autoDetectHandlesEvents();
+        }
+
         return $handlesEvents;
+    }
+
+    private function autoDetectHandlesEvents(): Collection
+    {
+        return collect((new ReflectionClass($this))->getMethods())
+            ->flatMap(function (ReflectionMethod $method) {
+                $method = new ReflectionMethod($this, $method->name);
+
+                $eventClass = collect($method->getParameters())
+                    ->map(function (ReflectionParameter $parameter) {
+                        return optional($parameter->getType())->getName();
+                    })
+                    ->first(function ($typeHint) {
+                        return is_subclass_of($typeHint, ShouldBeStored::class);
+                    });
+
+                if (!$eventClass) {
+                    return null;
+                }
+
+                return [$eventClass => $method->name];
+            })
+            ->filter();
     }
 }
