@@ -71,14 +71,14 @@ final class EventProjectorServiceProvider extends ServiceProvider
         $this->app->bind('command.make:projector', MakeProjectorCommand::class);
         $this->app->bind('command.make:reactor', MakeReactorCommand::class);
         $this->app->bind('command.make:aggregate', MakeAggregateCommand::class);
-        $this->app->bind('command.make:domain-event', MakeStorableEventCommand::class);
+        $this->app->bind('command.make:storable-event', MakeStorableEventCommand::class);
 
         $this->commands([
             'command.event-projector:replay',
             'command.make:projector',
             'command.make:reactor',
             'command.make:aggregate',
-            'command.make:domain-event',
+            'command.make:storable-event',
         ]);
     }
 }
