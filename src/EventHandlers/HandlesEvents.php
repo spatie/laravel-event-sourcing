@@ -3,7 +3,11 @@
 namespace Spatie\EventProjector\EventHandlers;
 
 use Exception;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionParameter;
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\ShouldBeStored;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
@@ -57,6 +61,33 @@ trait HandlesEvents
             $handlesEvents->put($this->handleEvent, get_class($this));
         }
 
+        if (! isset($this->handlesEvents) && ! isset($this->handleEvent)) {
+            $handlesEvents = $this->autoDetectHandlesEvents();
+        }
+
         return $handlesEvents;
+    }
+
+    private function autoDetectHandlesEvents(): Collection
+    {
+        return collect((new ReflectionClass($this))->getMethods())
+            ->flatMap(function (ReflectionMethod $method) {
+                $method = new ReflectionMethod($this, $method->name);
+
+                $eventClass = collect($method->getParameters())
+                    ->map(function (ReflectionParameter $parameter) {
+                        return optional($parameter->getType())->getName();
+                    })
+                    ->first(function ($typeHint) {
+                        return is_subclass_of($typeHint, ShouldBeStored::class);
+                    });
+
+                if (! $eventClass) {
+                    return;
+                }
+
+                return [$eventClass => $method->name];
+            })
+            ->filter();
     }
 }

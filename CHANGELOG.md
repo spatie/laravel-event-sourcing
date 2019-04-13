@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 2.1.0 - 2019-04-13
+
+- add autodetection for event handling methods
+
 ## 2.0.5 - 2019-04-09
 
 - fix storable event command
