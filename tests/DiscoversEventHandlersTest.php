@@ -3,7 +3,14 @@
 namespace Spatie\EventProjector\Tests;
 
 use Spatie\EventProjector\DiscoverEventHandlers;
+use Spatie\EventProjector\EventHandlers\EventHandler;
 use Spatie\EventProjector\Projectionist;
+use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestProjectorInSubdirectory;
+use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestQueuedProjectorInSubdirectory;
+use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestReactorInSubdirectory;
+use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\TestProjector;
+use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\TestQueuedProjector;
+use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\TestReactor;
 
 final class DiscoversEventHandlersTest extends TestCase
 {
@@ -19,12 +26,40 @@ final class DiscoversEventHandlersTest extends TestCase
             ->useRootNamespace('Spatie\EventProjector\\')
             ->addToProjectionist($projectionist);
 
-        dd($projectionist->getProjectors());
+        $registeredProjectors = $projectionist
+            ->getProjectors()
+            ->map(function (EventHandler $eventHandler) {
+                return get_class($eventHandler);
+            })
+            ->values()
+            ->sort()
+            ->toArray();
+
+        $this->assertEquals([
+            TestQueuedProjector::class,
+            TestProjectorInSubdirectory::class,
+            TestQueuedProjectorInSubdirectory::class,
+            TestProjector::class,
+        ], $registeredProjectors);
+
+        $registeredReactors = $projectionist
+            ->getReactors()
+            ->map(function (EventHandler $eventHandler) {
+                return get_class($eventHandler);
+            })
+            ->values()
+            ->sort()
+            ->toArray();
+
+        $this->assertEquals([
+            TestReactorInSubdirectory::class,
+            TestReactor::class,
+        ], $registeredReactors);
     }
 
     protected function getDiscoveryBasePath(): string
     {
-        return realpath($this->testsPath() . '/../');
+        return realpath($this->pathToTests() . '/../');
     }
 }
 
