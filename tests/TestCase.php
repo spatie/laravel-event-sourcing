@@ -18,6 +18,8 @@ abstract class TestCase extends Orchestra
         $this->setUpDatabase();
 
         FakeUuid::reset();
+
+        $this->artisan('event-projector:clear-event-handlers');
     }
 
     protected function getPackageProviders($app)
