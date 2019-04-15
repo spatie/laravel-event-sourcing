@@ -63,5 +63,7 @@ return [
 
     'discover_event_handlers_in_directories' => [
         app_path(),
-    ]
+    ],
+
+    'cache_path' => storage_path('app/event-projector/event-handlers.php'),
 ];
