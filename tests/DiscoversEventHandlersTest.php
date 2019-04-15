@@ -19,7 +19,7 @@ final class DiscoversEventHandlersTest extends TestCase
             ->useRootNamespace('Spatie\EventProjector\\')
             ->addToProjectionist($projectionist);
 
-        $projectionist->pr
+        dd($projectionist->getProjectors());
     }
 
     protected function getDiscoveryBasePath(): string
