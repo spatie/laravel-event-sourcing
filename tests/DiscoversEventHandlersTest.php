@@ -2,15 +2,15 @@
 
 namespace Spatie\EventProjector\Tests;
 
+use Spatie\EventProjector\Projectionist;
 use Spatie\EventProjector\DiscoverEventHandlers;
 use Spatie\EventProjector\EventHandlers\EventHandler;
-use Spatie\EventProjector\Projectionist;
-use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestProjectorInSubdirectory;
-use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestQueuedProjectorInSubdirectory;
-use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestReactorInSubdirectory;
+use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\TestReactor;
 use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\TestProjector;
 use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\TestQueuedProjector;
-use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\TestReactor;
+use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestReactorInSubdirectory;
+use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestProjectorInSubdirectory;
+use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestQueuedProjectorInSubdirectory;
 
 final class DiscoversEventHandlersTest extends TestCase
 {
@@ -21,7 +21,7 @@ final class DiscoversEventHandlersTest extends TestCase
         $projectionist = app(Projectionist::class);
 
         (new DiscoverEventHandlers())
-            ->within([__DIR__ . '/TestClasses/AutoDiscoverEventHandlers'])
+            ->within([__DIR__.'/TestClasses/AutoDiscoverEventHandlers'])
             ->useBasePath($this->getDiscoveryBasePath())
             ->useRootNamespace('Spatie\EventProjector\\')
             ->addToProjectionist($projectionist);
@@ -59,7 +59,6 @@ final class DiscoversEventHandlersTest extends TestCase
 
     protected function getDiscoveryBasePath(): string
     {
-        return realpath($this->pathToTests() . '/../');
+        return realpath($this->pathToTests().'/../');
     }
 }
-

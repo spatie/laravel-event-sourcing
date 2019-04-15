@@ -2,13 +2,11 @@
 
 namespace Spatie\EventProjector;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Spatie\EventProjector\EventHandlers\EventHandler;
-use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Projectors\QueuedProjector;
 use SplFileInfo;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Symfony\Component\Finder\Finder;
+use Spatie\EventProjector\EventHandlers\EventHandler;
 
 final class DiscoverEventHandlers
 {
@@ -52,15 +50,16 @@ final class DiscoverEventHandlers
             ->map(function (SplFileInfo $file) {
                 return static::fullQualifiedClassNameFromFile($file);
             })
-            ->filter(function(string $eventHandlerClass) {
+            ->filter(function (string $eventHandlerClass) {
                 return is_subclass_of($eventHandlerClass, EventHandler::class);
             })
-            ->pipe(function(Collection $eventHandlers) use ($projectionist) {
+            ->pipe(function (Collection $eventHandlers) use ($projectionist) {
                 $projectionist->addEventHandlers($eventHandlers->toArray());
             });
     }
 
-    protected function fullQualifiedClassNameFromFile(SplFileInfo $file): string {
+    protected function fullQualifiedClassNameFromFile(SplFileInfo $file): string
+    {
         $class = trim(str_replace($this->basePath, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
 
         $class = str_replace(
@@ -69,7 +68,6 @@ final class DiscoverEventHandlers
             ucfirst(Str::replaceLast('.php', '', $class))
         );
 
-        return $this->rootNamespace . $class;
+        return $this->rootNamespace.$class;
     }
 }
-

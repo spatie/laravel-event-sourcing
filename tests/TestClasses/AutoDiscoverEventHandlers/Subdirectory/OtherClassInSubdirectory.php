@@ -4,5 +4,4 @@ namespace Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subd
 
 class OtherClassInSubdirectory
 {
-
 }

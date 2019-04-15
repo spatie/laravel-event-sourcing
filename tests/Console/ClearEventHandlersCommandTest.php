@@ -4,9 +4,8 @@ namespace Spatie\EventProjector\Tests\Console;
 
 use Spatie\EventProjector\Projectionist;
 use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
-use Spatie\Snapshots\MatchesSnapshots;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 
 final class ClearEventHandlersCommandTest extends TestCase
 {
@@ -36,4 +35,3 @@ final class ClearEventHandlersCommandTest extends TestCase
         $this->assertFileNotExists(config('event-projector.cache_path'));
     }
 }
-

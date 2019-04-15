@@ -4,9 +4,6 @@ namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Spatie\EventProjector\EventHandlers\EventHandler;
-use Spatie\EventProjector\Projectionist;
-use Spatie\Snapshots\MatchesSnapshots;
 
 final class ClearCachedEventHandlersCommand extends Command
 {
@@ -21,4 +18,3 @@ final class ClearCachedEventHandlersCommand extends Command
         $this->info('Cached event handlers cleared!');
     }
 }
-
