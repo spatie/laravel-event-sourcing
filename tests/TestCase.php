@@ -57,4 +57,9 @@ abstract class TestCase extends Orchestra
         config()->set($name, $value);
         (new EventProjectorServiceProvider($this->app))->register();
     }
+
+    protected function testsPath(): string
+    {
+        return __DIR__;
+    }
 }

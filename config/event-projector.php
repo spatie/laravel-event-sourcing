@@ -60,4 +60,8 @@ return [
      * a chunked way. You can specify the chunk size here.
      */
     'replay_chunk_size' => 1000,
+
+    'discover_event_handlers_in_directories' => [
+        app_path(),
+    ]
 ];

@@ -60,6 +60,16 @@ final class EventProjectorServiceProvider extends ServiceProvider
         $this->app->bind(EventSerializer::class, config('event-projector.event_serializer'));
 
         $this->bindCommands();
+
+        $this->discoverEventHandlers();
+    }
+
+    private function discoverEventHandlers()
+    {
+        (new DiscoverEventHandlers())
+            ->within(config('event-projector.discover_event_handlers_in_directories'))
+            ->useBasePath(app_path())
+            ->addToProjectionist(app(Projectionist::class));
     }
 
     private function bindCommands()
