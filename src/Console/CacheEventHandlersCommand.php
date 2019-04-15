@@ -3,6 +3,8 @@
 namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Collection;
 use Spatie\EventProjector\EventHandlers\EventHandler;
 use Spatie\EventProjector\Projectionist;
 
@@ -12,7 +14,7 @@ final class CacheEventHandlersCommand extends Command
 
     protected $description = 'Cache all auto discovered event handlers';
 
-    public function handle(Projectionist $projectionist): void
+    public function handle(Projectionist $projectionist, Filesystem $files): void
     {
         $this->info('Caching registered event handlers...');
 
@@ -21,10 +23,14 @@ final class CacheEventHandlersCommand extends Command
             ->map(function(EventHandler $eventHandler) {
                 return get_class($eventHandler);
             })
-            ->pipe(function(array $eventHandlerClasses) {
-                file_put_contents(
-                    config('event-projector.cache_path'),
-                    '<?php return '.var_export($eventHandlerClasses, true).';'
+            ->pipe(function(Collection $eventHandlerClasses) use ($files) {
+                $cachePath = config('event-projector.cache_path');
+
+                $files->makeDirectory(dirname($cachePath), 0755, true, true);
+
+                $files->put(
+                    $cachePath,
+                    '<?php return '.var_export($eventHandlerClasses->toArray(), true).';'
                 );
             });
 
