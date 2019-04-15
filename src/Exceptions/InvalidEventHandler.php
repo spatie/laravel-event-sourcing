@@ -29,4 +29,9 @@ final class InvalidEventHandler extends Exception
     {
         return new static('`'.get_class($object).'` must implement Spatie\EventProjector\EventHandlers\EventHandler');
     }
+
+    public static function notAnEventHandlingClassName(string $className)
+    {
+        return new static('`'.$className.'` must implement Spatie\EventProjector\EventHandlers\EventHandler');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Spatie\EventProjector\EventHandlers\EventHandler;
 use Spatie\EventProjector\Projectors\Projector;
@@ -51,24 +52,11 @@ final class DiscoverEventHandlers
             ->map(function (SplFileInfo $file) {
                 return static::fullQualifiedClassNameFromFile($file);
             })
-            ->each(function (string $fqcn) use ($projectionist) {
-                if (is_subclass_of($fqcn, Projector::class)) {
-                    $projectionist->addProjector($fqcn);
-
-                    return;
-                };
-
-                if (is_subclass_of($fqcn, QueuedProjector::class)) {
-                    $projectionist->addProjector($fqcn);
-
-                    return;
-                };
-
-                if (is_subclass_of($fqcn, EventHandler::class)) {
-                    $projectionist->addReactor($fqcn);
-
-                    return;
-                };
+            ->filter(function(string $eventHandlerClass) {
+                return is_subclass_of($eventHandlerClass, EventHandler::class);
+            })
+            ->pipe(function(Collection $eventHandlers) use ($projectionist) {
+                $projectionist->addEventHandlers($eventHandlers->toArray());
             });
     }
 

@@ -66,14 +66,6 @@ final class EventProjectorServiceProvider extends ServiceProvider
         $this->discoverEventHandlers();
     }
 
-    private function discoverEventHandlers()
-    {
-        (new DiscoverEventHandlers())
-            ->within(config('event-projector.discover_event_handlers_in_directories'))
-            ->useBasePath(app_path())
-            ->addToProjectionist(app(Projectionist::class));
-    }
-
     private function bindCommands()
     {
         $this->app->bind('command.event-projector:replay', ReplayCommand::class);
@@ -93,5 +85,34 @@ final class EventProjectorServiceProvider extends ServiceProvider
             'command.make:aggregate',
             'command.make:storable-event',
         ]);
+    }
+
+    private function discoverEventHandlers()
+    {
+        $projectionist = app(Projectionist::class);
+
+        $cachedEventHandlers = $this->getCachedEventHandlers();
+
+        if(! is_null($cachedEventHandlers)) {
+            $projectionist->addEventHandlers($cachedEventHandlers);
+
+            return;
+        }
+
+        (new DiscoverEventHandlers())
+            ->within(config('event-projector.discover_event_handlers_in_directories'))
+            ->useBasePath(app_path())
+            ->addToProjectionist($projectionist);
+    }
+
+    private function getCachedEventHandlers(): ?array
+    {
+        $cachedEventHandlersPath = config('event-projector.cache_path');
+
+        if (! file_exists($cachedEventHandlersPath)) {
+            return null;
+        }
+
+        return require $cachedEventHandlersPath;
     }
 }
