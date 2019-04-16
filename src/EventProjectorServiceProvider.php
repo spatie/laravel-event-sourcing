@@ -30,6 +30,8 @@ final class EventProjectorServiceProvider extends ServiceProvider
         }
 
         Event::subscribe(EventSubscriber::class);
+
+        $this->discoverEventHandlers();
     }
 
     public function register(): void
@@ -63,7 +65,6 @@ final class EventProjectorServiceProvider extends ServiceProvider
 
         $this->bindCommands();
 
-        $this->discoverEventHandlers();
     }
 
     private function bindCommands()
