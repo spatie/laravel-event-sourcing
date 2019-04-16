@@ -46,7 +46,10 @@
     "autoload-dev": {
         "psr-4": {
             "Spatie\\EventProjector\\Tests\\": "tests"
-        }
+        },
+        "files": [
+            "tests/TestClasses/AutoDiscoverEventHandlers/functions.php"
+        ]
     },
     "scripts": {
         "test": "vendor/bin/phpunit",

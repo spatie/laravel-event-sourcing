@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector;
 
+use Error;
 use SplFileInfo;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
@@ -51,7 +52,11 @@ final class DiscoverEventHandlers
                 return static::fullQualifiedClassNameFromFile($file);
             })
             ->filter(function (string $eventHandlerClass) {
-                return is_subclass_of($eventHandlerClass, EventHandler::class);
+               // try {
+                    return is_subclass_of($eventHandlerClass, EventHandler::class);
+                //} catch (Error $error) {
+                 //   return false;
+               // }
             })
             ->pipe(function (Collection $eventHandlers) use ($projectionist) {
                 $projectionist->addEventHandlers($eventHandlers->toArray());
@@ -68,6 +73,6 @@ final class DiscoverEventHandlers
             ucfirst(Str::replaceLast('.php', '', $class))
         );
 
-        return $this->rootNamespace.$class;
+        return $this->rootNamespace . $class;
     }
 }
