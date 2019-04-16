@@ -31,6 +31,6 @@ final class CacheEventHandlersCommandTest extends TestCase
 
         $this->artisan('event-projector:cache-event-handlers')->assertExitCode(0);
 
-        $this->assertMatchesSnapshot(file_get_contents(config('event-projector.cache_path') . '/event-handlers.php'));
+        $this->assertMatchesSnapshot(file_get_contents(config('event-projector.cache_path').'/event-handlers.php'));
     }
 }

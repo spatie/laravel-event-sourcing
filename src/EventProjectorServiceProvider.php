@@ -64,7 +64,6 @@ final class EventProjectorServiceProvider extends ServiceProvider
         $this->app->bind(EventSerializer::class, config('event-projector.event_serializer'));
 
         $this->bindCommands();
-
     }
 
     private function bindCommands()
@@ -109,7 +108,7 @@ final class EventProjectorServiceProvider extends ServiceProvider
 
     private function getCachedEventHandlers(): ?array
     {
-        $cachedEventHandlersPath = config('event-projector.cache_path') . '/event-handlers.php';
+        $cachedEventHandlersPath = config('event-projector.cache_path').'/event-handlers.php';
 
         if (! file_exists($cachedEventHandlersPath)) {
             return null;

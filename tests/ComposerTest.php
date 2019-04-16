@@ -7,15 +7,14 @@ use Spatie\EventProjector\Composer;
 
 final class ComposerTest extends TestCase
 {
-
     /** @test */
     public function it_can_get_all_loaded_files()
     {
-        $pathToComposerJson = __DIR__ . '/../composer.json';
+        $pathToComposerJson = __DIR__.'/../composer.json';
 
         $files = Composer::getAutoloadedFiles($pathToComposerJson);
 
-        $files = array_map(function(string $path) {
+        $files = array_map(function (string $path) {
             return Str::after($path, $this->pathToTests());
         }, $files);
 
@@ -24,4 +23,3 @@ final class ComposerTest extends TestCase
         ], $files);
     }
 }
-

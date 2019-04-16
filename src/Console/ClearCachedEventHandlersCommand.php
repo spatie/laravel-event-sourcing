@@ -13,7 +13,7 @@ final class ClearCachedEventHandlersCommand extends Command
 
     public function handle(Filesystem $files): void
     {
-        $files->delete(config('event-projector.cache_path') . '/event-handlers.php');
+        $files->delete(config('event-projector.cache_path').'/event-handlers.php');
 
         $this->info('Cached event handlers cleared!');
     }

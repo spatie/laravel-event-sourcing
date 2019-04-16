@@ -28,10 +28,10 @@ final class ClearEventHandlersCommandTest extends TestCase
 
         $this->artisan('event-projector:cache-event-handlers')->assertExitCode(0);
 
-        $this->assertFileExists(config('event-projector.cache_path') . '/event-handlers.php');
+        $this->assertFileExists(config('event-projector.cache_path').'/event-handlers.php');
 
         $this->artisan('event-projector:clear-event-handlers')->assertExitCode(0);
 
-        $this->assertFileNotExists(config('event-projector.cache_path') . '/event-handlers.php');
+        $this->assertFileNotExists(config('event-projector.cache_path').'/event-handlers.php');
     }
 }

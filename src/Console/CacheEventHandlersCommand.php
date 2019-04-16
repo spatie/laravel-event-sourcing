@@ -29,7 +29,7 @@ final class CacheEventHandlersCommand extends Command
                 $files->makeDirectory($cachePath, 0755, true, true);
 
                 $files->put(
-                    $cachePath . '/event-handlers.php',
+                    $cachePath.'/event-handlers.php',
                     '<?php return '.var_export($eventHandlerClasses->toArray(), true).';'
                 );
             });

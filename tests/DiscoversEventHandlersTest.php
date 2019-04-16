@@ -21,8 +21,7 @@ final class DiscoversEventHandlersTest extends TestCase
         /** @var \Spatie\EventProjector\Projectionist $projectionist */
         $projectionist = app(Projectionist::class);
 
-        $pathToComposerJson = __DIR__ . '/../composer.json';
-
+        $pathToComposerJson = __DIR__.'/../composer.json';
 
         (new DiscoverEventHandlers())
             ->within([__DIR__.'/TestClasses/AutoDiscoverEventHandlers'])

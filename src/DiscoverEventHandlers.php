@@ -2,7 +2,6 @@
 
 namespace Spatie\EventProjector;
 
-use Error;
 use SplFileInfo;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
@@ -57,7 +56,7 @@ final class DiscoverEventHandlers
         $files = (new Finder())->files()->in($this->directories);
 
         return collect($files)
-            ->reject(function(SplFileInfo $file) {
+            ->reject(function (SplFileInfo $file) {
                 return in_array($file->getPathname(), $this->ignoredFiles);
             })
             ->map(function (SplFileInfo $file) {
@@ -81,6 +80,6 @@ final class DiscoverEventHandlers
             ucfirst(Str::replaceLast('.php', '', $class))
         );
 
-        return $this->rootNamespace . $class;
+        return $this->rootNamespace.$class;
     }
 }
