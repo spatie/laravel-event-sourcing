@@ -15,5 +15,4 @@ interface EventHandler
     public function handleException(Exception $exception): void;
 
     public function getEventHandlingMethods(): Collection;
-
 }

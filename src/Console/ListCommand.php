@@ -4,9 +4,9 @@ namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\EventHandlers\EventHandler;
 use Spatie\EventProjector\Projectionist;
 use Spatie\EventProjector\Projectors\Projector;
+use Spatie\EventProjector\EventHandlers\EventHandler;
 
 final class ListCommand extends Command
 {
@@ -31,7 +31,6 @@ final class ListCommand extends Command
             : 'No reactors registered';
     }
 
-
     private function convertEventHandlersToTableRows(Collection $eventHandlers): array
     {
         $events = $eventHandlers
@@ -51,4 +50,3 @@ final class ListCommand extends Command
             ->toArray();
     }
 }
-
