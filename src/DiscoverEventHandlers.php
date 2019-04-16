@@ -71,7 +71,7 @@ final class DiscoverEventHandlers
             });
     }
 
-    protected function fullQualifiedClassNameFromFile(SplFileInfo $file): string
+    private function fullQualifiedClassNameFromFile(SplFileInfo $file): string
     {
         $class = trim(str_replace($this->basePath, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
 
