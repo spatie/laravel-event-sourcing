@@ -100,7 +100,7 @@ final class EventProjectorServiceProvider extends ServiceProvider
         }
 
         (new DiscoverEventHandlers())
-            ->within(config('event-projector.discover_event_handlers_in_directories'))
+            ->within(config('event-projector.auto_discover_projectors_and_reactors'))
             ->useBasePath(app_path())
             ->addToProjectionist($projectionist);
     }

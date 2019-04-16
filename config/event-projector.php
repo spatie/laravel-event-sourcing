@@ -3,18 +3,26 @@
 return [
 
     /*
-     * Projectors are classes that build up projections. You can create them by
-     * performing `php artisan event-projector:create-projector`. Projectors
-     * can be registered in this array or a service provider.
+     * These directories will be scanned for projectors and reactors. They
+     *  will be automatically registered to projectionist automatically.
+     */
+    'auto_discover_projectors_and_reactors' => [
+        app_path(),
+    ],
+
+    /*
+     * Projectors are classes that build up projections. You can create them by performing
+     * `php artisan event-projector:create-projector`.  When not using autodiscovery
+     * Projectors can be registered in this array or a service provider.
      */
     'projectors' => [
         // App\Projectors\YourProjector::class
     ],
 
     /*
-     * Reactors are classes that handle side effects. You can create them by
-     * performing `php artisan event-projector:create-reactor`. Reactors
-     * can be registered in this array or a service provider.
+     * Reactors are classes that handle side effects. You can create them by performing
+     * `php artisan event-projector:create-reactor`. When not using autodiscovery
+     * Reactors can be registered in this array or a service provider.
      */
     'reactors' => [
         // App\Reactors\YourReactor::class
@@ -60,15 +68,6 @@ return [
      * a chunked way. You can specify the chunk size here.
      */
     'replay_chunk_size' => 1000,
-
-    /*
-     * Instead of registering projectors and reactor manually, you can enable automatic
-     * event handler discovery. We will scan these directories for projectors and
-     * reactors and register them to projectionist automatically.
-     */
-    'discover_event_handlers_in_directories' => [
-        app_path(),
-    ],
 
     /*
      * In production, you likely do not want the package to scan all the event handlers
