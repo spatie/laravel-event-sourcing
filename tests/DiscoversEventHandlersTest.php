@@ -32,10 +32,9 @@ final class DiscoversEventHandlersTest extends TestCase
                 return get_class($eventHandler);
             })
             ->values()
-            ->sort()
             ->toArray();
 
-        $this->assertEquals([
+        $this->assertEqualsCanonicalizing([
             TestQueuedProjector::class,
             TestProjectorInSubdirectory::class,
             TestQueuedProjectorInSubdirectory::class,
@@ -48,10 +47,9 @@ final class DiscoversEventHandlersTest extends TestCase
                 return get_class($eventHandler);
             })
             ->values()
-            ->sort()
             ->toArray();
 
-        $this->assertEquals([
+        $this->assertEqualsCanonicalizing([
             TestReactorInSubdirectory::class,
             TestReactor::class,
         ], $registeredReactors);
