@@ -26,10 +26,10 @@ final class CacheEventHandlersCommand extends Command
             ->pipe(function (Collection $eventHandlerClasses) use ($files) {
                 $cachePath = config('event-projector.cache_path');
 
-                $files->makeDirectory(dirname($cachePath), 0755, true, true);
+                $files->makeDirectory($cachePath, 0755, true, true);
 
                 $files->put(
-                    $cachePath,
+                    $cachePath . '/event-handlers.php',
                     '<?php return '.var_export($eventHandlerClasses->toArray(), true).';'
                 );
             });

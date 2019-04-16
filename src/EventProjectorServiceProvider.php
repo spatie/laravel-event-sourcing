@@ -109,7 +109,7 @@ final class EventProjectorServiceProvider extends ServiceProvider
 
     private function getCachedEventHandlers(): ?array
     {
-        $cachedEventHandlersPath = config('event-projector.cache_path');
+        $cachedEventHandlersPath = config('event-projector.cache_path') . '/event-handlers.php';
 
         if (! file_exists($cachedEventHandlersPath)) {
             return null;

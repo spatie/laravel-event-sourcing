@@ -76,5 +76,5 @@ return [
      *
      * Here you can specify where the cache should be stored.
      */
-    'cache_path' => storage_path('app/event-projector/event-handlers.php'),
+    'cache_path' => storage_path('app/event-projector'),
 ];
