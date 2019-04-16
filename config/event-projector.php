@@ -61,9 +61,21 @@ return [
      */
     'replay_chunk_size' => 1000,
 
+    /*
+     * Instead of registering projectors and reactor manually, you can enable automatic
+     * event handler discovery. We will scan these directories for projectors and
+     * reactors and register them to projectionist automatically.
+     */
     'discover_event_handlers_in_directories' => [
         app_path(),
     ],
 
+    /*
+     * In production, you likely do not want the package to scan all the event handlers
+     * on every request. The package can cache all registered event handlers.
+     * More info: XXX
+     *
+     * Here you can specify where the cache should be stored.
+     */
     'cache_path' => storage_path('app/event-projector/event-handlers.php'),
 ];
