@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 2.3.0 - 2019-04-16
+
+- add `list` command
+
 ## 2.2.0 - 2019-04-16
 
 - automatically register event handlers
