@@ -28,13 +28,15 @@
         "illuminate/support": "5.8.*",
         "league/flysystem": "^1.0.45",
         "spatie/laravel-schemaless-attributes": "^1.4",
+        "symfony/finder": "^4.2",
         "symfony/property-access": "^4.0",
         "symfony/serializer": "^4.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.1",
         "orchestra/testbench": "3.8.*",
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^8.0",
+        "spatie/phpunit-snapshot-assertions": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -44,7 +46,10 @@
     "autoload-dev": {
         "psr-4": {
             "Spatie\\EventProjector\\Tests\\": "tests"
-        }
+        },
+        "files": [
+            "tests/TestClasses/AutoDiscoverEventHandlers/functions.php"
+        ]
     },
     "scripts": {
         "test": "vendor/bin/phpunit",

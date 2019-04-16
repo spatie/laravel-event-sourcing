@@ -10,6 +10,7 @@ use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\EventHandlers\EventHandler;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
+use Spatie\EventProjector\Projectors\QueuedProjector;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\EventHandlers\EventHandlerCollection;
 use Spatie\EventProjector\Events\EventHandlerFailedHandlingEvent;
@@ -133,6 +134,40 @@ final class Projectionist
     public function getReactors(): Collection
     {
         return $this->reactors->all();
+    }
+
+    public function addEventHandler($eventHandlerClass)
+    {
+        if (! is_string($eventHandlerClass)) {
+            $eventHandlerClass = get_class($eventHandlerClass);
+        }
+
+        if (is_subclass_of($eventHandlerClass, Projector::class)) {
+            $this->addProjector($eventHandlerClass);
+
+            return;
+        }
+
+        if (is_subclass_of($eventHandlerClass, QueuedProjector::class)) {
+            $this->addProjector($eventHandlerClass);
+
+            return;
+        }
+
+        if (is_subclass_of($eventHandlerClass, EventHandler::class)) {
+            $this->addReactor($eventHandlerClass);
+
+            return;
+        }
+
+        throw InvalidEventHandler::notAnEventHandlingClassName($eventHandlerClass);
+    }
+
+    public function addEventHandlers(array $eventHandlers)
+    {
+        foreach ($eventHandlers as $eventHandler) {
+            $this->addEventHandler($eventHandler);
+        }
     }
 
     public function handle(StoredEvent $storedEvent): void

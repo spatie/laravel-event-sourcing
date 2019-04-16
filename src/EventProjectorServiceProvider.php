@@ -10,6 +10,8 @@ use Spatie\EventProjector\Console\MakeAggregateCommand;
 use Spatie\EventProjector\Console\MakeProjectorCommand;
 use Spatie\EventProjector\Console\MakeStorableEventCommand;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
+use Spatie\EventProjector\Console\CacheEventHandlersCommand;
+use Spatie\EventProjector\Console\ClearCachedEventHandlersCommand;
 
 final class EventProjectorServiceProvider extends ServiceProvider
 {
@@ -28,6 +30,8 @@ final class EventProjectorServiceProvider extends ServiceProvider
         }
 
         Event::subscribe(EventSubscriber::class);
+
+        $this->discoverEventHandlers();
     }
 
     public function register(): void
@@ -65,6 +69,8 @@ final class EventProjectorServiceProvider extends ServiceProvider
     private function bindCommands()
     {
         $this->app->bind('command.event-projector:replay', ReplayCommand::class);
+        $this->app->bind('command.event-projector:cache-event-handlers', CacheEventHandlersCommand::class);
+        $this->app->bind('command.event-projector:clear-event-handlers', ClearCachedEventHandlersCommand::class);
         $this->app->bind('command.make:projector', MakeProjectorCommand::class);
         $this->app->bind('command.make:reactor', MakeReactorCommand::class);
         $this->app->bind('command.make:aggregate', MakeAggregateCommand::class);
@@ -72,10 +78,42 @@ final class EventProjectorServiceProvider extends ServiceProvider
 
         $this->commands([
             'command.event-projector:replay',
+            'command.event-projector:cache-event-handlers',
+            'command.event-projector:clear-event-handlers',
             'command.make:projector',
             'command.make:reactor',
             'command.make:aggregate',
             'command.make:storable-event',
         ]);
+    }
+
+    private function discoverEventHandlers()
+    {
+        $projectionist = app(Projectionist::class);
+
+        $cachedEventHandlers = $this->getCachedEventHandlers();
+
+        if (! is_null($cachedEventHandlers)) {
+            $projectionist->addEventHandlers($cachedEventHandlers);
+
+            return;
+        }
+
+        (new DiscoverEventHandlers())
+            ->within(config('event-projector.auto_discover_projectors_and_reactors'))
+            ->useBasePath(base_path())
+            ->ignoringFiles(Composer::getAutoloadedFiles(base_path('composer.json')))
+            ->addToProjectionist($projectionist);
+    }
+
+    private function getCachedEventHandlers(): ?array
+    {
+        $cachedEventHandlersPath = config('event-projector.cache_path').'/event-handlers.php';
+
+        if (! file_exists($cachedEventHandlersPath)) {
+            return null;
+        }
+
+        return require $cachedEventHandlersPath;
     }
 }
