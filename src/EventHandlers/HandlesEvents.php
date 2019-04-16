@@ -46,7 +46,7 @@ trait HandlesEvents
         report($exception);
     }
 
-    private function getEventHandlingMethods(): Collection
+    public function getEventHandlingMethods(): Collection
     {
         $handlesEvents = collect($this->handlesEvents ?? [])
             ->mapWithKeys(function (string $handlerMethod, $eventClass) {
