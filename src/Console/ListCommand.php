@@ -26,9 +26,8 @@ final class ListCommand extends Command
         $this->info('');
         $projectors = $projectionist->getReactors();
         $rows = $this->convertEventHandlersToTableRows($projectors);
-        $this->table(['Event', 'Handled by reactors'], $rows);
         count($rows)
-            ? $this->table(['Event', 'Handled by projectors'], $rows)
+            ? $this->table(['Event', 'Handled by reactors'], $rows)
             : 'No reactors registered';
     }
 
