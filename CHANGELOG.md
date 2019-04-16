@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 2.2.0 - 2019-04-16
+
+- automatically register event handlers
+
 ## 2.1.1 - 2019-04-13
 
 - stubs don't use `handlesEvents` anymore
