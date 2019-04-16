@@ -103,6 +103,7 @@ final class EventProjectorServiceProvider extends ServiceProvider
         (new DiscoverEventHandlers())
             ->within(config('event-projector.auto_discover_projectors_and_reactors'))
             ->useBasePath(base_path())
+            ->ignoringFiles(Composer::getAutoloadedFiles(base_path('composer.json')))
             ->addToProjectionist($projectionist);
     }
 

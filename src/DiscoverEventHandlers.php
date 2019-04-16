@@ -17,6 +17,8 @@ final class DiscoverEventHandlers
 
     private $rootNamespace = '';
 
+    private $ignoredFiles = [];
+
     public function __construct()
     {
         $this->basePath = app_path();
@@ -43,20 +45,26 @@ final class DiscoverEventHandlers
         return $this;
     }
 
+    public function ignoringFiles(array $ignoredFiles): self
+    {
+        $this->ignoredFiles = $ignoredFiles;
+
+        return $this;
+    }
+
     public function addToProjectionist(Projectionist $projectionist)
     {
         $files = (new Finder())->files()->in($this->directories);
 
         return collect($files)
+            ->reject(function(SplFileInfo $file) {
+                return in_array($file->getPathname(), $this->ignoredFiles);
+            })
             ->map(function (SplFileInfo $file) {
                 return static::fullQualifiedClassNameFromFile($file);
             })
             ->filter(function (string $eventHandlerClass) {
-               // try {
-                    return is_subclass_of($eventHandlerClass, EventHandler::class);
-                //} catch (Error $error) {
-                 //   return false;
-               // }
+                return is_subclass_of($eventHandlerClass, EventHandler::class);
             })
             ->pipe(function (Collection $eventHandlers) use ($projectionist) {
                 $projectionist->addEventHandlers($eventHandlers->toArray());

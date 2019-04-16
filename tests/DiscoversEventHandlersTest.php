@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector\Tests;
 
+use Spatie\EventProjector\Composer;
 use Spatie\EventProjector\Projectionist;
 use Spatie\EventProjector\DiscoverEventHandlers;
 use Spatie\EventProjector\EventHandlers\EventHandler;
@@ -20,10 +21,15 @@ final class DiscoversEventHandlersTest extends TestCase
         /** @var \Spatie\EventProjector\Projectionist $projectionist */
         $projectionist = app(Projectionist::class);
 
+        $pathToComposerJson = __DIR__ . '/../composer.json';
+
+
         (new DiscoverEventHandlers())
             ->within([__DIR__.'/TestClasses/AutoDiscoverEventHandlers'])
             ->useBasePath($this->getDiscoveryBasePath())
             ->useRootNamespace('Spatie\EventProjector\\')
+            ->ignoringFiles(Composer::getAutoloadedFiles($pathToComposerJson))
+
             ->addToProjectionist($projectionist);
 
         $registeredProjectors = $projectionist
