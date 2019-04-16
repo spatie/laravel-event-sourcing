@@ -9,4 +9,3 @@ final class TestQueuedProjector implements Projector
 {
     use ProjectsEvents;
 }
-

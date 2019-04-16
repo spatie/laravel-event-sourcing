@@ -3,10 +3,10 @@
 namespace Spatie\EventProjector\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\EventHandlers\EventHandler;
+use Illuminate\Filesystem\Filesystem;
 use Spatie\EventProjector\Projectionist;
+use Spatie\EventProjector\EventHandlers\EventHandler;
 
 final class CacheEventHandlersCommand extends Command
 {
@@ -20,10 +20,10 @@ final class CacheEventHandlersCommand extends Command
 
         $projectionist->getProjectors()
             ->merge($projectionist->getReactors())
-            ->map(function(EventHandler $eventHandler) {
+            ->map(function (EventHandler $eventHandler) {
                 return get_class($eventHandler);
             })
-            ->pipe(function(Collection $eventHandlerClasses) use ($files) {
+            ->pipe(function (Collection $eventHandlerClasses) use ($files) {
                 $cachePath = config('event-projector.cache_path');
 
                 $files->makeDirectory(dirname($cachePath), 0755, true, true);
@@ -37,4 +37,3 @@ final class CacheEventHandlersCommand extends Command
         $this->info('All done!');
     }
 }
-

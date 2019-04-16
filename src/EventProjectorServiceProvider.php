@@ -4,14 +4,14 @@ namespace Spatie\EventProjector;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Spatie\EventProjector\Console\CacheEventHandlersCommand;
-use Spatie\EventProjector\Console\ClearCachedEventHandlersCommand;
 use Spatie\EventProjector\Console\ReplayCommand;
 use Spatie\EventProjector\Console\MakeReactorCommand;
 use Spatie\EventProjector\Console\MakeAggregateCommand;
 use Spatie\EventProjector\Console\MakeProjectorCommand;
 use Spatie\EventProjector\Console\MakeStorableEventCommand;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
+use Spatie\EventProjector\Console\CacheEventHandlersCommand;
+use Spatie\EventProjector\Console\ClearCachedEventHandlersCommand;
 
 final class EventProjectorServiceProvider extends ServiceProvider
 {
@@ -93,7 +93,7 @@ final class EventProjectorServiceProvider extends ServiceProvider
 
         $cachedEventHandlers = $this->getCachedEventHandlers();
 
-        if(! is_null($cachedEventHandlers)) {
+        if (! is_null($cachedEventHandlers)) {
             $projectionist->addEventHandlers($cachedEventHandlers);
 
             return;

@@ -2,11 +2,11 @@
 
 namespace Spatie\EventProjector\Tests\Console;
 
+use Spatie\Snapshots\MatchesSnapshots;
 use Spatie\EventProjector\Projectionist;
 use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
-use Spatie\Snapshots\MatchesSnapshots;
+use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
 
 final class CacheEventHandlersCommandTest extends TestCase
 {
@@ -34,4 +34,3 @@ final class CacheEventHandlersCommandTest extends TestCase
         $this->assertMatchesSnapshot(file_get_contents(config('event-projector.cache_path')));
     }
 }
-

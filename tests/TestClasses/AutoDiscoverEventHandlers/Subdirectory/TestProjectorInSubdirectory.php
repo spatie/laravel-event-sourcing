@@ -9,4 +9,3 @@ final class TestProjectorInSubdirectory implements Projector
 {
     use ProjectsEvents;
 }
-

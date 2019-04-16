@@ -9,4 +9,3 @@ final class TestProjector implements Projector
 {
     use ProjectsEvents;
 }
-
