@@ -4,7 +4,7 @@ return [
 
     /*
      * These directories will be scanned for projectors and reactors. They
-     *  will be automatically registered to projectionist automatically.
+     * will be automatically registered to projectionist automatically.
      */
     'auto_discover_projectors_and_reactors' => [
         app_path(),
@@ -70,9 +70,9 @@ return [
     'replay_chunk_size' => 1000,
 
     /*
-     * In production, you likely do not want the package to scan all the event handlers
+     * In production, you likely don't want the package to auto discover the event handlers
      * on every request. The package can cache all registered event handlers.
-     * More info: XXX
+     * More info: https://docs.spatie.be/laravel-event-projector/v2/advanced-usage/discovering-projectors-and-reactors
      *
      * Here you can specify where the cache should be stored.
      */
