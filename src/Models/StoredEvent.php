@@ -92,7 +92,7 @@ class StoredEvent extends Model
                     $tags ?? []
                 );
 
-                dispatch($storedEventJob->onQueue(config('event-projector.queue')));
+                dispatch($storedEventJob->onQueue($event->queue ?? config('event-projector.queue')));
             });
     }
 
