@@ -17,7 +17,7 @@ final class MoneyAddedEventWithQueueOverride implements ShouldBeStored
     public $amount;
 
     /** @var string */
-    public $queue = "testQueue";
+    public $queue = 'testQueue';
 
     public function __construct(Account $account, int $amount)
     {

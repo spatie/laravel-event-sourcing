@@ -3,20 +3,20 @@
 namespace Spatie\EventProjector\Tests;
 
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\HandleStoredEventJob;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEventWithQueueOverride;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventProjector\Tests\TestClasses\Events\DoNotStoreThisEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEventWithQueueOverride;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatInvokesAnObject;
 
 final class EventSubscriberTest extends TestCase
@@ -131,7 +131,7 @@ final class EventSubscriberTest extends TestCase
     public function event_without_queue_override_will_be_queued_correctly()
     {
         Queue::fake();
-        
+
         $this->setConfig('event-projector.queue', 'defaultQueue');
 
         $projector = new QueuedProjector();
@@ -146,7 +146,7 @@ final class EventSubscriberTest extends TestCase
     public function event_with_queue_override_will_be_queued_correctly()
     {
         Queue::fake();
-        
+
         $this->setConfig('event-projector.queue', 'defaultQueue');
 
         $projector = new QueuedProjector();
