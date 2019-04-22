@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 2.4.0 - 2019-04-23
+
+- allow to specify the queue that should be used on the event
+
 ## 2.3.0 - 2019-04-16
 
 - add `list` command
