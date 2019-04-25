@@ -6,17 +6,17 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-event-projector.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-event-projector)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-event-projector.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-projector)
 
-This package aims to be the entry point to get started with event sourcing in Laravel. It can help you setting up aggregates, projectors and reactors. 
+This package aims to be the entry point to get started with event sourcing in Laravel. It can help you with setting up aggregates, projectors, and reactors. 
 
-If you've never worked with event sourcing, or are uncertain about what aggregates, projectors and reactors are, head over to the getting familiar with event sourcing section [in our docs](https://docs.spatie.be/laravel-event-projector/v2/getting-familiar-with-event-sourcing/introduction).
+If you've never worked with event sourcing, or are uncertain about what aggregates, projectors and reactors are head over to the getting familiar with event sourcing section [in our docs](https://docs.spatie.be/laravel-event-projector/v2/getting-familiar-with-event-sourcing/introduction).
 
 Event sourcing might be a good choice for your project if:
 
 - your app needs to make decisions based on the past
-- your app has auditing requirments: the reason why your app is in a certain state is equally as important as the state itself
+- your app has auditing requirements: the reason why your app is in a certain state is equally as important as the state itself
 - you foresee that there will be a reporting need in the future, but you don't know yet which data you need to collect for those reports
 
-If you want to skip to reading code immediately, here are same example app. In each of them, you can create accounts and deposit or withdraw money. 
+If you want to skip to reading code immediately, here are some example apps. In each of them, you can create accounts and deposit or withdraw money. 
 
 - [Larabank built traditionally without event sourcing](https://github.com/spatie/larabank-traditional)
 - [Larabank built with projectors](https://github.com/spatie/larabank-event-projector)
