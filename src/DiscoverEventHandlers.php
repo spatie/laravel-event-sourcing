@@ -60,7 +60,7 @@ final class DiscoverEventHandlers
                 return in_array($file->getPathname(), $this->ignoredFiles);
             })
             ->map(function (SplFileInfo $file) {
-                return static::fullQualifiedClassNameFromFile($file);
+                return $this->fullQualifiedClassNameFromFile($file);
             })
             ->filter(function (string $eventHandlerClass) {
                 return is_subclass_of($eventHandlerClass, EventHandler::class);
