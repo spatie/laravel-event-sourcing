@@ -12,7 +12,7 @@ final class DiscoverEventHandlers
 {
     private $directories = [];
 
-    private $basePath;
+    private $basePath = '';
 
     private $rootNamespace = '';
 
