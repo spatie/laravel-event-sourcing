@@ -30,6 +30,6 @@ trait ProjectsEvents
 
     protected function getStoredEventClass(): string
     {
-        return config('event-projector.stored_event_model');
+        return $this->storedEventModel ?? config('event-projector.stored_event_model');
     }
 }
