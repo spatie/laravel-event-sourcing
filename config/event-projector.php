@@ -4,7 +4,7 @@ return [
 
     /*
      * These directories will be scanned for projectors and reactors. They
-     * will be automatically registered to projectionist automatically.
+     * will be registered to projectionist automatically.
      */
     'auto_discover_projectors_and_reactors' => [
         app_path(),
@@ -12,7 +12,7 @@ return [
 
     /*
      * Projectors are classes that build up projections. You can create them by performing
-     * `php artisan event-projector:create-projector`.  When not using autodiscovery
+     * `php artisan event-projector:create-projector`. When not using autodiscovery,
      * Projectors can be registered in this array or a service provider.
      */
     'projectors' => [
@@ -20,7 +20,7 @@ return [
     ],
 
     /*
-     * Reactors are classes that handle side effects. You can create them by performing
+     * Reactors are classes that handle side-effects. You can create them by performing
      * `php artisan event-projector:create-reactor`. When not using autodiscovery
      * Reactors can be registered in this array or a service provider.
      */
@@ -49,7 +49,7 @@ return [
     'stored_event_model' => \Spatie\EventProjector\Models\StoredEvent::class,
 
     /*
-     * This class is responsible for handle stored events. To add extra behaviour you
+     * This class is responsible for handling stored events. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
      * it should extend \Spatie\EventProjector\HandleDomainEventJob.
      */
@@ -64,13 +64,12 @@ return [
 
     /*
      * When replaying events potentially a lot of events will have to be retrieved.
-     * In order to avoid memory problems events will be retrieved in
-     * a chunked way. You can specify the chunk size here.
+     * In order to avoid memory problems events will be retrieved as chunks. You can specify the chunk size here.
      */
     'replay_chunk_size' => 1000,
 
     /*
-     * In production, you likely don't want the package to auto discover the event handlers
+     * In production, you likely don't want the package to auto-discover the event handlers
      * on every request. The package can cache all registered event handlers.
      * More info: https://docs.spatie.be/laravel-event-projector/v2/advanced-usage/discovering-projectors-and-reactors
      *
