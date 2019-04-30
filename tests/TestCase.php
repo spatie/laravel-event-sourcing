@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector\Tests;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Schema\Blueprint;
@@ -45,6 +46,9 @@ abstract class TestCase extends Orchestra
         Schema::dropIfExists('stored_events');
         include_once __DIR__.'/../stubs/create_stored_events_table.php.stub';
         (new \CreateStoredEventsTable())->up();
+
+        Schema::dropIfExists('other_stored_events');
+        DB::statement('CREATE TABLE other_stored_events LIKE stored_events');
     }
 
     protected function assertSeeInConsoleOutput(string $text): self
