@@ -27,9 +27,4 @@ trait ProjectsEvents
     {
         return ! $this instanceof QueuedProjector;
     }
-
-    protected function getStoredEventClass(): string
-    {
-        return $this->storedEventModel ?? config('event-projector.stored_event_model');
-    }
 }
