@@ -58,7 +58,7 @@ abstract class AggregateRoot
 
     private function reconstituteFromEvents(): AggregateRoot
     {
-        StoredEvent::uuid($this->aggregateUuid)->each(function (StoredEvent $storedEvent) {
+        $this->getStoredEventModel()::uuid($this->aggregateUuid)->each(function (StoredEvent $storedEvent) {
             $this->apply($storedEvent->event);
         });
 
