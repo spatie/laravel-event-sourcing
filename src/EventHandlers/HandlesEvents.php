@@ -48,6 +48,10 @@ trait HandlesEvents
 
     public function getEventHandlingMethods(): Collection
     {
+        if (! isset($this->handlesEvents) && ! isset($this->handleEvent)) {
+            return $this->autoDetectHandlesEvents();
+        }
+
         $handlesEvents = collect($this->handlesEvents ?? [])
             ->mapWithKeys(function (string $handlerMethod, $eventClass) {
                 if (is_numeric($eventClass)) {
@@ -59,10 +63,6 @@ trait HandlesEvents
 
         if ($this->handleEvent ?? false) {
             $handlesEvents->put($this->handleEvent, get_class($this));
-        }
-
-        if (! isset($this->handlesEvents) && ! isset($this->handleEvent)) {
-            $handlesEvents = $this->autoDetectHandlesEvents();
         }
 
         return $handlesEvents;
