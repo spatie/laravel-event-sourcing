@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 2.5.0 - 2019-05-06
+
+- allow to specify the model to be used by an aggregate for retrieving/peristing events by adding a `$storedEventModel` on it
+
 ## 2.4.0 - 2019-04-23
 
 - allow to specify the queue that should be used on the event
