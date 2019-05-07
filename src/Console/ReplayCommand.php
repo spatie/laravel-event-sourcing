@@ -3,14 +3,17 @@
 namespace Spatie\EventProjector\Console;
 
 use Exception;
+use InvalidArgumentException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Spatie\EventProjector\Projectionist;
+use Spatie\EventProjector\Models\StoredEvent;
 
 class ReplayCommand extends Command
 {
     protected $signature = 'event-projector:replay {projector?*}
-                            {--from=0 : Replay events starting from this event number}';
+                            {--from=0 : Replay events starting from this event number}
+                            {--store= : Replay events from this store}';
 
     protected $description = 'Replay stored events';
 
@@ -25,12 +28,12 @@ class ReplayCommand extends Command
         parent::__construct();
 
         $this->projectionist = $projectionist;
-
-        $this->storedEventModelClass = $this->getStoredEventClass();
     }
 
     public function handle(): void
     {
+        $this->storedEventModelClass = $this->getStoredEventClass();
+
         $projectors = $this->selectProjectors($this->argument('projector'));
 
         if (is_null($projectors)) {
@@ -99,6 +102,14 @@ class ReplayCommand extends Command
 
     private function getStoredEventClass(): string
     {
-        return config('event-projector.stored_event_model');
+        if ($store = $this->option('store')) {
+            if (! is_subclass_of($store, StoredEvent::class)) {
+                throw new InvalidArgumentException(
+                    "Invalid store value - class `$store` does not implement `".StoredEvent::class.'`'
+                );
+            }
+        }
+
+        return $store ?? config('event-projector.stored_event_model');
     }
 }
