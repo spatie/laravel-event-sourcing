@@ -15,8 +15,10 @@ use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
+use Spatie\EventProjector\Tests\TestClasses\Models\OtherStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventSpecified;
 
 final class ReplayCommandTest extends TestCase
 {
@@ -112,5 +114,20 @@ final class ReplayCommandTest extends TestCase
         Artisan::call('event-projector:replay', [
             'projector' => [get_class($projector)],
         ]);
+    }
+
+    public function it_will_replay_events_from_a_specific_store()
+    {
+        $account = AccountAggregateRootWithStoredEventSpecified::create();
+
+        foreach (range(1, 5) as $i) {
+            event(new MoneyAddedEvent($account, 2000));
+        }
+
+        OtherStoredEvent::truncate();
+
+        $this->artisan('event-projector:replay', ['--store' => OtherStoredEvent::class])
+            ->expectsOutput('Replaying 5 events...')
+            ->assertExitCode(0);
     }
 }
