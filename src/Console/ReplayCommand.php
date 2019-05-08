@@ -13,7 +13,7 @@ class ReplayCommand extends Command
 {
     protected $signature = 'event-projector:replay {projector?*}
                             {--from=0 : Replay events starting from this event number}
-                            {--store= : Replay events from this store}';
+                            {--stored-event-model= : Replay events from this store}';
 
     protected $description = 'Replay stored events';
 
@@ -102,14 +102,14 @@ class ReplayCommand extends Command
 
     private function getStoredEventClass(): string
     {
-        if ($store = $this->option('store')) {
-            if (! is_subclass_of($store, StoredEvent::class)) {
+        if ($storedEventModel = $this->option('stored-event-model')) {
+            if (! is_subclass_of($storedEventModel, StoredEvent::class)) {
                 throw new InvalidArgumentException(
-                    "Invalid store value - class `$store` does not implement `".StoredEvent::class.'`'
+                    "Stored event model class `$storedEventModel` does not implement `".StoredEvent::class.'`'
                 );
             }
         }
 
-        return $store ?? config('event-projector.stored_event_model');
+        return $storedEventModel ?? config('event-projector.stored_event_model');
     }
 }

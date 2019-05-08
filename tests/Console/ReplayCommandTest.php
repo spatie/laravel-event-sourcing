@@ -126,7 +126,7 @@ final class ReplayCommandTest extends TestCase
 
         OtherStoredEvent::truncate();
 
-        $this->artisan('event-projector:replay', ['--store' => OtherStoredEvent::class])
+        $this->artisan('event-projector:replay', ['--stored-event-model' => OtherStoredEvent::class])
             ->expectsOutput('Replaying 5 events...')
             ->assertExitCode(0);
     }
