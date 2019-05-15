@@ -53,6 +53,10 @@ final class DiscoverEventHandlers
 
     public function addToProjectionist(Projectionist $projectionist)
     {
+        if (empty($this->directories)) {
+            return;
+        }
+
         $files = (new Finder())->files()->in($this->directories);
 
         return collect($files)
