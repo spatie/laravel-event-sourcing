@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 2.6.1 - 2019-05-16
+
+- fix for disabling the event listener auto discovery
+
 ## 2.6.0 - 2019-05-06
 
 - add `stored-event-model` option to the replay command
