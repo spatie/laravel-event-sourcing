@@ -9,7 +9,7 @@ final class DummyClass implements EventHandler
 {
     use HandlesEvents;
 
-    public function onEventHappened(EventHappended $event)
+    public function onEventHappened(EventHappened $event)
     {
     }
 }
