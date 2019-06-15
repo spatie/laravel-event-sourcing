@@ -20,14 +20,14 @@ final class ListCommand extends Command
         $rows = $this->convertEventHandlersToTableRows($projectors);
         count($rows)
             ? $this->table(['Event', 'Handled by projectors'], $rows)
-            : 'No projectors registered';
+            : $this->warn('No projectors registered');
 
         $this->info('');
         $projectors = $projectionist->getReactors();
         $rows = $this->convertEventHandlersToTableRows($projectors);
         count($rows)
             ? $this->table(['Event', 'Handled by reactors'], $rows)
-            : 'No reactors registered';
+            : $this->warn('No reactors registered');
     }
 
     private function convertEventHandlersToTableRows(Collection $eventHandlers): array
