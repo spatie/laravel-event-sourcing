@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 2.6.3 - 2019-06-14
+
+- fix warnings in console commands
+
 ## 2.6.2 - 2019-06-04
 
 - fix stubs
