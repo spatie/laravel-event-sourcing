@@ -1,10 +1,11 @@
 ---
 title: Replaying events
+weight: 3
 ---
 
-All [events](/laravel-event-projector/v2/handling-events/preparing-events) that implement `Spatie\EventProjector\ShouldBeStored` will be [serialized](https://docs.spatie.be/laravel-event-projector/v2/advanced-usage/using-your-own-event-serializer) and stored in the `stored_events` table. After your app has been doing its work for a while the `stored_events` table will probably contain some events.
+All [events](/laravel-event-projector/v2/advanced-usage/preparing-events/) that implement `Spatie\EventProjector\ShouldBeStored` will be [serialized](https://docs.spatie.be/laravel-event-projector/v2/advanced-usage/using-your-own-event-serializer) and stored in the `stored_events` table. After your app has been doing its work for a while the `stored_events` table will probably contain some events.
 
- When creating a new [projector](/laravel-event-projector/v2/handling-events/using-projectors) or [reactor](/laravel-event-projector/v2/handling-events/using-reactors) you'll want to feed all stored events to that new projector or reactor. We call this process replaying events.
+ When creating a new [projector](/laravel-event-projector/v2/using-projectors/writing-your-first-projector/) or [reactor](/laravel-event-projector/v2/using-reactors/writing-your-first-reactor/) you'll want to feed all stored events to that new projector or reactor. We call this process replaying events.
 
  Events can be replayed to [all projectors that were added to the projectionist](/laravel-event-projector/v2/handling-events/using-reactors) with this artisan command:
 
@@ -12,7 +13,7 @@ All [events](/laravel-event-projector/v2/handling-events/preparing-events) that 
  php artisan event-projector:replay
  ```
 
- You can also projectors by using the `--projector` option. All stored events will be passed only to that projector.
+ You can also specify projectors by using the `--projector` option. All stored events will be passed only to that projector.
 
  ```bash
   php artisan event-projector:replay --projector=App\\Projectors\\AccountBalanceProjector
@@ -41,6 +42,32 @@ Though, under normal circumstances, you don't need to know this, you can detect 
 ```php
 Spatie\EventProjector\Facades\Projectionist::isReplayingEvents(); // returns a boolean
 ```
+
+## Performing some work before and after replaying events
+
+If your projector has a `onStartingEventReplay` method, it will get called right before the first event will be replayed. This can be handy to clean up any data your projector writes to. Here's an example where we truncate the `accounts` table before replaying events:
+
+```php
+namespace App\Projectors;
+
+use App\Account;
+
+// ...
+
+class AccountBalanceProjector implements Projector
+{
+    use ProjectsEvents;
+
+    // ...
+
+    public function onStartingEventReplay()
+    {
+        Account::truncate();
+    }
+}
+```
+
+After all events are replayed, the `onFinishedEventReplay` method will be called, should your projector have one.
 
 ## Models with timestamps
 
