@@ -7,7 +7,7 @@ All [events](/laravel-event-projector/v2/advanced-usage/preparing-events/) that 
 
  When creating a new [projector](/laravel-event-projector/v2/using-projectors/writing-your-first-projector/) or [reactor](/laravel-event-projector/v2/using-reactors/writing-your-first-reactor/) you'll want to feed all stored events to that new projector or reactor. We call this process replaying events.
 
- Events can be replayed to [all projectors that were added to the projectionist](/laravel-event-projector/v2/handling-events/using-reactors) with this artisan command:
+ Events can be replayed to [all projectors that were added to the projectionist](/laravel-event-projector/v2/using-projectors/creating-and-configuring-projectors/) with this artisan command:
 
  ```bash
  php artisan event-projector:replay
