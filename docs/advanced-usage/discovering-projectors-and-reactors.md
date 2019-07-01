@@ -1,6 +1,6 @@
 ---
 title: Discovering projectors and reactors
-weight: 4
+weight: 5
 ---
 
 By default the package will automatically discover all projectors and reactors and will register them at the projectionist. 

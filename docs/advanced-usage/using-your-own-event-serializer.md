@@ -1,6 +1,6 @@
 ---
 title: Using your own event serializer
-weight: 6
+weight: 7
 ---
 
 Events will be serialized by the `Spatie\EventProjector\EventSerializers\JsonEventSerializer`. Like the name implies, this class can serialize an event to json so it can be easily stored in a `json` column in the database.

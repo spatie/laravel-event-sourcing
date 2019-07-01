@@ -1,6 +1,6 @@
 ---
 title: Handling exceptions
-weight: 3
+weight: 4
 ---
 
 The `event-projector` config file has a key, `catch_exceptions`, that determines what will happen should a projector or reactor throw an exception. If this setting is set to `false`, exceptions will not be caught and your app will come to a grinding halt.

@@ -1,6 +1,6 @@
 ---
 title: Replaying events
-weight: 3
+weight: 2
 ---
 
 All [events](/laravel-event-projector/v2/advanced-usage/preparing-events/) that implement `Spatie\EventProjector\ShouldBeStored` will be [serialized](https://docs.spatie.be/laravel-event-projector/v2/advanced-usage/using-your-own-event-serializer) and stored in the `stored_events` table. After your app has been doing its work for a while the `stored_events` table will probably contain some events.
