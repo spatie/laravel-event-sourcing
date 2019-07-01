@@ -28,7 +28,7 @@ final class AccountAggregate extends AggregateRoot
 
 ## Recording events
 
-You can add any methods or variables you need on the aggregate. To get you familiar with event modeling using aggregates let's implement a small piece of [the Larabank example app](https://github.com/spatie/larabank-event-projector-aggregates). We are going to add methods to record the [`AccountCreated`](https://github.com/spatie/larabank-event-projector-aggregates/blob/c9f2ff240f4634ee2e241e3087ff60587a176ae0/app/Domain/Account/ShouldBeStoreds/AccountCreated.php), [`MoneyAdded`](https://github.com/spatie/larabank-event-projector-aggregates/blob/c9f2ff240f4634ee2e241e3087ff60587a176ae0/app/Domain/Account/ShouldBeStoreds/MoneyAdded.php) and the [`MoneySubtracted`](https://github.com/spatie/larabank-event-projector-aggregates/blob/c9f2ff240f4634ee2e241e3087ff60587a176ae0/app/Domain/Account/ShouldBeStoreds/MoneySubtracted.php) events.
+You can add any methods or variables you need on the aggregate. To get you familiar with event modeling using aggregates let's implement a small piece of [the Larabank example app](https://github.com/spatie/larabank-event-projector-aggregates). We are going to add methods to record the [`AccountCreated`](https://github.com/spatie/larabank-event-projector-aggregates/blob/master/app/Domain/Account/Events/AccountCreated.php), [`MoneyAdded`](https://github.com/spatie/larabank-event-projector-aggregates/blob/master/app/Domain/Account/Events/MoneyAdded.php) and the [`MoneySubtracted`](https://github.com/spatie/larabank-event-projector-aggregates/blob/master/app/Domain/Account/Events/MoneySubtracted.php) events.
 
 First, let's add a `createAccount` methods to our aggregate that will record the `AccountCreated` event.
 
