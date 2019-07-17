@@ -6,6 +6,7 @@ use Exception;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
@@ -27,7 +28,7 @@ class StoredEvent extends Model
     {
         $storedEvent = new static();
         $storedEvent->aggregate_uuid = $uuid;
-        $storedEvent->event_class = get_class($event);
+        $storedEvent->event_class = self::getEventClass(get_class($event));
         $storedEvent->attributes['event_properties'] = app(EventSerializer::class)->serialize(clone $event);
         $storedEvent->meta_data = [];
         $storedEvent->created_at = Carbon::now();
@@ -35,6 +36,11 @@ class StoredEvent extends Model
         $storedEvent->save();
 
         return $storedEvent;
+    }
+
+    public function getEventClassAttribute(string $value): string
+    {
+        return self::getActualClassForEvent($value);
     }
 
     public function getEventAttribute(): ShouldBeStored
@@ -99,5 +105,21 @@ class StoredEvent extends Model
     public static function store(ShouldBeStored $event, string $uuid = null): void
     {
         static::storeMany([$event], $uuid);
+    }
+
+    private static function getEventClass(string $class): string
+    {
+        $map = config('event-projector.event_class_map', []);
+
+        if (! empty($map) && in_array($class, $map)) {
+            return array_search($class, $map, true);
+        }
+
+        return $class;
+    }
+
+    private static function getActualClassForEvent(string $class): string
+    {
+        return Arr::get(config('event-projector.event_class_map', []), $class, $class);
     }
 }
