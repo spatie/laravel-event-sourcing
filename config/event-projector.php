@@ -56,7 +56,7 @@ return [
     'stored_event_job' => \Spatie\EventProjector\HandleStoredEventJob::class,
 
     /*
-     * Similar to Relation::morphMap you can define which alias responds to which
+     * Similar to Relation::morphMap() you can define which alias responds to which
      * event class. This allows you to change the namespace or classnames
      * of your events but still handle older events correctly.
      */
