@@ -4,9 +4,9 @@ namespace Spatie\EventProjector\Models;
 
 use Exception;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
