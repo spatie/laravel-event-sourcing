@@ -28,7 +28,7 @@ class StoredEvent extends Model
     {
         $storedEvent = new static();
         $storedEvent->aggregate_uuid = $uuid;
-        $storedEvent->event_class = self::getEventClass(get_class($event));
+        $storedEvent->event_class = static::getEventClass(get_class($event));
         $storedEvent->attributes['event_properties'] = app(EventSerializer::class)->serialize(clone $event);
         $storedEvent->meta_data = [];
         $storedEvent->created_at = Carbon::now();
@@ -38,9 +38,9 @@ class StoredEvent extends Model
         return $storedEvent;
     }
 
-    public function getEventClassAttribute(string $value): string
+    public static function getEventClassAttribute(string $value): string
     {
-        return self::getActualClassForEvent($value);
+        return static::getActualClassForEvent($value);
     }
 
     public function getEventAttribute(): ShouldBeStored
@@ -107,7 +107,7 @@ class StoredEvent extends Model
         static::storeMany([$event], $uuid);
     }
 
-    private static function getEventClass(string $class): string
+    protected static function getEventClass(string $class): string
     {
         $map = config('event-projector.event_class_map', []);
 
@@ -118,7 +118,7 @@ class StoredEvent extends Model
         return $class;
     }
 
-    private static function getActualClassForEvent(string $class): string
+    protected static function getActualClassForEvent(string $class): string
     {
         return Arr::get(config('event-projector.event_class_map', []), $class, $class);
     }
