@@ -38,7 +38,7 @@ class StoredEvent extends Model
         return $storedEvent;
     }
 
-    public static function getEventClassAttribute(string $value): string
+    public function getEventClassAttribute(string $value): string
     {
         return static::getActualClassForEvent($value);
     }
