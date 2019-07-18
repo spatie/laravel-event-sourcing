@@ -2,8 +2,9 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
-## x.x.x - 2019-xx-xx
-- Added `event_class_map` to alias your event classes which allows for refactoring after events have been fired
+## 2.7.0 - 2019-07-18
+
+- added `event_class_map` to alias your event classes which allows for refactoring after events have been fired
 
 ## 2.6.3 - 2019-06-14
 
