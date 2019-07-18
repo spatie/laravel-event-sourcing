@@ -3,7 +3,7 @@ title: Using aliases for stored event classes
 weight: 8
 ---
 
-By default we store the `Event`'s FQN in the database when storing the events. This prevents you from changing the name or the namespace of your event classes.
+By default we store the `Event`'s FQCN in the database when storing the events. This prevents you from changing the name or the namespace of your event classes.
 
 To get around this you can define event class aliases in the `event-projector.php` config file:
 
