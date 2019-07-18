@@ -49,6 +49,27 @@ final class EventSubscriberTest extends TestCase
         $this->assertEquals($this->account->id, $storedEvent->event->account->id);
     }
 
+    /** @test * */
+    public function it_will_log_events_that_implement_ShouldBeStored_with_a_map()
+    {
+        $this->setConfig('event-projector.event_class_map', [
+            'money_added' => MoneyAddedEvent::class,
+        ]);
+
+        event(new MoneyAddedEvent($this->account, 1234));
+
+        $this->assertCount(1, StoredEvent::get());
+
+        $storedEvent = StoredEvent::first();
+
+        $this->assertEquals(MoneyAddedEvent::class, $storedEvent->event_class);
+        $this->assertEquals('money_added', $storedEvent->getAttributes()['event_class']);
+
+        $this->assertInstanceOf(MoneyAddedEvent::class, $storedEvent->event);
+        $this->assertEquals(1234, $storedEvent->event->amount);
+        $this->assertEquals($this->account->id, $storedEvent->event->account->id);
+    }
+
     /** @test */
     public function it_will_not_store_events_without_the_ShouldBeStored_interface()
     {

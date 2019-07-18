@@ -45,6 +45,19 @@ final class StoredEventTest extends TestCase
         StoredEvent::first()->event;
     }
 
+    /** @test * */
+    public function it_will_store_the_alias_when_a_classname_is_found_in_the_event_class_map()
+    {
+        $this->setConfig('event-projector.event_class_map', [
+            'money_added' => MoneyAddedEvent::class,
+        ]);
+
+        $this->fireEvents();
+
+        $this->assertEquals(MoneyAddedEvent::class, StoredEvent::first()->event_class);
+        $this->assertEquals('money_added', StoredEvent::first()->getAttributes()['event_class']);
+    }
+
     public function fireEvents(int $number = 1, string $className = MoneyAddedEvent::class)
     {
         foreach (range(1, $number) as $i) {
