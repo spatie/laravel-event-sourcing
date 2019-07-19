@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses;
+namespace Spatie\EventProjector\Tests\TestClasses\AggregateRoots;
 
 use Spatie\EventProjector\AggregateRoot;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;

@@ -2,7 +2,7 @@
 
 namespace Spatie\EventProjector\Tests;
 
-use Spatie\EventProjector\Tests\TestClasses\DummyAggregateRoot;
+use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\DummyAggregateRoot;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
 
 class FakeAggregateRootTest extends TestCase
