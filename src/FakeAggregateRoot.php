@@ -15,8 +15,15 @@ class FakeAggregateRoot
         $this->aggregateRoot = $aggregateRoot;
     }
 
-    public function given(array $events)
+    /**
+     * @param \Spatie\EventProjector\ShouldBeStored|\Spatie\EventProjector\ShouldBeStored[] $events
+     *
+     * @return $this
+     */
+    public function given($events)
     {
+        $events = Arr::wrap($events);
+
         foreach ($events as $event) {
             $this->aggregateRoot->recordThat($event);
         }
@@ -40,8 +47,15 @@ class FakeAggregateRoot
         return $this;
     }
 
-    public function assertRecorded(array $expectedEvents)
+    /**
+     * @param \Spatie\EventProjector\ShouldBeStored|\Spatie\EventProjector\ShouldBeStored[] $expectedEvents
+     *
+     * @return $this
+     */
+    public function assertRecorded($expectedEvents)
     {
+        $expectedEvents = Arr::wrap($expectedEvents);
+
         Assert::assertEquals($expectedEvents, $this->aggregateRoot->getRecordedEvents());
 
         return $this;

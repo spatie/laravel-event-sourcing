@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 2.8.1 - 2019-07-19
+
+- improve test methods
+
 ## 2.8.0 - 2019-07-19
 
 - added aggregate test methods

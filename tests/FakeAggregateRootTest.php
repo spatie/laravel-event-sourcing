@@ -62,6 +62,23 @@ class FakeAggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function fake_can_accept_a_single_given_event()
+    {
+        DummyAggregateRoot::fake(new DummyEvent(1))
+            ->when(function(DummyAggregateRoot $dummyAggregateRoot) {
+                $dummyAggregateRoot->dummy();
+            })
+            ->assertRecorded(new DummyEvent(2));
+    }
+
+    /** @test */
+    public function assertNotRecorded_can_accept_a_single_given_event()
+    {
+        DummyAggregateRoot::fake(new DummyEvent(1))
+            ->assertNotRecorded(DummyEvent::class);
+    }
+
+    /** @test */
     public function it_can_assert_that_an_event_is_not_recorded()
     {
         DummyAggregateRoot::fake()->assertNotRecorded(DummyEvent::class);

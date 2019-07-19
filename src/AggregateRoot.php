@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Spatie\EventProjector\Models\StoredEvent;
 
@@ -83,8 +84,15 @@ abstract class AggregateRoot
         }
     }
 
-    public static function fake(array $givenEvents = []): FakeAggregateRoot
+    /**
+     * @param \Spatie\EventProjector\ShouldBeStored|\Spatie\EventProjector\ShouldBeStored[] $events
+     *
+     * @return $this
+     */
+    public static function fake($events = []): FakeAggregateRoot
     {
-        return (new FakeAggregateRoot(app(static::class)))->given($givenEvents);
+        $events = Arr::wrap($events);
+
+        return (new FakeAggregateRoot(app(static::class)))->given($events);
     }
 }
