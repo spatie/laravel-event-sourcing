@@ -14,7 +14,7 @@ class FakeAggregateRootTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_the_recorded_events()
+    public function it_can_assert_the_recorded_events()
     {
         DummyAggregateRoot::fake()
             ->given([
@@ -30,7 +30,7 @@ class FakeAggregateRootTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_recorded_events_without_using_when()
+    public function it_can_assert_recorded_events_without_using_when()
     {
         $fakeAggregateRoot = DummyAggregateRoot::fake();
 
