@@ -24,7 +24,7 @@ AccountAggregate::fake()
     ->assertNotRecorded(MoneySubstracted::class);
 ```
 
-You could write the above test a bit shorter. The given events can be passed to the `fake` method as well. You're also not required to use the `when` function.
+You could write the above test a bit shorter. The given events can be passed to the `fake` method. You're also not required to use the `when` function.
 
 ```php
 $accountAggregate = AccountAggregate::fake([
