@@ -35,7 +35,7 @@ abstract class AggregateRoot
     {
         call_user_func(
             [$this->getStoredEventModel(), 'storeMany'],
-            $this->getAndClearRecoredEvents(),
+            $this->getAndClearRecordedEvents(),
             $this->aggregateUuid
         );
 
@@ -47,7 +47,12 @@ abstract class AggregateRoot
         return $this->storedEventModel ?? config('event-projector.stored_event_model');
     }
 
-    private function getAndClearRecoredEvents(): array
+    public function getRecordedEvents(): array
+    {
+        return $this->recordedEvents;
+    }
+
+    private function getAndClearRecordedEvents(): array
     {
         $recordedEvents = $this->recordedEvents;
 
@@ -76,5 +81,10 @@ abstract class AggregateRoot
         if (method_exists($this, $applyingMethodName)) {
             $this->$applyingMethodName($event);
         }
+    }
+
+    public static function fake(array $givenEvents = []): FakeAggregateRoot
+    {
+        return (new FakeAggregateRoot(app(static::class)))->given($givenEvents);
     }
 }
