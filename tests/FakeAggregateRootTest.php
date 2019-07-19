@@ -32,6 +32,7 @@ class FakeAggregateRootTest extends TestCase
     /** @test */
     public function it_can_assert_recorded_events_without_using_when()
     {
+        /** @var \Spatie\EventProjector\Tests\TestClasses\DummyAggregateRoot|\Spatie\EventProjector\FakeAggregateRoot $fakeAggregateRoot */
         $fakeAggregateRoot = DummyAggregateRoot::fake();
 
         $fakeAggregateRoot->given([
@@ -58,6 +59,15 @@ class FakeAggregateRootTest extends TestCase
         $fakeAggregateRoot->assertRecorded([
             new DummyEvent(3),
         ]);
+    }
+
+    /** @test */
+    public function it_can_assert_that_an_event_is_not_recorded()
+    {
+        DummyAggregateRoot::fake()->assertNotRecorded(DummyEvent::class);
+
+        DummyAggregateRoot::fake()->assertNotRecorded([DummyEvent::class]);
+
     }
 }
 

@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector;
 
+use Illuminate\Support\Arr;
 use PHPUnit\Framework\Assert;
 
 class FakeAggregateRoot
@@ -39,9 +40,24 @@ class FakeAggregateRoot
         return $this;
     }
 
-    public function assertRecorded(array $expectedEvents): void
+    public function assertRecorded(array $expectedEvents)
     {
         Assert::assertEquals($expectedEvents, $this->aggregateRoot->getRecordedEvents());
+
+        return $this;
+    }
+
+    public function assertNotRecorded($unexpectedEventClasses): void
+    {
+        $actualEventClasses = array_map(function(ShouldBeStored $event) {
+            return get_class($event);
+        }, $this->aggregateRoot->getRecordedEvents());
+
+        $unexpectedEventClasses = Arr::wrap($unexpectedEventClasses);
+
+        foreach($unexpectedEventClasses as $nonExceptedEventClass) {
+            Assert::assertNotContains($nonExceptedEventClass, $actualEventClasses, "Did not expect to record {$nonExceptedEventClass}, but it was recorded.");
+        }
     }
 
     public function __call($name, $arguments)
