@@ -1,5 +1,5 @@
 ---
-title: Testing aggregate roots
+title: Testing aggregates
 weight: 3
 ---
 
