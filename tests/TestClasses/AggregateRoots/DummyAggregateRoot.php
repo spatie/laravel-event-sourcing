@@ -20,4 +20,3 @@ class DummyAggregateRoot extends AggregateRoot
         $this->latestInteger = $dummyEvent->integer;
     }
 }
-

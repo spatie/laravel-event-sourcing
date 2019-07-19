@@ -87,6 +87,4 @@ abstract class AggregateRoot
     {
         return (new FakeAggregateRoot(app(static::class)))->given($givenEvents);
     }
-
-
 }

@@ -17,7 +17,7 @@ class FakeAggregateRoot
 
     public function given(array $events)
     {
-        foreach($events as $event) {
+        foreach ($events as $event) {
             $this->aggregateRoot->recordThat($event);
         }
 
@@ -49,13 +49,13 @@ class FakeAggregateRoot
 
     public function assertNotRecorded($unexpectedEventClasses): void
     {
-        $actualEventClasses = array_map(function(ShouldBeStored $event) {
+        $actualEventClasses = array_map(function (ShouldBeStored $event) {
             return get_class($event);
         }, $this->aggregateRoot->getRecordedEvents());
 
         $unexpectedEventClasses = Arr::wrap($unexpectedEventClasses);
 
-        foreach($unexpectedEventClasses as $nonExceptedEventClass) {
+        foreach ($unexpectedEventClasses as $nonExceptedEventClass) {
             Assert::assertNotContains($nonExceptedEventClass, $actualEventClasses, "Did not expect to record {$nonExceptedEventClass}, but it was recorded.");
         }
     }
@@ -67,4 +67,3 @@ class FakeAggregateRoot
         return $this;
     }
 }
-

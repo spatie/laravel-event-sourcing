@@ -2,8 +2,8 @@
 
 namespace Spatie\EventProjector\Tests;
 
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
 use Spatie\EventProjector\Tests\TestClasses\DummyAggregateRoot;
+use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
 
 class FakeAggregateRootTest extends TestCase
 {
@@ -21,7 +21,7 @@ class FakeAggregateRootTest extends TestCase
                 new DummyEvent(1),
                 new DummyEvent(2),
             ])
-            ->when(function(DummyAggregateRoot $dummyAggregateRoot) {
+            ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
                 $dummyAggregateRoot->dummy();
             })
             ->assertRecorded([
@@ -67,7 +67,5 @@ class FakeAggregateRootTest extends TestCase
         DummyAggregateRoot::fake()->assertNotRecorded(DummyEvent::class);
 
         DummyAggregateRoot::fake()->assertNotRecorded([DummyEvent::class]);
-
     }
 }
-
