@@ -65,7 +65,7 @@ class FakeAggregateRootTest extends TestCase
     public function fake_can_accept_a_single_given_event()
     {
         DummyAggregateRoot::fake(new DummyEvent(1))
-            ->when(function(DummyAggregateRoot $dummyAggregateRoot) {
+            ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
                 $dummyAggregateRoot->dummy();
             })
             ->assertRecorded(new DummyEvent(2));
