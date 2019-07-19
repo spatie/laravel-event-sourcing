@@ -102,6 +102,13 @@ public function it_will_not_make_subtractions_that_would_go_below_the_account_li
 
 The `fake`, `given` and `assertRecorded` methods can accept a single event instances or an array with event instances. `assertNotRecorded` can also accept an array of class names.
 
-
 If you don't expect any events to be recorded you can use `assertNothingRecorded`.
+
+## Disabling dispatching events
+
+When calling the `given` method the aggregate will fire of events for your projector and reactor to react to. If you don't want events being dispatched. Simply [use the `Event` facades's `fake` method](https://laravel.com/docs/master/mocking#event-fake) before your test executed.
+
+```php
+\Illuminate\Support\Facades\Event::fake();
+``` 
 
