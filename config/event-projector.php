@@ -3,7 +3,7 @@
 return [
 
     /*
-     * These directories will be scanned for Projectors and Reactors. They
+     * These directories will be scanned for projectors and reactors. They
      * will be registered to Projectionist automatically.
      */
     'auto_discover_projectors_and_reactors' => [
