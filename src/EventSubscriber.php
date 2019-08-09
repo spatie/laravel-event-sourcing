@@ -7,9 +7,13 @@ final class EventSubscriber
     /** @var string */
     private $storedEventModel;
 
-    public function __construct(string $storedEventModel)
+    /** @var \Spatie\EventProjector\StoredEventRepository */
+    private $repository;
+
+    public function __construct(string $storedEventModel, StoredEventRepository $repository)
     {
         $this->storedEventModel = $storedEventModel;
+        $this->repository = $repository;
     }
 
     public function subscribe($events): void
@@ -28,7 +32,8 @@ final class EventSubscriber
 
     public function storeEvent(ShouldBeStored $event): void
     {
-        $this->storedEventModel::store($event);
+        $storedEvent = $this->repository->persist($event);
+        $storedEvent->handle();
     }
 
     private function shouldBeStored($event): bool

@@ -4,7 +4,7 @@ namespace Spatie\EventProjector;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Models\StoredEventData;
 
 abstract class AggregateRoot
 {
@@ -34,11 +34,15 @@ abstract class AggregateRoot
 
     public function persist(): AggregateRoot
     {
-        call_user_func(
-            [$this->getStoredEventModel(), 'storeMany'],
+        $storedEvents = call_user_func(
+            [$this->getStoredEventRepository(), 'persistMany'],
             $this->getAndClearRecordedEvents(),
             $this->aggregateUuid
         );
+
+        $storedEvents->each(function (StoredEventData $storedEventData) {
+            $storedEventData->handle();
+        });
 
         return $this;
     }
@@ -46,6 +50,11 @@ abstract class AggregateRoot
     protected function getStoredEventModel(): string
     {
         return $this->storedEventModel ?? config('event-projector.stored_event_model');
+    }
+
+    protected function getStoredEventRepository(): string
+    {
+        return $this->storedEventRepository ?? config('event-projector.stored_event_repository');
     }
 
     public function getRecordedEvents(): array
@@ -64,8 +73,8 @@ abstract class AggregateRoot
 
     private function reconstituteFromEvents(): AggregateRoot
     {
-        $this->getStoredEventModel()::uuid($this->aggregateUuid)
-            ->each(function (StoredEvent $storedEvent) {
+        $this->getStoredEventRepository()::retrieveAll($this->aggregateUuid)
+            ->each(function (StoredEventData $storedEvent) {
                 $this->apply($storedEvent->event);
             });
 

@@ -6,6 +6,8 @@ use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
+use Spatie\EventProjector\Facades\Projectionist;
+use Spatie\EventProjector\ShouldBeStored;
 
 class StoredEventData implements Arrayable
 {
@@ -59,5 +61,21 @@ class StoredEventData implements Arrayable
             'meta_data' => $this->meta_data instanceof Arrayable ? $this->meta_data->toArray() : (array) $this->meta_data,
             'created_at' => $this->created_at,
         ];
+    }
+
+    public function handle() {
+        Projectionist::handleWithSyncProjectors($this);
+
+        if (method_exists($this->event, 'tags')) {
+            $tags = $this->event->tags();
+        }
+
+        $storedEventJob = call_user_func(
+            [config('event-projector.stored_event_job'), 'createForEvent'],
+            $this,
+            $tags ?? []
+        );
+
+        dispatch($storedEventJob->onQueue($this->event->queue ?? config('event-projector.queue')));
     }
 }

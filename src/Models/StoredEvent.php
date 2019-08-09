@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\ShouldBeStored;
-use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class StoredEvent extends Model
@@ -81,36 +80,6 @@ class StoredEvent extends Model
     public function scopeWithMetaDataAttributes(): Builder
     {
         return SchemalessAttributes::scopeWithSchemalessAttributes('meta_data');
-    }
-
-    public static function storeMany(array $events, string $uuid = null): void
-    {
-        collect($events)
-            ->map(function (ShouldBeStored $domainEvent) use ($uuid) {
-                $storedEvent = static::createForEvent($domainEvent, $uuid);
-
-                return [$domainEvent, $storedEvent];
-            })
-            ->eachSpread(function (ShouldBeStored $event, StoredEventData $storedEvent) {
-                Projectionist::handleWithSyncProjectors($storedEvent);
-
-                if (method_exists($event, 'tags')) {
-                    $tags = $event->tags();
-                }
-
-                $storedEventJob = call_user_func(
-                    [config('event-projector.stored_event_job'), 'createForEvent'],
-                    $storedEvent,
-                    $tags ?? []
-                );
-
-                dispatch($storedEventJob->onQueue($event->queue ?? config('event-projector.queue')));
-            });
-    }
-
-    public static function store(ShouldBeStored $event, string $uuid = null): void
-    {
-        static::storeMany([$event], $uuid);
     }
 
     protected static function getEventClass(string $class): string
