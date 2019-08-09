@@ -3,11 +3,9 @@
 namespace Spatie\EventProjector\Console;
 
 use Exception;
-use InvalidArgumentException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Spatie\EventProjector\Projectionist;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\StoredEventRepository;
 
 class ReplayCommand extends Command

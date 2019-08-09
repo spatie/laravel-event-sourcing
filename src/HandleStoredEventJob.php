@@ -6,7 +6,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\StoredEventData;
 
 final class HandleStoredEventJob implements ShouldQueue

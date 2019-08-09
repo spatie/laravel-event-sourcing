@@ -4,9 +4,9 @@ namespace Spatie\EventProjector;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\StoredEventData;
+use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class EloquentStoredEventRepository implements StoredEventRepository
 {

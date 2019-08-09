@@ -3,11 +3,11 @@
 namespace Spatie\EventProjector\Models;
 
 use Exception;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
-use Spatie\EventProjector\EventSerializers\EventSerializer;
-use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
+use Illuminate\Contracts\Support\Arrayable;
 use Spatie\EventProjector\Facades\Projectionist;
+use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
+use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class StoredEventData implements Arrayable
 {
@@ -63,7 +63,8 @@ class StoredEventData implements Arrayable
         ];
     }
 
-    public function handle() {
+    public function handle()
+    {
         Projectionist::handleWithSyncProjectors($this);
 
         if (method_exists($this->event, 'tags')) {
@@ -89,7 +90,7 @@ class StoredEventData implements Arrayable
     {
         $map = config('event-projector.event_class_map', []);
 
-        if (!empty($map) && in_array($class, $map)) {
+        if (! empty($map) && in_array($class, $map)) {
             return array_search($class, $map, true);
         }
 

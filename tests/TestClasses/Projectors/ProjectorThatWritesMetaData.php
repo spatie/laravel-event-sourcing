@@ -2,12 +2,10 @@
 
 namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
 
-use Spatie\EventProjector\Models\StoredEvent;
-use Spatie\EventProjector\Models\StoredEventData;
 use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Projectors\ProjectsEvents;
-use Spatie\EventProjector\EloquentStoredEventRepository;
 use Spatie\EventProjector\StoredEventRepository;
+use Spatie\EventProjector\Models\StoredEventData;
+use Spatie\EventProjector\Projectors\ProjectsEvents;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
 
 final class ProjectorThatWritesMetaData implements Projector
