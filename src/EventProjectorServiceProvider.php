@@ -57,6 +57,8 @@ final class EventProjectorServiceProvider extends ServiceProvider
             return new EventSubscriber(config('event-projector.stored_event_model'));
         });
 
+        $this->app->singleton(StoredEventRepository::class, config('event-projector.stored_event_repository'));
+
         $this->app
             ->when(ReplayCommand::class)
             ->needs('$storedEventModelClass')

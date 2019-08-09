@@ -3,8 +3,11 @@
 namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
 
 use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Models\StoredEventData;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
+use Spatie\EventProjector\EloquentStoredEventRepository;
+use Spatie\EventProjector\StoredEventRepository;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
 
 final class ProjectorThatWritesMetaData implements Projector
@@ -17,10 +20,11 @@ final class ProjectorThatWritesMetaData implements Projector
 
     protected $trackStream = '*';
 
-    public function onMoneyAdded(StoredEvent $storedEvent, MoneyAddedEvent $event)
+    public function onMoneyAdded(StoredEventData $storedEventData, MoneyAddedEvent $event)
     {
-        $storedEvent->meta_data['user_id'] = 1;
+        $storedEventData->meta_data['user_id'] = 1;
 
-        $storedEvent->save();
+        $repository = app(StoredEventRepository::class);
+        $repository->update($storedEventData);
     }
 }

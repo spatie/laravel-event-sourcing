@@ -2,16 +2,14 @@
 
 namespace Spatie\EventProjector\Models;
 
-use Exception;
-use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
+use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
-use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
-use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class StoredEvent extends Model
 {
@@ -24,7 +22,7 @@ class StoredEvent extends Model
         'meta_data' => 'array',
     ];
 
-    public static function createForEvent(ShouldBeStored $event, string $uuid = null): StoredEvent
+    public static function createForEvent(ShouldBeStored $event, string $uuid = null): StoredEventData
     {
         $storedEvent = new static();
         $storedEvent->aggregate_uuid = $uuid;
@@ -35,7 +33,19 @@ class StoredEvent extends Model
 
         $storedEvent->save();
 
-        return $storedEvent;
+        return $storedEvent->toStoredEventData();
+    }
+
+    public function toStoredEventData(): StoredEventData
+    {
+        return new StoredEventData([
+            'id' => $this->id,
+            'event_properties' => $this->event_properties,
+            'aggregate_uuid' => $this->aggregate_uuid,
+            'event_class' => $this->event_class,
+            'meta_data' => $this->meta_data,
+            'created_at' => $this->created_at,
+        ]);
     }
 
     public function getEventClassAttribute(string $value): string
@@ -45,16 +55,7 @@ class StoredEvent extends Model
 
     public function getEventAttribute(): ShouldBeStored
     {
-        try {
-            $event = app(EventSerializer::class)->deserialize(
-                $this->event_class,
-                $this->getOriginal('event_properties')
-            );
-        } catch (Exception $exception) {
-            throw InvalidStoredEvent::couldNotUnserializeEvent($this, $exception);
-        }
-
-        return $event;
+        return $this->toStoredEventData()->event;
     }
 
     public function scopeStartingFrom(Builder $query, int $storedEventId): void
@@ -65,6 +66,11 @@ class StoredEvent extends Model
     public function scopeUuid(Builder $query, string $uuid): void
     {
         $query->where('aggregate_uuid', $uuid);
+    }
+
+    protected static function getActualClassForEvent(string $class): string
+    {
+        return Arr::get(config('event-projector.event_class_map', []), $class, $class);
     }
 
     public function getMetaDataAttribute(): SchemalessAttributes
@@ -85,7 +91,7 @@ class StoredEvent extends Model
 
                 return [$domainEvent, $storedEvent];
             })
-            ->eachSpread(function (ShouldBeStored $event, StoredEvent $storedEvent) {
+            ->eachSpread(function (ShouldBeStored $event, StoredEventData $storedEvent) {
                 Projectionist::handleWithSyncProjectors($storedEvent);
 
                 if (method_exists($event, 'tags')) {
@@ -111,15 +117,10 @@ class StoredEvent extends Model
     {
         $map = config('event-projector.event_class_map', []);
 
-        if (! empty($map) && in_array($class, $map)) {
+        if (!empty($map) && in_array($class, $map)) {
             return array_search($class, $map, true);
         }
 
         return $class;
-    }
-
-    protected static function getActualClassForEvent(string $class): string
-    {
-        return Arr::get(config('event-projector.event_class_map', []), $class, $class);
     }
 }

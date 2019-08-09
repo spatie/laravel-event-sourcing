@@ -4,13 +4,13 @@ namespace Spatie\EventProjector\EventHandlers;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Models\StoredEventData;
 
 interface EventHandler
 {
     public function handles(): array;
 
-    public function handle(StoredEvent $event);
+    public function handle(StoredEventData $event);
 
     public function handleException(Exception $exception): void;
 

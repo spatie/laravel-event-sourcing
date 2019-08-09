@@ -7,8 +7,8 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\Models\StoredEventData;
 use Spatie\EventProjector\ShouldBeStored;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
 trait HandlesEvents
@@ -18,7 +18,7 @@ trait HandlesEvents
         return $this->getEventHandlingMethods()->keys()->toArray();
     }
 
-    public function handle(StoredEvent $storedEvent)
+    public function handle(StoredEventData $storedEvent)
     {
         $eventClass = $storedEvent->event_class;
 
@@ -26,7 +26,7 @@ trait HandlesEvents
 
         $parameters = [
             'event' => $storedEvent->event,
-            'storedEvent' => $storedEvent,
+            'storedEventData' => $storedEvent,
             'aggregateUuid' => $storedEvent->aggregate_uuid,
         ];
 

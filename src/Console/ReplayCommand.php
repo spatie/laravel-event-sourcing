@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Spatie\EventProjector\Projectionist;
 use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\StoredEventRepository;
 
 class ReplayCommand extends Command
 {
@@ -20,9 +21,6 @@ class ReplayCommand extends Command
     /** @var \Spatie\EventProjector\Projectionist */
     protected $projectionist;
 
-    /** @var string */
-    protected $storedEventModelClass;
-
     public function __construct(Projectionist $projectionist)
     {
         parent::__construct();
@@ -32,8 +30,6 @@ class ReplayCommand extends Command
 
     public function handle(): void
     {
-        $this->storedEventModelClass = $this->getStoredEventClass();
-
         $projectors = $this->selectProjectors($this->argument('projector'));
 
         if (is_null($projectors)) {
@@ -70,7 +66,9 @@ class ReplayCommand extends Command
 
     public function replay(Collection $projectors, int $startingFrom): void
     {
-        $replayCount = $this->getStoredEventClass()::startingFrom($startingFrom)->count();
+        $repository = app(StoredEventRepository::class);
+        $events = $repository->retrieveAll(null, $startingFrom);
+        $replayCount = $events->count();
 
         if ($replayCount === 0) {
             $this->warn('There are no events to replay');
@@ -80,7 +78,7 @@ class ReplayCommand extends Command
 
         $this->comment("Replaying {$replayCount} events...");
 
-        $bar = $this->output->createProgressBar($this->getStoredEventClass()::count());
+        $bar = $this->output->createProgressBar($events->count());
         $onEventReplayed = function () use ($bar) {
             $bar->advance();
         };

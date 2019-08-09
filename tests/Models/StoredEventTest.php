@@ -42,7 +42,7 @@ final class StoredEventTest extends TestCase
 
         $this->expectException(InvalidStoredEvent::class);
 
-        StoredEvent::first()->event;
+        StoredEvent::first()->toStoredEventData();
     }
 
     /** @test * */
