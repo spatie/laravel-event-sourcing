@@ -72,16 +72,6 @@ class StoredEvent extends Model
         return Arr::get(config('event-projector.event_class_map', []), $class, $class);
     }
 
-    public function getMetaDataAttribute(): SchemalessAttributes
-    {
-        return SchemalessAttributes::createForModel($this, 'meta_data');
-    }
-
-    public function scopeWithMetaDataAttributes(): Builder
-    {
-        return SchemalessAttributes::scopeWithSchemalessAttributes('meta_data');
-    }
-
     protected static function getEventClass(string $class): string
     {
         $map = config('event-projector.event_class_map', []);

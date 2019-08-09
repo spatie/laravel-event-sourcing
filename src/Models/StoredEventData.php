@@ -7,7 +7,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
-use Spatie\EventProjector\ShouldBeStored;
 
 class StoredEventData implements Arrayable
 {
