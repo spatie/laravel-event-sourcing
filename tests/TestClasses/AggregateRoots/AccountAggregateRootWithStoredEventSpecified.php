@@ -3,10 +3,8 @@
 namespace Spatie\EventProjector\Tests\TestClasses\AggregateRoots;
 
 use Spatie\EventProjector\AggregateRoot;
-use Spatie\EventProjector\Models\StoredEvent;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\Models\OtherStoredEvent;
-use Spatie\EventProjector\Tests\TestClasses\Repositories\OtherEloquentStoredEventRepository;
+use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 
 final class AccountAggregateRootWithStoredEventSpecified extends AggregateRoot
 {

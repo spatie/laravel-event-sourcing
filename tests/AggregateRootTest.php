@@ -5,7 +5,6 @@ namespace Spatie\EventProjector\Tests;
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventSpecified;
 use Spatie\EventProjector\Tests\TestClasses\FakeUuid;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Models\OtherStoredEvent;
@@ -14,6 +13,7 @@ use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Reactors\SendMailReac
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
+use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventSpecified;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 
 final class AggregateRootTest extends TestCase
