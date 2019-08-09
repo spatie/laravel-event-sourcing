@@ -3,7 +3,6 @@
 namespace Spatie\EventProjector\Exceptions;
 
 use Exception;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\StoredEventData;
 
 final class InvalidStoredEvent extends Exception

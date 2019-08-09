@@ -80,7 +80,6 @@ class StoredEventData implements Arrayable
         dispatch($storedEventJob->onQueue($this->event->queue ?? config('event-projector.queue')));
     }
 
-
     protected static function getActualClassForEvent(string $class): string
     {
         return Arr::get(config('event-projector.event_class_map', []), $class, $class);
