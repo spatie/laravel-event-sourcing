@@ -37,7 +37,8 @@ abstract class AggregateRoot
         $storedEvents = call_user_func(
             [$this->getStoredEventRepository(), 'persistMany'],
             $this->getAndClearRecordedEvents(),
-            $this->aggregateUuid
+            $this->aggregateUuid,
+            $this->getStoredEventModel()
         );
 
         $storedEvents->each(function (StoredEventData $storedEventData) {
@@ -45,6 +46,11 @@ abstract class AggregateRoot
         });
 
         return $this;
+    }
+
+    protected function getStoredEventModel(): string
+    {
+        return $this->storedEventModel ?? config('event-projector.stored_event_model');
     }
 
     protected function getStoredEventRepository(): string

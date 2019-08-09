@@ -18,7 +18,7 @@ use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventProjector\Tests\TestClasses\Models\OtherStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventSpecified;
+use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 
 final class ReplayCommandTest extends TestCase
 {
@@ -118,7 +118,7 @@ final class ReplayCommandTest extends TestCase
 
     public function it_will_replay_events_from_a_specific_store()
     {
-        $account = AccountAggregateRootWithStoredEventSpecified::create();
+        $account = AccountAggregateRootWithStoredEventRepositorySpecified::create();
 
         foreach (range(1, 5) as $i) {
             event(new MoneyAddedEvent($account, 2000));

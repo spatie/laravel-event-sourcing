@@ -29,7 +29,7 @@ class OtherEloquentStoredEventRepository implements StoredEventRepository
         });
     }
 
-    public static function persist(ShouldBeStored $event, string $uuid = null): StoredEventData
+    public static function persist(ShouldBeStored $event, string $uuid = null, string $model = null): StoredEventData
     {
         /** @var OtherStoredEvent $storedEvent */
         $storedEvent = new OtherStoredEvent();
@@ -47,7 +47,7 @@ class OtherEloquentStoredEventRepository implements StoredEventRepository
         return $storedEvent->toStoredEventData();
     }
 
-    public static function persistMany(array $events, string $uuid = null): Collection
+    public static function persistMany(array $events, string $uuid = null, string $model = null): Collection
     {
         $storedEvents = [];
 

@@ -12,7 +12,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
 {
     public static function retrieveAll(string $uuid = null, int $startingFrom = null): Collection
     {
-        $query = StoredEvent::query();
+        $query = self::getStoredEventModel()::query();
 
         if ($uuid) {
             $query->uuid($uuid);
@@ -27,10 +27,10 @@ class EloquentStoredEventRepository implements StoredEventRepository
         });
     }
 
-    public static function persist(ShouldBeStored $event, string $uuid = null): StoredEventData
+    public static function persist(ShouldBeStored $event, string $uuid = null, string $model = null): StoredEventData
     {
         /** @var StoredEvent $storedEvent */
-        $storedEvent = new StoredEvent();
+        $storedEvent = self::getStoredEventModel($model)::make();
 
         $storedEvent->setRawAttributes([
             'event_properties' => app(EventSerializer::class)->serialize(clone $event),
@@ -45,12 +45,12 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $storedEvent->toStoredEventData();
     }
 
-    public static function persistMany(array $events, string $uuid = null): Collection
+    public static function persistMany(array $events, string $uuid = null, string $model = null): Collection
     {
         $storedEvents = [];
 
         foreach ($events as $event) {
-            $storedEvents[] = self::persist($event, $uuid);
+            $storedEvents[] = self::persist($event, $uuid, $model);
         }
 
         return collect($storedEvents);
@@ -58,7 +58,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
     public static function update(StoredEventData $storedEventData): StoredEventData
     {
-        $storedEvent = StoredEvent::find($storedEventData->id);
+        $storedEvent = self::getStoredEventModel()::find($storedEventData->id);
 
         $storedEvent->update($storedEventData->toArray());
 
@@ -74,5 +74,10 @@ class EloquentStoredEventRepository implements StoredEventRepository
         }
 
         return $class;
+    }
+
+    private static function getStoredEventModel(string $model = null): string
+    {
+        return $model ?? config('event-projector.stored_event_model');
     }
 }
