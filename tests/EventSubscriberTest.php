@@ -53,7 +53,7 @@ final class EventSubscriberTest extends TestCase
     public function it_will_log_events_that_implement_ShouldBeStored_with_a_map()
     {
         $this->setConfig('event-projector.event_class_map', [
-            'money_added' => MoneyAddedEvent::class,
+            'moneyadd' => MoneyAddedEvent::class,
         ]);
 
         event(new MoneyAddedEvent($this->account, 1234));
@@ -62,8 +62,7 @@ final class EventSubscriberTest extends TestCase
 
         $storedEvent = StoredEvent::first();
 
-        $this->assertEquals(MoneyAddedEvent::class, $storedEvent->event_class);
-        $this->assertEquals('money_added', $storedEvent->getAttributes()['event_class']);
+        $this->assertDatabaseHas('stored_events', ['event_class' => 'moneyadd']);
 
         $this->assertInstanceOf(MoneyAddedEvent::class, $storedEvent->event);
         $this->assertEquals(1234, $storedEvent->event->amount);

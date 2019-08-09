@@ -30,9 +30,6 @@ final class Projectionist
     /** @var bool */
     private $replayChunkSize;
 
-    /** @var string */
-    private $storedEventClass;
-
     /** @var bool */
     private $isProjecting = false;
 
@@ -46,7 +43,6 @@ final class Projectionist
 
         $this->catchExceptions = $config['catch_exceptions'];
         $this->replayChunkSize = $config['replay_chunk_size'];
-        $this->storedEventClass = $config['stored_event_model'];
     }
 
     public function addProjector($projector): Projectionist

@@ -54,8 +54,8 @@ final class StoredEventTest extends TestCase
 
         $this->fireEvents();
 
-        $this->assertEquals(MoneyAddedEvent::class, StoredEvent::first()->event_class);
-        $this->assertEquals('money_added', StoredEvent::first()->getAttributes()['event_class']);
+        $this->assertEquals(MoneyAddedEvent::class, StoredEvent::first()->toStoredEventData()->event_class);
+        $this->assertDatabaseHas('stored_events', ['event_class' => 'money_added']);
     }
 
     public function fireEvents(int $number = 1, string $className = MoneyAddedEvent::class)

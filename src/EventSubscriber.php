@@ -4,16 +4,12 @@ namespace Spatie\EventProjector;
 
 final class EventSubscriber
 {
-    /** @var string */
-    private $storedEventModel;
-
     /** @var \Spatie\EventProjector\StoredEventRepository */
     private $repository;
 
-    public function __construct(string $storedEventModel, StoredEventRepository $repository)
+    public function __construct(string $storedEventRepository)
     {
-        $this->storedEventModel = $storedEventModel;
-        $this->repository = $repository;
+        $this->repository = app($storedEventRepository);
     }
 
     public function subscribe($events): void

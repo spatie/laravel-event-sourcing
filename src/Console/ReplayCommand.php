@@ -97,17 +97,4 @@ class ReplayCommand extends Command
             $this->line('');
         }
     }
-
-    private function getStoredEventClass(): string
-    {
-        if ($storedEventModel = $this->option('stored-event-model')) {
-            if (! is_subclass_of($storedEventModel, StoredEvent::class)) {
-                throw new InvalidArgumentException(
-                    "Stored event model class `$storedEventModel` does not implement `".StoredEvent::class.'`'
-                );
-            }
-        }
-
-        return $storedEventModel ?? config('event-projector.stored_event_model');
-    }
 }

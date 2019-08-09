@@ -47,11 +47,6 @@ abstract class AggregateRoot
         return $this;
     }
 
-    protected function getStoredEventModel(): string
-    {
-        return $this->storedEventModel ?? config('event-projector.stored_event_model');
-    }
-
     protected function getStoredEventRepository(): string
     {
         return $this->storedEventRepository ?? config('event-projector.stored_event_repository');

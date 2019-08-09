@@ -48,8 +48,6 @@ final class AggregateRootTest extends TestCase
     /** @test */
     public function when_an_aggregate_root_specifies_a_stored_event_model_persisting_will_persist_all_events_it_recorded_via_that_model()
     {
-        $this->markTestSkipped('TODO: Find a way to fix OtherStoredEvent');
-
         AccountAggregateRootWithStoredEventSpecified::retrieve($this->aggregateUuid)
             ->addMoney(100)
             ->persist();
@@ -89,8 +87,6 @@ final class AggregateRootTest extends TestCase
     /** @test */
     public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it_with_the_stored_event_model_specified()
     {
-        $this->markTestSkipped('TODO: Find a way to fix OtherStoredEvent');
-
         /** @var \Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventSpecified $aggregateRoot */
         $aggregateRoot = AccountAggregateRootWithStoredEventSpecified::retrieve($this->aggregateUuid);
 
