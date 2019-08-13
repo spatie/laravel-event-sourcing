@@ -12,6 +12,8 @@ class EloquentStoredEvent extends Model
 
     public $timestamps = false;
 
+    protected $table = 'stored_events';
+
     public $casts = [
         'event_properties' => 'array',
         'meta_data' => 'array',
