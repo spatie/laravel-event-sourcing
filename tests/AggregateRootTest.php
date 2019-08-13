@@ -13,7 +13,6 @@ use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Reactors\SendMailReac
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventSpecified;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 
 final class AggregateRootTest extends TestCase
@@ -68,27 +67,6 @@ final class AggregateRootTest extends TestCase
     }
 
     /** @test */
-    public function when_an_aggregate_root_specifies_a_stored_event_model_persisting_will_persist_all_events_it_recorded_via_that_model()
-    {
-        AccountAggregateRootWithStoredEventSpecified::retrieve($this->aggregateUuid)
-            ->addMoney(100)
-            ->persist();
-
-        $storedEvents = EloquentStoredEvent::get();
-        $this->assertCount(0, $storedEvents);
-
-        $otherStoredEvents = OtherEloquentStoredEvent::get();
-        $this->assertCount(1, $otherStoredEvents);
-
-        $storedEvent = $otherStoredEvents->first();
-        $this->assertEquals($this->aggregateUuid, $storedEvent->aggregate_uuid);
-
-        $event = $storedEvent->event;
-        $this->assertInstanceOf(MoneyAdded::class, $event);
-        $this->assertEquals(100, $event->amount);
-    }
-
-    /** @test */
     public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it()
     {
         /** @var \Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
@@ -111,29 +89,6 @@ final class AggregateRootTest extends TestCase
     {
         /** @var \Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified $aggregateRoot */
         $aggregateRoot = AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid);
-
-        $aggregateRoot
-            ->addMoney(100)
-            ->addMoney(100)
-            ->addMoney(100);
-
-        $aggregateRoot->persist();
-
-        $this->assertEquals(0, EloquentStoredEvent::count());
-        $this->assertEquals(3, OtherEloquentStoredEvent::count());
-
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
-        $this->assertEquals(0, $aggregateRoot->balance);
-
-        $aggregateRoot = AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid);
-        $this->assertEquals(300, $aggregateRoot->balance);
-    }
-
-    /** @test */
-    public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it_with_the_stored_event_model_specified()
-    {
-        /** @var \Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified $aggregateRoot */
-        $aggregateRoot = AccountAggregateRootWithStoredEventSpecified::retrieve($this->aggregateUuid);
 
         $aggregateRoot
             ->addMoney(100)

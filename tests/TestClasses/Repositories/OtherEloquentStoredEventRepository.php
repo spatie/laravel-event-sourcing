@@ -4,13 +4,13 @@ namespace Spatie\EventProjector\Tests\TestClasses\Repositories;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\EloquentStoredEventRepository;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\EventProjector\Models\StoredEvent;
-use Spatie\EventProjector\StoredEventRepository;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 
-class OtherEloquentStoredEventRepository implements StoredEventRepository
+class OtherEloquentStoredEventRepository extends EloquentStoredEventRepository
 {
     public static function retrieveAll(string $uuid = null, int $startingFrom = null): Collection
     {
@@ -29,7 +29,7 @@ class OtherEloquentStoredEventRepository implements StoredEventRepository
         });
     }
 
-    public static function persist(ShouldBeStored $event, string $uuid = null, string $model = null): StoredEvent
+    public static function persist(ShouldBeStored $event, string $uuid = null): StoredEvent
     {
         /** @var OtherEloquentStoredEvent $storedEvent */
         $storedEvent = new OtherEloquentStoredEvent();
@@ -47,7 +47,7 @@ class OtherEloquentStoredEventRepository implements StoredEventRepository
         return $storedEvent->toStoredEventData();
     }
 
-    public static function persistMany(array $events, string $uuid = null, string $model = null): Collection
+    public static function persistMany(array $events, string $uuid = null): Collection
     {
         $storedEvents = [];
 
@@ -67,7 +67,7 @@ class OtherEloquentStoredEventRepository implements StoredEventRepository
         return $storedEvent->toStoredEventData();
     }
 
-    protected static function getEventClass(string $class): string
+    private static function getEventClass(string $class): string
     {
         $map = config('event-projector.event_class_map', []);
 

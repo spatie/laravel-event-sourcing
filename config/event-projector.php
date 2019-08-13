@@ -44,13 +44,6 @@ return [
     /*
      * This class is responsible for storing events. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
-     * it should extend \Spatie\EventProjector\Models\StoredEvent.
-     */
-    'stored_event_model' => \Spatie\EventProjector\Models\EloquentStoredEvent::class,
-
-    /*
-     * This class is responsible for storing events. To add extra behaviour you
-     * can change this to a class of your own. The only restriction is that
      * it should implement \Spatie\EventProjector\StoredEventRepository.
      */
     'stored_event_repository' => \Spatie\EventProjector\EloquentStoredEventRepository::class,
