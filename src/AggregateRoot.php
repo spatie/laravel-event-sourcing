@@ -40,8 +40,8 @@ abstract class AggregateRoot
             $this->aggregateUuid
         );
 
-        $storedEvents->each(function (StoredEvent $storedEventData) {
-            $storedEventData->handle();
+        $storedEvents->each(function (StoredEvent $storedEvent) {
+            $storedEvent->handle();
         });
 
         return $this;

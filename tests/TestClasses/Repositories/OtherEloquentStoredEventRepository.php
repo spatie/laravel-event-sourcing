@@ -25,7 +25,7 @@ class OtherEloquentStoredEventRepository extends EloquentStoredEventRepository
         }
 
         return $query->get()->map(function (OtherEloquentStoredEvent $storedEvent) {
-            return $storedEvent->toStoredEventData();
+            return $storedEvent->toStoredEvent();
         });
     }
 
@@ -44,7 +44,7 @@ class OtherEloquentStoredEventRepository extends EloquentStoredEventRepository
 
         $storedEvent->save();
 
-        return $storedEvent->toStoredEventData();
+        return $storedEvent->toStoredEvent();
     }
 
     public static function persistMany(array $events, string $uuid = null): Collection
@@ -58,13 +58,14 @@ class OtherEloquentStoredEventRepository extends EloquentStoredEventRepository
         return collect($storedEvents);
     }
 
-    public static function update(StoredEvent $storedEventData): StoredEvent
+    public static function update(StoredEvent $storedEvent): StoredEvent
     {
-        $storedEvent = OtherEloquentStoredEvent::find($storedEventData->id);
+        /** @var OtherEloquentStoredEvent $storedEvent */
+        $storedEvent = OtherEloquentStoredEvent::find($storedEvent->id);
 
-        $storedEvent->update($storedEventData->toArray());
+        $storedEvent->update($storedEvent->toArray());
 
-        return $storedEvent->toStoredEventData();
+        return $storedEvent->toStoredEvent();
     }
 
     private static function getEventClass(string $class): string

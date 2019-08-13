@@ -23,15 +23,15 @@ class EloquentStoredEventRepository implements StoredEventRepository
         }
 
         return $query->get()->map(function (EloquentStoredEvent $storedEvent) {
-            return $storedEvent->toStoredEventData();
+            return $storedEvent->toStoredEvent();
         });
     }
 
     public static function persist(ShouldBeStored $event, string $uuid = null): StoredEvent
     {
-        $storedEvent = new EloquentStoredEvent();
+        $eloquentStoredEvent = new EloquentStoredEvent();
 
-        $storedEvent->setRawAttributes([
+        $eloquentStoredEvent->setRawAttributes([
             'event_properties' => app(EventSerializer::class)->serialize(clone $event),
             'aggregate_uuid' => $uuid,
             'event_class' => self::getEventClass(get_class($event)),
@@ -39,9 +39,9 @@ class EloquentStoredEventRepository implements StoredEventRepository
             'created_at' => Carbon::now(),
         ]);
 
-        $storedEvent->save();
+        $eloquentStoredEvent->save();
 
-        return $storedEvent->toStoredEventData();
+        return $eloquentStoredEvent->toStoredEvent();
     }
 
     public static function persistMany(array $events, string $uuid = null): Collection
@@ -55,13 +55,14 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return collect($storedEvents);
     }
 
-    public static function update(StoredEvent $storedEventData): StoredEvent
+    public static function update(StoredEvent $storedEvent): StoredEvent
     {
-        $storedEvent = EloquentStoredEvent::find($storedEventData->id);
+        /** @var EloquentStoredEvent $storedEvent */
+        $eloquentStoredEvent = EloquentStoredEvent::find($storedEvent->id);
 
-        $storedEvent->update($storedEventData->toArray());
+        $eloquentStoredEvent->update($storedEvent->toArray());
 
-        return $storedEvent->toStoredEventData();
+        return $eloquentStoredEvent->toStoredEvent();
     }
 
     private static function getEventClass(string $class): string

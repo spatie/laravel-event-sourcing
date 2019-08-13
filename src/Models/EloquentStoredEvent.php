@@ -19,7 +19,7 @@ class EloquentStoredEvent extends Model
         'meta_data' => 'array',
     ];
 
-    public function toStoredEventData(): StoredEvent
+    public function toStoredEvent(): StoredEvent
     {
         return new StoredEvent([
             'id' => $this->id,
@@ -33,7 +33,7 @@ class EloquentStoredEvent extends Model
 
     public function getEventAttribute(): ShouldBeStored
     {
-        return $this->toStoredEventData()->event;
+        return $this->toStoredEvent()->event;
     }
 
     public function scopeStartingFrom(Builder $query, int $storedEventId): void

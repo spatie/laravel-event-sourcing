@@ -18,11 +18,11 @@ final class ProjectorThatWritesMetaData implements Projector
 
     protected $trackStream = '*';
 
-    public function onMoneyAdded(StoredEvent $storedEventData, MoneyAddedEvent $event)
+    public function onMoneyAdded(StoredEvent $storedEvent, MoneyAddedEvent $event)
     {
-        $storedEventData->meta_data['user_id'] = 1;
+        $storedEvent->meta_data['user_id'] = 1;
 
         $repository = app(StoredEventRepository::class);
-        $repository->update($storedEventData);
+        $repository->update($storedEvent);
     }
 }

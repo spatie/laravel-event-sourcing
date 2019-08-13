@@ -42,7 +42,7 @@ final class StoredEventTest extends TestCase
 
         $this->expectException(InvalidStoredEvent::class);
 
-        EloquentStoredEvent::first()->toStoredEventData();
+        EloquentStoredEvent::first()->toStoredEvent();
     }
 
     /** @test * */
@@ -54,7 +54,7 @@ final class StoredEventTest extends TestCase
 
         $this->fireEvents();
 
-        $this->assertEquals(MoneyAddedEvent::class, EloquentStoredEvent::first()->toStoredEventData()->event_class);
+        $this->assertEquals(MoneyAddedEvent::class, EloquentStoredEvent::first()->toStoredEvent()->event_class);
         $this->assertDatabaseHas('stored_events', ['event_class' => 'money_added']);
     }
 

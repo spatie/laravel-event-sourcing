@@ -26,7 +26,7 @@ trait HandlesEvents
 
         $parameters = [
             'event' => $storedEvent->event,
-            'storedEventData' => $storedEvent,
+            'storedEvent' => $storedEvent,
             'aggregateUuid' => $storedEvent->aggregate_uuid,
         ];
 

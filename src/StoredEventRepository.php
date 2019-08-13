@@ -13,5 +13,5 @@ interface StoredEventRepository
 
     public static function persistMany(array $events, string $uuid = null): Collection;
 
-    public static function update(StoredEvent $storedEventData): StoredEvent;
+    public static function update(StoredEvent $storedEvent): StoredEvent;
 }
