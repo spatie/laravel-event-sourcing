@@ -3,7 +3,7 @@
 namespace Spatie\EventProjector\Tests\Models;
 
 use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
@@ -29,7 +29,7 @@ final class StoredEventTest extends TestCase
     {
         $this->fireEvents(4);
 
-        $this->assertEquals([3, 4], StoredEvent::startingFrom(3)->pluck('id')->toArray());
+        $this->assertEquals([3, 4], EloquentStoredEvent::startingFrom(3)->pluck('id')->toArray());
     }
 
     /** @test */
@@ -38,11 +38,11 @@ final class StoredEventTest extends TestCase
         $this->fireEvents();
 
         // sneakily change the stored event class
-        StoredEvent::first()->update(['event_class' => 'NonExistingClass']);
+        EloquentStoredEvent::first()->update(['event_class' => 'NonExistingClass']);
 
         $this->expectException(InvalidStoredEvent::class);
 
-        StoredEvent::first()->toStoredEventData();
+        EloquentStoredEvent::first()->toStoredEventData();
     }
 
     /** @test * */
@@ -54,7 +54,7 @@ final class StoredEventTest extends TestCase
 
         $this->fireEvents();
 
-        $this->assertEquals(MoneyAddedEvent::class, StoredEvent::first()->toStoredEventData()->event_class);
+        $this->assertEquals(MoneyAddedEvent::class, EloquentStoredEvent::first()->toStoredEventData()->event_class);
         $this->assertDatabaseHas('stored_events', ['event_class' => 'money_added']);
     }
 

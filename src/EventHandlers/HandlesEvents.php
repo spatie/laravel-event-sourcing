@@ -8,7 +8,7 @@ use ReflectionMethod;
 use ReflectionParameter;
 use Illuminate\Support\Collection;
 use Spatie\EventProjector\ShouldBeStored;
-use Spatie\EventProjector\Models\StoredEventData;
+use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
 trait HandlesEvents
@@ -18,7 +18,7 @@ trait HandlesEvents
         return $this->getEventHandlingMethods()->keys()->toArray();
     }
 
-    public function handle(StoredEventData $storedEvent)
+    public function handle(StoredEvent $storedEvent)
     {
         $eventClass = $storedEvent->event_class;
 

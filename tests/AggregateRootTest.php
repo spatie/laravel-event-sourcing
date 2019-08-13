@@ -3,11 +3,11 @@
 namespace Spatie\EventProjector\Tests;
 
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Tests\TestClasses\FakeUuid;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
-use Spatie\EventProjector\Tests\TestClasses\Models\OtherStoredEvent;
+use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
@@ -35,7 +35,7 @@ final class AggregateRootTest extends TestCase
             ->addMoney(100)
             ->persist();
 
-        $storedEvents = StoredEvent::get();
+        $storedEvents = EloquentStoredEvent::get();
         $this->assertCount(1, $storedEvents);
 
         $storedEvent = $storedEvents->first();
@@ -53,10 +53,10 @@ final class AggregateRootTest extends TestCase
             ->addMoney(100)
             ->persist();
 
-        $storedEvents = StoredEvent::get();
+        $storedEvents = EloquentStoredEvent::get();
         $this->assertCount(0, $storedEvents);
 
-        $otherStoredEvents = OtherStoredEvent::get();
+        $otherStoredEvents = OtherEloquentStoredEvent::get();
         $this->assertCount(1, $otherStoredEvents);
 
         $storedEvent = $otherStoredEvents->first();
@@ -74,10 +74,10 @@ final class AggregateRootTest extends TestCase
             ->addMoney(100)
             ->persist();
 
-        $storedEvents = StoredEvent::get();
+        $storedEvents = EloquentStoredEvent::get();
         $this->assertCount(0, $storedEvents);
 
-        $otherStoredEvents = OtherStoredEvent::get();
+        $otherStoredEvents = OtherEloquentStoredEvent::get();
         $this->assertCount(1, $otherStoredEvents);
 
         $storedEvent = $otherStoredEvents->first();
@@ -119,8 +119,8 @@ final class AggregateRootTest extends TestCase
 
         $aggregateRoot->persist();
 
-        $this->assertEquals(0, StoredEvent::count());
-        $this->assertEquals(3, OtherStoredEvent::count());
+        $this->assertEquals(0, EloquentStoredEvent::count());
+        $this->assertEquals(3, OtherEloquentStoredEvent::count());
 
         $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
         $this->assertEquals(0, $aggregateRoot->balance);
@@ -142,8 +142,8 @@ final class AggregateRootTest extends TestCase
 
         $aggregateRoot->persist();
 
-        $this->assertEquals(0, StoredEvent::count());
-        $this->assertEquals(3, OtherStoredEvent::count());
+        $this->assertEquals(0, EloquentStoredEvent::count());
+        $this->assertEquals(3, OtherEloquentStoredEvent::count());
 
         $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
         $this->assertEquals(0, $aggregateRoot->balance);

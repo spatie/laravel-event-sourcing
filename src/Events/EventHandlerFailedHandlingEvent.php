@@ -3,7 +3,7 @@
 namespace Spatie\EventProjector\Events;
 
 use Exception;
-use Spatie\EventProjector\Models\StoredEventData;
+use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\EventHandlers\EventHandler;
 
 final class EventHandlerFailedHandlingEvent
@@ -11,13 +11,13 @@ final class EventHandlerFailedHandlingEvent
     /** @var \Spatie\EventProjector\EventHandlers\EventHandler */
     public $eventHandler;
 
-    /** @var \Spatie\EventProjector\Models\StoredEvent */
+    /** @var \Spatie\EventProjector\Models\EloquentStoredEvent */
     public $storedEvent;
 
     /** @var \Exception */
     public $exception;
 
-    public function __construct(EventHandler $eventHandler, StoredEventData $storedEvent, Exception $exception)
+    public function __construct(EventHandler $eventHandler, StoredEvent $storedEvent, Exception $exception)
     {
         $this->eventHandler = $eventHandler;
 

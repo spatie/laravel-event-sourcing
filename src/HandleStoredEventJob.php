@@ -6,19 +6,19 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Spatie\EventProjector\Models\StoredEventData;
+use Spatie\EventProjector\Models\StoredEvent;
 
 final class HandleStoredEventJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
-    /** @var \Spatie\EventProjector\Models\StoredEvent */
+    /** @var \Spatie\EventProjector\Models\EloquentStoredEvent */
     public $storedEvent;
 
     /** @var array */
     public $tags;
 
-    public function __construct(StoredEventData $storedEvent, array $tags)
+    public function __construct(StoredEvent $storedEvent, array $tags)
     {
         $this->storedEvent = $storedEvent;
 
@@ -37,7 +37,7 @@ final class HandleStoredEventJob implements ShouldQueue
             : $this->tags;
     }
 
-    public static function createForEvent(StoredEventData $event, array $tags): self
+    public static function createForEvent(StoredEvent $event, array $tags): self
     {
         return new static($event, $tags);
     }

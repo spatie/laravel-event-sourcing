@@ -3,7 +3,7 @@
 namespace Spatie\EventProjector\EventHandlers;
 
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Models\StoredEventData;
+use Spatie\EventProjector\Models\StoredEvent;
 
 final class EventHandlerCollection
 {
@@ -29,7 +29,7 @@ final class EventHandlerCollection
         return $this->eventHandlers;
     }
 
-    public function forEvent(StoredEventData $storedEvent): Collection
+    public function forEvent(StoredEvent $storedEvent): Collection
     {
         return $this->eventHandlers->filter(function (EventHandler $eventHandler) use ($storedEvent) {
             return in_array($storedEvent->event_class, $eventHandler->handles(), true);

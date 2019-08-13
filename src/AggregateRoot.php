@@ -4,7 +4,7 @@ namespace Spatie\EventProjector;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Spatie\EventProjector\Models\StoredEventData;
+use Spatie\EventProjector\Models\StoredEvent;
 
 abstract class AggregateRoot
 {
@@ -41,7 +41,7 @@ abstract class AggregateRoot
             $this->getStoredEventModel()
         );
 
-        $storedEvents->each(function (StoredEventData $storedEventData) {
+        $storedEvents->each(function (StoredEvent $storedEventData) {
             $storedEventData->handle();
         });
 
@@ -75,7 +75,7 @@ abstract class AggregateRoot
     private function reconstituteFromEvents(): AggregateRoot
     {
         $this->getStoredEventRepository()::retrieveAll($this->aggregateUuid)
-            ->each(function (StoredEventData $storedEvent) {
+            ->each(function (StoredEvent $storedEvent) {
                 $this->apply($storedEvent->event);
             });
 

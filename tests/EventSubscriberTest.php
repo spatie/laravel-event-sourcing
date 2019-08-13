@@ -5,7 +5,7 @@ namespace Spatie\EventProjector\Tests;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
-use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\HandleStoredEventJob;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
@@ -38,9 +38,9 @@ final class EventSubscriberTest extends TestCase
     {
         event(new MoneyAddedEvent($this->account, 1234));
 
-        $this->assertCount(1, StoredEvent::get());
+        $this->assertCount(1, EloquentStoredEvent::get());
 
-        $storedEvent = StoredEvent::first();
+        $storedEvent = EloquentStoredEvent::first();
 
         $this->assertEquals(MoneyAddedEvent::class, $storedEvent->event_class);
 
@@ -58,9 +58,9 @@ final class EventSubscriberTest extends TestCase
 
         event(new MoneyAddedEvent($this->account, 1234));
 
-        $this->assertCount(1, StoredEvent::get());
+        $this->assertCount(1, EloquentStoredEvent::get());
 
-        $storedEvent = StoredEvent::first();
+        $storedEvent = EloquentStoredEvent::first();
 
         $this->assertDatabaseHas('stored_events', ['event_class' => 'moneyadd']);
 
@@ -74,7 +74,7 @@ final class EventSubscriberTest extends TestCase
     {
         event(new DoNotStoreThisEvent());
 
-        $this->assertCount(0, StoredEvent::get());
+        $this->assertCount(0, EloquentStoredEvent::get());
     }
 
     /** @test */

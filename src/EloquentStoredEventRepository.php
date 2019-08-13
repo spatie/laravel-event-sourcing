@@ -4,8 +4,8 @@ namespace Spatie\EventProjector;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Models\StoredEvent;
-use Spatie\EventProjector\Models\StoredEventData;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class EloquentStoredEventRepository implements StoredEventRepository
@@ -22,14 +22,14 @@ class EloquentStoredEventRepository implements StoredEventRepository
             $query->startingFrom($startingFrom);
         }
 
-        return $query->get()->map(function (StoredEvent $storedEvent) {
+        return $query->get()->map(function (EloquentStoredEvent $storedEvent) {
             return $storedEvent->toStoredEventData();
         });
     }
 
-    public static function persist(ShouldBeStored $event, string $uuid = null, string $model = null): StoredEventData
+    public static function persist(ShouldBeStored $event, string $uuid = null, string $model = null): StoredEvent
     {
-        /** @var StoredEvent $storedEvent */
+        /** @var EloquentStoredEvent $storedEvent */
         $storedEvent = self::getStoredEventModel($model)::make();
 
         $storedEvent->setRawAttributes([
@@ -56,7 +56,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return collect($storedEvents);
     }
 
-    public static function update(StoredEventData $storedEventData): StoredEventData
+    public static function update(StoredEvent $storedEventData): StoredEvent
     {
         $storedEvent = self::getStoredEventModel()::find($storedEventData->id);
 

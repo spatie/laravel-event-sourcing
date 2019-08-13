@@ -6,15 +6,15 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Spatie\EventProjector\ShouldBeStored;
 use Spatie\EventProjector\StoredEventRepository;
-use Spatie\EventProjector\Models\StoredEventData;
+use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
-use Spatie\EventProjector\Tests\TestClasses\Models\OtherStoredEvent;
+use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 
 class OtherEloquentStoredEventRepository implements StoredEventRepository
 {
     public static function retrieveAll(string $uuid = null, int $startingFrom = null): Collection
     {
-        $query = OtherStoredEvent::query();
+        $query = OtherEloquentStoredEvent::query();
 
         if ($uuid) {
             $query->uuid($uuid);
@@ -24,15 +24,15 @@ class OtherEloquentStoredEventRepository implements StoredEventRepository
             $query->startingFrom($startingFrom);
         }
 
-        return $query->get()->map(function (OtherStoredEvent $storedEvent) {
+        return $query->get()->map(function (OtherEloquentStoredEvent $storedEvent) {
             return $storedEvent->toStoredEventData();
         });
     }
 
-    public static function persist(ShouldBeStored $event, string $uuid = null, string $model = null): StoredEventData
+    public static function persist(ShouldBeStored $event, string $uuid = null, string $model = null): StoredEvent
     {
-        /** @var OtherStoredEvent $storedEvent */
-        $storedEvent = new OtherStoredEvent();
+        /** @var OtherEloquentStoredEvent $storedEvent */
+        $storedEvent = new OtherEloquentStoredEvent();
 
         $storedEvent->setRawAttributes([
             'event_properties' => app(EventSerializer::class)->serialize(clone $event),
@@ -58,9 +58,9 @@ class OtherEloquentStoredEventRepository implements StoredEventRepository
         return collect($storedEvents);
     }
 
-    public static function update(StoredEventData $storedEventData): StoredEventData
+    public static function update(StoredEvent $storedEventData): StoredEvent
     {
-        $storedEvent = OtherStoredEvent::find($storedEventData->id);
+        $storedEvent = OtherEloquentStoredEvent::find($storedEventData->id);
 
         $storedEvent->update($storedEventData->toArray());
 
