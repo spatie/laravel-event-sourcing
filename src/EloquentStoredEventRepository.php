@@ -65,7 +65,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $storedEvent->toStoredEventData();
     }
 
-    protected static function getEventClass(string $class): string
+    private static function getEventClass(string $class): string
     {
         $map = config('event-projector.event_class_map', []);
 
