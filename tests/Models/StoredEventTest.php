@@ -3,8 +3,8 @@
 namespace Spatie\EventProjector\Tests\Models;
 
 use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
+use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;

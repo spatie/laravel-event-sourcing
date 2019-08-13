@@ -3,8 +3,8 @@
 namespace Spatie\EventProjector\Tests;
 
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
+use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\FakeUuid;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;

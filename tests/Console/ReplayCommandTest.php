@@ -7,17 +7,17 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
+use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
-use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 
 final class ReplayCommandTest extends TestCase

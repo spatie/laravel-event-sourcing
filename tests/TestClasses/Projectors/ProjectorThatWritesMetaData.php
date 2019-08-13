@@ -2,9 +2,9 @@
 
 namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
 
+use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\StoredEventRepository;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
 

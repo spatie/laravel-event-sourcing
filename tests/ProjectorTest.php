@@ -2,8 +2,8 @@
 
 namespace Spatie\EventProjector\Tests;
 
-use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
+use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Exceptions\CouldNotResetProjector;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;

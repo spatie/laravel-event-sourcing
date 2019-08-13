@@ -5,8 +5,8 @@ namespace Spatie\EventProjector\Tests\TestClasses\Repositories;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Spatie\EventProjector\ShouldBeStored;
-use Spatie\EventProjector\StoredEventRepository;
 use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\StoredEventRepository;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 
