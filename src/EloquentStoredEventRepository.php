@@ -10,7 +10,7 @@ use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class EloquentStoredEventRepository implements StoredEventRepository
 {
-    public static function retrieveAll(string $uuid = null, int $startingFrom = null): Collection
+    public function retrieveAll(string $uuid = null, int $startingFrom = null): Collection
     {
         $query = EloquentStoredEvent::query();
 
@@ -27,7 +27,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         });
     }
 
-    public static function persist(ShouldBeStored $event, string $uuid = null): StoredEvent
+    public function persist(ShouldBeStored $event, string $uuid = null): StoredEvent
     {
         $eloquentStoredEvent = new EloquentStoredEvent();
 
@@ -44,7 +44,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $eloquentStoredEvent->toStoredEvent();
     }
 
-    public static function persistMany(array $events, string $uuid = null): Collection
+    public function persistMany(array $events, string $uuid = null): Collection
     {
         $storedEvents = [];
 
@@ -55,7 +55,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return collect($storedEvents);
     }
 
-    public static function update(StoredEvent $storedEvent): StoredEvent
+    public function update(StoredEvent $storedEvent): StoredEvent
     {
         /** @var EloquentStoredEvent $storedEvent */
         $eloquentStoredEvent = EloquentStoredEvent::find($storedEvent->id);
@@ -65,7 +65,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $eloquentStoredEvent->toStoredEvent();
     }
 
-    private static function getEventClass(string $class): string
+    private function getEventClass(string $class): string
     {
         $map = config('event-projector.event_class_map', []);
 

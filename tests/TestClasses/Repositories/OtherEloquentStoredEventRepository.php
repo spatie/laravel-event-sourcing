@@ -12,7 +12,7 @@ use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 
 class OtherEloquentStoredEventRepository extends EloquentStoredEventRepository
 {
-    public static function retrieveAll(string $uuid = null, int $startingFrom = null): Collection
+    public function retrieveAll(string $uuid = null, int $startingFrom = null): Collection
     {
         $query = OtherEloquentStoredEvent::query();
 
@@ -29,7 +29,7 @@ class OtherEloquentStoredEventRepository extends EloquentStoredEventRepository
         });
     }
 
-    public static function persist(ShouldBeStored $event, string $uuid = null): StoredEvent
+    public function persist(ShouldBeStored $event, string $uuid = null): StoredEvent
     {
         /** @var OtherEloquentStoredEvent $storedEvent */
         $storedEvent = new OtherEloquentStoredEvent();
@@ -47,7 +47,7 @@ class OtherEloquentStoredEventRepository extends EloquentStoredEventRepository
         return $storedEvent->toStoredEvent();
     }
 
-    public static function persistMany(array $events, string $uuid = null): Collection
+    public function persistMany(array $events, string $uuid = null): Collection
     {
         $storedEvents = [];
 
@@ -58,7 +58,7 @@ class OtherEloquentStoredEventRepository extends EloquentStoredEventRepository
         return collect($storedEvents);
     }
 
-    public static function update(StoredEvent $storedEvent): StoredEvent
+    public function update(StoredEvent $storedEvent): StoredEvent
     {
         /** @var OtherEloquentStoredEvent $storedEvent */
         $storedEvent = OtherEloquentStoredEvent::find($storedEvent->id);
@@ -68,7 +68,7 @@ class OtherEloquentStoredEventRepository extends EloquentStoredEventRepository
         return $storedEvent->toStoredEvent();
     }
 
-    private static function getEventClass(string $class): string
+    private function getEventClass(string $class): string
     {
         $map = config('event-projector.event_class_map', []);
 

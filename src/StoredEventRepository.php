@@ -7,11 +7,11 @@ use Spatie\EventProjector\Models\StoredEvent;
 
 interface StoredEventRepository
 {
-    public static function retrieveAll(string $uuid = null, int $startingFrom = null): Collection;
+    public function retrieveAll(string $uuid = null, int $startingFrom = null): Collection;
 
-    public static function persist(ShouldBeStored $event, string $uuid = null): StoredEvent;
+    public function persist(ShouldBeStored $event, string $uuid = null): StoredEvent;
 
-    public static function persistMany(array $events, string $uuid = null): Collection;
+    public function persistMany(array $events, string $uuid = null): Collection;
 
-    public static function update(StoredEvent $storedEvent): StoredEvent;
+    public function update(StoredEvent $storedEvent): StoredEvent;
 }

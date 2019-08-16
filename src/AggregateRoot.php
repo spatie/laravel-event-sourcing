@@ -47,9 +47,9 @@ abstract class AggregateRoot
         return $this;
     }
 
-    protected function getStoredEventRepository(): string
+    protected function getStoredEventRepository(): StoredEventRepository
     {
-        return $this->storedEventRepository ?? config('event-projector.stored_event_repository');
+        return app($this->storedEventRepository ?? config('event-projector.stored_event_repository'));
     }
 
     public function getRecordedEvents(): array
@@ -68,7 +68,7 @@ abstract class AggregateRoot
 
     private function reconstituteFromEvents(): AggregateRoot
     {
-        $this->getStoredEventRepository()::retrieveAll($this->aggregateUuid)
+        $this->getStoredEventRepository()->retrieveAll($this->aggregateUuid)
             ->each(function (StoredEvent $storedEvent) {
                 $this->apply($storedEvent->event);
             });
