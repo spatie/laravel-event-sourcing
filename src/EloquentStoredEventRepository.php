@@ -10,9 +10,11 @@ use Spatie\EventProjector\EventSerializers\EventSerializer;
 
 class EloquentStoredEventRepository implements StoredEventRepository
 {
+    protected $storedEventModel = EloquentStoredEvent::class;
+
     public function retrieveAll(string $uuid = null, int $startingFrom = null): Collection
     {
-        $query = EloquentStoredEvent::query();
+        $query = $this->storedEventModel::query();
 
         if ($uuid) {
             $query->uuid($uuid);
@@ -29,7 +31,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
     public function persist(ShouldBeStored $event, string $uuid = null): StoredEvent
     {
-        $eloquentStoredEvent = new EloquentStoredEvent();
+        $eloquentStoredEvent = new $this->storedEventModel();
 
         $eloquentStoredEvent->setRawAttributes([
             'event_properties' => app(EventSerializer::class)->serialize(clone $event),
@@ -58,7 +60,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
     public function update(StoredEvent $storedEvent): StoredEvent
     {
         /** @var EloquentStoredEvent $storedEvent */
-        $eloquentStoredEvent = EloquentStoredEvent::find($storedEvent->id);
+        $eloquentStoredEvent = $this->storedEventModel::find($storedEvent->id);
 
         $eloquentStoredEvent->update($storedEvent->toArray());
 
