@@ -67,7 +67,7 @@ public function addMoney(int $amount)
 }
 ```
 
-Calling `recordThat` will persist the event to the DB, that will happen when the aggregate itself gets persisted. However, recording an event will cause it getting applied to the aggregate immediately. For example, when you record the event `MoneyAdded`, we'll immediately call `applyMoneyAdded` on the aggregate.
+Calling `recordThat` will not persist the event to the DB, that will happen when the aggregate itself gets persisted. However, recording an event will cause it getting applied to the aggregate immediately. For example, when you record the event `MoneyAdded`, we'll immediately call `applyMoneyAdded` on the aggregate.
 
 Notice that your event isn't required to contain the `$uuid`. Your aggregate is built up for a specific `$uuid` and under the hood, the package will save that `$uuid` along with the event when the aggregate gets persisted.
 
