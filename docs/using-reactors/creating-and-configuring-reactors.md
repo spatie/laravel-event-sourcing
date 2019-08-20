@@ -15,7 +15,7 @@ php artisan make:reactor BigAmountAddedReactor
 
 ## Registering reactors
 
-By default, the package will automatically find an register all reactors found in your application.
+By default, the package will automatically find and register all reactors found in your application.
 
 Alternatively, you can also manually register them in the `reactors` key of the `event-projectors` config file.
 
