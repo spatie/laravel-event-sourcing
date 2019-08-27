@@ -65,7 +65,7 @@ class ReplayCommand extends Command
     public function replay(Collection $projectors, int $startingFrom): void
     {
         $repository = app(StoredEventRepository::class);
-        $events = $repository->retrieveAll(null, $startingFrom);
+        $events = $repository->retrieveAllStartingFrom($startingFrom);
         $replayCount = $events->count();
 
         if ($replayCount === 0) {

@@ -3,7 +3,7 @@
 namespace Spatie\EventProjector;
 
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
@@ -12,25 +12,37 @@ class EloquentStoredEventRepository implements StoredEventRepository
 {
     protected $storedEventModel = EloquentStoredEvent::class;
 
-    public function retrieveAll(string $uuid = null, int $startingFrom = null): Collection
+    public function retrieveAll(string $uuid = null): LazyCollection
     {
+        /** @var \Illuminate\Database\Query\Builder $query */
         $query = $this->storedEventModel::query();
 
         if ($uuid) {
             $query->uuid($uuid);
         }
 
-        if ($startingFrom) {
-            $query->startingFrom($startingFrom);
+        return $query->cursor()->map(function (EloquentStoredEvent $storedEvent) {
+            return $storedEvent->toStoredEvent();
+        });
+    }
+
+    public function retrieveAllStartingFrom(int $startingFrom, string $uuid = null): LazyCollection
+    {
+        /** @var \Illuminate\Database\Query\Builder $query */
+        $query = $this->storedEventModel::query()->startingFrom($startingFrom);
+
+        if ($uuid) {
+            $query->uuid($uuid);
         }
 
-        return $query->get()->map(function (EloquentStoredEvent $storedEvent) {
+        return $query->cursor()->map(function (EloquentStoredEvent $storedEvent) {
             return $storedEvent->toStoredEvent();
         });
     }
 
     public function persist(ShouldBeStored $event, string $uuid = null): StoredEvent
     {
+        /** @var EloquentStoredEvent $eloquentStoredEvent */
         $eloquentStoredEvent = new $this->storedEventModel();
 
         $eloquentStoredEvent->setRawAttributes([
@@ -46,7 +58,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $eloquentStoredEvent->toStoredEvent();
     }
 
-    public function persistMany(array $events, string $uuid = null): Collection
+    public function persistMany(array $events, string $uuid = null): LazyCollection
     {
         $storedEvents = [];
 
@@ -54,12 +66,12 @@ class EloquentStoredEventRepository implements StoredEventRepository
             $storedEvents[] = self::persist($event, $uuid);
         }
 
-        return collect($storedEvents);
+        return new LazyCollection($storedEvents);
     }
 
     public function update(StoredEvent $storedEvent): StoredEvent
     {
-        /** @var EloquentStoredEvent $storedEvent */
+        /** @var EloquentStoredEvent $eloquentStoredEvent */
         $eloquentStoredEvent = $this->storedEventModel::find($storedEvent->id);
 
         $eloquentStoredEvent->update($storedEvent->toArray());
