@@ -2,15 +2,14 @@
 
 namespace Spatie\EventProjector\Tests;
 
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Mockery;
 use Exception;
-use ReflectionException;
 use Illuminate\Support\Facades\Queue;
-use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\HandleStoredEventJob;
 use Spatie\EventProjector\Facades\Projectionist;
+use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
