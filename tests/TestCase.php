@@ -48,12 +48,10 @@ abstract class TestCase extends Orchestra
         include_once __DIR__.'/../stubs/create_stored_events_table.php.stub';
         (new \CreateStoredEventsTable())->up();
 
-        $connection = config('database.default');
-        $driver = config("database.connections.{$connection}.driver");
         Schema::dropIfExists('other_stored_events');
-        if ($driver === 'mysql') {
+        if ($this->dbDriver() === 'mysql') {
             DB::statement('CREATE TABLE other_stored_events LIKE stored_events');
-        } elseif ($driver === 'pgsql') {
+        } elseif ($this->dbDriver() === 'pgsql') {
             DB::statement('CREATE TABLE other_stored_events AS TABLE stored_events;');
         } else {
             throw new Exception("DB driver [$driver] is not supported by this test suite.");
@@ -76,5 +74,12 @@ abstract class TestCase extends Orchestra
     protected function pathToTests(): string
     {
         return __DIR__;
+    }
+
+    protected function dbDriver(): string
+    {
+        $connection = config('database.default');
+
+        return config("database.connections.{$connection}.driver");
     }
 }

@@ -59,14 +59,12 @@ final class EventSerializerTest extends TestCase
 
         $array = json_decode($json, true);
 
-        $connection = config('database.default');
-        $driver = config("database.connections.{$connection}.driver");
         $this->assertEquals([
             'account' => [
                 'class' => get_class($account),
                 'id' => 1,
                 'relations' => [],
-                'connection' => $driver,
+                'connection' => $this->dbDriver(),
             ],
             'amount' => 1234,
         ], $array);
