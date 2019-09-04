@@ -54,7 +54,9 @@ abstract class TestCase extends Orchestra
         } elseif ($this->dbDriver() === 'pgsql') {
             DB::statement('CREATE TABLE other_stored_events AS TABLE stored_events;');
         } else {
-            throw new Exception("DB driver [$driver] is not supported by this test suite.");
+            throw new Exception(
+                sprintf('DB driver [%s] is not supported by this test suite.', $this->dbDriver())
+            );
         }
     }
 
