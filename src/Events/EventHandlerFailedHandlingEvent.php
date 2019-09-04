@@ -11,7 +11,7 @@ final class EventHandlerFailedHandlingEvent
     /** @var \Spatie\EventProjector\EventHandlers\EventHandler */
     public $eventHandler;
 
-    /** @var \Spatie\EventProjector\Models\StoredEvent */
+    /** @var \Spatie\EventProjector\Models\EloquentStoredEvent */
     public $storedEvent;
 
     /** @var \Exception */

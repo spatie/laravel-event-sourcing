@@ -5,9 +5,9 @@ namespace Spatie\EventProjector\Tests;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\HandleStoredEventJob;
 use Spatie\EventProjector\Facades\Projectionist;
+use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
@@ -38,9 +38,9 @@ final class EventSubscriberTest extends TestCase
     {
         event(new MoneyAddedEvent($this->account, 1234));
 
-        $this->assertCount(1, StoredEvent::get());
+        $this->assertCount(1, EloquentStoredEvent::get());
 
-        $storedEvent = StoredEvent::first();
+        $storedEvent = EloquentStoredEvent::first();
 
         $this->assertEquals(MoneyAddedEvent::class, $storedEvent->event_class);
 
@@ -53,17 +53,16 @@ final class EventSubscriberTest extends TestCase
     public function it_will_log_events_that_implement_ShouldBeStored_with_a_map()
     {
         $this->setConfig('event-projector.event_class_map', [
-            'money_added' => MoneyAddedEvent::class,
+            'moneyadd' => MoneyAddedEvent::class,
         ]);
 
         event(new MoneyAddedEvent($this->account, 1234));
 
-        $this->assertCount(1, StoredEvent::get());
+        $this->assertCount(1, EloquentStoredEvent::get());
 
-        $storedEvent = StoredEvent::first();
+        $storedEvent = EloquentStoredEvent::first();
 
-        $this->assertEquals(MoneyAddedEvent::class, $storedEvent->event_class);
-        $this->assertEquals('money_added', $storedEvent->getAttributes()['event_class']);
+        $this->assertDatabaseHas('stored_events', ['event_class' => 'moneyadd']);
 
         $this->assertInstanceOf(MoneyAddedEvent::class, $storedEvent->event);
         $this->assertEquals(1234, $storedEvent->event->amount);
@@ -75,7 +74,7 @@ final class EventSubscriberTest extends TestCase
     {
         event(new DoNotStoreThisEvent());
 
-        $this->assertCount(0, StoredEvent::get());
+        $this->assertCount(0, EloquentStoredEvent::get());
     }
 
     /** @test */

@@ -6,7 +6,7 @@ use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
 
-final class InvalidProjectThatDoesNotHaveTheRightEventHandlingMethod implements Projector
+final class InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod implements Projector
 {
     use ProjectsEvents;
 

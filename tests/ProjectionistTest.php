@@ -4,11 +4,12 @@ namespace Spatie\EventProjector\Tests;
 
 use Mockery;
 use Exception;
-use ReflectionException;
 use Illuminate\Support\Facades\Queue;
 use Spatie\EventProjector\HandleStoredEventJob;
 use Spatie\EventProjector\Facades\Projectionist;
+use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
@@ -32,7 +33,7 @@ final class ProjectionistTest extends TestCase
     /** @test */
     public function it_will_throw_an_exception_when_trying_to_add_a_non_existing_projector()
     {
-        $this->expectException(ReflectionException::class);
+        $this->expectException(BindingResolutionException::class);
 
         Projectionist::addProjector('non-exising-class-name');
     }
@@ -40,7 +41,7 @@ final class ProjectionistTest extends TestCase
     /** @test */
     public function it_will_thrown_an_exception_when_trying_to_add_a_non_existing_reactor()
     {
-        $this->expectException(ReflectionException::class);
+        $this->expectException(BindingResolutionException::class);
 
         Projectionist::addReactor('non-exising-class-name');
     }
@@ -48,7 +49,7 @@ final class ProjectionistTest extends TestCase
     /** @test */
     public function it_will_thrown_an_exception_when_an_event_handler_does_not_have_the_expected_event_handling_method()
     {
-        $this->expectException(ReflectionException::class);
+        $this->expectException(InvalidEventHandler::class);
 
         Projectionist::addProjector(InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod::class);
 

@@ -7,18 +7,18 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Events\FinishedEventReplay;
 use Spatie\EventProjector\Events\StartingEventReplay;
+use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
-use Spatie\EventProjector\Tests\TestClasses\Models\OtherStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventSpecified;
+use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;
+use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 
 final class ReplayCommandTest extends TestCase
 {
@@ -87,7 +87,7 @@ final class ReplayCommandTest extends TestCase
         Projectionist::addProjector(BalanceProjector::class);
         Projectionist::addReactor(BrokeReactor::class);
 
-        StoredEvent::truncate();
+        EloquentStoredEvent::truncate();
 
         $account = Account::create();
         event(new MoneySubtractedEvent($account, 2000));
@@ -118,15 +118,15 @@ final class ReplayCommandTest extends TestCase
 
     public function it_will_replay_events_from_a_specific_store()
     {
-        $account = AccountAggregateRootWithStoredEventSpecified::create();
+        $account = AccountAggregateRootWithStoredEventRepositorySpecified::create();
 
         foreach (range(1, 5) as $i) {
             event(new MoneyAddedEvent($account, 2000));
         }
 
-        OtherStoredEvent::truncate();
+        OtherEloquentStoredEvent::truncate();
 
-        $this->artisan('event-projector:replay', ['--stored-event-model' => OtherStoredEvent::class])
+        $this->artisan('event-projector:replay', ['--stored-event-model' => OtherEloquentStoredEvent::class])
             ->expectsOutput('Replaying 5 events...')
             ->assertExitCode(0);
     }

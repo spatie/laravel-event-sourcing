@@ -2,8 +2,8 @@
 
 namespace Spatie\EventProjector\Tests;
 
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Facades\Projectionist;
+use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
 use Spatie\EventProjector\Exceptions\CouldNotResetProjector;
 use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
@@ -24,9 +24,9 @@ final class ProjectorTest extends TestCase
 
         event(new MoneyAddedEvent(Account::create(), 1234));
 
-        $this->assertCount(1, StoredEvent::get());
+        $this->assertCount(1, EloquentStoredEvent::get());
 
-        $this->assertEquals(1, StoredEvent::first()->meta_data['user_id']);
+        $this->assertEquals(1, EloquentStoredEvent::first()->meta_data['user_id']);
     }
 
     /** @test */
@@ -105,11 +105,11 @@ final class ProjectorTest extends TestCase
         Projectionist::addProjector(ProjectorWithoutHandlesEvents::class);
 
         event(new MoneyAddedEvent($account, 1234));
-        $this->assertCount(1, StoredEvent::get());
+        $this->assertCount(1, EloquentStoredEvent::get());
         $this->assertEquals(1234, $account->refresh()->amount);
 
         event(new MoneySubtractedEvent($account, 34));
-        $this->assertCount(2, StoredEvent::get());
+        $this->assertCount(2, EloquentStoredEvent::get());
         $this->assertEquals(1200, $account->refresh()->amount);
     }
 }

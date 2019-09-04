@@ -34,18 +34,22 @@ abstract class AggregateRoot
 
     public function persist(): AggregateRoot
     {
-        call_user_func(
-            [$this->getStoredEventModel(), 'storeMany'],
+        $storedEvents = call_user_func(
+            [$this->getStoredEventRepository(), 'persistMany'],
             $this->getAndClearRecordedEvents(),
             $this->aggregateUuid
         );
 
+        $storedEvents->each(function (StoredEvent $storedEvent) {
+            $storedEvent->handle();
+        });
+
         return $this;
     }
 
-    protected function getStoredEventModel(): string
+    protected function getStoredEventRepository(): StoredEventRepository
     {
-        return $this->storedEventModel ?? config('event-projector.stored_event_model');
+        return app($this->storedEventRepository ?? config('event-projector.stored_event_repository'));
     }
 
     public function getRecordedEvents(): array
@@ -64,7 +68,7 @@ abstract class AggregateRoot
 
     private function reconstituteFromEvents(): AggregateRoot
     {
-        $this->getStoredEventModel()::uuid($this->aggregateUuid)
+        $this->getStoredEventRepository()->retrieveAll($this->aggregateUuid)
             ->each(function (StoredEvent $storedEvent) {
                 $this->apply($storedEvent->event);
             });
