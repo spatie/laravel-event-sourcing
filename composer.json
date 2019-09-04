@@ -22,17 +22,15 @@
     ],
     "require": {
         "php": "^7.3",
-        "illuminate/console": "6.*",
-        "illuminate/database": "6.*",
-        "illuminate/events": "6.*",
-        "illuminate/support": "6.*",
+        "illuminate/console": "^6.0",
+        "illuminate/database": "^6.0",
+        "illuminate/events": "^6.0",
+        "illuminate/support": "^6.0",
         "league/flysystem": "^1.0.45",
         "symfony/finder": "^4.2",
         "symfony/property-access": "^4.0",
         "symfony/serializer": "^4.0"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require-dev": {
         "mockery/mockery": "^1.1",
         "orchestra/testbench": "^4.0",
