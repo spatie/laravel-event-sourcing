@@ -7,7 +7,6 @@ env:
     matrix:
         - COMPOSER_FLAGS="--prefer-lowest"
         - COMPOSER_FLAGS=""
-
 php:
     - 7.3
 

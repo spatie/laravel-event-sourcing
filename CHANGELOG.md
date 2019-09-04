@@ -2,6 +2,11 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 3.0.0 - 2019-09-04
+
+- don't require eloquent for storing and retrieving events
+- add support for Laravel 6
+
 ## 2.8.2 - 2019-09-04
 
 - fix for projectors with non-public methods
