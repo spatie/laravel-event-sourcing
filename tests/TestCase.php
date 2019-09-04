@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector\Tests;
 
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Artisan;
@@ -47,8 +48,16 @@ abstract class TestCase extends Orchestra
         include_once __DIR__.'/../stubs/create_stored_events_table.php.stub';
         (new \CreateStoredEventsTable())->up();
 
+        $connection = config('database.default');
+        $driver = config("database.connections.{$connection}.driver");
         Schema::dropIfExists('other_stored_events');
-        DB::statement('CREATE TABLE other_stored_events LIKE stored_events');
+        if ($driver === 'mysql') {
+            DB::statement('CREATE TABLE other_stored_events LIKE stored_events');
+        } elseif ($driver === 'pgsql') {
+            DB::statement('CREATE TABLE other_stored_events AS TABLE stored_events;');
+        } else {
+            throw new Exception("DB driver [$driver] is not supported by this test suite.");
+        }
     }
 
     protected function assertSeeInConsoleOutput(string $text): self

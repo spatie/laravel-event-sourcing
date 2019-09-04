@@ -21,7 +21,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             $query->uuid($uuid);
         }
 
-        return $query->cursor()->map(function (EloquentStoredEvent $storedEvent) {
+        return $query->orderBy('id')->cursor()->map(function (EloquentStoredEvent $storedEvent) {
             return $storedEvent->toStoredEvent();
         });
     }
@@ -35,7 +35,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             $query->uuid($uuid);
         }
 
-        return $query->cursor()->map(function (EloquentStoredEvent $storedEvent) {
+        return $query->orderBy('id')->cursor()->map(function (EloquentStoredEvent $storedEvent) {
             return $storedEvent->toStoredEvent();
         });
     }
