@@ -59,7 +59,6 @@ final class EventSerializerTest extends TestCase
 
         $array = json_decode($json, true);
 
-
         $connection = config('database.default');
         $driver = config("database.connections.{$connection}.driver");
         $this->assertEquals([
