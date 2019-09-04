@@ -73,6 +73,9 @@ trait HandlesEvents
         return collect((new ReflectionClass($this))->getMethods())
             ->flatMap(function (ReflectionMethod $method) {
                 $method = new ReflectionMethod($this, $method->name);
+                if (! $method->isPublic()) {
+                    return;
+                }
 
                 $eventClass = collect($method->getParameters())
                     ->map(function (ReflectionParameter $parameter) {

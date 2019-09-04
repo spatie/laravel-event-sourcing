@@ -29,4 +29,12 @@ class ProjectorWithoutHandlesEvents implements Projector
     public function functionWithUnreleatedClassTypeHint(Collection $test)
     {
     }
+
+    protected function protectedFunction(MoneyAddedEvent $event)
+    {
+    }
+
+    private function privateFunction(MoneyAddedEvent $event)
+    {
+    }
 }
