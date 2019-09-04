@@ -9,3 +9,12 @@ Because there are many breaking changes we cannot give you a waterproof list of 
 - Remove all options in the config file not present in the config file that ships with v2
 - In v1 streams were used to track if events came in the right order.  All support for event streams has been removed. If for your projectors the order of events is imports, use a queued projector.
 - v1 tracked which events were already processed by a given event handler. In v2 all functionality around projector statusses is removed. It's now your own resposibility that you give all projectors the right events. 
+
+## From v2 to v3
+
+- Remove the `stored_event_model` key in your `event-projector.php` config file
+- Add a `stored_event_repository` config key with the following value: `\Spatie\EventProjector\EloquentStoredEventRepository::class`
+- If you're using a different model for event storage:
+    1. The `\Spatie\EventProjector\Models\StoredEvent::class` has been renamed to `\Spatie\EventProjector\Models\EloquentStoredEvent::class`
+    2. Extend the `\Spatie\EventProjector\EloquentStoredEventRepository` and change the `$storedEventModel` property with your own model that extends `\Spatie\EventProjector\Models\EloquentStoredEvent`
+    3. Change the `stored_event_repository` config value with your own repository
