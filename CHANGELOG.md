@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 3.0.1 - 2019-09-05
+
+- make sure events are retrieved in the correct order
+
 ## 3.0.0 - 2019-09-04
 
 - don't require eloquent for storing and retrieving events
