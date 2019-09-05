@@ -3,13 +3,13 @@
 namespace Spatie\EventProjector\Tests;
 
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventProjector\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\FakeUuid;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
-use Spatie\EventProjector\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
+use Spatie\EventProjector\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;
+use Spatie\EventProjector\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;

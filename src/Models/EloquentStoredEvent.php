@@ -2,10 +2,10 @@
 
 namespace Spatie\EventProjector\Models;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\EventProjector\ShouldBeStored;
 use Spatie\EventProjector\StoredEvent;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Spatie\EventProjector\ShouldBeStored;
 
 class EloquentStoredEvent extends Model
 {

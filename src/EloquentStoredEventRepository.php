@@ -4,9 +4,9 @@ namespace Spatie\EventProjector;
 
 use Carbon\Carbon;
 use Illuminate\Support\LazyCollection;
+use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
 use Spatie\EventProjector\Exceptions\InvalidEloquentStoredEventModel;
-use Spatie\EventProjector\Models\EloquentStoredEvent;
 
 class EloquentStoredEventRepository implements StoredEventRepository
 {
