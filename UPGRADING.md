@@ -12,9 +12,6 @@ Because there are many breaking changes we cannot give you a waterproof list of 
 
 ## From v2 to v3
 
-- Remove the `stored_event_model` key in your `event-projector.php` config file
 - Add a `stored_event_repository` config key with the following value: `\Spatie\EventProjector\EloquentStoredEventRepository::class`
 - If you're using a different model for event storage:
-    1. The `\Spatie\EventProjector\Models\StoredEvent::class` has been renamed to `\Spatie\EventProjector\Models\EloquentStoredEvent::class`
-    2. Extend the `\Spatie\EventProjector\EloquentStoredEventRepository` and change the `$storedEventModel` property with your own model that extends `\Spatie\EventProjector\Models\EloquentStoredEvent`
-    3. Change the `stored_event_repository` config value with your own repository
+    1. Make sure the model extends `\Spatie\EventProjector\Models\EloquentStoredEvent`

@@ -3,7 +3,7 @@
 namespace Spatie\EventProjector\Events;
 
 use Exception;
-use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\StoredEvent;
 use Spatie\EventProjector\EventHandlers\EventHandler;
 
 final class EventHandlerFailedHandlingEvent

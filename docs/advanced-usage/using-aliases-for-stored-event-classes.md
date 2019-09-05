@@ -1,6 +1,6 @@
 ---
 title: Using aliases for stored event classes
-weight: 8
+weight: 9
 ---
 
 By default we store the `Event`'s FQCN in the database when storing the events. This prevents you from changing the name or the namespace of your event classes.

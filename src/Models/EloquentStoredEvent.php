@@ -2,6 +2,7 @@
 
 namespace Spatie\EventProjector\Models;
 
+use Spatie\EventProjector\StoredEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\EventProjector\ShouldBeStored;

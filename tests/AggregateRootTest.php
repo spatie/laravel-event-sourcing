@@ -7,7 +7,9 @@ use Spatie\EventProjector\Facades\Projectionist;
 use Spatie\EventProjector\Models\EloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\FakeUuid;
 use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventProjector\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;
+use Spatie\EventProjector\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
 use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
@@ -64,6 +66,41 @@ final class AggregateRootTest extends TestCase
         $event = $storedEvent->event;
         $this->assertInstanceOf(MoneyAdded::class, $event);
         $this->assertEquals(100, $event->amount);
+    }
+
+    /** @test */
+    public function when_an_the_config_specifies_a_stored_event_model_persisting_will_persist_all_events_it_recorded_via_stored_event()
+    {
+        config()->set('event-projector.stored_event_model', OtherEloquentStoredEvent::class);
+
+        AccountAggregateRoot::retrieve($this->aggregateUuid)
+            ->addMoney(100)
+            ->persist();
+
+        $storedEvents = EloquentStoredEvent::get();
+        $this->assertCount(0, $storedEvents);
+
+        $otherStoredEvents = OtherEloquentStoredEvent::get();
+        $this->assertCount(1, $otherStoredEvents);
+
+        $storedEvent = $otherStoredEvents->first();
+        $this->assertEquals($this->aggregateUuid, $storedEvent->aggregate_uuid);
+
+        $event = $storedEvent->event;
+        $this->assertInstanceOf(MoneyAdded::class, $event);
+        $this->assertEquals(100, $event->amount);
+    }
+
+    /** @test * */
+    public function it_throws_an_error_when_defining_a_class_that_doesnt_extend_eloquent_stored_event()
+    {
+        config()->set('event-projector.stored_event_model', InvalidEloquentStoredEvent::class);
+
+        $this->expectException(InvalidEloquentStoredEventModel::class);
+
+        AccountAggregateRoot::retrieve($this->aggregateUuid)
+            ->addMoney(100)
+            ->persist();
     }
 
     /** @test */

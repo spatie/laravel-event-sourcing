@@ -42,6 +42,13 @@ return [
     'catch_exceptions' => env('EVENT_PROJECTOR_CATCH_EXCEPTIONS', false),
 
     /*
+     * This class is responsible for storing events in the ELoquentStoredEventRepository.
+     * To add extra behaviour you can change this to a class of your own. It should
+     * extend the \Spatie\EventProjector\Models\EloquentStoredEvent model.
+     */
+    'stored_event_model' => \Spatie\EventProjector\Models\EloquentStoredEvent::class,
+
+    /*
      * This class is responsible for storing events. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
      * it should implement \Spatie\EventProjector\StoredEventRepository.

@@ -7,8 +7,8 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use Illuminate\Support\Collection;
+use Spatie\EventProjector\StoredEvent;
 use Spatie\EventProjector\ShouldBeStored;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
 
 trait HandlesEvents
