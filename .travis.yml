@@ -7,9 +7,13 @@ matrix:
     fast_finish: true
     include:
         - php: 7.3
-          env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest'
+          env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest' DB_CONNECTION='mysql' DB_PORT='3306' DB_USERNAME='username' DB_PASSWORD='password'
         - php: 7.3
-          env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
+          env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest' DB_CONNECTION='pgsql' DB_PORT='5432' DB_USERNAME='username' DB_PASSWORD='password'
+        - php: 7.3
+          env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable' DB_CONNECTION='mysql' DB_PORT='3306' DB_USERNAME='username' DB_PASSWORD='password'
+        - php: 7.3
+          env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable' DB_CONNECTION='pgsql' DB_PORT='5432' DB_USERNAME='username' DB_PASSWORD='password'
 
 sudo: false
 
@@ -24,7 +28,7 @@ install:
     - travis_retry composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction --no-suggest
 
 script:
-    - vendor/bin/phpunit
+    - DB_CONNECTION=${DB_CONNECTION} DB_PORT=${DB_PORT} DB_USERNAME=${DB_USERNAME} DB_PASSWORD=${DB_PASSWORD} vendor/bin/phpunit
 
 after_script:
     - docker-compose -f ./tests/docker-compose.yml down

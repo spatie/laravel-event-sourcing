@@ -12,3 +12,12 @@ services:
             MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
         ports:
             - "3306:3306"
+    postgres:
+        restart: always
+        image: postgres:11
+        environment:
+            POSTGRES_DB: "laravel_event_projector"
+            POSTGRES_USER: "username"
+            POSTGRES_PASSWORD: "password"
+        ports:
+            - "5432:5432"

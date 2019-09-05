@@ -5,6 +5,7 @@ $start = time();
 while (true) {
     try {
         new PDO('mysql:host=127.0.0.1;dbname=laravel_event_projector', 'username', 'password');
+        new PDO('pgsql:host=127.0.0.1;dbname=laravel_event_projector', 'username', 'password');
         fwrite(STDOUT, 'Docker container started!'.PHP_EOL);
         exit(0);
     } catch (PDOException $exception) {
