@@ -37,7 +37,7 @@ return [
 
     /*
      * Projectors are classes that build up projections. You can create them by performing
-     * `php artisan event-projector:create-projector`.  When not using autodiscovery
+     * `php artisan event-projector:create-projector`.  When not using auto-discovery
      * Projectors can be registered in this array or a service provider.
      */
     'projectors' => [
@@ -46,7 +46,7 @@ return [
 
     /*
      * Reactors are classes that handle side effects. You can create them by performing
-     * `php artisan event-projector:create-reactor`. When not using autodiscovery
+     * `php artisan event-projector:create-reactor`. When not using auto-discovery
      * Reactors can be registered in this array or a service provider.
      */
     'reactors' => [
@@ -79,7 +79,7 @@ return [
      * it should extend \Spatie\EventProjector\HandleDomainEventJob.
      */
     'stored_event_job' => \Spatie\EventProjector\HandleStoredEventJob::class,
-    
+
     /*
      * Similar to Relation::morphMap() you can define which alias responds to which
      * event class. This allows you to change the namespace or classnames
@@ -104,7 +104,7 @@ return [
     /*
      * In production, you likely don't want the package to auto discover the event handlers
      * on every request. The package can cache all registered event handlers.
-     * More info: https://docs.spatie.be/laravel-event-projector/v2/advanced-usage/discovering-projectors-and-reactors
+     * More info: https://docs.spatie.be/laravel-event-projector/v3/advanced-usage/discovering-projectors-and-reactors
      *
      * Here you can specify where the cache should be stored.
      */
@@ -112,6 +112,6 @@ return [
 ];
 ```
 
-The package will scan all classes of your project to [automatically discover projectors and reactors](/laravel-event-projector/v2/advanced-usage/discovering-projectors-and-reactors#discovering-projectors-and-reactors). In a production environment you probably should [cache auto discovered projectors and reactors](/laravel-event-projector/v2/advanced-usage/discovering-projectors-and-reactors#caching-discovered-projectors-and-reactors).
+The package will scan all classes of your project to [automatically discover projectors and reactors](/laravel-event-projector/v3/advanced-usage/discovering-projectors-and-reactors#discovering-projectors-and-reactors). In a production environment you probably should [cache auto discovered projectors and reactors](/laravel-event-projector/v3/advanced-usage/discovering-projectors-and-reactors#caching-discovered-projectors-and-reactors).
 
 It's recommended that should set up a queue. Specify the connection name in the `queue` key of the `event-projector` config file. This queue will be used to guarantee that the events will be processed by all projectors in the right order. You should make sure that the queue will process only one job at a time. In a local environment, where events have a very low chance of getting fired concurrently, it's probably ok to just use the `sync` driver.

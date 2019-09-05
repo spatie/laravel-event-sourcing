@@ -41,7 +41,7 @@ If your event has an eloquent model, it should also use the `Illuminate\Queue\Se
 
 ## Specifying a queue
 
-When a `StoredEvent` is created, we'll dispatch a job on the queue defined in the `queue` key of the `event-projector` config file. Queued projectors and reactors will get called when the job is executed on the queue. 
+When a `StoredEvent` is created, we'll dispatch a job on the queue defined in the `queue` key of the `event-projector` config file. Queued projectors and reactors will get called when the job is executed on the queue.
 
 On an event you can override the queue that should be used by adding a `queue` property.
 

@@ -3,7 +3,7 @@ title: Writing your first projector
 weight: 1
 ---
 
-This section is a perfect entry point to get yourself aquinted with projectors. Most examples in these docs are also available in the Laravel app you'll find in [this repo on GitHub](https://github.com/spatie/larabank-event-projector). Clone that repo to toy around with the package.
+This section is a perfect entry point to get yourself acquainted with projectors. Most examples in these docs are also available in the Laravel app you'll find in [this repo on GitHub](https://github.com/spatie/larabank-event-projector). Clone that repo to toy around with the package.
 
 A projector is a class that gets triggered when new events come in. It typically writes data (to the database or to a file on disk). We call that written data a projection.
 
@@ -56,7 +56,7 @@ class Account extends Model
     public static function createWithAttributes(array $attributes): Account
     {
         /*
-         * Let's generate a uuid. 
+         * Let's generate a uuid.
          */
         $attributes['uuid'] = (string) Uuid::uuid4();
 

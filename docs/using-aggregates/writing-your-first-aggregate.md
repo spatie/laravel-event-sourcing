@@ -3,10 +3,10 @@ title: Writing your first aggregate
 weight: 1
 ---
 
-An aggregate is a class that decides to record events based on past events. To know more about their general purpose and the idea behind them, read this section on [using aggregates to make decisions-based-on-the-past](https://docs.spatie.be/laravel-event-projector/v2/getting-familiar-with-event-sourcing/using-aggregates-to-make-decisions-based-on-the-past).
- 
-## Creating an aggregate 
- 
+An aggregate is a class that decides to record events based on past events. To know more about their general purpose and the idea behind them, read this section on [using aggregates to make decisions-based-on-the-past](/laravel-event-projector/v3/getting-familiar-with-event-sourcing/using-aggregates-to-make-decisions-based-on-the-past).
+
+## Creating an aggregate
+
 The easiest way to create an aggregate root would be to use the `make:aggregate` command:
 
 ```php
@@ -28,7 +28,7 @@ final class AccountAggregate extends AggregateRoot
 
 ## Recording events
 
-You can add any methods or variables you need on the aggregate. To get you familiar with event modeling using aggregates let's implement a small piece of [the Larabank example app](https://github.com/spatie/larabank-event-projector-aggregates). We are going to add methods to record the [`AccountCreated`](https://github.com/spatie/larabank-event-projector-aggregates/blob/master/app/Domain/Account/Events/AccountCreated.php), [`MoneyAdded`](https://github.com/spatie/larabank-event-projector-aggregates/blob/master/app/Domain/Account/Events/MoneyAdded.php) and the [`MoneySubtracted`](https://github.com/spatie/larabank-event-projector-aggregates/blob/master/app/Domain/Account/Events/MoneySubtracted.php) events.
+You can add any methods or variables you need on the aggregate. To get you familiar with event modelling using aggregates let's implement a small piece of [the Larabank example app](https://github.com/spatie/larabank-event-projector-aggregates). We are going to add methods to record the [`AccountCreated`](https://github.com/spatie/larabank-event-projector-aggregates/blob/master/app/Domain/Account/Events/AccountCreated.php), [`MoneyAdded`](https://github.com/spatie/larabank-event-projector-aggregates/blob/master/app/Domain/Account/Events/MoneyAdded.php) and the [`MoneySubtracted`](https://github.com/spatie/larabank-event-projector-aggregates/blob/master/app/Domain/Account/Events/MoneySubtracted.php) events.
 
 First, let's add a `createAccount` methods to our aggregate that will record the `AccountCreated` event.
 
@@ -44,12 +44,12 @@ final class AccountAggregate extends AggregateRoot
     {
         $this->recordThat(new AccountCreated($name, $userId));
     }
-    
+
     public function addMoney(int $amount)
     {
         $this->recordThat(new MoneyAdded($amount));
     }
-    
+
     public function subtractAmount(int $amount)
     {
         $this->recordThat(new MoneySubtracted($amount));
@@ -91,10 +91,10 @@ In our demo app we retrieve and persist the aggregate [in the `AccountsControlle
 
 Let's now implement the rule that an account cannot go below -$5000. Here's the thing to keep in mind: when retrieving an aggregate all events for the given uuid will be retrieved and will be passed to methods named `apply<className>` on the aggregate.
 
-So for our aggregate to receive all past `MoneyAdded` and `MoneySubtracted` events we need to add `applyMoneySubtracted` and`applyMoneySubtracted` methods to our aggregate. Because those events are all fed to the same instance of the aggregate, we can simply add an instance variable to hold the calculated balance. 
+So for our aggregate to receive all past `MoneyAdded` and `MoneySubtracted` events we need to add `applyMoneySubtracted` and`applyMoneySubtracted` methods to our aggregate. Because those events are all fed to the same instance of the aggregate, we can simply add an instance variable to hold the calculated balance.
 
 ```php
-// in our aggregate 
+// in our aggregate
 
 private $balance = 0;
 
@@ -138,10 +138,10 @@ public function subtractAmount(int $amount)
 {
     if (! $this->hasSufficientFundsToSubtractAmount($amount) {
         $this->recordThat(new AccountLimitHit($amount));
-        
+
         // persist the aggregate so the record event gets persisted
         $this->persist();
-    
+
         throw CouldNotSubtractMoney::notEnoughFunds($amount);
     }
 
@@ -164,14 +164,14 @@ public function subtractAmount(int $amount)
 {
     if (! $this->hasSufficientFundsToSubtractAmount($amount) {
         $this->recordThat(new AccountLimitHit($amount));
-        
+
         if ($this->accountLimitHitCount === 3) {
             $this->recordThat(new LoanProposed());
         }
-        
+
         // persist the aggregate so the record events gets persisted
         $this->persist();
-    
+
         throw CouldNotSubtractMoney::notEnoughFunds($amount);
     }
 

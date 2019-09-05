@@ -3,11 +3,11 @@ title: Replaying events
 weight: 2
 ---
 
-All [events](/laravel-event-projector/v2/advanced-usage/preparing-events/) that implement `Spatie\EventProjector\ShouldBeStored` will be [serialized](https://docs.spatie.be/laravel-event-projector/v2/advanced-usage/using-your-own-event-serializer) and stored in the `stored_events` table. After your app has been doing its work for a while the `stored_events` table will probably contain some events.
+All [events](/laravel-event-projector/v3/advanced-usage/preparing-events/) that implement `Spatie\EventProjector\ShouldBeStored` will be [serialized](/laravel-event-projector/v3/advanced-usage/using-your-own-event-serializer) and stored in the `stored_events` table. After your app has been doing its work for a while the `stored_events` table will probably contain some events.
 
- When creating a new [projector](/laravel-event-projector/v2/using-projectors/writing-your-first-projector/) or [reactor](/laravel-event-projector/v2/using-reactors/writing-your-first-reactor/) you'll want to feed all stored events to that new projector or reactor. We call this process replaying events.
+ When creating a new [projector](/laravel-event-projector/v3/using-projectors/writing-your-first-projector/) or [reactor](/laravel-event-projector/v3/using-reactors/writing-your-first-reactor/) you'll want to feed all stored events to that new projector or reactor. We call this process replaying events.
 
- Events can be replayed to [all projectors that were added to the projectionist](/laravel-event-projector/v2/using-projectors/creating-and-configuring-projectors/) with this artisan command:
+ Events can be replayed to [all projectors that were added to the projectionist](/laravel-event-projector/v3/using-projectors/creating-and-configuring-projectors/) with this artisan command:
 
  ```bash
  php artisan event-projector:replay
@@ -24,12 +24,12 @@ All [events](/laravel-event-projector/v2/advanced-usage/preparing-events/) that 
   ```bash
    php artisan event-projector:replay --projector=App\\Projectors\\AccountBalanceProjector --projector=App\\Projectors\\AnotherProjector
   ```
-  
-If your projector has a `resetState` method it will get called before replaying events. You can use that method to reset the state of your projector. 
+
+If your projector has a `resetState` method it will get called before replaying events. You can use that method to reset the state of your projector.
 
 If you want to replay events starting from a certain event you can use the `--from` option when executing `event-projector:replay`. If you use this option the `resetState` on projectors will not get called. This package does not track which events have already been processed by which projectors. Be sure not to replay events to projectors that already have handled them.
 
-If you are [using your own event storage model](/laravel-event-projector/v2/advanced-usage/using-your-own-event-storage-model/) then you will need to use the `--store-event-model` option when executing `event-projector:replay` to specify the model storing the events you want to replay.
+If you are [using your own event storage model](/laravel-event-projector/v3/advanced-usage/using-your-own-event-storage-model/) then you will need to use the `--store-event-model` option when executing `event-projector:replay` to specify the model storing the events you want to replay.
 
 ```bash
 php artisan event-projector:replay --stored-event-model=App\\Models\\AccountStoredEvent
@@ -77,7 +77,7 @@ After all events are replayed, the `onFinishedEventReplay` method will be called
 
 ## Models with timestamps
 
-When using models with timestamps, it is important to keep in mind that the projector will create or update these models when replaying and the timestamps will not correspond to the event's original timestamps. This will probably not be behavior you intended. To work around this you can use the stored event's timestamps:
+When using models with timestamps, it is important to keep in mind that the projector will create or update these models when replaying and the timestamps will not correspond to the event's original timestamps. This will probably not be behaviour you intended. To work around this you can use the stored event's timestamps:
 
 ```php
 public function onAccountCreated(StoredEvent $storedEvent, AccountCreated $event) {
@@ -87,4 +87,4 @@ public function onAccountCreated(StoredEvent $storedEvent, AccountCreated $event
 
 ## What about reactors?
 
-Reactors are used to handle side effects, like sending mails and such. You'll only want reactors to do their work when an event is originally fired. You don't want to send out mails when replaying events. That's why reactors will never get called when replaying events.  
+Reactors are used to handle side effects, like sending mails and such. You'll only want reactors to do their work when an event is originally fired. You don't want to send out mails when replaying events. That's why reactors will never get called when replaying events.

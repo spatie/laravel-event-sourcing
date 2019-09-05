@@ -69,7 +69,7 @@ Just by adding a typehint of the event you want to handle makes our package call
 
 ## Getting the uuid of an event
 
-In most cases you want to have access to the event that was fired. When [using aggregates](/laravel-event-projector/v2/using-aggregates/writing-your-first-aggregate) your events probably won't contain the uuid associated with that event. To get to the uuid of an event simply add a parameter called `$aggregateUuid` that typehinted as a string. 
+In most cases you want to have access to the event that was fired. When [using aggregates](/laravel-event-projector/v3/using-aggregates/writing-your-first-aggregate) your events probably won't contain the uuid associated with that event. To get to the uuid of an event simply add a parameter called `$aggregateUuid` that typehinted as a string.
 
 ```php
 // ...
@@ -77,9 +77,9 @@ In most cases you want to have access to the event that was fired. When [using a
 public function onMoneyAdded(MoneyAdded $event, string $aggregateUuid)
 {
     $account = Account::findByUuid($aggregateUuid);
-    
+
     $account->balance += $event->amount;
-    
+
     $account->save();
 }
 ```
@@ -132,7 +132,7 @@ Instead of letting a method on a projector handle an event you can use a dedicat
 protected $handlesEvents = [
     /*
      * If this event is passed to the projector, the `AddMoneyToAccount` class will be called.
-     */ 
+     */
     MoneyAdded::class => AddMoneyToAccount::class,
 ];
 ```
@@ -175,7 +175,7 @@ You can write this a little shorter. Just put the class name of an event in that
 protected $handlesEvents = [
     /*
      * If this event is passed to the projector, the `onMoneyAdded` method will be called.
-     */ 
+     */
     MoneyAdded::class,
 ];
 ```

@@ -5,8 +5,8 @@ weight: 2
 
 An aggregate is a class that decides to record events based on past events.
 
-## Creating an aggregate 
- 
+## Creating an aggregate
+
 The easiest way to create an aggregate root would be to use the `make:aggregate` command:
 
 ```php
@@ -78,7 +78,7 @@ To persist an aggregate call `persist` on it. Here's an example:
 ```php
 MyAggregate::retrieve($uuid) // will cause all events for this uuid to be fed to the `apply*` methods
    // call methods that record events
-   ->persist(); // 
+   ->persist(); //
 ```
 
 Persisting an aggregate root will write all newly recorded events to the database. The newly persisted events will get passed to all projectors and reactors.
