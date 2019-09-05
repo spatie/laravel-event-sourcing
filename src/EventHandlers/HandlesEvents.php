@@ -3,13 +3,13 @@
 namespace Spatie\EventProjector\EventHandlers;
 
 use Exception;
+use Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
-use Illuminate\Support\Collection;
-use Spatie\EventProjector\ShouldBeStored;
-use Spatie\EventProjector\Models\StoredEvent;
 use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventProjector\StoredEvent;
 
 trait HandlesEvents
 {

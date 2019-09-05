@@ -3,7 +3,7 @@
 namespace Spatie\EventProjector\EventHandlers;
 
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\StoredEvent;
 
 final class EventHandlerCollection
 {

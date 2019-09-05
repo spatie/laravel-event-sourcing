@@ -3,7 +3,6 @@
 namespace Spatie\EventProjector;
 
 use Illuminate\Support\LazyCollection;
-use Spatie\EventProjector\Models\StoredEvent;
 
 interface StoredEventRepository
 {

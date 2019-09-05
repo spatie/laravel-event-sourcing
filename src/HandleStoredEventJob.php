@@ -3,16 +3,15 @@
 namespace Spatie\EventProjector;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Spatie\EventProjector\Models\StoredEvent;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 final class HandleStoredEventJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
-    /** @var \Spatie\EventProjector\Models\StoredEvent */
+    /** @var \Spatie\EventProjector\StoredEvent */
     public $storedEvent;
 
     /** @var array */

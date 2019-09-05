@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\Models;
+namespace Spatie\EventProjector;
 
 use Exception;
 use Illuminate\Support\Arr;

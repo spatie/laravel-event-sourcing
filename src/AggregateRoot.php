@@ -4,7 +4,6 @@ namespace Spatie\EventProjector;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Spatie\EventProjector\Models\StoredEvent;
 
 abstract class AggregateRoot
 {
