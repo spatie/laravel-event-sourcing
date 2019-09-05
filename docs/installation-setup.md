@@ -37,7 +37,7 @@ return [
 
     /*
      * Projectors are classes that build up projections. You can create them by performing
-     * `php artisan event-projector:create-projector`.  When not using autodiscovery
+     * `php artisan event-projector:create-projector`.  When not using auto-discovery
      * Projectors can be registered in this array or a service provider.
      */
     'projectors' => [
@@ -46,7 +46,7 @@ return [
 
     /*
      * Reactors are classes that handle side effects. You can create them by performing
-     * `php artisan event-projector:create-reactor`. When not using autodiscovery
+     * `php artisan event-projector:create-reactor`. When not using auto-discovery
      * Reactors can be registered in this array or a service provider.
      */
     'reactors' => [
@@ -79,7 +79,7 @@ return [
      * it should extend \Spatie\EventProjector\HandleDomainEventJob.
      */
     'stored_event_job' => \Spatie\EventProjector\HandleStoredEventJob::class,
-    
+
     /*
      * Similar to Relation::morphMap() you can define which alias responds to which
      * event class. This allows you to change the namespace or classnames
