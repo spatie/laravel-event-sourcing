@@ -5,11 +5,21 @@ namespace Spatie\EventProjector;
 use Carbon\Carbon;
 use Illuminate\Support\LazyCollection;
 use Spatie\EventProjector\EventSerializers\EventSerializer;
+use Spatie\EventProjector\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventProjector\Models\EloquentStoredEvent;
 
 class EloquentStoredEventRepository implements StoredEventRepository
 {
-    protected $storedEventModel = EloquentStoredEvent::class;
+    protected $storedEventModel;
+
+    public function __construct()
+    {
+        $this->storedEventModel = config('event-projector.stored_event_model', EloquentStoredEvent::class);
+
+        if (! new $this->storedEventModel instanceof EloquentStoredEvent) {
+            throw new InvalidEloquentStoredEventModel("The class {$this->storedEventModel} must extend EloquentStoredEvent");
+        }
+    }
 
     public function retrieveAll(string $uuid = null): LazyCollection
     {
