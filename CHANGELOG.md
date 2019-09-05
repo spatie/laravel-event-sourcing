@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 3.1.0 - 2019-09-05
+
+- re-introduce the `stored_event_model` config
+
 ## 3.0.1 - 2019-09-05
 
 - make sure events are retrieved in the correct order
