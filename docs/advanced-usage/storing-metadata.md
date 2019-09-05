@@ -16,7 +16,7 @@ use Spatie\EventProjector\EloquentStoredEventRepository;
 
 class CustomStoredEventRepository extends EloquentStoredEventRepository
 {
-    protected $storedEventModel = CustomStoredEvent::class;
+    protected $storedEventModel = \App\CustomStoredEvent::class;
 }
 ```
 
