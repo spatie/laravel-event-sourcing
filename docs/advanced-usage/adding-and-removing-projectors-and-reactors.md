@@ -5,7 +5,7 @@ weight: 10
 
 You can add and remove projectors and reactors via the `Projectionist` facade.
 
-Whilst this package can auto-discover your event handlers, it is still useful to be able to add and remove projectors for your test suite. For example, a slow reactor might be worth removing to speed up your tests if the behaviour of that reactor is not relevant for the feature you are testing.
+Whilst this package can auto-discover your event handlers, it is still useful to be able to add and remove projectors or reactors for your test suite. For example, a slow reactor might be worth removing to speed up your tests if the behaviour of that reactor is not relevant for the feature you are testing.
 
 ## Adding Projectors
 
