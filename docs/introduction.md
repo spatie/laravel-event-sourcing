@@ -3,9 +3,9 @@ title: Introduction
 weight: 1
 ---
 
-This package aims to be the entry point to get started with event sourcing in Laravel. It can help you setting up aggregates, projectors and reactors. 
+This package aims to be the entry point to get started with event sourcing in Laravel. It can help you setting up aggregates, projectors and reactors.
 
-If you've never worked with event sourcing, or are uncertain about what projectors, reactors and aggregates are, head over to [the getting familiar with event sourcing section](https://docs.spatie.be/laravel-event-projector/v2/getting-familiar-with-event-sourcing/introduction).
+If you've never worked with event sourcing, or are uncertain about what projectors, reactors and aggregates are, head over to [the getting familiar with event sourcing section](/laravel-event-projector/v3/getting-familiar-with-event-sourcing/introduction).
 
 Are you visual learner? Then start by watching this video. It explains event sourcing in general and how you can use projectors, reactors and aggregates.
 
