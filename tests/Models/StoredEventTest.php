@@ -71,12 +71,11 @@ final class StoredEventTest extends TestCase
 
         $this->fireEvents();
 
-        $instance = EloquentStoredEvent::first();
-        $payload = (new EloquentStoredEvent())->getConnection()->raw("CAST('{\"ip\": \"127.0.0.1\"}' AS JSON)");
+        $instance = EloquentStoredEvent::withMetaDataAttributes('ip', '127.0.0.1')->first();
 
+        $this->assertInstanceOf(EloquentStoredEvent::class, $instance);
         $this->assertArrayHasKey('ip', $instance->meta_data->toArray());
         $this->assertSame('127.0.0.1', $instance->meta_data['ip']);
-        $this->assertDatabaseHas('stored_events', ['meta_data' => $payload]);
 
         EloquentStoredEvent::flushEventListeners();
     }
