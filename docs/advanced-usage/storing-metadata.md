@@ -9,16 +9,7 @@ You can add metadata, such as the `id` of the logged in user, to a stored event.
 
 If you need to store metadata on all events you can leverage Laravel's native models events when using the `EloquentStoredEventRepository`.
 
-You must configure the package to [use your own event storage repository](/laravel-event-projector/v3/advanced-usage/using-your-own-event-storage-repository) that extends the `EloquentStoredEventRepository` with a custom Eloquent model. On that model you can hook into the model lifecycle hooks.
-
-```php
-use Spatie\EventProjector\EloquentStoredEventRepository;
-
-class CustomStoredEventRepository extends EloquentStoredEventRepository
-{
-    protected $storedEventModel = \App\CustomStoredEvent::class;
-}
-```
+You must configure the package to [use your own eloquent event storage model](/laravel-event-projector/v3/advanced-usage/using-your-own-event-storage-model) that extends the `EloquentStoredEvent` model. On that model you can hook into the model lifecycle hooks.
 
 ```php
 use Spatie\EventProjector\Models\EloquentStoredEvent;
