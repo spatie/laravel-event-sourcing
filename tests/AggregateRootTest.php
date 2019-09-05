@@ -85,6 +85,23 @@ final class AggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it_in_the_correct_order()
+    {
+        /** @var \Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $aggregateRoot
+            ->multiplyMoney(5)
+            ->addMoney(100);
+
+        $aggregateRoot->persist();
+
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $this->assertEquals(100, $aggregateRoot->balance);
+    }
+
+    /** @test */
     public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it_with_the_stored_event_repository_specified()
     {
         /** @var \Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified $aggregateRoot */

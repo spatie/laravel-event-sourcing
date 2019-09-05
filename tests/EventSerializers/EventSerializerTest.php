@@ -64,7 +64,7 @@ final class EventSerializerTest extends TestCase
                 'class' => get_class($account),
                 'id' => 1,
                 'relations' => [],
-                'connection' => 'mysql',
+                'connection' => $this->dbDriver(),
             ],
             'amount' => 1234,
         ], $array);
