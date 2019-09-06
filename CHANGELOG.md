@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 3.1.1 - 2019-09-06
+
+- Add schemaless-attributes again for Eloquent models
+
 ## 3.1.0 - 2019-09-05
 
 - re-introduce the `stored_event_model` config
