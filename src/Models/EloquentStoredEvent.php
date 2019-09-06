@@ -6,6 +6,7 @@ use Spatie\EventProjector\StoredEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\EventProjector\ShouldBeStored;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class EloquentStoredEvent extends Model
 {
@@ -35,6 +36,16 @@ class EloquentStoredEvent extends Model
     public function getEventAttribute(): ShouldBeStored
     {
         return $this->toStoredEvent()->event;
+    }
+
+    public function getMetaDataAttribute(): SchemalessAttributes
+    {
+        return SchemalessAttributes::createForModel($this, 'meta_data');
+    }
+
+    public function scopeWithMetaDataAttributes(): Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('meta_data');
     }
 
     public function scopeStartingFrom(Builder $query, int $storedEventId): void

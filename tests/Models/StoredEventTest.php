@@ -58,6 +58,28 @@ final class StoredEventTest extends TestCase
         $this->assertDatabaseHas('stored_events', ['event_class' => 'money_added']);
     }
 
+    /** @test * */
+    public function it_allows_to_modify_metadata_with_offset_set_in_eloquent_model()
+    {
+        EloquentStoredEvent::creating(function (EloquentStoredEvent $event) {
+            $event->meta_data['ip'] = '127.0.0.1';
+        });
+
+        $this->setConfig('event-projector.event_class_map', [
+            'money_added' => MoneyAddedEvent::class,
+        ]);
+
+        $this->fireEvents();
+
+        $instance = EloquentStoredEvent::withMetaDataAttributes('ip', '127.0.0.1')->first();
+
+        $this->assertInstanceOf(EloquentStoredEvent::class, $instance);
+        $this->assertArrayHasKey('ip', $instance->meta_data->toArray());
+        $this->assertSame('127.0.0.1', $instance->meta_data['ip']);
+
+        EloquentStoredEvent::flushEventListeners();
+    }
+
     public function fireEvents(int $number = 1, string $className = MoneyAddedEvent::class)
     {
         foreach (range(1, $number) as $i) {

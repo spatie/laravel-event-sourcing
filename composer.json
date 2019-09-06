@@ -27,6 +27,7 @@
         "illuminate/events": "^6.0",
         "illuminate/support": "^6.0",
         "league/flysystem": "^1.0.45",
+        "spatie/laravel-schemaless-attributes": "^1.6",
         "symfony/finder": "^4.2",
         "symfony/property-access": "^4.0",
         "symfony/serializer": "^4.0"
