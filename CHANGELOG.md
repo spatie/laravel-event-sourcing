@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-projector` will be documented in this file
 
+## 3.1.2 - 2019-09-12
+
+- fix for replay events command with no-interaction flag (#197)
+
 ## 3.1.1 - 2019-09-06
 
 - Add schemaless-attributes again for Eloquent models
