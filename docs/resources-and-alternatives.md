@@ -10,5 +10,5 @@ If you want to know more about event sourcing in general check out these links:
 
 There are many other event sourcing packages out there:
 
-- [EventSauce](https://eventsauce.io/): A pragmatic, feature rich event sourcing library for PHP made by [Frank de Jonge](https://frankdejonge.nl)
+- [EventSauce](https://eventsauce.io/): A pragmatic, feature rich event sourcing library for PHP made by [Frank de Jonge](https://frankdejonge.nl). We took a lot of inspiration from Frank's work.
 - [prooph](https://github.com/prooph): A full blown CQRS and event sourcing solution in PHP
