@@ -4,13 +4,13 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-event-sourcing.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-sourcing)
 [![Build Status](https://img.shields.io/travis/spatie/laravel-event-sourcing/master.svg?style=flat-square)](https://travis-ci.org/spatie/laravel-event-sourcing)
-[![StyleCI](https://styleci.io/repos/133496112/shield?branch=master)](https://styleci.io/repos/133496112)
+[![StyleCI](https://github.styleci.io/repos/209727464/shield?branch=master)](https://github.styleci.io/repos/209727464)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-event-sourcing.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-event-sourcing)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-event-sourcing.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-sourcing)
 
 This package aims to be the entry point to get started with event sourcing in Laravel. It can help you with setting up aggregates, projectors, and reactors. 
 
-If you've never worked with event sourcing, or are uncertain about what aggregates, projectors and reactors are head over to the getting familiar with event sourcing section [in our docs](https://docs.spatie.be/laravel-event-sourcing/v3/getting-familiar-with-event-sourcing/introduction).
+If you've never worked with event sourcing, or are uncertain about what aggregates, projectors and reactors are head over to the getting familiar with event sourcing section [in our docs](https://docs.spatie.be/laravel-event-sourcing/v4/getting-familiar-with-event-sourcing/introduction).
 
 Event sourcing might be a good choice for your project if:
 
