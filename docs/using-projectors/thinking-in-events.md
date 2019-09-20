@@ -3,9 +3,9 @@ title: Thinking in events
 weight: 5
 ---
 
-In this example we're going to try to send a mail whenever an account is broke (balance below zero). You can do this with projectors and reactors alone, but aggregates might be a better fit for this. Aggregates make it easy to make decisions based on past events. Check out the section on [how to use aggregates](/laravel-event-sourcing/v3/introduction) to learn more about them, or keep reading on this page if you don't want to use aggregates.
+In this example we're going to try to send a mail whenever an account is broke (balance below zero). You can do this with projectors and reactors alone, but aggregates might be a better fit for this. Aggregates make it easy to make decisions based on past events. Check out the section on [how to use aggregates](/laravel-event-sourcing/v4/introduction) to learn more about them, or keep reading on this page if you don't want to use aggregates.
 
-Let's build upon the examples shown in the [writing your first projector](/laravel-event-sourcing/v3/using-projectors/writing-your-first-projector) and [handling side effects with reactors](/laravel-event-sourcing/v3/using-reactors/writing-your-first-reactor)' sections.
+Let's build upon the examples shown in the [writing your first projector](/laravel-event-sourcing/v4/using-projectors/writing-your-first-projector) and [handling side effects with reactors](/laravel-event-sourcing/v4/using-reactors/writing-your-first-reactor)' sections.
 
 Imagine you are tasked with sending a mail to an account holder whenever he or she is broke. You might think, that's easy, let's just check in a new reactor if the account balance is less than zero.
 
