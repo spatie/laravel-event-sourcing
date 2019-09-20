@@ -4,8 +4,8 @@ namespace Spatie\EventSourcing\Models;
 
 use Spatie\EventSourcing\StoredEvent;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Spatie\EventSourcing\ShouldBeStored;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class EloquentStoredEvent extends Model
