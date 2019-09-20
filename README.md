@@ -1,5 +1,3 @@
-**THIS PACKAGE WILL BE RELEASED SOON, DO NOT USE YET** 
-
 # Event sourcing for Artisans 📽
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-event-sourcing.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-sourcing)
