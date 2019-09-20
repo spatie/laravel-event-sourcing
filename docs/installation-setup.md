@@ -6,7 +6,7 @@ weight: 4
 laravel-event-sourcing can be installed via composer:
 
 ```bash
-composer require spatie/laravel-event-sourcing:^3.0
+composer require spatie/laravel-event-sourcing:^4.0
 ```
 
 You need to publish and run the migrations to create the `stored_events` table:
