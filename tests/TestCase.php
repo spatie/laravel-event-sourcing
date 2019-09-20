@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\Tests;
+namespace Spatie\EventSourcing\Tests;
 
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\EventProjector\Tests\TestClasses\FakeUuid;
-use Spatie\EventProjector\EventProjectorServiceProvider;
+use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
+use Spatie\EventSourcing\EventSourcingServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -21,13 +21,13 @@ abstract class TestCase extends Orchestra
 
         FakeUuid::reset();
 
-        $this->artisan('event-projector:clear-event-handlers');
+        $this->artisan('event-sourcing:clear-event-handlers');
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            EventProjectorServiceProvider::class,
+            EventSourcingServiceProvider::class,
         ];
     }
 
@@ -70,7 +70,7 @@ abstract class TestCase extends Orchestra
     protected function setConfig(string $name, $value)
     {
         config()->set($name, $value);
-        (new EventProjectorServiceProvider($this->app))->register();
+        (new EventSourcingServiceProvider($this->app))->register();
     }
 
     protected function pathToTests(): string

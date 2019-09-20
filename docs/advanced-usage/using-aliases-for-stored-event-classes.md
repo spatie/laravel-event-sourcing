@@ -5,7 +5,7 @@ weight: 9
 
 By default we store the `Event`'s FQCN in the database when storing the events. This prevents you from changing the name or the namespace of your event classes.
 
-To get around this you can define event class aliases in the `event-projector.php` config file:
+To get around this you can define event class aliases in the `event-sourcing.php` config file:
 
 ```php
     /*

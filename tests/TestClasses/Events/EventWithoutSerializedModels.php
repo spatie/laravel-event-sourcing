@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\Events;
+namespace Spatie\EventSourcing\Tests\TestClasses\Events;
 
-use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventSourcing\ShouldBeStored;
 
 final class EventWithoutSerializedModels implements ShouldBeStored
 {

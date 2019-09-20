@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
+namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
-use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\Projectors\Projector;
+use Spatie\EventSourcing\Projectors\ProjectsEvents;
 
 final class UnrelatedProjector implements Projector
 {

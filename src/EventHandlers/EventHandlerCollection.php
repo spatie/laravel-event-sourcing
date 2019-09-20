@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventProjector\EventHandlers;
+namespace Spatie\EventSourcing\EventHandlers;
 
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\StoredEvent;
+use Spatie\EventSourcing\StoredEvent;
 
 final class EventHandlerCollection
 {

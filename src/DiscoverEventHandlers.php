@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventSourcing;
 
 use SplFileInfo;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Symfony\Component\Finder\Finder;
-use Spatie\EventProjector\EventHandlers\EventHandler;
+use Spatie\EventSourcing\EventHandlers\EventHandler;
 
 final class DiscoverEventHandlers
 {

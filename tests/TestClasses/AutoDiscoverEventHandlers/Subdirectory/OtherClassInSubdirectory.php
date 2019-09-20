@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory;
+namespace Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory;
 
 class OtherClassInSubdirectory
 {

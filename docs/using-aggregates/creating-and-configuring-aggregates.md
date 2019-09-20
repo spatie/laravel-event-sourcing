@@ -18,7 +18,7 @@ This will create a class like this:
 ```php
 namespace App\Aggregates;
 
-use Spatie\EventProjector\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoot;
 
 
 final class MyAggregate extends AggregateRoot
@@ -38,12 +38,12 @@ This will cause all events with the given `uuid` to be retrieved and fed to the 
 
 ## Recording events
 
-Inside an aggregate you can record new events using the `recordThat` function. All events being passed to that function should implement `Spatie\EventProjector\ShouldBeStored`.
+Inside an aggregate you can record new events using the `recordThat` function. All events being passed to that function should implement `Spatie\EventSourcing\ShouldBeStored`.
 
 Here's an example event
 
 ```php
-use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventSourcing\ShouldBeStored;
 
 class MoneyAdded extends ShouldBeStored
 {

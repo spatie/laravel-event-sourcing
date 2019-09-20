@@ -5,7 +5,7 @@ weight: 1
 
 This package aims to be the entry point to get started with event sourcing in Laravel. It can help you setting up aggregates, projectors and reactors.
 
-If you've never worked with event sourcing, or are uncertain about what projectors, reactors and aggregates are, head over to [the getting familiar with event sourcing section](/laravel-event-projector/v3/getting-familiar-with-event-sourcing/introduction).
+If you've never worked with event sourcing, or are uncertain about what projectors, reactors and aggregates are, head over to [the getting familiar with event sourcing section](/laravel-event-sourcing/v3/getting-familiar-with-event-sourcing/introduction).
 
 Are you visual learner? Then start by watching this video. It explains event sourcing in general and how you can use projectors, reactors and aggregates.
 
@@ -22,9 +22,9 @@ Some concepts in the package, for example the testing methods of aggregates, wer
 ## We have badges!
 
 <section class="article_badges">
-    <a href="https://github.com/spatie/laravel-event-projector/releases"><img src="https://img.shields.io/github/release/spatie/laravel-event-projector.svg?style=flat-square" alt="Latest Version"></a>
-    <a href="https://github.com/spatie/laravel-event-projector/blob/master/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="Software License"></a>
-    <a href="https://travis-ci.org/spatie/laravel-event-projector"><img src="https://img.shields.io/travis/spatie/laravel-event-projector/master.svg?style=flat-square" alt="Build Status"></a>
-    <a href="https://scrutinizer-ci.com/g/spatie/laravel-event-projector"><img src="https://img.shields.io/scrutinizer/g/spatie/laravel-event-projector.svg?style=flat-square" alt="Quality Score"></a>
-    <a href="https://packagist.org/packages/spatie/laravel-event-projector"><img src="https://img.shields.io/packagist/dt/spatie/laravel-event-projector.svg?style=flat-square" alt="Total Downloads"></a>
+    <a href="https://github.com/spatie/laravel-event-sourcing/releases"><img src="https://img.shields.io/github/release/spatie/laravel-event-sourcing.svg?style=flat-square" alt="Latest Version"></a>
+    <a href="https://github.com/spatie/laravel-event-sourcing/blob/master/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="Software License"></a>
+    <a href="https://travis-ci.org/spatie/laravel-event-sourcing"><img src="https://img.shields.io/travis/spatie/laravel-event-sourcing/master.svg?style=flat-square" alt="Build Status"></a>
+    <a href="https://scrutinizer-ci.com/g/spatie/laravel-event-sourcing"><img src="https://img.shields.io/scrutinizer/g/spatie/laravel-event-sourcing.svg?style=flat-square" alt="Quality Score"></a>
+    <a href="https://packagist.org/packages/spatie/laravel-event-sourcing"><img src="https://img.shields.io/packagist/dt/spatie/laravel-event-sourcing.svg?style=flat-square" alt="Total Downloads"></a>
 </section>

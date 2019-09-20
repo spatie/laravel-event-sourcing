@@ -1,19 +1,19 @@
 <?php
 
-namespace Spatie\EventProjector\Tests;
+namespace Spatie\EventSourcing\Tests;
 
-use Spatie\EventProjector\Facades\Projectionist;
-use Spatie\EventProjector\Models\EloquentStoredEvent;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
-use Spatie\EventProjector\Exceptions\CouldNotResetProjector;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\ResettableProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatWritesMetaData;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorWithoutHandlesEvents;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectThatHandlesASingleEvent;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorWithAssociativeAndNonAssociativeHandleEvents;
+use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Exceptions\CouldNotResetProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ResettableProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatWritesMetaData;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutHandlesEvents;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectThatHandlesASingleEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithAssociativeAndNonAssociativeHandleEvents;
 
 final class ProjectorTest extends TestCase
 {

@@ -1,18 +1,18 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\Models;
+namespace Spatie\EventSourcing\Tests\Models;
 
-use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Facades\Projectionist;
-use Spatie\EventProjector\Models\EloquentStoredEvent;
-use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Tests\TestCase;
+use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 
 final class StoredEventTest extends TestCase
 {
-    /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\Models\Account */
     protected $account;
 
     public function setUp(): void
@@ -48,7 +48,7 @@ final class StoredEventTest extends TestCase
     /** @test * */
     public function it_will_store_the_alias_when_a_classname_is_found_in_the_event_class_map()
     {
-        $this->setConfig('event-projector.event_class_map', [
+        $this->setConfig('event-sourcing.event_class_map', [
             'money_added' => MoneyAddedEvent::class,
         ]);
 
@@ -65,7 +65,7 @@ final class StoredEventTest extends TestCase
             $event->meta_data['ip'] = '127.0.0.1';
         });
 
-        $this->setConfig('event-projector.event_class_map', [
+        $this->setConfig('event-sourcing.event_class_map', [
             'money_added' => MoneyAddedEvent::class,
         ]);
 

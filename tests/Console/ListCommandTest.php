@@ -1,13 +1,13 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\Console;
+namespace Spatie\EventSourcing\Tests\Console;
 
-use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Facades\Projectionist;
-use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
+use Spatie\EventSourcing\Tests\TestCase;
+use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
 
 final class ListCommandTest extends TestCase
 {
@@ -20,6 +20,6 @@ final class ListCommandTest extends TestCase
 
         Projectionist::addReactor(BrokeReactor::class);
 
-        $this->artisan('event-projector:list')->assertExitCode(0);
+        $this->artisan('event-sourcing:list')->assertExitCode(0);
     }
 }

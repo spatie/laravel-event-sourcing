@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\Projectors;
+namespace Spatie\EventSourcing\Projectors;
 
 interface QueuedProjector extends Projector
 {

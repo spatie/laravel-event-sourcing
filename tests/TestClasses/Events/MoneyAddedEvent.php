@@ -1,16 +1,16 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\Events;
+namespace Spatie\EventSourcing\Tests\TestClasses\Events;
 
 use Illuminate\Queue\SerializesModels;
-use Spatie\EventProjector\ShouldBeStored;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
 final class MoneyAddedEvent implements ShouldBeStored
 {
     use SerializesModels;
 
-    /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\Models\Account */
     public $account;
 
     /** @var int */

@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventProjector\Exceptions;
+namespace Spatie\EventSourcing\Exceptions;
 
 use Exception;
-use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventSourcing\ShouldBeStored;
 
 final class InvalidEventHandler extends Exception
 {
@@ -27,11 +27,11 @@ final class InvalidEventHandler extends Exception
 
     public static function notAnEventHandler(object $object)
     {
-        return new static('`'.get_class($object).'` must implement Spatie\EventProjector\EventHandlers\EventHandler');
+        return new static('`'.get_class($object).'` must implement Spatie\EventSourcing\EventHandlers\EventHandler');
     }
 
     public static function notAnEventHandlingClassName(string $className)
     {
-        return new static('`'.$className.'` must implement Spatie\EventProjector\EventHandlers\EventHandler');
+        return new static('`'.$className.'` must implement Spatie\EventSourcing\EventHandlers\EventHandler');
     }
 }

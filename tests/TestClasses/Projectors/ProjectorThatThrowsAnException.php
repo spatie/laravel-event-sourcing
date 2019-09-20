@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
+namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
 use Exception;
-use Spatie\EventProjector\Projectors\QueuedProjector;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Projectors\QueuedProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 
 class ProjectorThatThrowsAnException extends BalanceProjector implements QueuedProjector
 {

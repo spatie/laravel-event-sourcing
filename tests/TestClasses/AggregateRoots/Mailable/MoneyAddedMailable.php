@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Mailable;
+namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable;
 
 use Illuminate\Mail\Mailable;
 

@@ -1,28 +1,28 @@
 <?php
 
-namespace Spatie\EventProjector\Console;
+namespace Spatie\EventSourcing\Console;
 
 use Mockery;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Artisan;
-use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Facades\Projectionist;
-use Spatie\EventProjector\Events\FinishedEventReplay;
-use Spatie\EventProjector\Events\StartingEventReplay;
-use Spatie\EventProjector\Models\EloquentStoredEvent;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
-use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
-use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
+use Spatie\EventSourcing\Tests\TestCase;
+use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\Events\FinishedEventReplay;
+use Spatie\EventSourcing\Events\StartingEventReplay;
+use Spatie\EventSourcing\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 
 final class ReplayCommandTest extends TestCase
 {
-    /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\Models\Account */
     protected $account;
 
     public function setUp(): void
@@ -52,7 +52,7 @@ final class ReplayCommandTest extends TestCase
         Event::assertNotDispatched(StartingEventReplay::class);
         Event::assertNotDispatched(FinishedEventReplay::class);
 
-        $this->artisan('event-projector:replay '.get_class($projector));
+        $this->artisan('event-sourcing:replay '.get_class($projector));
 
         Event::assertDispatched(StartingEventReplay::class);
         Event::assertDispatched(FinishedEventReplay::class);
@@ -63,7 +63,7 @@ final class ReplayCommandTest extends TestCase
     {
         Projectionist::addProjector(BalanceProjector::class);
 
-        $this->artisan('event-projector:replay')
+        $this->artisan('event-sourcing:replay')
             ->expectsQuestion('Are you sure you want to replay events to all projectors?', 'Y')
             ->expectsOutput('Replaying 3 events...')
             ->assertExitCode(0);
@@ -76,7 +76,7 @@ final class ReplayCommandTest extends TestCase
 
         Projectionist::addProjector($projectorClass);
 
-        $this->artisan('event-projector:replay', ['projector' => [BalanceProjector::class], '--from' => 2])
+        $this->artisan('event-sourcing:replay', ['projector' => [BalanceProjector::class], '--from' => 2])
             ->expectsOutput('Replaying 2 events...')
             ->assertExitCode(0);
     }
@@ -96,7 +96,7 @@ final class ReplayCommandTest extends TestCase
 
         Account::create();
 
-        Artisan::call('event-projector:replay', ['projector' => [BalanceProjector::class]]);
+        Artisan::call('event-sourcing:replay', ['projector' => [BalanceProjector::class]]);
 
         Mail::assertSent(AccountBroke::class, 1);
     }
@@ -111,7 +111,7 @@ final class ReplayCommandTest extends TestCase
         $projector->shouldReceive('onStartingEventReplay')->once();
         $projector->shouldReceive('onFinishedEventReplay')->once();
 
-        Artisan::call('event-projector:replay', [
+        Artisan::call('event-sourcing:replay', [
             'projector' => [get_class($projector)],
         ]);
     }
@@ -126,7 +126,7 @@ final class ReplayCommandTest extends TestCase
 
         OtherEloquentStoredEvent::truncate();
 
-        $this->artisan('event-projector:replay', ['--stored-event-model' => OtherEloquentStoredEvent::class])
+        $this->artisan('event-sourcing:replay', ['--stored-event-model' => OtherEloquentStoredEvent::class])
             ->expectsOutput('Replaying 5 events...')
             ->assertExitCode(0);
     }

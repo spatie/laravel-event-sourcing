@@ -9,10 +9,10 @@ Event sourcing tries to solve this problem by storing all events that happen in 
 
 Here's a concrete example to make it more clear. Imagine you're a bank. Your clients have accounts. Storing the balance of the accounts wouldn't be enough; all the transactions should be remembered too. With event sourcing, the balance isn't a standalone database field, but a value calculated from the stored transactions.
 
-After taking a look at [an example of traditional application](/laravel-event-projector/v3/getting-familiar-with-event-sourcing/the-traditional-application), we're going to discuss the two concepts that make up this package: [projectors](/laravel-event-projector/v3/getting-familiar-with-event-sourcing/using-projectors-to-transform-events) and [aggregates](/laravel-event-projector/v3/getting-familiar-with-event-sourcing/using-aggregates-to-make-decisions-based-on-the-past).
+After taking a look at [an example of traditional application](/laravel-event-sourcing/v3/getting-familiar-with-event-sourcing/the-traditional-application), we're going to discuss the two concepts that make up this package: [projectors](/laravel-event-sourcing/v3/getting-familiar-with-event-sourcing/using-projectors-to-transform-events) and [aggregates](/laravel-event-sourcing/v3/getting-familiar-with-event-sourcing/using-aggregates-to-make-decisions-based-on-the-past).
 
 If you want to skip to reading code immediately, here are the Larabank example apps used in this section. In all of them, you can create accounts and deposit or withdraw money.
 
 - [Larabank built traditionally without event sourcing](https://github.com/spatie/larabank-traditional)
-- [Larabank built with projectors](https://github.com/spatie/larabank-event-projector)
-- [Larabank built with aggregates and projectors](https://github.com/spatie/larabank-event-projector-aggregates)
+- [Larabank built with projectors](https://github.com/spatie/larabank-event-sourcing)
+- [Larabank built with aggregates and projectors](https://github.com/spatie/larabank-event-sourcing-aggregates)

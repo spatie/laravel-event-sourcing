@@ -1,19 +1,19 @@
 <?php
 
-namespace Spatie\EventProjector\Console;
+namespace Spatie\EventSourcing\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
 final class ClearCachedEventHandlersCommand extends Command
 {
-    protected $signature = 'event-projector:clear-event-handlers';
+    protected $signature = 'event-sourcing:clear-event-handlers';
 
     protected $description = 'Clear cached event handlers';
 
     public function handle(Filesystem $files): void
     {
-        $files->delete(config('event-projector.cache_path').'/event-handlers.php');
+        $files->delete(config('event-sourcing.cache_path').'/event-handlers.php');
 
         $this->info('Cached event handlers cleared!');
     }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\EventProjector\Projectors;
+namespace Spatie\EventSourcing\Projectors;
 
-use Spatie\EventProjector\EventHandlers\EventHandler;
+use Spatie\EventSourcing\EventHandlers\EventHandler;
 
 interface Projector extends EventHandler
 {

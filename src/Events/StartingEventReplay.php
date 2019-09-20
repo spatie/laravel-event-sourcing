@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\Events;
+namespace Spatie\EventSourcing\Events;
 
 use Illuminate\Support\Collection;
 

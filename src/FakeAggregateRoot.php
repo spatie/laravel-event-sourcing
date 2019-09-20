@@ -1,13 +1,13 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Arr;
 use PHPUnit\Framework\Assert;
 
 class FakeAggregateRoot
 {
-    /** @var \Spatie\EventProjector\AggregateRoot */
+    /** @var \Spatie\EventSourcing\AggregateRoot */
     private $aggregateRoot;
 
     public function __construct(AggregateRoot $aggregateRoot)
@@ -16,7 +16,7 @@ class FakeAggregateRoot
     }
 
     /**
-     * @param \Spatie\EventProjector\ShouldBeStored|\Spatie\EventProjector\ShouldBeStored[] $events
+     * @param \Spatie\EventSourcing\ShouldBeStored|\Spatie\EventSourcing\ShouldBeStored[] $events
      *
      * @return $this
      */
@@ -48,7 +48,7 @@ class FakeAggregateRoot
     }
 
     /**
-     * @param \Spatie\EventProjector\ShouldBeStored|\Spatie\EventProjector\ShouldBeStored[] $expectedEvents
+     * @param \Spatie\EventSourcing\ShouldBeStored|\Spatie\EventSourcing\ShouldBeStored[] $expectedEvents
      *
      * @return $this
      */

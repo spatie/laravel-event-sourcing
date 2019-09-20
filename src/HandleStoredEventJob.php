@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventSourcing;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -11,7 +11,7 @@ final class HandleStoredEventJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
-    /** @var \Spatie\EventProjector\StoredEvent */
+    /** @var \Spatie\EventSourcing\StoredEvent */
     public $storedEvent;
 
     /** @var array */

@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventSourcing;
 
 final class EventSubscriber
 {
-    /** @var \Spatie\EventProjector\StoredEventRepository */
+    /** @var \Spatie\EventSourcing\StoredEventRepository */
     private $repository;
 
     public function __construct(string $storedEventRepository)

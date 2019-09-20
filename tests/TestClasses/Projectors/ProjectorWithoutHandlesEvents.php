@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
+namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Projectors\ProjectsEvents;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Projectors\Projector;
+use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 
 class ProjectorWithoutHandlesEvents implements Projector
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents;
+namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents;
 
-use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventSourcing\ShouldBeStored;
 
 final class MoneyAdded implements ShouldBeStored
 {

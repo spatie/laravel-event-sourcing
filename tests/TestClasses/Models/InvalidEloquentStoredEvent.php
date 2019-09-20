@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\Models;
+namespace Spatie\EventSourcing\Tests\TestClasses\Models;
 
 class InvalidEloquentStoredEvent
 {

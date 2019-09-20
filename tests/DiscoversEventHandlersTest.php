@@ -1,24 +1,24 @@
 <?php
 
-namespace Spatie\EventProjector\Tests;
+namespace Spatie\EventSourcing\Tests;
 
-use Spatie\EventProjector\Composer;
-use Spatie\EventProjector\Projectionist;
-use Spatie\EventProjector\DiscoverEventHandlers;
-use Spatie\EventProjector\EventHandlers\EventHandler;
-use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\TestReactor;
-use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\TestProjector;
-use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\TestQueuedProjector;
-use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestReactorInSubdirectory;
-use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestProjectorInSubdirectory;
-use Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestQueuedProjectorInSubdirectory;
+use Spatie\EventSourcing\Composer;
+use Spatie\EventSourcing\Projectionist;
+use Spatie\EventSourcing\DiscoverEventHandlers;
+use Spatie\EventSourcing\EventHandlers\EventHandler;
+use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestReactor;
+use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestProjector;
+use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestQueuedProjector;
+use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestReactorInSubdirectory;
+use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestProjectorInSubdirectory;
+use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestQueuedProjectorInSubdirectory;
 
 final class DiscoversEventHandlersTest extends TestCase
 {
     /** @test */
     public function it_can_get_all_classes_that_have_event_handlers()
     {
-        /** @var \Spatie\EventProjector\Projectionist $projectionist */
+        /** @var \Spatie\EventSourcing\Projectionist $projectionist */
         $projectionist = app(Projectionist::class);
 
         $pathToComposerJson = __DIR__.'/../composer.json';
@@ -26,7 +26,7 @@ final class DiscoversEventHandlersTest extends TestCase
         (new DiscoverEventHandlers())
             ->within([__DIR__.'/TestClasses/AutoDiscoverEventHandlers'])
             ->useBasePath($this->getDiscoveryBasePath())
-            ->useRootNamespace('Spatie\EventProjector\\')
+            ->useRootNamespace('Spatie\EventSourcing\\')
             ->ignoringFiles(Composer::getAutoloadedFiles($pathToComposerJson))
 
             ->addToProjectionist($projectionist);

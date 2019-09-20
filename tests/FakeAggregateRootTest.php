@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventProjector\Tests;
+namespace Spatie\EventSourcing\Tests;
 
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\DummyAggregateRoot;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\DummyAggregateRoot;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
 
 class FakeAggregateRootTest extends TestCase
 {
@@ -32,7 +32,7 @@ class FakeAggregateRootTest extends TestCase
     /** @test */
     public function it_can_assert_recorded_events_without_using_when()
     {
-        /** @var \Spatie\EventProjector\Tests\TestClasses\DummyAggregateRoot|\Spatie\EventProjector\FakeAggregateRoot $fakeAggregateRoot */
+        /** @var \Spatie\EventSourcing\Tests\TestClasses\DummyAggregateRoot|\Spatie\EventSourcing\FakeAggregateRoot $fakeAggregateRoot */
         $fakeAggregateRoot = DummyAggregateRoot::fake();
 
         $fakeAggregateRoot->given([

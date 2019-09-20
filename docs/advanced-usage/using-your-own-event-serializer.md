@@ -3,16 +3,16 @@ title: Using your own event serializer
 weight: 8
 ---
 
-Events will be serialized by the `Spatie\EventProjector\EventSerializers\JsonEventSerializer`. Like the name implies, this class can serialize an event to json so it can be easily stored in a `json` column in the database.
+Events will be serialized by the `Spatie\EventSourcing\EventSerializers\JsonEventSerializer`. Like the name implies, this class can serialize an event to json so it can be easily stored in a `json` column in the database.
 
-You can specify your own serializer by creating a class that implements `Spatie\EventProjector\EventSerializers\EventSerializer` and specifying the class in the `event_serializer` key of the `event-projector.php` config file.
+You can specify your own serializer by creating a class that implements `Spatie\EventSourcing\EventSerializers\EventSerializer` and specifying the class in the `event_serializer` key of the `event-sourcing.php` config file.
 
 This is the content of the `EventSerializer` interface:
 
 ```
-namespace Spatie\EventProjector\EventSerializers;
+namespace Spatie\EventSourcing\EventSerializers;
 
-use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventSourcing\ShouldBeStored;
 
 interface EventSerializer
 {

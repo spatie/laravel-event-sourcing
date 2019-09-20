@@ -1,13 +1,13 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventSourcing;
 
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Contracts\Support\Arrayable;
-use Spatie\EventProjector\Facades\Projectionist;
-use Spatie\EventProjector\Exceptions\InvalidStoredEvent;
-use Spatie\EventProjector\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
+use Spatie\EventSourcing\EventSerializers\EventSerializer;
 
 class StoredEvent implements Arrayable
 {
@@ -29,7 +29,7 @@ class StoredEvent implements Arrayable
     /** @var \Carbon\Carbon */
     public $created_at;
 
-    /** @var \Spatie\EventProjector\ShouldBeStored|null */
+    /** @var \Spatie\EventSourcing\ShouldBeStored|null */
     public $event;
 
     public function __construct(array $data)
@@ -72,22 +72,22 @@ class StoredEvent implements Arrayable
         }
 
         $storedEventJob = call_user_func(
-            [config('event-projector.stored_event_job'), 'createForEvent'],
+            [config('event-sourcing.stored_event_job'), 'createForEvent'],
             $this,
             $tags ?? []
         );
 
-        dispatch($storedEventJob->onQueue($this->event->queue ?? config('event-projector.queue')));
+        dispatch($storedEventJob->onQueue($this->event->queue ?? config('event-sourcing.queue')));
     }
 
     protected static function getActualClassForEvent(string $class): string
     {
-        return Arr::get(config('event-projector.event_class_map', []), $class, $class);
+        return Arr::get(config('event-sourcing.event_class_map', []), $class, $class);
     }
 
     protected static function getEventClass(string $class): string
     {
-        $map = config('event-projector.event_class_map', []);
+        $map = config('event-sourcing.event_class_map', []);
 
         if (! empty($map) && in_array($class, $map)) {
             return array_search($class, $map, true);

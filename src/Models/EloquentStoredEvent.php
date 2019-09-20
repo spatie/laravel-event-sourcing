@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\EventProjector\Models;
+namespace Spatie\EventSourcing\Models;
 
-use Spatie\EventProjector\StoredEvent;
+use Spatie\EventSourcing\StoredEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventSourcing\ShouldBeStored;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class EloquentStoredEvent extends Model

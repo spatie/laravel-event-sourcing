@@ -1,18 +1,18 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\Console;
+namespace Spatie\EventSourcing\Tests\Console;
 
 use Spatie\Snapshots\MatchesSnapshots;
-use Spatie\EventProjector\Projectionist;
-use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Projectionist;
+use Spatie\EventSourcing\Tests\TestCase;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 
 final class CacheEventHandlersCommandTest extends TestCase
 {
     use MatchesSnapshots;
 
-    /** @var \Spatie\EventProjector\Projectionist */
+    /** @var \Spatie\EventSourcing\Projectionist */
     private $projectionist;
 
     public function setUp(): void
@@ -29,8 +29,8 @@ final class CacheEventHandlersCommandTest extends TestCase
 
         $this->projectionist->addReactor(BrokeReactor::class);
 
-        $this->artisan('event-projector:cache-event-handlers')->assertExitCode(0);
+        $this->artisan('event-sourcing:cache-event-handlers')->assertExitCode(0);
 
-        $this->assertMatchesSnapshot(file_get_contents(config('event-projector.cache_path').'/event-handlers.php'));
+        $this->assertMatchesSnapshot(file_get_contents(config('event-sourcing.cache_path').'/event-handlers.php'));
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventProjector\Exceptions;
+namespace Spatie\EventSourcing\Exceptions;
 
 use Exception;
-use Spatie\EventProjector\Projectors\Projector;
+use Spatie\EventSourcing\Projectors\Projector;
 
 final class CouldNotResetProjector extends Exception
 {

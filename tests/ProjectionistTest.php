@@ -1,26 +1,26 @@
 <?php
 
-namespace Spatie\EventProjector\Tests;
+namespace Spatie\EventSourcing\Tests;
 
 use Mockery;
 use Exception;
 use Illuminate\Support\Facades\Queue;
-use Spatie\EventProjector\HandleStoredEventJob;
-use Spatie\EventProjector\Facades\Projectionist;
-use Spatie\EventProjector\Exceptions\InvalidEventHandler;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\HandleStoredEventJob;
+use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod;
 
 final class ProjectionistTest extends TestCase
 {
-    /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\Models\Account */
     protected $account;
 
     public function setUp(): void
@@ -77,7 +77,7 @@ final class ProjectionistTest extends TestCase
     /** @test */
     public function it_will_call_the_method_on_the_projector_when_the_projector_throws_an_exception()
     {
-        $this->setConfig('event-projector.catch_exceptions', true);
+        $this->setConfig('event-sourcing.catch_exceptions', true);
 
         $projector = Mockery::mock(ProjectorThatThrowsAnException::class.'[handleException]');
 
@@ -91,7 +91,7 @@ final class ProjectionistTest extends TestCase
     /** @test */
     public function it_can_catch_exceptions_and_still_continue_calling_other_projectors()
     {
-        $this->setConfig('event-projector.catch_exceptions', true);
+        $this->setConfig('event-sourcing.catch_exceptions', true);
 
         $failingProjector = new ProjectorThatThrowsAnException();
         Projectionist::addProjector($failingProjector);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses;
+namespace Spatie\EventSourcing\Tests\TestClasses;
 
 final class FakeUuid
 {

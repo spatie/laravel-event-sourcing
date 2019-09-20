@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\AggregateRoots;
+namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots;
 
-use Spatie\EventProjector\AggregateRoot;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
+use Spatie\EventSourcing\AggregateRoot;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
 
 class DummyAggregateRoot extends AggregateRoot
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventSourcing;
 
 use Carbon\Carbon;
 use Illuminate\Support\LazyCollection;
-use Spatie\EventProjector\Models\EloquentStoredEvent;
-use Spatie\EventProjector\EventSerializers\EventSerializer;
-use Spatie\EventProjector\Exceptions\InvalidEloquentStoredEventModel;
+use Spatie\EventSourcing\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 
 class EloquentStoredEventRepository implements StoredEventRepository
 {
@@ -14,7 +14,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
     public function __construct()
     {
-        $this->storedEventModel = config('event-projector.stored_event_model', EloquentStoredEvent::class);
+        $this->storedEventModel = config('event-sourcing.stored_event_model', EloquentStoredEvent::class);
 
         if (! new $this->storedEventModel instanceof EloquentStoredEvent) {
             throw new InvalidEloquentStoredEventModel("The class {$this->storedEventModel} must extend EloquentStoredEvent");
@@ -90,7 +90,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
     private function getEventClass(string $class): string
     {
-        $map = config('event-projector.event_class_map', []);
+        $map = config('event-sourcing.event_class_map', []);
 
         if (! empty($map) && in_array($class, $map)) {
             return array_search($class, $map, true);

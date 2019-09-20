@@ -3,7 +3,7 @@ title: Writing your first projector
 weight: 1
 ---
 
-This section is a perfect entry point to get yourself acquainted with projectors. Most examples in these docs are also available in the Laravel app you'll find in [this repo on GitHub](https://github.com/spatie/larabank-event-projector). Clone that repo to toy around with the package.
+This section is a perfect entry point to get yourself acquainted with projectors. Most examples in these docs are also available in the Laravel app you'll find in [this repo on GitHub](https://github.com/spatie/larabank-event-sourcing). Clone that repo to toy around with the package.
 
 A projector is a class that gets triggered when new events come in. It typically writes data (to the database or to a file on disk). We call that written data a projection.
 
@@ -98,14 +98,14 @@ class Account extends Model
 
 ## Defining events
 
-Instead of creating, updating and deleting accounts, we're simply firing off events. All these events should implement `\Spatie\EventProjector\ShouldBeStored`. This is an empty interface that signifies to our package that the event should be stored.
+Instead of creating, updating and deleting accounts, we're simply firing off events. All these events should implement `\Spatie\EventSourcing\ShouldBeStored`. This is an empty interface that signifies to our package that the event should be stored.
 
 Let's take a look at all events used in the `Account` model.
 
 ```php
 namespace App\Events;
 
-use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventSourcing\ShouldBeStored;
 
 class AccountCreated implements ShouldBeStored
 {
@@ -122,7 +122,7 @@ class AccountCreated implements ShouldBeStored
 ```php
 namespace App\Events;
 
-use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventSourcing\ShouldBeStored;
 
 class MoneyAdded implements ShouldBeStored
 {
@@ -144,7 +144,7 @@ class MoneyAdded implements ShouldBeStored
 ```php
 namespace App\Events;
 
-use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventSourcing\ShouldBeStored;
 
 class MoneySubtracted implements ShouldBeStored
 {
@@ -166,7 +166,7 @@ class MoneySubtracted implements ShouldBeStored
 ```php
 namespace App\Events;
 
-use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventSourcing\ShouldBeStored;
 
 class AccountDeleted implements ShouldBeStored
 {
@@ -196,9 +196,9 @@ use App\Events\AccountCreated;
 use App\Events\AccountDeleted;
 use App\Events\MoneyAdded;
 use App\Events\MoneySubtracted;
-use Spatie\EventProjector\Models\StoredEvent;
-use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\Models\StoredEvent;
+use Spatie\EventSourcing\Projectors\Projector;
+use Spatie\EventSourcing\Projectors\ProjectsEvents;
 
 class AccountBalanceProjector implements Projector
 {
@@ -314,9 +314,9 @@ namespace App\Projectors;
 use App\Events\MoneyAdded;
 use App\Events\MoneySubtracted;
 use App\TransactionCount;
-use Spatie\EventProjector\Models\StoredEvent;
-use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\Models\StoredEvent;
+use Spatie\EventSourcing\Projectors\Projector;
+use Spatie\EventSourcing\Projectors\ProjectsEvents;
 
 class TransactionCountProjector implements Projector
 {
@@ -352,7 +352,7 @@ Projectionist::addProjector(TransactionCountProjector::class);
 If you've followed along, you've already created some accounts and some events. To feed those past events to the projector we can simply perform this artisan command:
 
 ```php
-php artisan event-projector:replay
+php artisan event-sourcing:replay
 ```
 
 This command will take all events stored in the `stored_events` table and pass them to `TransactionCountProjector`. After the command completes you should see the transaction counts in the `transaction_counts` table.

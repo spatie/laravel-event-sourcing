@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventSourcing;
 
 interface ShouldBeStored
 {

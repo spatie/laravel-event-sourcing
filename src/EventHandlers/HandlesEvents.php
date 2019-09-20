@@ -1,15 +1,15 @@
 <?php
 
-namespace Spatie\EventProjector\EventHandlers;
+namespace Spatie\EventSourcing\EventHandlers;
 
 use Exception;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\StoredEvent;
-use Spatie\EventProjector\ShouldBeStored;
-use Spatie\EventProjector\Exceptions\InvalidEventHandler;
+use Spatie\EventSourcing\StoredEvent;
+use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
 
 trait HandlesEvents
 {

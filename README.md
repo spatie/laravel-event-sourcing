@@ -1,14 +1,14 @@
 # Event sourcing for Artisans 📽
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-event-projector.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-projector)
-[![Build Status](https://img.shields.io/travis/spatie/laravel-event-projector/master.svg?style=flat-square)](https://travis-ci.org/spatie/laravel-event-projector)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-event-sourcing.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-sourcing)
+[![Build Status](https://img.shields.io/travis/spatie/laravel-event-sourcing/master.svg?style=flat-square)](https://travis-ci.org/spatie/laravel-event-sourcing)
 [![StyleCI](https://styleci.io/repos/133496112/shield?branch=master)](https://styleci.io/repos/133496112)
-[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-event-projector.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-event-projector)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-event-projector.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-projector)
+[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-event-sourcing.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-event-sourcing)
+[![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-event-sourcing.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-sourcing)
 
 This package aims to be the entry point to get started with event sourcing in Laravel. It can help you with setting up aggregates, projectors, and reactors. 
 
-If you've never worked with event sourcing, or are uncertain about what aggregates, projectors and reactors are head over to the getting familiar with event sourcing section [in our docs](https://docs.spatie.be/laravel-event-projector/v3/getting-familiar-with-event-sourcing/introduction).
+If you've never worked with event sourcing, or are uncertain about what aggregates, projectors and reactors are head over to the getting familiar with event sourcing section [in our docs](https://docs.spatie.be/laravel-event-sourcing/v3/getting-familiar-with-event-sourcing/introduction).
 
 Event sourcing might be a good choice for your project if:
 
@@ -19,12 +19,12 @@ Event sourcing might be a good choice for your project if:
 If you want to skip to reading code immediately, here are some example apps. In each of them, you can create accounts and deposit or withdraw money. 
 
 - [Larabank built traditionally without event sourcing](https://github.com/spatie/larabank-traditional)
-- [Larabank built with projectors](https://github.com/spatie/larabank-event-projector)
-- [Larabank built with aggregates and projectors](https://github.com/spatie/larabank-event-projector-aggregates)
+- [Larabank built with projectors](https://github.com/spatie/larabank-event-sourcing)
+- [Larabank built with aggregates and projectors](https://github.com/spatie/larabank-event-sourcing-aggregates)
 
 ## Documentation
 
-You can find installation instructions and detailed instructions on how to use this package at [the dedicated documentation site](https://docs.spatie.be/laravel-event-projector).
+You can find installation instructions and detailed instructions on how to use this package at [the dedicated documentation site](https://docs.spatie.be/laravel-event-sourcing).
 
 ## Changelog
 

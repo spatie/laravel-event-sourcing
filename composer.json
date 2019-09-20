@@ -1,16 +1,16 @@
 {
-    "name": "spatie/laravel-event-projector",
+    "name": "spatie/laravel-event-sourcing",
     "description": "Event sourcing for artisans",
     "keywords": [
         "spatie",
-        "laravel-event-projector",
+        "laravel-event-sourcing",
         "event",
         "sourcing",
         "aggregates",
         "projectors",
         "reactors"
     ],
-    "homepage": "https://github.com/spatie/laravel-event-projector",
+    "homepage": "https://github.com/spatie/laravel-event-sourcing",
     "license": "MIT",
     "authors": [
         {
@@ -40,12 +40,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\EventProjector\\": "src"
+            "Spatie\\EventSourcing\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\EventProjector\\Tests\\": "tests"
+            "Spatie\\EventSourcing\\Tests\\": "tests"
         },
         "files": [
             "tests/TestClasses/AutoDiscoverEventHandlers/functions.php"
@@ -62,10 +62,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\EventProjector\\EventProjectorServiceProvider"
+                "Spatie\\EventSourcing\\EventSourcingServiceProvider"
             ],
             "aliases": {
-                "Projectionist": "Spatie\\EventProjector\\Facades\\EventProjector"
+                "Projectionist": "Spatie\\EventSourcing\\Facades\\EventSourcing"
             }
         }
     }

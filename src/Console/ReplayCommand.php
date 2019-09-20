@@ -1,22 +1,22 @@
 <?php
 
-namespace Spatie\EventProjector\Console;
+namespace Spatie\EventSourcing\Console;
 
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Projectionist;
-use Spatie\EventProjector\StoredEventRepository;
+use Spatie\EventSourcing\Projectionist;
+use Spatie\EventSourcing\StoredEventRepository;
 
 class ReplayCommand extends Command
 {
-    protected $signature = 'event-projector:replay {projector?*}
+    protected $signature = 'event-sourcing:replay {projector?*}
                             {--from=0 : Replay events starting from this event number}
                             {--stored-event-model= : Replay events from this store}';
 
     protected $description = 'Replay stored events';
 
-    /** @var \Spatie\EventProjector\Projectionist */
+    /** @var \Spatie\EventSourcing\Projectionist */
     protected $projectionist;
 
     public function __construct(Projectionist $projectionist)

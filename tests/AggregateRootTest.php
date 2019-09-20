@@ -1,21 +1,21 @@
 <?php
 
-namespace Spatie\EventProjector\Tests;
+namespace Spatie\EventSourcing\Tests;
 
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventProjector\Facades\Projectionist;
-use Spatie\EventProjector\Models\EloquentStoredEvent;
-use Spatie\EventProjector\Tests\TestClasses\FakeUuid;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
-use Spatie\EventProjector\Exceptions\InvalidEloquentStoredEventModel;
-use Spatie\EventProjector\Tests\TestClasses\Models\OtherEloquentStoredEvent;
-use Spatie\EventProjector\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
+use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
+use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 
 final class AggregateRootTest extends TestCase
 {
@@ -71,7 +71,7 @@ final class AggregateRootTest extends TestCase
     /** @test */
     public function when_an_the_config_specifies_a_stored_event_model_persisting_will_persist_all_events_it_recorded_via_stored_event()
     {
-        config()->set('event-projector.stored_event_model', OtherEloquentStoredEvent::class);
+        config()->set('event-sourcing.stored_event_model', OtherEloquentStoredEvent::class);
 
         AccountAggregateRoot::retrieve($this->aggregateUuid)
             ->addMoney(100)
@@ -94,7 +94,7 @@ final class AggregateRootTest extends TestCase
     /** @test * */
     public function it_throws_an_error_when_defining_a_class_that_doesnt_extend_eloquent_stored_event()
     {
-        config()->set('event-projector.stored_event_model', InvalidEloquentStoredEvent::class);
+        config()->set('event-sourcing.stored_event_model', InvalidEloquentStoredEvent::class);
 
         $this->expectException(InvalidEloquentStoredEventModel::class);
 
@@ -106,7 +106,7 @@ final class AggregateRootTest extends TestCase
     /** @test */
     public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it()
     {
-        /** @var \Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
         $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
         $aggregateRoot
@@ -124,7 +124,7 @@ final class AggregateRootTest extends TestCase
     /** @test */
     public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it_in_the_correct_order()
     {
-        /** @var \Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
         $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
         $aggregateRoot
@@ -141,7 +141,7 @@ final class AggregateRootTest extends TestCase
     /** @test */
     public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it_with_the_stored_event_repository_specified()
     {
-        /** @var \Spatie\EventProjector\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified $aggregateRoot */
+        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified $aggregateRoot */
         $aggregateRoot = AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid);
 
         $aggregateRoot

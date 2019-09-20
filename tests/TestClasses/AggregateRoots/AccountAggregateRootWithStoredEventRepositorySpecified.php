@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\AggregateRoots;
+namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots;
 
-use Spatie\EventProjector\AggregateRoot;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
-use Spatie\EventProjector\Tests\TestClasses\Repositories\OtherEloquentStoredEventRepository;
+use Spatie\EventSourcing\AggregateRoot;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
+use Spatie\EventSourcing\Tests\TestClasses\Repositories\OtherEloquentStoredEventRepository;
 
 final class AccountAggregateRootWithStoredEventRepositorySpecified extends AggregateRoot
 {

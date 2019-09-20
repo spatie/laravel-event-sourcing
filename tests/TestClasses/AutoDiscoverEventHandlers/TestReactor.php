@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers;
+namespace Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers;
 
-use Spatie\EventProjector\Projectors\ProjectsEvents;
-use Spatie\EventProjector\EventHandlers\EventHandler;
+use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\EventHandler;
 
 final class TestReactor implements EventHandler
 {

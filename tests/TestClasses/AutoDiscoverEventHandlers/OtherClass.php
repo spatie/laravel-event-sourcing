@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\AutoDiscoverEventHandlers;
+namespace Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers;
 
 class OtherClass
 {

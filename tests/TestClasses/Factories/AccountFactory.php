@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\Factories;
+namespace Spatie\EventSourcing\Tests\Factories;
 
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
 final class AccountFactory
 {

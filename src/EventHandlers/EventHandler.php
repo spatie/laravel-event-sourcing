@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\EventProjector\EventHandlers;
+namespace Spatie\EventSourcing\EventHandlers;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\StoredEvent;
+use Spatie\EventSourcing\StoredEvent;
 
 interface EventHandler
 {

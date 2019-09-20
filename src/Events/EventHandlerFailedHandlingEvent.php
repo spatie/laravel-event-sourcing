@@ -1,17 +1,17 @@
 <?php
 
-namespace Spatie\EventProjector\Events;
+namespace Spatie\EventSourcing\Events;
 
 use Exception;
-use Spatie\EventProjector\StoredEvent;
-use Spatie\EventProjector\EventHandlers\EventHandler;
+use Spatie\EventSourcing\StoredEvent;
+use Spatie\EventSourcing\EventHandlers\EventHandler;
 
 final class EventHandlerFailedHandlingEvent
 {
-    /** @var \Spatie\EventProjector\EventHandlers\EventHandler */
+    /** @var \Spatie\EventSourcing\EventHandlers\EventHandler */
     public $eventHandler;
 
-    /** @var \Spatie\EventProjector\Models\EloquentStoredEvent */
+    /** @var \Spatie\EventSourcing\Models\EloquentStoredEvent */
     public $storedEvent;
 
     /** @var \Exception */

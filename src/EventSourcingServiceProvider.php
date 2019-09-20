@@ -1,26 +1,26 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Spatie\EventProjector\Console\ListCommand;
-use Spatie\EventProjector\Console\ReplayCommand;
-use Spatie\EventProjector\Console\MakeReactorCommand;
-use Spatie\EventProjector\Console\MakeAggregateCommand;
-use Spatie\EventProjector\Console\MakeProjectorCommand;
-use Spatie\EventProjector\Console\MakeStorableEventCommand;
-use Spatie\EventProjector\EventSerializers\EventSerializer;
-use Spatie\EventProjector\Console\CacheEventHandlersCommand;
-use Spatie\EventProjector\Console\ClearCachedEventHandlersCommand;
+use Spatie\EventSourcing\Console\ListCommand;
+use Spatie\EventSourcing\Console\ReplayCommand;
+use Spatie\EventSourcing\Console\MakeReactorCommand;
+use Spatie\EventSourcing\Console\MakeAggregateCommand;
+use Spatie\EventSourcing\Console\MakeProjectorCommand;
+use Spatie\EventSourcing\Console\MakeStorableEventCommand;
+use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\Console\CacheEventHandlersCommand;
+use Spatie\EventSourcing\Console\ClearCachedEventHandlersCommand;
 
-final class EventProjectorServiceProvider extends ServiceProvider
+final class EventSourcingServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/event-projector.php' => config_path('event-projector.php'),
+                __DIR__.'/../config/event-sourcing.php' => config_path('event-sourcing.php'),
             ], 'config');
         }
 
@@ -37,10 +37,10 @@ final class EventProjectorServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/event-projector.php', 'event-projector');
+        $this->mergeConfigFrom(__DIR__.'/../config/event-sourcing.php', 'event-sourcing');
 
         $this->app->singleton(Projectionist::class, function () {
-            $config = config('event-projector');
+            $config = config('event-sourcing');
 
             $projectionist = new Projectionist($config);
 
@@ -51,40 +51,40 @@ final class EventProjectorServiceProvider extends ServiceProvider
             return $projectionist;
         });
 
-        $this->app->alias(Projectionist::class, 'event-projector');
+        $this->app->alias(Projectionist::class, 'event-sourcing');
 
-        $this->app->singleton(StoredEventRepository::class, config('event-projector.stored_event_repository'));
+        $this->app->singleton(StoredEventRepository::class, config('event-sourcing.stored_event_repository'));
 
         $this->app->singleton(EventSubscriber::class, function () {
-            return new EventSubscriber(config('event-projector.stored_event_repository'));
+            return new EventSubscriber(config('event-sourcing.stored_event_repository'));
         });
 
         $this->app
             ->when(ReplayCommand::class)
             ->needs('$storedEventModelClass')
-            ->give(config('event-projector.stored_event_repository'));
+            ->give(config('event-sourcing.stored_event_repository'));
 
-        $this->app->bind(EventSerializer::class, config('event-projector.event_serializer'));
+        $this->app->bind(EventSerializer::class, config('event-sourcing.event_serializer'));
 
         $this->bindCommands();
     }
 
     private function bindCommands()
     {
-        $this->app->bind('command.event-projector:list', ListCommand::class);
-        $this->app->bind('command.event-projector:replay', ReplayCommand::class);
-        $this->app->bind('command.event-projector:cache-event-handlers', CacheEventHandlersCommand::class);
-        $this->app->bind('command.event-projector:clear-event-handlers', ClearCachedEventHandlersCommand::class);
+        $this->app->bind('command.event-sourcing:list', ListCommand::class);
+        $this->app->bind('command.event-sourcing:replay', ReplayCommand::class);
+        $this->app->bind('command.event-sourcing:cache-event-handlers', CacheEventHandlersCommand::class);
+        $this->app->bind('command.event-sourcing:clear-event-handlers', ClearCachedEventHandlersCommand::class);
         $this->app->bind('command.make:projector', MakeProjectorCommand::class);
         $this->app->bind('command.make:reactor', MakeReactorCommand::class);
         $this->app->bind('command.make:aggregate', MakeAggregateCommand::class);
         $this->app->bind('command.make:storable-event', MakeStorableEventCommand::class);
 
         $this->commands([
-            'command.event-projector:list',
-            'command.event-projector:replay',
-            'command.event-projector:cache-event-handlers',
-            'command.event-projector:clear-event-handlers',
+            'command.event-sourcing:list',
+            'command.event-sourcing:replay',
+            'command.event-sourcing:cache-event-handlers',
+            'command.event-sourcing:clear-event-handlers',
             'command.make:projector',
             'command.make:reactor',
             'command.make:aggregate',
@@ -105,7 +105,7 @@ final class EventProjectorServiceProvider extends ServiceProvider
         }
 
         (new DiscoverEventHandlers())
-            ->within(config('event-projector.auto_discover_projectors_and_reactors'))
+            ->within(config('event-sourcing.auto_discover_projectors_and_reactors'))
             ->useBasePath(base_path())
             ->ignoringFiles(Composer::getAutoloadedFiles(base_path('composer.json')))
             ->addToProjectionist($projectionist);
@@ -113,7 +113,7 @@ final class EventProjectorServiceProvider extends ServiceProvider
 
     private function getCachedEventHandlers(): ?array
     {
-        $cachedEventHandlersPath = config('event-projector.cache_path').'/event-handlers.php';
+        $cachedEventHandlersPath = config('event-sourcing.cache_path').'/event-handlers.php';
 
         if (! file_exists($cachedEventHandlersPath)) {
             return null;

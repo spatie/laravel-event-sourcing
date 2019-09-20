@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventProjector\Tests;
+namespace Spatie\EventSourcing\Tests;
 
 use Illuminate\Support\Str;
-use Spatie\EventProjector\Composer;
+use Spatie\EventSourcing\Composer;
 
 final class ComposerTest extends TestCase
 {

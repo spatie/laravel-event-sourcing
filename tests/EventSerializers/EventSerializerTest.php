@@ -1,16 +1,16 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\EventSerializers;
+namespace Spatie\EventSourcing\Tests\EventSerializers;
 
-use Spatie\EventProjector\Tests\TestCase;
-use Spatie\EventProjector\EventSerializers\EventSerializer;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
-use Spatie\EventProjector\Tests\TestClasses\Events\EventWithoutSerializedModels;
+use Spatie\EventSourcing\Tests\TestCase;
+use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithoutSerializedModels;
 
 final class EventSerializerTest extends TestCase
 {
-    /** @var \Spatie\EventProjector\EventSerializers\EventSerializer */
+    /** @var \Spatie\EventSourcing\EventSerializers\EventSerializer */
     protected $eventSerializer;
 
     public function setUp(): void

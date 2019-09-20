@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\Models;
+namespace Spatie\EventSourcing\Tests\TestClasses\Models;
 
-use Spatie\EventProjector\Models\EloquentStoredEvent as BaseStoredEvent;
+use Spatie\EventSourcing\Models\EloquentStoredEvent as BaseStoredEvent;
 
 class OtherEloquentStoredEvent extends BaseStoredEvent
 {

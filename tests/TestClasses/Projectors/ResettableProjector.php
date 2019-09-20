@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\Projectors;
+namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
-use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Projectors\ProjectsEvents;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Projectors\Projector;
+use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 
 final class ResettableProjector implements Projector
 {

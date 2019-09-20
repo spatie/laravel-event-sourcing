@@ -12,7 +12,7 @@ return [
 
     /*
      * Projectors are classes that build up projections. You can create them by performing
-     * `php artisan event-projector:create-projector`. When not using auto-discovery,
+     * `php artisan event-sourcing:create-projector`. When not using auto-discovery,
      * Projectors can be registered in this array or a service provider.
      */
     'projectors' => [
@@ -21,7 +21,7 @@ return [
 
     /*
      * Reactors are classes that handle side-effects. You can create them by performing
-     * `php artisan event-projector:create-reactor`. When not using auto-discovery
+     * `php artisan event-sourcing:create-reactor`. When not using auto-discovery
      * Reactors can be registered in this array or a service provider.
      */
     'reactors' => [
@@ -44,23 +44,23 @@ return [
     /*
      * This class is responsible for storing events in the EloquentStoredEventRepository.
      * To add extra behaviour you can change this to a class of your own. It should
-     * extend the \Spatie\EventProjector\Models\EloquentStoredEvent model.
+     * extend the \Spatie\EventSourcing\Models\EloquentStoredEvent model.
      */
-    'stored_event_model' => \Spatie\EventProjector\Models\EloquentStoredEvent::class,
+    'stored_event_model' => \Spatie\EventSourcing\Models\EloquentStoredEvent::class,
 
     /*
      * This class is responsible for storing events. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
-     * it should implement \Spatie\EventProjector\StoredEventRepository.
+     * it should implement \Spatie\EventSourcing\StoredEventRepository.
      */
-    'stored_event_repository' => \Spatie\EventProjector\EloquentStoredEventRepository::class,
+    'stored_event_repository' => \Spatie\EventSourcing\EloquentStoredEventRepository::class,
 
     /*
      * This class is responsible for handling stored events. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
-     * it should extend \Spatie\EventProjector\HandleDomainEventJob.
+     * it should extend \Spatie\EventSourcing\HandleDomainEventJob.
      */
-    'stored_event_job' => \Spatie\EventProjector\HandleStoredEventJob::class,
+    'stored_event_job' => \Spatie\EventSourcing\HandleStoredEventJob::class,
 
     /*
      * Similar to Relation::morphMap() you can define which alias responds to which
@@ -72,9 +72,9 @@ return [
     /*
      * This class is responsible for serializing events. By default an event will be serialized
      * and stored as json. You can customize the class name. A valid serializer
-     * should implement Spatie\EventProjector\EventSerializers\Serializer.
+     * should implement Spatie\EventSourcing\EventSerializers\Serializer.
      */
-    'event_serializer' => \Spatie\EventProjector\EventSerializers\JsonEventSerializer::class,
+    'event_serializer' => \Spatie\EventSourcing\EventSerializers\JsonEventSerializer::class,
 
     /*
      * When replaying events, potentially a lot of events will have to be retrieved.
@@ -86,9 +86,9 @@ return [
     /*
      * In production, you likely don't want the package to auto-discover the event handlers
      * on every request. The package can cache all registered event handlers.
-     * More info: https://docs.spatie.be/laravel-event-projector/v2/advanced-usage/discovering-projectors-and-reactors
+     * More info: https://docs.spatie.be/laravel-event-sourcing/v2/advanced-usage/discovering-projectors-and-reactors
      *
      * Here you can specify where the cache should be stored.
      */
-    'cache_path' => storage_path('app/event-projector'),
+    'cache_path' => storage_path('app/event-sourcing'),
 ];

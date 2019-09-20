@@ -5,7 +5,7 @@ weight: 1
 
 ## What is a reactor
 
-Now that you've [written your first projector](/laravel-event-projector/v3/using-projectors/writing-your-first-projector), let's learn how to handle side effects. With side effects we mean things like sending a mail, sending a notification, ... You only want to perform these actions when the original event happens. You don't want to do this work when replaying events.
+Now that you've [written your first projector](/laravel-event-sourcing/v3/using-projectors/writing-your-first-projector), let's learn how to handle side effects. With side effects we mean things like sending a mail, sending a notification, ... You only want to perform these actions when the original event happens. You don't want to do this work when replaying events.
 
 A reactor is a class, that much like a projector, listens for incoming events. Unlike projectors however, reactors will not get called when events are replayed. Reactors only will get called when the original event fires.
 
@@ -20,8 +20,8 @@ use App\Account;
 use App\Events\MoneyAdded;
 use App\Mail\BigAmountAddedMail;
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventProjector\EventHandlers\EventHandler;
-use Spatie\EventProjector\EventHandlers\HandlesEvents;
+use Spatie\EventSourcing\EventHandlers\EventHandler;
+use Spatie\EventSourcing\EventHandlers\HandlesEvents;
 
 final class BigAmountAddedReactor implements EventHandler
 {
@@ -56,7 +56,7 @@ A mail will be sent to the director.
 If you truncate the `accounts` table and rebuild the contents with
 
 ```php
-php artisan event-projector:replay
+php artisan event-sourcing:replay
 ```
 
 no mail will be sent.

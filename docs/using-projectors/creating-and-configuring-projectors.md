@@ -17,7 +17,7 @@ php artisan make:projector AccountBalanceProjector
 
 By default, the package will automatically find an register all projectors found in your application.
 
-Alternatively, you can manually register projectors in the `projectors` key of the `event-projectors` config file.
+Alternatively, you can manually register projectors in the `projectors` key of the `event-sourcings` config file.
 
 You can also add them to the `Projectionist`. This can be done anywhere, but typically you would do this in a ServiceProvider of your own.
 
@@ -26,9 +26,9 @@ namespace App\Providers;
 
 use App\Projectors\AccountBalanceProjector;
 use Illuminate\Support\ServiceProvider;
-use Spatie\EventProjector\Facades\Projectionist;
+use Spatie\EventSourcing\Facades\Projectionist;
 
-class EventProjectorServiceProvider extends ServiceProvider
+class EventSourcingServiceProvider extends ServiceProvider
 {
     public function register()
     {
@@ -51,8 +51,8 @@ This is the contents of a class created by the artisan command mentioned in the 
 ```php
 namespace App\Projectors;
 
-use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\Projectors\Projector;
+use Spatie\EventSourcing\Projectors\ProjectsEvents;
 
 class MyProjector implements Projector
 {
@@ -69,7 +69,7 @@ Just by adding a typehint of the event you want to handle makes our package call
 
 ## Getting the uuid of an event
 
-In most cases you want to have access to the event that was fired. When [using aggregates](/laravel-event-projector/v3/using-aggregates/writing-your-first-aggregate) your events probably won't contain the uuid associated with that event. To get to the uuid of an event simply add a parameter called `$aggregateUuid` that typehinted as a string.
+In most cases you want to have access to the event that was fired. When [using aggregates](/laravel-event-sourcing/v3/using-aggregates/writing-your-first-aggregate) your events probably won't contain the uuid associated with that event. To get to the uuid of an event simply add a parameter called `$aggregateUuid` that typehinted as a string.
 
 ```php
 // ...
@@ -97,8 +97,8 @@ namespace App\Projectors;
 
 use App\Account;
 use App\Events\MoneyAdded;
-use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\Projectors\Projector;
+use Spatie\EventSourcing\Projectors\ProjectsEvents;
 
 class AccountBalanceProjector implements Projector
 {

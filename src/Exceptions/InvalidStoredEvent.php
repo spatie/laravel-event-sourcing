@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventProjector\Exceptions;
+namespace Spatie\EventSourcing\Exceptions;
 
 use Exception;
-use Spatie\EventProjector\StoredEvent;
+use Spatie\EventSourcing\StoredEvent;
 
 final class InvalidStoredEvent extends Exception
 {

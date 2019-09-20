@@ -1,15 +1,15 @@
 <?php
 
-namespace Spatie\EventProjector\Console;
+namespace Spatie\EventSourcing\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Projectionist;
-use Spatie\EventProjector\EventHandlers\EventHandler;
+use Spatie\EventSourcing\Projectionist;
+use Spatie\EventSourcing\EventHandlers\EventHandler;
 
 final class ListCommand extends Command
 {
-    protected $signature = 'event-projector:list';
+    protected $signature = 'event-sourcing:list';
 
     protected $description = 'Lists all event handlers';
 

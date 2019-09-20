@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\EventProjector\EventSerializers;
+namespace Spatie\EventSourcing\EventSerializers;
 
-use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventSourcing\ShouldBeStored;
 
 interface EventSerializer
 {

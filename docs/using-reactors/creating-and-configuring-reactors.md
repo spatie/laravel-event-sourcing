@@ -17,7 +17,7 @@ php artisan make:reactor BigAmountAddedReactor
 
 By default, the package will automatically find and register all reactors found in your application.
 
-Alternatively, you can also manually register them in the `reactors` key of the `event-projectors` config file.
+Alternatively, you can also manually register them in the `reactors` key of the `event-sourcings` config file.
 
 They can also be added to the `Projectionist`. This can be done anywhere, but typically you would do this in a ServiceProvider of your own.
 
@@ -26,9 +26,9 @@ namespace App\Providers;
 
 use App\Projectors\AccountBalanceProjector;
 use Illuminate\Support\ServiceProvider;
-use Spatie\EventProjector\Facades\Projectionist;
+use Spatie\EventSourcing\Facades\Projectionist;
 
-class EventProjectorServiceProvider extends ServiceProvider
+class EventSourcingServiceProvider extends ServiceProvider
 {
     public function register()
     {

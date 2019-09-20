@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\EventProjector\Projectors;
+namespace Spatie\EventSourcing\Projectors;
 
-use Spatie\EventProjector\EventHandlers\HandlesEvents;
-use Spatie\EventProjector\Exceptions\CouldNotResetProjector;
+use Spatie\EventSourcing\EventHandlers\HandlesEvents;
+use Spatie\EventSourcing\Exceptions\CouldNotResetProjector;
 
 trait ProjectsEvents
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\EventProjector\Tests\TestClasses\AggregateRoots\Projectors;
+namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors;
 
-use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Projectors\ProjectsEvents;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
-use Spatie\EventProjector\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
+use Spatie\EventSourcing\Projectors\Projector;
+use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 
 final class AccountProjector implements Projector
 {

@@ -3,7 +3,7 @@ title: Writing your first aggregate
 weight: 1
 ---
 
-An aggregate is a class that decides to record events based on past events. To know more about their general purpose and the idea behind them, read this section on [using aggregates to make decisions-based-on-the-past](/laravel-event-projector/v3/getting-familiar-with-event-sourcing/using-aggregates-to-make-decisions-based-on-the-past).
+An aggregate is a class that decides to record events based on past events. To know more about their general purpose and the idea behind them, read this section on [using aggregates to make decisions-based-on-the-past](/laravel-event-sourcing/v3/getting-familiar-with-event-sourcing/using-aggregates-to-make-decisions-based-on-the-past).
 
 ## Creating an aggregate
 
@@ -18,7 +18,7 @@ This will create a class like this:
 ```php
 namespace App\Aggregates;
 
-use Spatie\EventProjector\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoot;
 
 
 final class AccountAggregate extends AggregateRoot
@@ -28,14 +28,14 @@ final class AccountAggregate extends AggregateRoot
 
 ## Recording events
 
-You can add any methods or variables you need on the aggregate. To get you familiar with event modelling using aggregates let's implement a small piece of [the Larabank example app](https://github.com/spatie/larabank-event-projector-aggregates). We are going to add methods to record the [`AccountCreated`](https://github.com/spatie/larabank-event-projector-aggregates/blob/master/app/Domain/Account/Events/AccountCreated.php), [`MoneyAdded`](https://github.com/spatie/larabank-event-projector-aggregates/blob/master/app/Domain/Account/Events/MoneyAdded.php) and the [`MoneySubtracted`](https://github.com/spatie/larabank-event-projector-aggregates/blob/master/app/Domain/Account/Events/MoneySubtracted.php) events.
+You can add any methods or variables you need on the aggregate. To get you familiar with event modelling using aggregates let's implement a small piece of [the Larabank example app](https://github.com/spatie/larabank-event-sourcing-aggregates). We are going to add methods to record the [`AccountCreated`](https://github.com/spatie/larabank-event-sourcing-aggregates/blob/master/app/Domain/Account/Events/AccountCreated.php), [`MoneyAdded`](https://github.com/spatie/larabank-event-sourcing-aggregates/blob/master/app/Domain/Account/Events/MoneyAdded.php) and the [`MoneySubtracted`](https://github.com/spatie/larabank-event-sourcing-aggregates/blob/master/app/Domain/Account/Events/MoneySubtracted.php) events.
 
 First, let's add a `createAccount` methods to our aggregate that will record the `AccountCreated` event.
 
 ```php
 namespace App\Aggregates;
 
-use Spatie\EventProjector\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoot;
 
 
 final class AccountAggregate extends AggregateRoot
@@ -85,7 +85,7 @@ AccountAggregate::retrieve($uuid)
 
 When persisting an aggregate all newly recorded events inside aggregate root will be saved to the database. The newly recorded events will also get passed to all projectors and reactors that listen for them.
 
-In our demo app we retrieve and persist the aggregate [in the `AccountsController`](https://github.com/spatie/larabank-event-projector-aggregates/blob/c9f2ff240f4634ee2e241e3087ff60587a176ae0/app/Http/Controllers/AccountsController.php). The package has no opinion on where you should interact with aggregates. Do whatever you wish.
+In our demo app we retrieve and persist the aggregate [in the `AccountsController`](https://github.com/spatie/larabank-event-sourcing-aggregates/blob/c9f2ff240f4634ee2e241e3087ff60587a176ae0/app/Http/Controllers/AccountsController.php). The package has no opinion on where you should interact with aggregates. Do whatever you wish.
 
 ## Implementing our first business rule
 
@@ -181,4 +181,4 @@ public function subtractAmount(int $amount)
 
 When the limit is hit three times, we record another event `LoanProposed`. We could set up a reactor that listens for that event and sends the actual mail.
 
-If you want to toy around with this example, clone the [Larabank with aggregates](https://github.com/spatie/larabank-event-projector-aggregates) example.
+If you want to toy around with this example, clone the [Larabank with aggregates](https://github.com/spatie/larabank-event-sourcing-aggregates) example.

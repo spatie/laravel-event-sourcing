@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Str;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector\Console;
+namespace Spatie\EventSourcing\Console;
 
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
@@ -43,7 +43,7 @@ final class MakeProjectorCommand extends GeneratorCommand
         $content = file_get_contents($path);
 
         $content = str_replace('implements Projector', 'implements QueuedProjector', $content);
-        $content = str_replace('use Spatie\EventProjector\Projectors\Projector;', 'use Spatie\EventProjector\Projectors\QueuedProjector;', $content);
+        $content = str_replace('use Spatie\EventSourcing\Projectors\Projector;', 'use Spatie\EventSourcing\Projectors\QueuedProjector;', $content);
 
         file_put_contents($path, $content);
     }

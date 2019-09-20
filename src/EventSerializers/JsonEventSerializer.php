@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\EventProjector\EventSerializers;
+namespace Spatie\EventSourcing\EventSerializers;
 
-use Spatie\EventProjector\ShouldBeStored;
+use Spatie\EventSourcing\ShouldBeStored;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer as SymfonySerializer;

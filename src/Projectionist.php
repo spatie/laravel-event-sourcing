@@ -1,25 +1,25 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventSourcing;
 
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\EventHandlers\EventHandler;
-use Spatie\EventProjector\Events\FinishedEventReplay;
-use Spatie\EventProjector\Events\StartingEventReplay;
-use Spatie\EventProjector\Projectors\QueuedProjector;
-use Spatie\EventProjector\Exceptions\InvalidEventHandler;
-use Spatie\EventProjector\EventHandlers\EventHandlerCollection;
-use Spatie\EventProjector\Events\EventHandlerFailedHandlingEvent;
+use Spatie\EventSourcing\Projectors\Projector;
+use Spatie\EventSourcing\EventHandlers\EventHandler;
+use Spatie\EventSourcing\Events\FinishedEventReplay;
+use Spatie\EventSourcing\Events\StartingEventReplay;
+use Spatie\EventSourcing\Projectors\QueuedProjector;
+use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
+use Spatie\EventSourcing\EventHandlers\EventHandlerCollection;
+use Spatie\EventSourcing\Events\EventHandlerFailedHandlingEvent;
 
 final class Projectionist
 {
-    /** @var \Spatie\EventProjector\EventHandlers\EventHandlerCollection */
+    /** @var \Spatie\EventSourcing\EventHandlers\EventHandlerCollection */
     private $projectors;
 
-    /** @var \Spatie\EventProjector\EventHandlers\EventHandlerCollection */
+    /** @var \Spatie\EventSourcing\EventHandlers\EventHandlerCollection */
     private $reactors;
 
     /** @var bool */

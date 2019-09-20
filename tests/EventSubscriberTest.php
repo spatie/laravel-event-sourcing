@@ -1,27 +1,27 @@
 <?php
 
-namespace Spatie\EventProjector\Tests;
+namespace Spatie\EventSourcing\Tests;
 
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
-use Spatie\EventProjector\HandleStoredEventJob;
-use Spatie\EventProjector\Facades\Projectionist;
-use Spatie\EventProjector\Models\EloquentStoredEvent;
-use Spatie\EventProjector\Tests\TestClasses\Models\Account;
-use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEvent;
-use Spatie\EventProjector\Tests\TestClasses\Mailables\AccountBroke;
-use Spatie\EventProjector\Tests\TestClasses\Events\DoNotStoreThisEvent;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\QueuedProjector;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneySubtractedEvent;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventProjector\Tests\TestClasses\Events\MoneyAddedEventWithQueueOverride;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\ProjectorThatInvokesAnObject;
+use Spatie\EventSourcing\HandleStoredEventJob;
+use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
+use Spatie\EventSourcing\Tests\TestClasses\Events\DoNotStoreThisEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEventWithQueueOverride;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatInvokesAnObject;
 
 final class EventSubscriberTest extends TestCase
 {
-    /** @var \Spatie\EventProjector\Tests\TestClasses\Models\Account */
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\Models\Account */
     protected $account;
 
     public function setUp(): void
@@ -52,7 +52,7 @@ final class EventSubscriberTest extends TestCase
     /** @test * */
     public function it_will_log_events_that_implement_ShouldBeStored_with_a_map()
     {
-        $this->setConfig('event-projector.event_class_map', [
+        $this->setConfig('event-sourcing.event_class_map', [
             'moneyadd' => MoneyAddedEvent::class,
         ]);
 
@@ -152,7 +152,7 @@ final class EventSubscriberTest extends TestCase
     {
         Queue::fake();
 
-        $this->setConfig('event-projector.queue', 'defaultQueue');
+        $this->setConfig('event-sourcing.queue', 'defaultQueue');
 
         $projector = new QueuedProjector();
         Projectionist::addProjector($projector);
@@ -167,7 +167,7 @@ final class EventSubscriberTest extends TestCase
     {
         Queue::fake();
 
-        $this->setConfig('event-projector.queue', 'defaultQueue');
+        $this->setConfig('event-sourcing.queue', 'defaultQueue');
 
         $projector = new QueuedProjector();
         Projectionist::addProjector($projector);

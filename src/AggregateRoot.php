@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventProjector;
+namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -48,7 +48,7 @@ abstract class AggregateRoot
 
     protected function getStoredEventRepository(): StoredEventRepository
     {
-        return app($this->storedEventRepository ?? config('event-projector.stored_event_repository'));
+        return app($this->storedEventRepository ?? config('event-sourcing.stored_event_repository'));
     }
 
     public function getRecordedEvents(): array
@@ -89,7 +89,7 @@ abstract class AggregateRoot
     }
 
     /**
-     * @param \Spatie\EventProjector\ShouldBeStored|\Spatie\EventProjector\ShouldBeStored[] $events
+     * @param \Spatie\EventSourcing\ShouldBeStored|\Spatie\EventSourcing\ShouldBeStored[] $events
      *
      * @return $this
      */

@@ -1,21 +1,21 @@
 <?php
 
-namespace Spatie\EventProjector\Tests;
+namespace Spatie\EventSourcing\Tests;
 
-use Spatie\EventProjector\Facades\Projectionist;
-use Spatie\EventProjector\EventProjectorServiceProvider;
-use Spatie\EventProjector\Tests\TestClasses\Reactors\BrokeReactor;
-use Spatie\EventProjector\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\EventSourcingServiceProvider;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 
-final class EventProjectorServiceProviderTest extends TestCase
+final class EventSourcingServiceProviderTest extends TestCase
 {
     /** @test */
     public function it_will_automatically_register_event_handlers_from_the_config_file()
     {
-        config()->set('event-projector.projectors', [BalanceProjector::class]);
-        config()->set('event-projector.reactors', [BrokeReactor::class]);
+        config()->set('event-sourcing.projectors', [BalanceProjector::class]);
+        config()->set('event-sourcing.reactors', [BrokeReactor::class]);
 
-        (new EventProjectorServiceProvider($this->app))->register();
+        (new EventSourcingServiceProvider($this->app))->register();
 
         $this->assertCount(1, Projectionist::getProjectors());
         $this->assertCount(1, Projectionist::getReactors());
