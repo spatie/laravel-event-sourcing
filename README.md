@@ -19,8 +19,8 @@ Event sourcing might be a good choice for your project if:
 If you want to skip to reading code immediately, here are some example apps. In each of them, you can create accounts and deposit or withdraw money. 
 
 - [Larabank built traditionally without event sourcing](https://github.com/spatie/larabank-traditional)
-- [Larabank built with projectors](https://github.com/spatie/larabank-event-sourcing)
-- [Larabank built with aggregates and projectors](https://github.com/spatie/larabank-event-sourcing-aggregates)
+- [Larabank built with projectors](https://github.com/spatie/larabank-event-projector)
+- [Larabank built with aggregates and projectors](https://github.com/spatie/larabank-event-projector-aggregates)
 
 ## Documentation
 
