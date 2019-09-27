@@ -24,7 +24,7 @@ If you want to skip to reading code immediately, here are some example apps. In 
 
 ## Documentation
 
-You can find installation instructions and detailed instructions on how to use this package at [the dedicated documentation site](https://docs.spatie.be/laravel-event-sourcing).
+You can find installation instructions and detailed instructions on how to use this package at [the dedicated documentation site](https://docs.spatie.be/laravel-event-sourcing/v1/introduction/).
 
 ## Upgrading from laravel-event-projector
 
