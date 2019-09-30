@@ -14,5 +14,5 @@ After taking a look at [an example of traditional application](/laravel-event-so
 If you want to skip to reading code immediately, here are the Larabank example apps used in this section. In all of them, you can create accounts and deposit or withdraw money.
 
 - [Larabank built traditionally without event sourcing](https://github.com/spatie/larabank-traditional)
-- [Larabank built with projectors](https://github.com/spatie/larabank-projects)
+- [Larabank built with projectors](https://github.com/spatie/larabank-projectors)
 - [Larabank built with aggregates and projectors](https://github.com/spatie/larabank-aggregates)

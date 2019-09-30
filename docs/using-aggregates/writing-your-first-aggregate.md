@@ -28,7 +28,7 @@ final class AccountAggregate extends AggregateRoot
 
 ## Recording events
 
-You can add any methods or variables you need on the aggregate. To get you familiar with event modelling using aggregates let's implement a small piece of [the Larabank example app](https://github.com/spatie/larabank-event-sourcing-aggregates). We are going to add methods to record the [`AccountCreated`](https://github.com/spatie/larabank-event-sourcing-aggregates/blob/master/app/Domain/Account/Events/AccountCreated.php), [`MoneyAdded`](https://github.com/spatie/larabank-event-sourcing-aggregates/blob/master/app/Domain/Account/Events/MoneyAdded.php) and the [`MoneySubtracted`](https://github.com/spatie/larabank-event-sourcing-aggregates/blob/master/app/Domain/Account/Events/MoneySubtracted.php) events.
+You can add any methods or variables you need on the aggregate. To get you familiar with event modelling using aggregates let's implement a small piece of [the Larabank example app](https://github.com/spatie/larabank-aggregates). We are going to add methods to record the [`AccountCreated`](https://github.com/spatie/larabank-aggregates/blob/master/app/Domain/Account/Events/AccountCreated.php), [`MoneyAdded`](https://github.com/spatie/larabank-aggregates/blob/master/app/Domain/Account/Events/MoneyAdded.php) and the [`MoneySubtracted`](https://github.com/spatie/larabank-aggregates/blob/master/app/Domain/Account/Events/MoneySubtracted.php) events.
 
 First, let's add a `createAccount` methods to our aggregate that will record the `AccountCreated` event.
 
@@ -85,7 +85,7 @@ AccountAggregate::retrieve($uuid)
 
 When persisting an aggregate all newly recorded events inside aggregate root will be saved to the database. The newly recorded events will also get passed to all projectors and reactors that listen for them.
 
-In our demo app we retrieve and persist the aggregate [in the `AccountsController`](https://github.com/spatie/larabank-event-sourcing-aggregates/blob/c9f2ff240f4634ee2e241e3087ff60587a176ae0/app/Http/Controllers/AccountsController.php). The package has no opinion on where you should interact with aggregates. Do whatever you wish.
+In our demo app we retrieve and persist the aggregate [in the `AccountsController`](https://github.com/spatie/larabank-aggregates/blob/c9f2ff240f4634ee2e241e3087ff60587a176ae0/app/Http/Controllers/AccountsController.php). The package has no opinion on where you should interact with aggregates. Do whatever you wish.
 
 ## Implementing our first business rule
 
@@ -181,4 +181,4 @@ public function subtractAmount(int $amount)
 
 When the limit is hit three times, we record another event `LoanProposed`. We could set up a reactor that listens for that event and sends the actual mail.
 
-If you want to toy around with this example, clone the [Larabank with aggregates](https://github.com/spatie/larabank-event-sourcing-aggregates) example.
+If you want to toy around with this example, clone the [Larabank with aggregates](https://github.com/spatie/larabank-aggregates) example.
