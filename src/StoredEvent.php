@@ -44,7 +44,9 @@ class StoredEvent implements Arrayable
         try {
             $this->event = app(EventSerializer::class)->deserialize(
                 self::getActualClassForEvent($this->event_class),
-                json_encode($this->event_properties)
+                is_string($this->event_properties)
+                    ? $this->event_properties
+                    : json_encode($this->event_properties)
             );
         } catch (Exception $exception) {
             throw InvalidStoredEvent::couldNotUnserializeEvent($this, $exception);

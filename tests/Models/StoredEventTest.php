@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\Models;
 
+use Spatie\EventSourcing\StoredEvent;
 use Spatie\EventSourcing\Tests\TestCase;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\Models\EloquentStoredEvent;
@@ -78,6 +79,46 @@ final class StoredEventTest extends TestCase
         $this->assertSame('127.0.0.1', $instance->meta_data['ip']);
 
         EloquentStoredEvent::flushEventListeners();
+    }
+
+    /** @test * */
+    public function it_can_handle_an_encoded_string_as_event_properties()
+    {
+        $this->fireEvents();
+
+        $eloquentEvent = EloquentStoredEvent::first();
+
+        $storedEvent = new StoredEvent([
+            'id' => $eloquentEvent->id,
+            'event_properties' => json_encode($eloquentEvent->event_properties),
+            'aggregate_uuid' => $eloquentEvent->aggregate_uuid,
+            'event_class' => $eloquentEvent->event_class,
+            'meta_data' => $eloquentEvent->meta_data,
+            'created_at' => $eloquentEvent->created_at,
+        ]);
+
+        $this->assertEquals(MoneyAddedEvent::class, get_class($storedEvent->event));
+    }
+
+    /** @test * */
+    public function it_encodes_the_event_properties_itself_when_its_an_array()
+    {
+        $this->fireEvents();
+
+        $eloquentEvent = EloquentStoredEvent::first();
+
+        $this->assertIsArray($eloquentEvent->event_properties);
+
+        $storedEvent = new StoredEvent([
+            'id' => $eloquentEvent->id,
+            'event_properties' => $eloquentEvent->event_properties,
+            'aggregate_uuid' => $eloquentEvent->aggregate_uuid,
+            'event_class' => $eloquentEvent->event_class,
+            'meta_data' => $eloquentEvent->meta_data,
+            'created_at' => $eloquentEvent->created_at,
+        ]);
+
+        $this->assertEquals(MoneyAddedEvent::class, get_class($storedEvent->event));
     }
 
     public function fireEvents(int $number = 1, string $className = MoneyAddedEvent::class)

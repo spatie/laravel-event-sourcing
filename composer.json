@@ -21,6 +21,7 @@
         }
     ],
     "require": {
+        "ext-json": "*",
         "php": "^7.3",
         "illuminate/console": "^6.0",
         "illuminate/database": "^6.0",
