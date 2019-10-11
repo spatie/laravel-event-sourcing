@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 1.0.1 - 2019-10-11
+
+- Fix an issue with encoding the `event_properties` when they're already a string
+
 ## 1.0.0 - 2019-09-20
 
 - initial release
