@@ -46,7 +46,7 @@ You can also detect the start and end of event replay by listening for the `Spat
 Though, under normal circumstances, you don't need to know this, you can detect if events are currently being replayed like this:
 
 ```php
-Spatie\EventSourcing\Facades\Projectionist::isReplayingEvents(); // returns a boolean
+Spatie\EventSourcing\Facades\Projectionist::isReplaying(); // returns a boolean
 ```
 
 ## Performing some work before and after replaying events
