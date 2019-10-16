@@ -1,5 +1,5 @@
 ---
-title: Using your own event storage repository
+title: Using your own event storage model
 weight: 6
 ---
 
