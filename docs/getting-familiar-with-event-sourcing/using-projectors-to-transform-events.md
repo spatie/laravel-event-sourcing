@@ -27,7 +27,7 @@ All events get passed to a class we call a projector. The projector transforms t
     <img class="scheme_figure" src="../../images/transform-03.svg">
 </figure>
 
-Imagine that you've already stored some events, and your first projector is doing its job creating that `Accounts` table. The bank directory now wants to know on which accounts the most transactions were performed. No problem, we could create another projector that reads all previous events and acts the `MoneyAdded` and `MoneySubtracted` to make projections.
+Imagine that you've already stored some events, and your first projector is doing its job creating that `Accounts` table. The bank director now wants to know on which accounts the most transactions were performed. No problem, we could create another projector that reads all previous events and adds the `MoneyAdded` and `MoneySubtracted` events to make projections.
 
 <figure class="scheme">
     <img class="scheme_figure" src="../../images/transform-04.svg">
