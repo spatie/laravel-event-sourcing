@@ -35,7 +35,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         });
     }
 
-    public function retrieveAllStartingFrom(int $startingFrom, string $uuid = null): LazyCollection
+    public function retrieveAllStartingFrom($startingFrom, string $uuid = null): LazyCollection
     {
         /** @var \Illuminate\Database\Query\Builder $query */
         $query = $this->storedEventModel::query()->startingFrom($startingFrom);
