@@ -183,3 +183,4 @@ class SendMoneyAddedMail
         // do work to send a mail here
     }
 }
+```
