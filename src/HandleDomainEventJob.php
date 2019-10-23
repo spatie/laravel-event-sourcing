@@ -2,8 +2,6 @@
 
 namespace Spatie\EventSourcing;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-
 interface HandleDomainEventJob
 {
     public function handle(Projectionist $projectionist): void;
