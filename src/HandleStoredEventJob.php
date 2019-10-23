@@ -7,7 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-final class HandleStoredEventJob implements ShouldQueue
+final class HandleStoredEventJob implements HandleDomainEventJob, ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
@@ -36,7 +36,7 @@ final class HandleStoredEventJob implements ShouldQueue
             : $this->tags;
     }
 
-    public static function createForEvent(StoredEvent $event, array $tags): self
+    public static function createForEvent(StoredEvent $event, array $tags): HandleDomainEventJob
     {
         return new static($event, $tags);
     }
