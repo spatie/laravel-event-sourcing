@@ -8,7 +8,7 @@ final class FakeUuid
 
     public static function generate()
     {
-        return 'uuid-'.self::$count++;
+        return '594713b3-0000-4000-b300-'.sprintf('%012d', self::$count++);
     }
 
     public static function reset()
