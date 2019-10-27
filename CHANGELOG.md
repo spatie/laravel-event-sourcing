@@ -2,6 +2,11 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 1.0.2 - 2019-10-27
+
+- Implemented missing HandleDomainEventJob interface
+- Use a UUID field when possible for storing UUIDs
+
 ## 1.0.1 - 2019-10-11
 
 - Fix an issue with encoding the `event_properties` when they're already a string
