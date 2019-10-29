@@ -28,7 +28,7 @@ You can find installation instructions and detailed instructions on how to use t
 
 ## Upgrading from laravel-event-projector
 
-This package supercedes [laravel-event-projector](https://github.com/spatie/laravel-event-projector). It has the same API. Upgrading from laravel-event-projector to laravel-event-sourcing is easy. Take a look at [our upgrade guide](https://github.com/spatie/laravel-event-sourcing/edit/master/UPGRADING.md).
+This package supercedes [laravel-event-projector](https://github.com/spatie/laravel-event-projector). It has the same API. Upgrading from laravel-event-projector to laravel-event-sourcing is easy. Take a look at [our upgrade guide](UPGRADING.md).
 
 ## Changelog
 
