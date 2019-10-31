@@ -13,6 +13,10 @@ abstract class AggregateRoot
     /** @var array */
     private $recordedEvents = [];
 
+    /**
+     * @param  string  $uuid
+     * @return static
+     */
     public static function retrieve(string $uuid): AggregateRoot
     {
         $aggregateRoot = (new static());
@@ -22,6 +26,10 @@ abstract class AggregateRoot
         return $aggregateRoot->reconstituteFromEvents();
     }
 
+    /**
+     * @param  ShouldBeStored  $domainEvent
+     * @return static
+     */
     public function recordThat(ShouldBeStored $domainEvent): AggregateRoot
     {
         $this->recordedEvents[] = $domainEvent;
@@ -31,6 +39,9 @@ abstract class AggregateRoot
         return $this;
     }
 
+    /**
+     * @return static
+     */
     public function persist(): AggregateRoot
     {
         $storedEvents = call_user_func(
