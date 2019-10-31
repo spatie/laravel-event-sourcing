@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 1.0.3 - 2019-11-01
+
+- Provide docblocks to AggregateRoot class (#31)
+
 ## 1.0.2 - 2019-10-27
 
 - Implemented missing HandleDomainEventJob interface
