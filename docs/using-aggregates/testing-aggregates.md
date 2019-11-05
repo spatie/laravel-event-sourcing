@@ -105,9 +105,14 @@ If you don't expect any events to be recorded you can use `assertNothingRecorded
 
 ## Disabling dispatching events
 
-When calling the `given` method the aggregate will fire of events for your projector and reactor to react to. If you don't want events being dispatched. Simply [use the `Event` facades's `fake` method](https://laravel.com/docs/master/mocking#event-fake) before your test executed.
+When calling the `given` method the aggregate will fire of events for your projector and reactor to react to. If you don't want events being dispatched. Simply [use the `Event` facade's `fake` method](https://laravel.com/docs/master/mocking#event-fake) before your test executes.
 
 ```php
 \Illuminate\Support\Facades\Event::fake();
 ``` 
 
+If you would prefer to disable Projectors reacting to events whilst retaining `Event` functionality simply use the `Projectionist` facade's `withoutEventHandlers` method before your test executes.
+
+```php
+\Spatie\EventSourcing\Facades\Projectionist::withoutEventHandlers();
+```
