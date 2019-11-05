@@ -111,7 +111,7 @@ When calling the `given` method the aggregate will fire of events for your proje
 \Illuminate\Support\Facades\Event::fake();
 ``` 
 
-If you would prefer to disable Projectors reacting to events whilst retaining `Event` functionality simply use the `Projectionist` facade's `withoutEventHandlers` method before your test exeecutes.
+If you would prefer to disable Projectors reacting to events whilst retaining `Event` functionality simply use the `Projectionist` facade's `withoutEventHandlers` method before your test executes.
 
 ```php
 \Spatie\EventSourcing\Facades\Projectionist::withoutEventHandlers();
