@@ -2,21 +2,21 @@
 
 namespace Spatie\EventSourcing\Tests;
 
-use Mockery;
 use Exception;
-use Illuminate\Support\Facades\Queue;
-use Spatie\EventSourcing\HandleStoredEventJob;
-use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
-use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use Illuminate\Support\Facades\Queue;
+use Mockery;
+use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
+use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\HandleStoredEventJob;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
-use Spatie\EventSourcing\Tests\TestClasses\Projectors\InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
 final class ProjectionistTest extends TestCase
 {

@@ -4,8 +4,8 @@ namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
 use Spatie\EventSourcing\Projectors\Projector;
 use Spatie\EventSourcing\Projectors\ProjectsEvents;
-use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
 final class ResettableProjector implements Projector
 {

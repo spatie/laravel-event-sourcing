@@ -2,11 +2,11 @@
 
 namespace Spatie\EventSourcing;
 
-use SplFileInfo;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
-use Symfony\Component\Finder\Finder;
+use Illuminate\Support\Str;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
+use SplFileInfo;
+use Symfony\Component\Finder\Finder;
 
 final class DiscoverEventHandlers
 {

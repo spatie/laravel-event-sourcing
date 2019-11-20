@@ -4,9 +4,9 @@ namespace Spatie\EventSourcing;
 
 use Carbon\Carbon;
 use Illuminate\Support\LazyCollection;
-use Spatie\EventSourcing\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
+use Spatie\EventSourcing\Models\EloquentStoredEvent;
 
 class EloquentStoredEventRepository implements StoredEventRepository
 {

@@ -3,19 +3,19 @@
 namespace Spatie\EventSourcing\Tests;
 
 use Illuminate\Support\Facades\Mail;
+use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\Models\EloquentStoredEvent;
-use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
-use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
-use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
-use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
-use Spatie\EventSourcing\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
-use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
-use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
-use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
+use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 
 final class AggregateRootTest extends TestCase
 {

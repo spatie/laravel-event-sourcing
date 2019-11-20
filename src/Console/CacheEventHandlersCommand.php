@@ -3,10 +3,10 @@
 namespace Spatie\EventSourcing\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
-use Spatie\EventSourcing\Projectionist;
+use Illuminate\Support\Collection;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
+use Spatie\EventSourcing\Projectionist;
 
 final class CacheEventHandlersCommand extends Command
 {

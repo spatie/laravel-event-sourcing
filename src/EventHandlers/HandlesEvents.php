@@ -3,13 +3,13 @@
 namespace Spatie\EventSourcing\EventHandlers;
 
 use Exception;
+use Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
-use Illuminate\Support\Collection;
-use Spatie\EventSourcing\StoredEvent;
-use Spatie\EventSourcing\ShouldBeStored;
 use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
+use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvent;
 
 trait HandlesEvents
 {

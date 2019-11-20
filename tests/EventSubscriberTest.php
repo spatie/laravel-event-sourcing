@@ -5,19 +5,19 @@ namespace Spatie\EventSourcing\Tests;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
-use Spatie\EventSourcing\HandleStoredEventJob;
 use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\HandleStoredEventJob;
 use Spatie\EventSourcing\Models\EloquentStoredEvent;
-use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
-use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
-use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
-use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventSourcing\Tests\TestClasses\Events\DoNotStoreThisEvent;
-use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
-use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
-use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEventWithQueueOverride;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
+use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatInvokesAnObject;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
 final class EventSubscriberTest extends TestCase
 {

@@ -4,8 +4,8 @@ namespace Spatie\EventSourcing\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Spatie\EventSourcing\Projectionist;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
+use Spatie\EventSourcing\Projectionist;
 
 final class ListCommand extends Command
 {

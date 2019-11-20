@@ -5,8 +5,8 @@ namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 use Spatie\EventSourcing\Projectors\Projector;
 use Spatie\EventSourcing\Projectors\ProjectsEvents;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
-use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEventWithQueueOverride;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 
 class BalanceProjector implements Projector
 {
