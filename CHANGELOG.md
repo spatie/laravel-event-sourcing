@@ -2,18 +2,22 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 1.0.4 - 2019-11-20
+
+- fix replay from specified event id (#33)
+
 ## 1.0.3 - 2019-11-01
 
-- Provide docblocks to AggregateRoot class (#31)
+- provide docblocks to AggregateRoot class (#31)
 
 ## 1.0.2 - 2019-10-27
 
-- Implemented missing HandleDomainEventJob interface
-- Use a UUID field when possible for storing UUIDs
+- implemented missing HandleDomainEventJob interface
+- use a UUID field when possible for storing UUIDs
 
 ## 1.0.1 - 2019-10-11
 
-- Fix an issue with encoding the `event_properties` when they're already a string
+- fix an issue with encoding the `event_properties` when they're already a string
 
 ## 1.0.0 - 2019-09-20
 
