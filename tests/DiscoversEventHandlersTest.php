@@ -3,15 +3,15 @@
 namespace Spatie\EventSourcing\Tests;
 
 use Spatie\EventSourcing\Composer;
-use Spatie\EventSourcing\Projectionist;
 use Spatie\EventSourcing\DiscoverEventHandlers;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
-use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestReactor;
-use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestProjector;
-use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestQueuedProjector;
-use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestReactorInSubdirectory;
+use Spatie\EventSourcing\Projectionist;
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestProjectorInSubdirectory;
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestQueuedProjectorInSubdirectory;
+use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestReactorInSubdirectory;
+use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestProjector;
+use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestQueuedProjector;
+use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestReactor;
 
 final class DiscoversEventHandlersTest extends TestCase
 {

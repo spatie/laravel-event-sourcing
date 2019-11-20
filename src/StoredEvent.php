@@ -3,11 +3,11 @@
 namespace Spatie\EventSourcing;
 
 use Exception;
-use Illuminate\Support\Arr;
 use Illuminate\Contracts\Support\Arrayable;
-use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
+use Illuminate\Support\Arr;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
+use Spatie\EventSourcing\Facades\Projectionist;
 
 class StoredEvent implements Arrayable
 {

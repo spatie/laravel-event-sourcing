@@ -5,14 +5,14 @@ namespace Spatie\EventSourcing;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Spatie\EventSourcing\Projectors\Projector;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
-use Spatie\EventSourcing\Events\FinishedEventReplay;
-use Spatie\EventSourcing\Events\StartingEventReplay;
-use Spatie\EventSourcing\Projectors\QueuedProjector;
-use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
 use Spatie\EventSourcing\EventHandlers\EventHandlerCollection;
 use Spatie\EventSourcing\Events\EventHandlerFailedHandlingEvent;
+use Spatie\EventSourcing\Events\FinishedEventReplay;
+use Spatie\EventSourcing\Events\StartingEventReplay;
+use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
+use Spatie\EventSourcing\Projectors\Projector;
+use Spatie\EventSourcing\Projectors\QueuedProjector;
 
 final class Projectionist
 {

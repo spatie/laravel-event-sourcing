@@ -5,8 +5,8 @@ namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors;
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\EventHandlers\HandlesEvents;
-use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 
 final class SendMailReactor implements EventHandler
 {

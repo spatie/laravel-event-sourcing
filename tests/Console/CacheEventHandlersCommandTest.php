@@ -2,11 +2,11 @@
 
 namespace Spatie\EventSourcing\Tests\Console;
 
-use Spatie\Snapshots\MatchesSnapshots;
 use Spatie\EventSourcing\Projectionist;
 use Spatie\EventSourcing\Tests\TestCase;
-use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\Snapshots\MatchesSnapshots;
 
 final class CacheEventHandlersCommandTest extends TestCase
 {

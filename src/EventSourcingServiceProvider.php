@@ -4,15 +4,15 @@ namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Spatie\EventSourcing\Console\ListCommand;
-use Spatie\EventSourcing\Console\ReplayCommand;
-use Spatie\EventSourcing\Console\MakeReactorCommand;
-use Spatie\EventSourcing\Console\MakeAggregateCommand;
-use Spatie\EventSourcing\Console\MakeProjectorCommand;
-use Spatie\EventSourcing\Console\MakeStorableEventCommand;
-use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Console\CacheEventHandlersCommand;
 use Spatie\EventSourcing\Console\ClearCachedEventHandlersCommand;
+use Spatie\EventSourcing\Console\ListCommand;
+use Spatie\EventSourcing\Console\MakeAggregateCommand;
+use Spatie\EventSourcing\Console\MakeProjectorCommand;
+use Spatie\EventSourcing\Console\MakeReactorCommand;
+use Spatie\EventSourcing\Console\MakeStorableEventCommand;
+use Spatie\EventSourcing\Console\ReplayCommand;
+use Spatie\EventSourcing\EventSerializers\EventSerializer;
 
 final class EventSourcingServiceProvider extends ServiceProvider
 {

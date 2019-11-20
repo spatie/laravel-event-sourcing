@@ -5,8 +5,8 @@ namespace Spatie\EventSourcing\Tests\TestClasses\Reactors;
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\EventHandlers\HandlesEvents;
-use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
 
 final class BrokeReactor implements EventHandler
 {

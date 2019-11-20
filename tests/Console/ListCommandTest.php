@@ -2,12 +2,12 @@
 
 namespace Spatie\EventSourcing\Tests\Console;
 
-use Spatie\EventSourcing\Tests\TestCase;
 use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\EventSourcing\Tests\TestCase;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
-use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
 final class ListCommandTest extends TestCase
 {

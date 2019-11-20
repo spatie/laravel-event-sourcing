@@ -3,13 +3,13 @@
 namespace Spatie\EventSourcing\Tests;
 
 use Exception;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 use Spatie\EventSourcing\EventSourcingServiceProvider;
+use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 
 abstract class TestCase extends Orchestra
 {
