@@ -263,7 +263,7 @@ final class Projectionist
 
         $projectors->call('onStartingEventReplay');
 
-        app(StoredEventRepository::class)->retrieveAll(null, $startingFromEventId ?? 0)->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
+        app(StoredEventRepository::class)->retrieveAllStartingFrom($startingFromEventId)->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
             $this->applyStoredEventToProjectors(
                 $storedEvent,
                 $projectors->forEvent($storedEvent)
