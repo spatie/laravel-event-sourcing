@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 2.0.0 - 2019-12-02
+
+- drop PHP 7.3
+
 ## 1.0.4 - 2019-11-20
 
 - fix replay from specified event id (#33)

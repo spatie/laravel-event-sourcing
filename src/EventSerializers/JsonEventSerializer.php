@@ -9,7 +9,6 @@ use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 
 final class JsonEventSerializer implements EventSerializer
 {
-    /** @var \Symfony\Component\Serializer\Serializer */
     private SymfonySerializer $serializer;
 
     public function __construct()

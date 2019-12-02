@@ -13,23 +13,19 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class StoredEvent implements Arrayable
 {
-    /** @var int|null */
     public ?int $id;
 
     /** @var array|string */
     public $event_properties;
 
-    /** @var string */
     public string $aggregate_uuid;
 
-    /** @var string */
     public string $event_class;
 
     public SchemalessAttributes $meta_data;
 
     public string $created_at;
 
-    /** @var \Spatie\EventSourcing\ShouldBeStored|null */
     public ?ShouldBeStored $event;
 
     public function __construct(array $data)

@@ -7,7 +7,6 @@ use Spatie\EventSourcing\StoredEvent;
 
 final class EventHandlerCollection
 {
-    /** @var \Illuminate\Support\Collection */
     private Collection $eventHandlers;
 
     public function __construct($eventHandlers = [])

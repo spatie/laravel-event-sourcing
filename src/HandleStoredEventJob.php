@@ -11,10 +11,8 @@ final class HandleStoredEventJob implements HandleDomainEventJob, ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
-    /** @var \Spatie\EventSourcing\StoredEvent */
     public StoredEvent $storedEvent;
 
-    /** @var array */
     public array $tags;
 
     public function __construct(StoredEvent $storedEvent, array $tags)
