@@ -12,8 +12,7 @@ final class CacheEventHandlersCommandTest extends TestCase
 {
     use MatchesSnapshots;
 
-    /** @var \Spatie\EventSourcing\Projectionist */
-    private $projectionist;
+    private Projectionist $projectionist;
 
     public function setUp(): void
     {

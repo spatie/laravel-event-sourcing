@@ -10,8 +10,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
 final class EventSerializerTest extends TestCase
 {
-    /** @var \Spatie\EventSourcing\EventSerializers\EventSerializer */
-    protected $eventSerializer;
+    protected EventSerializer $eventSerializer;
 
     public function setUp(): void
     {

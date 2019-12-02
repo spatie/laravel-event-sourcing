@@ -9,8 +9,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
 final class ClearEventHandlersCommandTest extends TestCase
 {
-    /** @var \Spatie\EventSourcing\Projectionist */
-    private $projectionist;
+    private Projectionist $projectionist;
 
     public function setUp(): void
     {
