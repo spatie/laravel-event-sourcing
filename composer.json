@@ -22,7 +22,7 @@
     ],
     "require": {
         "ext-json": "*",
-        "php": "^7.3",
+        "php": "^7.4",
         "illuminate/console": "^6.0",
         "illuminate/database": "^6.0",
         "illuminate/events": "^6.0",
@@ -36,7 +36,7 @@
     "require-dev": {
         "mockery/mockery": "^1.1",
         "orchestra/testbench": "^4.0",
-        "phpunit/phpunit": "^8.0",
+        "phpunit/phpunit": "^8.4",
         "spatie/phpunit-snapshot-assertions": "^2.1"
     },
     "autoload": {
