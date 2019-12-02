@@ -20,9 +20,7 @@ final class CacheEventHandlersCommand extends Command
 
         $projectionist->getProjectors()
             ->merge($projectionist->getReactors())
-            ->map(function (EventHandler $eventHandler) {
-                return get_class($eventHandler);
-            })
+            ->map(fn(EventHandler $eventHandler) => get_class($eventHandler))
             ->pipe(function (Collection $eventHandlerClasses) use ($files) {
                 $cachePath = config('event-sourcing.cache_path');
 

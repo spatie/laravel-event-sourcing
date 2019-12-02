@@ -10,13 +10,13 @@ use Symfony\Component\Finder\Finder;
 
 final class DiscoverEventHandlers
 {
-    private $directories = [];
+    private array $directories = [];
 
-    private $basePath = '';
+    private string $basePath = '';
 
-    private $rootNamespace = '';
+    private string $rootNamespace = '';
 
-    private $ignoredFiles = [];
+    private array $ignoredFiles = [];
 
     public function __construct()
     {
@@ -60,15 +60,9 @@ final class DiscoverEventHandlers
         $files = (new Finder())->files()->in($this->directories);
 
         return collect($files)
-            ->reject(function (SplFileInfo $file) {
-                return in_array($file->getPathname(), $this->ignoredFiles);
-            })
-            ->map(function (SplFileInfo $file) {
-                return $this->fullQualifiedClassNameFromFile($file);
-            })
-            ->filter(function (string $eventHandlerClass) {
-                return is_subclass_of($eventHandlerClass, EventHandler::class);
-            })
+            ->reject(fn(SplFileInfo $file) => in_array($file->getPathname(), $this->ignoredFiles))
+            ->map(fn(SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
+            ->filter(fn(string $eventHandlerClass) => is_subclass_of($eventHandlerClass, EventHandler::class))
             ->pipe(function (Collection $eventHandlers) use ($projectionist) {
                 $projectionist->addEventHandlers($eventHandlers->toArray());
             });

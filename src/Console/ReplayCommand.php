@@ -16,8 +16,7 @@ class ReplayCommand extends Command
 
     protected $description = 'Replay stored events';
 
-    /** @var \Spatie\EventSourcing\Projectionist */
-    protected $projectionist;
+    protected Projectionist $projectionist;
 
     public function __construct(Projectionist $projectionist)
     {
@@ -50,9 +49,7 @@ class ReplayCommand extends Command
         }
 
         return collect($projectorClassNames)
-            ->map(function (string $projectorName) {
-                return ltrim($projectorName, '\\');
-            })
+            ->map(fn(string $projectorName) => ltrim($projectorName, '\\'))
             ->map(function (string $projectorName) {
                 if (! $projector = $this->projectionist->getProjector($projectorName)) {
                     throw new Exception("Projector {$projectorName} not found. Did you register it?");

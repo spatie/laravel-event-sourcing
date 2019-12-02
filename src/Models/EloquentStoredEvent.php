@@ -26,7 +26,7 @@ class EloquentStoredEvent extends Model
         return new StoredEvent([
             'id' => $this->id,
             'event_properties' => $this->event_properties,
-            'aggregate_uuid' => $this->aggregate_uuid,
+            'aggregate_uuid' => $this->aggregate_uuid ?? '',
             'event_class' => $this->event_class,
             'meta_data' => $this->meta_data,
             'created_at' => $this->created_at,

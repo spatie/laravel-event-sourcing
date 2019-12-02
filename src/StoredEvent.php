@@ -2,35 +2,35 @@
 
 namespace Spatie\EventSourcing;
 
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class StoredEvent implements Arrayable
 {
     /** @var int|null */
-    public $id;
+    public ?int $id;
 
-    /** @var string */
+    /** @var array|string */
     public $event_properties;
 
     /** @var string */
-    public $aggregate_uuid;
+    public string $aggregate_uuid;
 
     /** @var string */
-    public $event_class;
+    public string $event_class;
 
-    /** @var array */
-    public $meta_data;
+    public SchemalessAttributes $meta_data;
 
-    /** @var \Carbon\Carbon */
-    public $created_at;
+    public string $created_at;
 
     /** @var \Spatie\EventSourcing\ShouldBeStored|null */
-    public $event;
+    public ?ShouldBeStored $event;
 
     public function __construct(array $data)
     {

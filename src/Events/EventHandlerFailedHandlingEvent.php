@@ -9,13 +9,13 @@ use Spatie\EventSourcing\StoredEvent;
 final class EventHandlerFailedHandlingEvent
 {
     /** @var \Spatie\EventSourcing\EventHandlers\EventHandler */
-    public $eventHandler;
+    public EventHandler $eventHandler;
 
     /** @var \Spatie\EventSourcing\Models\EloquentStoredEvent */
-    public $storedEvent;
+    public StoredEvent $storedEvent;
 
     /** @var \Exception */
-    public $exception;
+    public Exception $exception;
 
     public function __construct(EventHandler $eventHandler, StoredEvent $storedEvent, Exception $exception)
     {

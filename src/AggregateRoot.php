@@ -8,10 +8,10 @@ use Illuminate\Support\Str;
 abstract class AggregateRoot
 {
     /** @var string */
-    private $aggregateUuid;
+    private string $aggregateUuid;
 
     /** @var array */
-    private $recordedEvents = [];
+    private array $recordedEvents = [];
 
     /**
      * @param  string  $uuid
@@ -47,7 +47,7 @@ abstract class AggregateRoot
         $storedEvents = call_user_func(
             [$this->getStoredEventRepository(), 'persistMany'],
             $this->getAndClearRecordedEvents(),
-            $this->aggregateUuid
+            $this->aggregateUuid ?? ''
         );
 
         $storedEvents->each(function (StoredEvent $storedEvent) {

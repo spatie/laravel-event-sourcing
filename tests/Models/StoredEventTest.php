@@ -91,7 +91,7 @@ final class StoredEventTest extends TestCase
         $storedEvent = new StoredEvent([
             'id' => $eloquentEvent->id,
             'event_properties' => json_encode($eloquentEvent->event_properties),
-            'aggregate_uuid' => $eloquentEvent->aggregate_uuid,
+            'aggregate_uuid' => $eloquentEvent->aggregate_uuid ?? '',
             'event_class' => $eloquentEvent->event_class,
             'meta_data' => $eloquentEvent->meta_data,
             'created_at' => $eloquentEvent->created_at,
@@ -112,7 +112,7 @@ final class StoredEventTest extends TestCase
         $storedEvent = new StoredEvent([
             'id' => $eloquentEvent->id,
             'event_properties' => $eloquentEvent->event_properties,
-            'aggregate_uuid' => $eloquentEvent->aggregate_uuid,
+            'aggregate_uuid' => $eloquentEvent->aggregate_uuid ?? '',
             'event_class' => $eloquentEvent->event_class,
             'meta_data' => $eloquentEvent->meta_data,
             'created_at' => $eloquentEvent->created_at,

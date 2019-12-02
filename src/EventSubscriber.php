@@ -5,7 +5,7 @@ namespace Spatie\EventSourcing;
 final class EventSubscriber
 {
     /** @var \Spatie\EventSourcing\StoredEventRepository */
-    private $repository;
+    private StoredEventRepository $repository;
 
     public function __construct(string $storedEventRepository)
     {
