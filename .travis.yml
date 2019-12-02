@@ -6,13 +6,13 @@ services:
 matrix:
     fast_finish: true
     include:
-        - php: 7.3
+        - php: 7.4
           env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest' DB_CONNECTION='mysql' DB_PORT='3306' DB_USERNAME='username' DB_PASSWORD='password'
-        - php: 7.3
+        - php: 7.4
           env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest' DB_CONNECTION='pgsql' DB_PORT='5432' DB_USERNAME='username' DB_PASSWORD='password'
-        - php: 7.3
+        - php: 7.4snapshot
           env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable' DB_CONNECTION='mysql' DB_PORT='3306' DB_USERNAME='username' DB_PASSWORD='password'
-        - php: 7.3
+        - php: 7.4snapshot
           env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable' DB_CONNECTION='pgsql' DB_PORT='5432' DB_USERNAME='username' DB_PASSWORD='password'
 
 sudo: false
