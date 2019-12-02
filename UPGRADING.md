@@ -1,5 +1,9 @@
 # Upgrading
 
+## From v1 to v2
+
+Nothing changed, expect that where possible property types and short closures are used
+
 ## From laravel-event-projector v3 to v1 of laravel-event-sourcing
 
 The only change in this version is the naming change from `laravel-event-projector` to `laravel-event-sourcing`. There are no changes to the API.
