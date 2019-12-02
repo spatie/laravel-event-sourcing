@@ -19,8 +19,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 
 final class AggregateRootTest extends TestCase
 {
-    /** @var string */
-    private $aggregateUuid;
+    private string $aggregateUuid;
 
     public function setUp(): void
     {

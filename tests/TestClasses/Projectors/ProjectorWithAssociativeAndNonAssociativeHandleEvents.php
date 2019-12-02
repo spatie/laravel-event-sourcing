@@ -11,7 +11,7 @@ final class ProjectorWithAssociativeAndNonAssociativeHandleEvents implements Pro
 {
     use ProjectsEvents;
 
-    protected $handlesEvents = [
+    protected array $handlesEvents = [
         MoneyAddedEvent::class,
         MoneySubtractedEvent::class => 'onMoneySubtracted',
     ];

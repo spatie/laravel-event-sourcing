@@ -10,7 +10,7 @@ final class InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod implement
 {
     use ProjectsEvents;
 
-    protected $handlesEvents = [
+    protected array $handlesEvents = [
         MoneyAddedEvent::class => 'hahaThisMethodDoesNotExist',
     ];
 }

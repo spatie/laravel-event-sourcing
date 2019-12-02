@@ -7,8 +7,7 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEv
 
 class DummyAggregateRoot extends AggregateRoot
 {
-    /** @var int */
-    private $latestInteger = 0;
+    private int $latestInteger = 0;
 
     public function dummy()
     {

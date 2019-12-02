@@ -10,7 +10,7 @@ final class MoneyAddedCountProjector implements Projector
 {
     use ProjectsEvents;
 
-    protected $handlesEvents = [
+    protected array $handlesEvents = [
         MoneyAddedEvent::class => 'onMoneyAdded',
     ];
 

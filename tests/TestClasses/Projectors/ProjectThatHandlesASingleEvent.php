@@ -10,7 +10,7 @@ final class ProjectThatHandlesASingleEvent implements Projector
 {
     use ProjectsEvents;
 
-    public $handleEvent = MoneyAddedEvent::class;
+    public string $handleEvent = MoneyAddedEvent::class;
 
     public function __invoke(MoneyAddedEvent $event)
     {

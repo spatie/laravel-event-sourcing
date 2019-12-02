@@ -12,7 +12,7 @@ final class BrokeReactor implements EventHandler
 {
     use HandlesEvents;
 
-    protected $handlesEvents = [
+    protected array $handlesEvents = [
         MoneySubtractedEvent::class => 'onMoneySubtracted',
     ];
 

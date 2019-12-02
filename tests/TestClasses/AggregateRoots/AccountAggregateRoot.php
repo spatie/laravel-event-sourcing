@@ -8,7 +8,7 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyMu
 
 final class AccountAggregateRoot extends AggregateRoot
 {
-    public $balance = 0;
+    public int $balance = 0;
 
     public function addMoney(int $amount): self
     {

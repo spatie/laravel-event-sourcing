@@ -10,11 +10,9 @@ final class MoneySubtractedEvent implements ShouldBeStored
 {
     use SerializesModels;
 
-    /** @var \Spatie\EventSourcing\Tests\TestClasses\Models\Account */
-    public $account;
+    public object $account;
 
-    /** @var int */
-    public $amount;
+    public int $amount;
 
     public function __construct(Account $account, int $amount)
     {

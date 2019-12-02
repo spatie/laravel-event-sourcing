@@ -11,7 +11,7 @@ final class AccountProjector implements Projector
 {
     use ProjectsEvents;
 
-    protected $handlesEvents = [
+    protected array $handlesEvents = [
         MoneyAdded::class => 'onMoneyAdded',
     ];
 

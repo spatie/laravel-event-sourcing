@@ -9,8 +9,6 @@ final class AccountFactory
 {
     public static function create(int $amount = 1): Collection
     {
-        return collect(range(1, $amount))->map(function () {
-            return new Account();
-        });
+        return collect(range(1, $amount))->map(fn() => new Account());
     }
 }
