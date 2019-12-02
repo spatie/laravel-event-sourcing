@@ -107,7 +107,7 @@ class AccountBalanceProjector implements Projector
     /*
      * Here you can specify which event should trigger which method.
      */
-    protected $handlesEvents = [
+    protected array $handlesEvents = [
         MoneyAdded::class => 'onMoneyAdded',
     ];
 
@@ -129,7 +129,7 @@ Instead of letting a method on a projector handle an event you can use a dedicat
 
 // ...
 
-protected $handlesEvents = [
+protected array $handlesEvents = [
     /*
      * If this event is passed to the projector, the `AddMoneyToAccount` class will be called.
      */
@@ -160,7 +160,7 @@ In the example above the events are mapped to methods on the projector using the
 
 // ...
 
-protected $handlesEvents = [
+protected array $handlesEvents = [
     MoneyAdded::class => 'onMoneyAdded',
 ];
 ```
@@ -172,7 +172,7 @@ You can write this a little shorter. Just put the class name of an event in that
 
 // ...
 
-protected $handlesEvents = [
+protected array $handlesEvents = [
     /*
      * If this event is passed to the projector, the `onMoneyAdded` method will be called.
      */

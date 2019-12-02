@@ -50,7 +50,7 @@ class MetaDataProjector implements Projector
     /*
      * Here you can specify which event should trigger which method.
      */
-    public $handlesEvents = [
+    public array $handlesEvents = [
         MoneyAdded::class => 'onMoneyAdded',
     ];
 

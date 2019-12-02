@@ -95,7 +95,7 @@ class BigAmountAddedReactor
     /*
      * Here you can specify which event should trigger which method.
      */
-    protected $handlesEvents = [
+    protected array $handlesEvents = [
         MoneyAdded::class => 'onMoneyAdded',
 
     ];
@@ -118,7 +118,7 @@ In the example above the events are mapped to methods on the reactor using the `
 
 // ...
 
-protected $handlesEvents = [
+protected array $handlesEvents = [
     MoneyAdded::class => 'onMoneyAdded',
 ];
 ```
@@ -130,7 +130,7 @@ You can write this a little shorter. Just put the class name of an event in that
 
 // ...
 
-protected $handlesEvents = [
+protected array $handlesEvents = [
     /*
      * If this event is passed to the reactor, the `onMoneyAdded` method will be called.
      */ 
@@ -163,7 +163,7 @@ Instead of letting a method on a reactor handle an event you can use a dedicated
 
 // ...
 
-protected $handlesEvents = [
+protected array $handlesEvents = [
     /*
      * If this event is passed to the projector, the `AddMoneyToAccount` class will be called.
      */ 
