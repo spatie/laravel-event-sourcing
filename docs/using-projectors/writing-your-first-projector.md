@@ -49,10 +49,6 @@ class Account extends Model
 {
     protected $guarded = [];
 
-    protected $casts = [
-        'broke_mail_send' => 'bool',
-    ];
-
     public static function createWithAttributes(array $attributes): Account
     {
         /*
