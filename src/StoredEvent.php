@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSourcing;
 
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
@@ -72,7 +71,7 @@ class StoredEvent implements Arrayable
         $hasAsyncProjectors = count(Projectionist::getAsyncProjectorsFor($this)) > 0;
         $hasReactors = count(Projectionist::getReactorsFor($this)) > 0;
 
-        if (! $hasAsyncProjectors  && ! $hasReactors) {
+        if (! $hasAsyncProjectors && ! $hasReactors) {
             return;
         }
 
