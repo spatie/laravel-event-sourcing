@@ -69,14 +69,10 @@ class StoredEvent implements Arrayable
             $tags = $this->event->tags();
         }
 
-        $hasAsyncProjectors = Projectionist::getProjectors()
-            ->forEvent($this)
-            ->reject(fn(Projector $projector) => $projector->shouldBeCalledImmediately())
-            ->count() > 0;
+        $hasAsyncProjectors = Projectionist::getAsyncProjectorsFor($this)->count() > 0;
+        $hasReactors = Projectionist::getReactorsFor($this)->count() > 0;
 
-        $hasReactors = Projectionist::getReactors()->forEvent($this)->count() > 0;
-
-        if (! $hasAsyncProjectors && ! $hasReactors) {
+        if (! $hasAsyncProjectors  && ! $hasReactors) {
             return;
         }
 
