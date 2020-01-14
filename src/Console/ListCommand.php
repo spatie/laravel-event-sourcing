@@ -41,7 +41,7 @@ final class ListCommand extends Command
                 return $events;
             }, []);
 
-        return collect($events)->map(fn(array $eventHandlers, string $eventClass) => [$eventClass, implode(PHP_EOL, collect($eventHandlers)->sort()->toArray())])
+        return collect($events)->map(fn (array $eventHandlers, string $eventClass) => [$eventClass, implode(PHP_EOL, collect($eventHandlers)->sort()->toArray())])
             ->sort()
             ->values()
             ->toArray();

@@ -30,7 +30,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             $query->uuid($uuid);
         }
 
-        return $query->orderBy('id')->cursor()->map(fn(EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+        return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
     public function retrieveAllStartingFrom(int $startingFrom, string $uuid = null): LazyCollection
@@ -42,7 +42,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             $query->uuid($uuid);
         }
 
-        return $query->orderBy('id')->cursor()->map(fn(EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+        return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
     public function persist(ShouldBeStored $event, string $uuid = null): StoredEvent

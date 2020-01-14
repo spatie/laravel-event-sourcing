@@ -21,6 +21,6 @@ final class Composer
             $composerContents['autoload-dev']['files'] ?? []
         );
 
-        return array_map(fn(string $path) => realpath($basePath.$path), $paths);
+        return array_map(fn (string $path) => realpath($basePath.$path), $paths);
     }
 }
