@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSourcing;
 
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
