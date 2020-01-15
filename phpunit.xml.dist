@@ -20,9 +20,11 @@
         </whitelist>
     </filter>
     <php>
+        <env name="DB_CONNECTION" value="mysql"/>
         <env name="DB_USERNAME" value="root"/>
         <env name="DB_PASSWORD" value=""/>
-        <env name="DB_DATABASE" value="laravel_event_projector"/>
-        <env name="DB_CONNECTION" value="mysql"/>
+        <env name="DB_DATABASE" value="laravel_event_sourcing"/>
+        <env name="DB_HOST" value="127.0.0.1" />
+        <env name="DB_PORT" value="3306" />
     </php>
 </phpunit>
