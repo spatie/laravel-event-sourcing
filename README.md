@@ -1,7 +1,7 @@
 # Event sourcing for Artisans 📽
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-event-sourcing.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-sourcing)
-[![Build Status](https://img.shields.io/travis/spatie/laravel-event-sourcing/master.svg?style=flat-square)](https://travis-ci.org/spatie/laravel-event-sourcing)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/spatie/laravel-event-sourcing/run-tests?label=tests)
 [![StyleCI](https://github.styleci.io/repos/209727464/shield?branch=master)](https://github.styleci.io/repos/209727464)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-event-sourcing.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-event-sourcing)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-event-sourcing.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-sourcing)
