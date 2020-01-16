@@ -6,7 +6,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionProperty;
-use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 abstract class AggregateRoot
 {
