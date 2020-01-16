@@ -141,7 +141,7 @@ abstract class AggregateRoot
             $this->$applyingMethodName($event);
         }
 
-        ++$this->aggregateVersion;
+        $this->aggregateVersion++;
     }
 
     /**
