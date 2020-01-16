@@ -41,8 +41,6 @@ jobs:
 
             - name: Create database
               run: mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_event_sourcing;'
-              env:
-                  DB_PASSWORD: root
 
             - name: Install dependencies
               run: |
