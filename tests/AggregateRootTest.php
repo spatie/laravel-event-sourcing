@@ -5,6 +5,7 @@ namespace Spatie\EventSourcing\Tests;
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\Models\EloquentSnapshot;
 use Spatie\EventSourcing\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
@@ -118,6 +119,83 @@ final class AggregateRootTest extends TestCase
         $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
         $this->assertEquals(300, $aggregateRoot->balance);
+    }
+
+    /** @test */
+    public function when_applying_events_it_increases_the_version_number()
+    {
+        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $aggregateRoot
+            ->addMoney(100)
+            ->addMoney(100)
+            ->addMoney(100);
+
+        $this->assertEquals(3, $aggregateRoot->aggregateVersion);
+    }
+
+    /** @test */
+    public function snapshotting_stores_public_properties_and_version_number()
+    {
+        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $aggregateRoot
+            ->addMoney(100)
+            ->addMoney(100)
+            ->addMoney(100);
+
+        $this->assertEquals(0, EloquentSnapshot::count());
+
+        $aggregateRoot->snapshot();
+
+        $this->assertEquals(1, EloquentSnapshot::count());
+        tap(EloquentSnapshot::first(), function (EloquentSnapshot $snapshot) {
+            $this->assertEquals(300, $snapshot->state->balance);
+            $this->assertEquals(3, $snapshot->aggregate_version);
+        });
+    }
+
+    /** @test */
+    public function restoring_an_aggregate_root_with_a_snapshot_restores_public_properties()
+    {
+        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $aggregateRoot
+            ->addMoney(100)
+            ->addMoney(100)
+            ->addMoney(100);
+
+        $aggregateRoot->snapshot();
+
+        $aggregateRootRetrieved = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $this->assertEquals(3, $aggregateRootRetrieved->aggregateVersion);
+        $this->assertEquals(300, $aggregateRootRetrieved->balance);
+    }
+
+    /** @test */
+    public function events_saved_after_the_snapshot_are_reconstituted()
+    {
+        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $aggregateRoot
+            ->addMoney(100)
+            ->addMoney(100)
+            ->addMoney(100)
+            ->persist();
+
+        $aggregateRoot->snapshot();
+
+        $aggregateRoot->addMoney(100)->persist();
+
+        $aggregateRootRetrieved = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $this->assertEquals(4, $aggregateRootRetrieved->aggregateVersion);
+        $this->assertEquals(400, $aggregateRootRetrieved->balance);
     }
 
     /** @test */

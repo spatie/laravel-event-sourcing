@@ -48,6 +48,10 @@ abstract class TestCase extends Orchestra
         include_once __DIR__.'/../stubs/create_stored_events_table.php.stub';
         (new \CreateStoredEventsTable())->up();
 
+        Schema::dropIfExists('snapshots');
+        include_once __DIR__.'/../stubs/create_snapshots_table.php.stub';
+        (new \CreateSnapshotsTable())->up();
+
         Schema::dropIfExists('other_stored_events');
         if ($this->dbDriver() === 'mysql') {
             DB::statement('CREATE TABLE other_stored_events LIKE stored_events');
