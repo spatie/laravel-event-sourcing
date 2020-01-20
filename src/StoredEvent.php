@@ -68,6 +68,13 @@ class StoredEvent implements Arrayable
             $tags = $this->event->tags();
         }
 
+        $hasAsyncProjectors = count(Projectionist::getAsyncProjectorsFor($this)) > 0;
+        $hasReactors = count(Projectionist::getReactorsFor($this)) > 0;
+
+        if (! $hasAsyncProjectors && ! $hasReactors) {
+            return;
+        }
+
         $storedEventJob = call_user_func(
             [config('event-sourcing.stored_event_job'), 'createForEvent'],
             $this,
