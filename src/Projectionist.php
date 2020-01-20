@@ -94,12 +94,12 @@ final class Projectionist
         return $this->projectors->all()->first(fn (Projector $projector) => $projector->getName() === $name);
     }
 
-    public function getAsyncProjectorsFor(StoredEvent $storedEvent)
+    public function getAsyncProjectorsFor(StoredEvent $storedEvent): Collection
     {
         return $this->projectors
             ->forEvent($storedEvent)
             ->reject(fn (Projector $projector) => $projector->shouldBeCalledImmediately())
-            ->all();
+            ->values();
     }
 
     public function addReactor($reactor): Projectionist
@@ -131,9 +131,9 @@ final class Projectionist
         return $this->reactors->all();
     }
 
-    public function getReactorsFor(StoredEvent $storedEvent)
+    public function getReactorsFor(StoredEvent $storedEvent): Collection
     {
-        return $this->reactors->forEvent($storedEvent)->all();
+        return $this->reactors->forEvent($storedEvent)->values();
     }
 
     public function addEventHandler($eventHandlerClass)
