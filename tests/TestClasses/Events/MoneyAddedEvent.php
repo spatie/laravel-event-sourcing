@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\Events;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\SerializesModels;
 use Spatie\EventSourcing\ShouldBeStored;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;

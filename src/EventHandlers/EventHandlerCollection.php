@@ -30,19 +30,19 @@ final class EventHandlerCollection
 
     public function forEvent(StoredEvent $storedEvent): Collection
     {
-        return $this->eventHandlers->filter(fn(EventHandler $eventHandler) => in_array($storedEvent->event_class, $eventHandler->handles(), true));
+        return $this->eventHandlers->filter(fn (EventHandler $eventHandler) => in_array($storedEvent->event_class, $eventHandler->handles(), true));
     }
 
     public function call(string $method)
     {
         $this->eventHandlers
-            ->filter(fn(EventHandler $eventHandler) => method_exists($eventHandler, $method))
-            ->each(fn(EventHandler $eventHandler) => app()->call([$eventHandler, $method]));
+            ->filter(fn (EventHandler $eventHandler) => method_exists($eventHandler, $method))
+            ->each(fn (EventHandler $eventHandler) => app()->call([$eventHandler, $method]));
     }
 
     public function remove(array $eventHandlerClassNames): void
     {
         $this->eventHandlers = $this->eventHandlers
-            ->reject(fn(EventHandler $eventHandler) => in_array(get_class($eventHandler), $eventHandlerClassNames));
+            ->reject(fn (EventHandler $eventHandler) => in_array(get_class($eventHandler), $eventHandlerClassNames));
     }
 }
