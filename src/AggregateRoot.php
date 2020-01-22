@@ -113,19 +113,12 @@ abstract class AggregateRoot
     private function reconstituteFromEvents(): AggregateRoot
     {
         $storedEventRepository = $this->getStoredEventRepository();
+        $snapshot = $this->getSnapshotRepository()->retrieve($this->aggregateUuid);
 
-        if (! $snapshot = $this->getSnapshotRepository()->retrieve($this->aggregateUuid)) {
-            $storedEventRepository->retrieveAll($this->aggregateUuid)
-                ->each(function (StoredEvent $storedEvent) {
-                    $this->apply($storedEvent->event);
-                });
-
-            return $this;
+        if ($snapshot) {
+            $this->aggregateVersion = $snapshot->aggregateVersion;
+            $this->useState($snapshot->state);
         }
-
-        $this->aggregateVersion = $snapshot->aggregateVersion;
-
-        $this->useState($snapshot->state);
 
         $storedEventRepository->retrieveAllAfterVersion($this->aggregateVersion, $this->aggregateUuid)
             ->each(function (StoredEvent $storedEvent) {
