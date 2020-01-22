@@ -4,6 +4,6 @@ namespace DummyNamespace;
 
 use Spatie\EventSourcing\AggregateRoot;
 
-final class DummyClass extends AggregateRoot
+class DummyClass extends AggregateRoot
 {
 }

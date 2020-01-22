@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\Projectionist;
 
-final class CacheEventHandlersCommand extends Command
+class CacheEventHandlersCommand extends Command
 {
     protected $signature = 'event-sourcing:cache-event-handlers';
 

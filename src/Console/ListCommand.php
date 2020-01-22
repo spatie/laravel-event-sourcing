@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\Projectionist;
 
-final class ListCommand extends Command
+class ListCommand extends Command
 {
     protected $signature = 'event-sourcing:list';
 

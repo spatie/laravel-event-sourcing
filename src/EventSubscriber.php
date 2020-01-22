@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing;
 
-final class EventSubscriber
+class EventSubscriber
 {
     private StoredEventRepository $repository;
 

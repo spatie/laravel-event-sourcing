@@ -5,7 +5,7 @@ namespace Spatie\EventSourcing\Console;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
-final class ClearCachedEventHandlersCommand extends Command
+class ClearCachedEventHandlersCommand extends Command
 {
     protected $signature = 'event-sourcing:clear-event-handlers';
 

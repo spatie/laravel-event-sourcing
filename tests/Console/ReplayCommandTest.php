@@ -20,7 +20,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
-final class ReplayCommandTest extends TestCase
+class ReplayCommandTest extends TestCase
 {
     protected Account $account;
 

@@ -6,7 +6,7 @@ use Spatie\EventSourcing\Projectors\Projector;
 use Spatie\EventSourcing\Projectors\ProjectsEvents;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 
-final class MoneyAddedCountProjector implements Projector
+class MoneyAddedCountProjector implements Projector
 {
     use ProjectsEvents;
 

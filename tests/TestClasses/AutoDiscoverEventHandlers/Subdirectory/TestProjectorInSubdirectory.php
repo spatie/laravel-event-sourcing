@@ -5,7 +5,7 @@ namespace Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdi
 use Spatie\EventSourcing\Projectors\Projector;
 use Spatie\EventSourcing\Projectors\ProjectsEvents;
 
-final class TestProjectorInSubdirectory implements Projector
+class TestProjectorInSubdirectory implements Projector
 {
     use ProjectsEvents;
 }

@@ -14,7 +14,7 @@ use Spatie\EventSourcing\Console\MakeStorableEventCommand;
 use Spatie\EventSourcing\Console\ReplayCommand;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 
-final class EventSourcingServiceProvider extends ServiceProvider
+class EventSourcingServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {

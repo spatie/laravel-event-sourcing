@@ -5,7 +5,7 @@ namespace Spatie\EventSourcing\Exceptions;
 use Exception;
 use Spatie\EventSourcing\StoredEvent;
 
-final class InvalidStoredEvent extends Exception
+class InvalidStoredEvent extends Exception
 {
     public static function couldNotUnserializeEvent(StoredEvent $storedEvent, Exception $serializerException): self
     {

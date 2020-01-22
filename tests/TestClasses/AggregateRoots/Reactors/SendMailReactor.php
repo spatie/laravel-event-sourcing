@@ -8,7 +8,7 @@ use Spatie\EventSourcing\EventHandlers\HandlesEvents;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 
-final class SendMailReactor implements EventHandler
+class SendMailReactor implements EventHandler
 {
     use HandlesEvents;
 

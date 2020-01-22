@@ -4,7 +4,7 @@ namespace Spatie\EventSourcing\Console;
 
 use Illuminate\Console\GeneratorCommand;
 
-final class MakeStorableEventCommand extends GeneratorCommand
+class MakeStorableEventCommand extends GeneratorCommand
 {
     protected $name = 'make:storable-event';
 

@@ -7,7 +7,7 @@ use Spatie\EventSourcing\Projectors\ProjectsEvents;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
-final class AccountProjector implements Projector
+class AccountProjector implements Projector
 {
     use ProjectsEvents;
 

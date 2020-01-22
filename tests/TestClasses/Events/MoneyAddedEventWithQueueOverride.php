@@ -6,7 +6,7 @@ use Illuminate\Queue\SerializesModels;
 use Spatie\EventSourcing\ShouldBeStored;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
-final class MoneyAddedEventWithQueueOverride implements ShouldBeStored
+class MoneyAddedEventWithQueueOverride implements ShouldBeStored
 {
     use SerializesModels;
 

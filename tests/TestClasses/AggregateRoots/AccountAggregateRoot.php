@@ -6,7 +6,7 @@ use Spatie\EventSourcing\AggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyMultiplied;
 
-final class AccountAggregateRoot extends AggregateRoot
+class AccountAggregateRoot extends AggregateRoot
 {
     public int $balance = 0;
 

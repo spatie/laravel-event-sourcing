@@ -6,7 +6,7 @@ use Spatie\EventSourcing\AggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\Repositories\OtherEloquentStoredEventRepository;
 
-final class AccountAggregateRootWithStoredEventRepositorySpecified extends AggregateRoot
+class AccountAggregateRootWithStoredEventRepositorySpecified extends AggregateRoot
 {
     public int $balance = 0;
     public string $storedEventRepository = OtherEloquentStoredEventRepository::class;

@@ -8,7 +8,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\Snapshots\MatchesSnapshots;
 
-final class CacheEventHandlersCommandTest extends TestCase
+class CacheEventHandlersCommandTest extends TestCase
 {
     use MatchesSnapshots;
 
