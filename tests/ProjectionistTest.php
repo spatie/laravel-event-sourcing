@@ -16,6 +16,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
 final class ProjectionistTest extends TestCase
@@ -129,7 +130,7 @@ final class ProjectionistTest extends TestCase
     {
         Queue::fake();
 
-        Projectionist::addProjector(MoneyAddedCountProjector::class);
+        Projectionist::addProjector(QueuedProjector::class);
 
         event(new MoneyAddedEvent($this->account, 500));
 

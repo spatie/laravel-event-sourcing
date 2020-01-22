@@ -2,6 +2,7 @@ name: run-tests
 
 on:
     push:
+    pull_request:
     schedule:
         - cron: '0 0 * * *'
 
@@ -22,17 +23,6 @@ jobs:
 
         name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
-        services:
-            mysql:
-                image: mysql:5.7
-                env:
-                    MYSQL_ALLOW_EMPTY_PASSWORD: yes
-                    MYSQL_DATABASE: laravel_event_sourcing
-                ports:
-                    - 3306
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
-
         steps:
             - name: Checkout code
               uses: actions/checkout@v1
@@ -50,6 +40,9 @@ jobs:
                   extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
                   coverage: none
 
+            - name: Create database
+              run: mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_event_sourcing;'
+
             - name: Install dependencies
               run: |
                   composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
@@ -58,7 +51,7 @@ jobs:
             - name: Execute tests
               run: vendor/bin/phpunit
               env:
-                  DB_PORT: ${{ job.services.mysql.ports[3306] }}
+                  DB_PASSWORD: root
 
             - name: Send Slack notification
               uses: 8398a7/action-slack@v2

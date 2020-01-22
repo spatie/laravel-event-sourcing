@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 2.0.1 - 2020-01-20
+
+- do not dispatch job when there is nothing to be performed on queue
+
 ## 2.0.0 - 2019-12-02
 
 - drop PHP 7.3

@@ -147,6 +147,21 @@ final class EventSubscriberTest extends TestCase
     }
 
     /** @test */
+    public function it_calls_sync_projectors_but_does_not_dipatch_job_if_event_has_no_queued_projectors_and_no_reactors()
+    {
+        Bus::fake();
+
+        $projector = new BalanceProjector();
+        Projectionist::addProjector($projector);
+
+        event(new MoneyAddedEvent($this->account, 1234));
+
+        Bus::assertNotDispatched(HandleStoredEventJob::class);
+
+        $this->assertEquals(1234, $this->account->refresh()->amount);
+    }
+
+    /** @test */
     public function event_without_queue_override_will_be_queued_correctly()
     {
         Queue::fake();

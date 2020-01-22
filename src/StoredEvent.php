@@ -5,6 +5,7 @@ namespace Spatie\EventSourcing;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
@@ -68,6 +69,10 @@ class StoredEvent implements Arrayable
             $tags = $this->event->tags();
         }
 
+        if (! $this->shouldDispatchJob()) {
+            return;
+        }
+
         $storedEventJob = call_user_func(
             [config('event-sourcing.stored_event_job'), 'createForEvent'],
             $this,
@@ -75,6 +80,19 @@ class StoredEvent implements Arrayable
         );
 
         dispatch($storedEventJob->onQueue($this->event->queue ?? config('event-sourcing.queue')));
+    }
+
+    protected function shouldDispatchJob(): bool
+    {
+        if (Projectionist::getAsyncProjectorsFor($this)->isNotEmpty()) {
+            return true;
+        }
+
+        if (Projectionist::getReactorsFor($this)->isNotEmpty()) {
+            return true;
+        }
+
+        return false;
     }
 
     protected static function getActualClassForEvent(string $class): string
