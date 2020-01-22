@@ -5,7 +5,6 @@ namespace Spatie\EventSourcing\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EventSourcing\Snapshot;
-use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class EloquentSnapshot extends Model
 {
