@@ -152,7 +152,7 @@ final class AggregateRootTest extends TestCase
 
         $this->assertEquals(1, EloquentSnapshot::count());
         tap(EloquentSnapshot::first(), function (EloquentSnapshot $snapshot) {
-            $this->assertEquals(300, $snapshot->state->balance);
+            $this->assertEquals(300, $snapshot->state['balance']);
             $this->assertEquals(3, $snapshot->aggregate_version);
         });
     }

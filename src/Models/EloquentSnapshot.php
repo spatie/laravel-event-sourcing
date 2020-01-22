@@ -24,11 +24,6 @@ class EloquentSnapshot extends Model
         return new Snapshot($this->aggregate_uuid, $this->aggregate_version, $this->state);
     }
 
-    public function getStateAttribute(): SchemalessAttributes
-    {
-        return SchemalessAttributes::createForModel($this, 'state');
-    }
-
     public function scopeUuid(Builder $query, string $uuid): void
     {
         $query->where('aggregate_uuid', $uuid);

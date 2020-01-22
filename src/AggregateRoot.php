@@ -65,7 +65,7 @@ abstract class AggregateRoot
         return $this->getSnapshotRepository()->persist(new Snapshot(
             $this->aggregateUuid,
             $this->aggregateVersion,
-            $this->state(),
+            $this->getState(),
         ));
     }
 
@@ -84,14 +84,21 @@ abstract class AggregateRoot
         return $this->recordedEvents;
     }
 
-    private function state(): array
+    protected function getState(): array
     {
         $class = new ReflectionClass($this);
 
-        return collect($class->getProperties(ReflectionProperty::IS_PUBLIC))
+        return collect($class->getProperties())
             ->mapWithKeys(function (ReflectionProperty $property) {
                 return [$property->getName() => $this->{$property->getName()}];
             })->toArray();
+    }
+
+    protected function useState(array $state): void
+    {
+        foreach ($state as $key => $value) {
+            $this->$key = $value;
+        }
     }
 
     private function getAndClearRecordedEvents(): array
@@ -117,9 +124,8 @@ abstract class AggregateRoot
         }
 
         $this->aggregateVersion = $snapshot->aggregateVersion;
-        foreach ($snapshot->state as $key => $value) {
-            $this->$key = $value;
-        }
+
+        $this->useState($snapshot->state);
 
         $storedEventRepository->retrieveAllAfterVersion($this->aggregateVersion, $this->aggregateUuid)
             ->each(function (StoredEvent $storedEvent) {

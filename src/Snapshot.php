@@ -8,8 +8,7 @@ class Snapshot
 
     public int $aggregateVersion;
 
-    /** @var mixed */
-    public $state;
+    public array $state;
 
     public function __construct(
         string $aggregateUuid,
