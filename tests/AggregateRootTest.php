@@ -18,7 +18,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 
-final class AggregateRootTest extends TestCase
+class AggregateRootTest extends TestCase
 {
     private string $aggregateUuid;
 

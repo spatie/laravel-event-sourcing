@@ -19,7 +19,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatThrowsAnExcep
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
-final class ProjectionistTest extends TestCase
+class ProjectionistTest extends TestCase
 {
     protected Account $account;
 

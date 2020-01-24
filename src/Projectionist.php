@@ -14,7 +14,7 @@ use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
 use Spatie\EventSourcing\Projectors\Projector;
 use Spatie\EventSourcing\Projectors\QueuedProjector;
 
-final class Projectionist
+class Projectionist
 {
     private EventHandlerCollection $projectors;
 

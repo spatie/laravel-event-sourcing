@@ -2,6 +2,6 @@
 
 namespace Spatie\EventSourcing\Events;
 
-final class FinishedEventReplay
+class FinishedEventReplay
 {
 }

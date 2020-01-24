@@ -4,7 +4,7 @@ namespace Spatie\EventSourcing\Console;
 
 use Illuminate\Console\GeneratorCommand;
 
-final class MakeAggregateCommand extends GeneratorCommand
+class MakeAggregateCommand extends GeneratorCommand
 {
     protected $name = 'make:aggregate';
 

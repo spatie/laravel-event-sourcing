@@ -13,7 +13,7 @@ use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestProject
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestQueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestReactor;
 
-final class DiscoversEventHandlersTest extends TestCase
+class DiscoversEventHandlersTest extends TestCase
 {
     /** @test */
     public function it_can_get_all_classes_that_have_event_handlers()

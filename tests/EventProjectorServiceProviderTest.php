@@ -7,7 +7,7 @@ use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
-final class EventProjectorServiceProviderTest extends TestCase
+class EventProjectorServiceProviderTest extends TestCase
 {
     /** @test */
     public function it_will_automatically_register_event_handlers_from_the_config_file()

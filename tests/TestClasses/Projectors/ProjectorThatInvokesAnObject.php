@@ -6,7 +6,7 @@ use Spatie\EventSourcing\Projectors\Projector;
 use Spatie\EventSourcing\Projectors\ProjectsEvents;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 
-final class AddMoneyToAccount
+class AddMoneyToAccount
 {
     public function __invoke(MoneyAddedEvent $event)
     {
@@ -14,7 +14,7 @@ final class AddMoneyToAccount
     }
 }
 
-final class ProjectorThatInvokesAnObject implements Projector
+class ProjectorThatInvokesAnObject implements Projector
 {
     use ProjectsEvents;
 

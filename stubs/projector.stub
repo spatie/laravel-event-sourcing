@@ -5,7 +5,7 @@ namespace DummyNamespace;
 use Spatie\EventSourcing\Projectors\Projector;
 use Spatie\EventSourcing\Projectors\ProjectsEvents;
 
-final class DummyClass implements Projector
+class DummyClass implements Projector
 {
     use ProjectsEvents;
 
