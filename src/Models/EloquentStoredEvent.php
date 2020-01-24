@@ -53,6 +53,11 @@ class EloquentStoredEvent extends Model
         $query->where('id', '>=', $storedEventId);
     }
 
+    public function scopeAfterVersion(Builder $query, int $version): void
+    {
+        $query->where('aggregate_version', '>', $version);
+    }
+
     public function scopeUuid(Builder $query, string $uuid): void
     {
         $query->where('aggregate_uuid', $uuid);
