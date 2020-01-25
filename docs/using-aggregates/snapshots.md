@@ -16,7 +16,9 @@ $myAggregate->snapshot();
 
 This will create a new snapshot in the `snapshots` table. By default we store the values of all the private, protected and public properties on the aggregate at that point in time.
 
-When you retrieve the aggregate the next time, it will find the snapshot, set its internal properties back to what they were at the time of the snapshot, and apply any new events starting from the snapshot.
+When you retrieve the aggregate the next time, it will find the snapshot, set its internal properties back to what they were at the time of the snapshot, and apply any new events starting from the snapshot.   
+
+This uses the snapshot's `aggregateVersion`, this version number is incremented each time an event is applied by the aggregate and stored in the snapshot.
 
 ## Customizing the stored snapshot state
 
