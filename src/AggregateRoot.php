@@ -22,12 +22,7 @@ abstract class AggregateRoot
 
     protected static bool $allowConcurrency = false;
 
-    /**
-     * @param string $uuid
-     *
-     * @return static
-     */
-    public static function retrieve(string $uuid): AggregateRoot
+    public static function retrieve(string $uuid): self
     {
         $aggregateRoot = (new static());
 
@@ -36,12 +31,7 @@ abstract class AggregateRoot
         return $aggregateRoot->reconstituteFromEvents();
     }
 
-    /**
-     * @param ShouldBeStored $domainEvent
-     *
-     * @return static
-     */
-    public function recordThat(ShouldBeStored $domainEvent): AggregateRoot
+    public function recordThat(ShouldBeStored $domainEvent): self
     {
         $this->recordedEvents[] = $domainEvent;
 
@@ -50,8 +40,7 @@ abstract class AggregateRoot
         return $this;
     }
 
-    /** @return static */
-    public function persist(): AggregateRoot
+    public function persist(): self
     {
         $this->ensureNoOtherEventsHaveBeenPersisted();
 
@@ -122,7 +111,7 @@ abstract class AggregateRoot
         return $recordedEvents;
     }
 
-    protected function reconstituteFromEvents(): AggregateRoot
+    protected function reconstituteFromEvents(): self
     {
         $storedEventRepository = $this->getStoredEventRepository();
         $snapshot = $this->getSnapshotRepository()->retrieve($this->uuid);
