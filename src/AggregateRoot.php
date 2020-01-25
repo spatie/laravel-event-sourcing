@@ -12,7 +12,7 @@ use Spatie\EventSourcing\Snapshots\SnapshotRepository;
 
 abstract class AggregateRoot
 {
-    private string $aggregateUuid = '';
+    private string $uuid = '';
 
     private array $recordedEvents = [];
 
@@ -31,7 +31,7 @@ abstract class AggregateRoot
     {
         $aggregateRoot = (new static());
 
-        $aggregateRoot->aggregateUuid = $uuid;
+        $aggregateRoot->uuid = $uuid;
 
         return $aggregateRoot->reconstituteFromEvents();
     }
@@ -58,7 +58,7 @@ abstract class AggregateRoot
         $storedEvents = call_user_func(
             [$this->getStoredEventRepository(), 'persistMany'],
             $this->getAndClearRecordedEvents(),
-            $this->aggregateUuid ?? '',
+            $this->uuid ?? '',
             $this->aggregateVersion,
         );
 
@@ -74,7 +74,7 @@ abstract class AggregateRoot
     public function snapshot(): Snapshot
     {
         return $this->getSnapshotRepository()->persist(new Snapshot(
-            $this->aggregateUuid,
+            $this->uuid,
             $this->aggregateVersion,
             $this->getState(),
         ));
@@ -125,14 +125,14 @@ abstract class AggregateRoot
     protected function reconstituteFromEvents(): AggregateRoot
     {
         $storedEventRepository = $this->getStoredEventRepository();
-        $snapshot = $this->getSnapshotRepository()->retrieve($this->aggregateUuid);
+        $snapshot = $this->getSnapshotRepository()->retrieve($this->uuid);
 
         if ($snapshot) {
             $this->aggregateVersion = $snapshot->aggregateVersion;
             $this->useState($snapshot->state);
         }
 
-        $storedEventRepository->retrieveAllAfterVersion($this->aggregateVersion, $this->aggregateUuid)
+        $storedEventRepository->retrieveAllAfterVersion($this->aggregateVersion, $this->uuid)
             ->each(function (StoredEvent $storedEvent) {
                 $this->apply($storedEvent->event);
             });
@@ -148,12 +148,12 @@ abstract class AggregateRoot
             return;
         }
 
-        $latestPersistedVersionId = $this->getStoredEventRepository()->getLatestVersion($this->aggregateUuid);
+        $latestPersistedVersionId = $this->getStoredEventRepository()->getLatestVersion($this->uuid);
 
         if ($this->aggregateVersionAfterReconstitution !== $latestPersistedVersionId) {
             throw CouldNotPersistAggregate::unexpectedVersionAlreadyPersisted(
                 $this,
-                $this->aggregateUuid,
+                $this->uuid,
                 $this->aggregateVersionAfterReconstitution,
                 $latestPersistedVersionId,
                 );
