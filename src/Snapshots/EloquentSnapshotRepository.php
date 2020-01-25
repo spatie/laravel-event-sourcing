@@ -9,7 +9,7 @@ use Spatie\EventSourcing\Snapshots\SnapshotRepository;
 
 class EloquentSnapshotRepository implements SnapshotRepository
 {
-    protected $snapshotModel;
+    protected string $snapshotModel;
 
     public function __construct()
     {
