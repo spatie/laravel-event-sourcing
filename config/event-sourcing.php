@@ -60,7 +60,7 @@ return [
      * can change this to a class of your own. The only restriction is that
      * it should implement \Spatie\EventSourcing\StoredEventRepository.
      */
-    'snapshot_repository' => \Spatie\EventSourcing\EloquentSnapshotRepository::class,
+    'snapshot_repository' => \Spatie\EventSourcing\Snapshots\EloquentSnapshotRepository::class,
 
     /*
      * This class is responsible for handling stored events. To add extra behaviour you

@@ -1,9 +1,11 @@
 <?php
 
-namespace Spatie\EventSourcing;
+namespace Spatie\EventSourcing\Snapshots;
 
 use Spatie\EventSourcing\Exceptions\InvalidEloquentSnapshotModel;
-use Spatie\EventSourcing\Models\EloquentSnapshot;
+use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
+use Spatie\EventSourcing\Snapshots\Snapshot;
+use Spatie\EventSourcing\Snapshots\SnapshotRepository;
 
 class EloquentSnapshotRepository implements SnapshotRepository
 {

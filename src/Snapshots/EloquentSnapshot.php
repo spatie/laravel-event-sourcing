@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\EventSourcing\Models;
+namespace Spatie\EventSourcing\Snapshots;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\EventSourcing\Snapshot;
+use Spatie\EventSourcing\Snapshots\Snapshot;
 
 class EloquentSnapshot extends Model
 {

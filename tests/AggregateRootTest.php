@@ -5,7 +5,7 @@ namespace Spatie\EventSourcing\Tests;
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\EventSourcing\Models\EloquentSnapshot;
+use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
 use Spatie\EventSourcing\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;

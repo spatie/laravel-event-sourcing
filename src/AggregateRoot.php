@@ -6,6 +6,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionProperty;
+use Spatie\EventSourcing\Snapshots\Snapshot;
+use Spatie\EventSourcing\Snapshots\SnapshotRepository;
 
 abstract class AggregateRoot
 {

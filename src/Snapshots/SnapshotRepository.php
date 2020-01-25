@@ -1,6 +1,8 @@
 <?php
 
-namespace Spatie\EventSourcing;
+namespace Spatie\EventSourcing\Snapshots;
+
+use Spatie\EventSourcing\Snapshots\Snapshot;
 
 interface SnapshotRepository
 {
