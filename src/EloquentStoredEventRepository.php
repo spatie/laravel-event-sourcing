@@ -105,4 +105,11 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
         return $class;
     }
+
+    public function getLatestVersion(string $aggregateUuid): int
+    {
+        return $this->storedEventModel::query()
+            ->where('aggregate_uuid', $aggregateUuid)
+            ->max('aggregate_version') ?? 0;
+    }
 }
