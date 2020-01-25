@@ -43,9 +43,7 @@ abstract class AggregateRoot
         return $this;
     }
 
-    /**
-     * @return static
-     */
+    /** @return static */
     public function persist(): AggregateRoot
     {
         $storedEvents = call_user_func(
