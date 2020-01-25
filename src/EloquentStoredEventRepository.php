@@ -10,7 +10,7 @@ use Spatie\EventSourcing\Models\EloquentStoredEvent;
 
 class EloquentStoredEventRepository implements StoredEventRepository
 {
-    protected $storedEventModel;
+    protected string $storedEventModel;
 
     public function __construct()
     {
