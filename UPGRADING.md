@@ -4,8 +4,9 @@
 
 - Add an `aggregate_version` property to the `stored_events` table `$table->unsignedInteger('aggregate_version')->nullable();`
 - Republish the migrations or copy the `create_snapshots_table` migration
-- The `StoredEventRepository` interface has a new method `retrieveAllAfterVersion` that you must implement if you have a custom repository
+- The `StoredEventRepository` interface has new methods called `retrieveAllAfterVersion` and `getLatestVersion` that you must implement if you have a custom repository
 - The `StoredEventRepository` now accepts an `aggregateVersion` parameter in the `persist` and `persistMany` methods
+- The `
 
 ## From v1 to v2
 

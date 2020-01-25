@@ -88,4 +88,9 @@ abstract class TestCase extends Orchestra
 
         return config("database.connections.{$connection}.driver");
     }
+
+    protected function assertTestPassed(): void
+    {
+        $this->assertTrue(true);
+    }
 }

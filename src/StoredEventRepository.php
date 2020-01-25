@@ -17,4 +17,6 @@ interface StoredEventRepository
     public function persistMany(array $events, string $uuid = null, int $aggregateVersion = null): LazyCollection;
 
     public function update(StoredEvent $storedEvent): StoredEvent;
+
+    public function getLatestAggregateVersion(string $aggregateUuid): int;
 }

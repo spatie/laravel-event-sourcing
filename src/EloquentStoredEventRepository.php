@@ -10,7 +10,7 @@ use Spatie\EventSourcing\Models\EloquentStoredEvent;
 
 class EloquentStoredEventRepository implements StoredEventRepository
 {
-    protected $storedEventModel;
+    protected string $storedEventModel;
 
     public function __construct()
     {
@@ -104,5 +104,12 @@ class EloquentStoredEventRepository implements StoredEventRepository
         }
 
         return $class;
+    }
+
+    public function getLatestAggregateVersion(string $aggregateUuid): int
+    {
+        return $this->storedEventModel::query()
+            ->where('aggregate_uuid', $aggregateUuid)
+            ->max('aggregate_version') ?? 0;
     }
 }

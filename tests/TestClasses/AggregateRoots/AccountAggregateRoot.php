@@ -12,6 +12,8 @@ class AccountAggregateRoot extends AggregateRoot
 
     public int $aggregateVersion = 0;
 
+    public int $aggregateVersionAfterReconstitution = 0;
+
     public function addMoney(int $amount): self
     {
         $this->recordThat(new MoneyAdded($amount));

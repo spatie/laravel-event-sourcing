@@ -7,7 +7,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 
 class OtherEloquentStoredEventRepository extends EloquentStoredEventRepository
 {
-    protected $storedEventModel;
+    protected string $storedEventModel;
 
     public function __construct()
     {

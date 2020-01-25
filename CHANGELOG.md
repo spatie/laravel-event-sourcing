@@ -6,6 +6,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 - add the ability to snapshot aggregates
 - make all classes non-final
+- do not allow concurrent persist on an aggregate by default
 
 ## 2.0.1 - 2020-01-20
 
