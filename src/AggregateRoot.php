@@ -137,7 +137,7 @@ abstract class AggregateRoot
             return;
         }
 
-        $latestPersistedVersionId = $this->getStoredEventRepository()->getLatestVersion($this->uuid);
+        $latestPersistedVersionId = $this->getStoredEventRepository()->getLatestAggregateVersion($this->uuid);
 
         if ($this->aggregateVersionAfterReconstitution !== $latestPersistedVersionId) {
             throw CouldNotPersistAggregate::unexpectedVersionAlreadyPersisted(

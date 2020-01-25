@@ -18,5 +18,5 @@ interface StoredEventRepository
 
     public function update(StoredEvent $storedEvent): StoredEvent;
 
-    public function getLatestVersion(string $aggregateUuid): int;
+    public function getLatestAggregateVersion(string $aggregateUuid): int;
 }
