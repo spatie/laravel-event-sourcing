@@ -40,8 +40,8 @@ class AccountAggregateRoot extends AggregateRoot
     public function subtractMoney(int $amount)
     {
         $this->hasSufficientFundsToSubtractAmount($amount)
-            ? $this->recordThat(new AccountLimitHit($amount))
-            : $this->recordThat(new MoneySubtracted($amount));
+            ? $this->recordThat(new MoneySubtracted($amount))
+            : $this->recordThat(new AccountLimitHit($amount));
     }
 
     protected function applyMoneySubtracted(MoneySubtracted $event)
