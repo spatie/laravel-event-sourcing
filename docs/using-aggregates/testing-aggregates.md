@@ -65,7 +65,7 @@ Let's now test that rule that an account cannot go beyond its limit.
 public function it_can_subtract_money()
 {
     AccountAggregateRoot::fake()
-        ->given(new SubtractMoney(4999))
+        ->given([new AccountCreated('Luke'), new MoneySubtracted(4999)])
         ->when(function (AccountAggregate $accountAggregate) {
             $accountAggregate->subtractMoney(1);
         })
@@ -77,7 +77,7 @@ public function it_can_subtract_money()
 public function it_will_not_make_subtractions_that_would_go_below_the_account_limit()
 {
     AccountAggregateRoot::fake()
-        ->given(new MoneySubtracted(4999))
+        ->given([new AccountCreated('Luke'), new MoneySubtracted(4999)])
         ->when(function (AccountAggregate $accountAggregate) {
             $accountAggregate->subtractMoney(2);
         })
