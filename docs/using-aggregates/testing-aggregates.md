@@ -77,7 +77,7 @@ public function it_can_subtract_money()
 public function it_will_not_make_subtractions_that_would_go_below_the_account_limit()
 {
     AccountAggregateRoot::fake()
-        ->given(new SubtractMoney(4999))
+        ->given(new MoneySubtracted(4999))
         ->when(function (AccountAggregate $accountAggregate) {
             $accountAggregate->subtractMoney(2);
         })
@@ -92,7 +92,7 @@ You could write the above test a bit shorter. The given events can be passed to 
 /** @test */
 public function it_will_not_make_subtractions_that_would_go_below_the_account_limit()
 {
-    AccountAggregateRoot::fake(new SubtractMoney(4999))
+    AccountAggregateRoot::fake(new MoneySubtracted(4999))
         ->subtractMoney(2)
         ->assertRecorded(new AccountLimitHit(2))
         ->assertNotRecorded(MoneySubtracted::class);
