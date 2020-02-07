@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 3.0.0 - 2020-02-XX
+
+- add the ability to snapshot aggregates
+- make all classes non-final
+- do not allow concurrent persist on an aggregate by default
+
 ## 2.1.0 - 2020-02-07
 
 - add `countAllStartingFrom`

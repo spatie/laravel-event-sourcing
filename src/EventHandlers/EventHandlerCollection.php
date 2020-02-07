@@ -5,7 +5,7 @@ namespace Spatie\EventSourcing\EventHandlers;
 use Illuminate\Support\Collection;
 use Spatie\EventSourcing\StoredEvent;
 
-final class EventHandlerCollection
+class EventHandlerCollection
 {
     private Collection $eventHandlers;
 

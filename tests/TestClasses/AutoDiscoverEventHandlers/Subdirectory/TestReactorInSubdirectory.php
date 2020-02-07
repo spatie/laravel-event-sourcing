@@ -5,7 +5,7 @@ namespace Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdi
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\Projectors\ProjectsEvents;
 
-final class TestReactorInSubdirectory implements EventHandler
+class TestReactorInSubdirectory implements EventHandler
 {
     use ProjectsEvents;
 }

@@ -6,7 +6,7 @@ use Exception;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\StoredEvent;
 
-final class EventHandlerFailedHandlingEvent
+class EventHandlerFailedHandlingEvent
 {
     public EventHandler $eventHandler;
 

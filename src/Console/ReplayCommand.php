@@ -16,17 +16,12 @@ class ReplayCommand extends Command
 
     protected $description = 'Replay stored events';
 
-    protected Projectionist $projectionist;
+    protected ?Projectionist $projectionist;
 
-    public function __construct(Projectionist $projectionist)
+    public function handle(Projectionist $projectionist): void
     {
-        parent::__construct();
-
         $this->projectionist = $projectionist;
-    }
 
-    public function handle(): void
-    {
         $projectors = $this->selectProjectors($this->argument('projector'));
 
         if (is_null($projectors)) {

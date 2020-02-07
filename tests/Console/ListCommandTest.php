@@ -9,7 +9,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
-final class ListCommandTest extends TestCase
+class ListCommandTest extends TestCase
 {
     /** @test */
     public function it_can_list_all_registered_projectors_and_reactors()

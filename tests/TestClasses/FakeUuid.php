@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses;
 
-final class FakeUuid
+class FakeUuid
 {
     private static int $count = 1;
 

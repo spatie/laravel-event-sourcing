@@ -8,7 +8,7 @@ use Spatie\EventSourcing\StoredEvent;
 use Spatie\EventSourcing\StoredEventRepository;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 
-final class ProjectorThatWritesMetaData implements Projector
+class ProjectorThatWritesMetaData implements Projector
 {
     use ProjectsEvents;
 

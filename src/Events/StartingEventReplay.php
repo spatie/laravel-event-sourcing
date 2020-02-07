@@ -4,9 +4,8 @@ namespace Spatie\EventSourcing\Events;
 
 use Illuminate\Support\Collection;
 
-final class StartingEventReplay
+class StartingEventReplay
 {
-    /** @var \Illuminate\Support\Collection */
     public Collection $projectors;
 
     public function __construct(Collection $projectors)

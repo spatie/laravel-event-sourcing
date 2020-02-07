@@ -4,33 +4,34 @@ namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use ReflectionClass;
+use ReflectionProperty;
+use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
+use Spatie\EventSourcing\Snapshots\Snapshot;
+use Spatie\EventSourcing\Snapshots\SnapshotRepository;
 
 abstract class AggregateRoot
 {
-    /** @var string */
-    private string $aggregateUuid;
+    private string $uuid = '';
 
-    /** @var array */
     private array $recordedEvents = [];
 
-    /**
-     * @param  string  $uuid
-     * @return static
-     */
-    public static function retrieve(string $uuid): AggregateRoot
+    protected int $aggregateVersion = 0;
+
+    protected int $aggregateVersionAfterReconstitution = 0;
+
+    protected static bool $allowConcurrency = false;
+
+    public static function retrieve(string $uuid): self
     {
         $aggregateRoot = (new static());
 
-        $aggregateRoot->aggregateUuid = $uuid;
+        $aggregateRoot->uuid = $uuid;
 
         return $aggregateRoot->reconstituteFromEvents();
     }
 
-    /**
-     * @param  ShouldBeStored  $domainEvent
-     * @return static
-     */
-    public function recordThat(ShouldBeStored $domainEvent): AggregateRoot
+    public function recordThat(ShouldBeStored $domainEvent): self
     {
         $this->recordedEvents[] = $domainEvent;
 
@@ -39,22 +40,38 @@ abstract class AggregateRoot
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function persist(): AggregateRoot
+    public function persist(): self
     {
+        $this->ensureNoOtherEventsHaveBeenPersisted();
+
         $storedEvents = call_user_func(
             [$this->getStoredEventRepository(), 'persistMany'],
             $this->getAndClearRecordedEvents(),
-            $this->aggregateUuid ?? ''
+            $this->uuid ?? '',
+            $this->aggregateVersion,
         );
 
         $storedEvents->each(function (StoredEvent $storedEvent) {
             $storedEvent->handle();
         });
 
+        $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
+
         return $this;
+    }
+
+    public function snapshot(): Snapshot
+    {
+        return $this->getSnapshotRepository()->persist(new Snapshot(
+            $this->uuid,
+            $this->aggregateVersion,
+            $this->getState(),
+        ));
+    }
+
+    protected function getSnapshotRepository(): SnapshotRepository
+    {
+        return app($this->snapshotRepository ?? config('event-sourcing.snapshot_repository'));
     }
 
     protected function getStoredEventRepository(): StoredEventRepository
@@ -67,7 +84,25 @@ abstract class AggregateRoot
         return $this->recordedEvents;
     }
 
-    private function getAndClearRecordedEvents(): array
+    protected function getState(): array
+    {
+        $class = new ReflectionClass($this);
+
+        return collect($class->getProperties())
+            ->reject(fn (ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
+            ->mapWithKeys(function (ReflectionProperty $property) {
+                return [$property->getName() => $this->{$property->getName()}];
+            })->toArray();
+    }
+
+    protected function useState(array $state): void
+    {
+        foreach ($state as $key => $value) {
+            $this->$key = $value;
+        }
+    }
+
+    protected function getAndClearRecordedEvents(): array
     {
         $recordedEvents = $this->recordedEvents;
 
@@ -76,14 +111,42 @@ abstract class AggregateRoot
         return $recordedEvents;
     }
 
-    private function reconstituteFromEvents(): AggregateRoot
+    protected function reconstituteFromEvents(): self
     {
-        $this->getStoredEventRepository()->retrieveAll($this->aggregateUuid)
+        $storedEventRepository = $this->getStoredEventRepository();
+        $snapshot = $this->getSnapshotRepository()->retrieve($this->uuid);
+
+        if ($snapshot) {
+            $this->aggregateVersion = $snapshot->aggregateVersion;
+            $this->useState($snapshot->state);
+        }
+
+        $storedEventRepository->retrieveAllAfterVersion($this->aggregateVersion, $this->uuid)
             ->each(function (StoredEvent $storedEvent) {
                 $this->apply($storedEvent->event);
             });
 
+        $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
+
         return $this;
+    }
+
+    protected function ensureNoOtherEventsHaveBeenPersisted(): void
+    {
+        if (static::$allowConcurrency) {
+            return;
+        }
+
+        $latestPersistedVersionId = $this->getStoredEventRepository()->getLatestAggregateVersion($this->uuid);
+
+        if ($this->aggregateVersionAfterReconstitution !== $latestPersistedVersionId) {
+            throw CouldNotPersistAggregate::unexpectedVersionAlreadyPersisted(
+                $this,
+                $this->uuid,
+                $this->aggregateVersionAfterReconstitution,
+                $latestPersistedVersionId,
+                );
+        }
     }
 
     private function apply(ShouldBeStored $event): void
@@ -97,6 +160,8 @@ abstract class AggregateRoot
         if (method_exists($this, $applyingMethodName)) {
             $this->$applyingMethodName($event);
         }
+
+        $this->aggregateVersion++;
     }
 
     /**

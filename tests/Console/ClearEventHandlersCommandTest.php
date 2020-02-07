@@ -7,7 +7,7 @@ use Spatie\EventSourcing\Tests\TestCase;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
-final class ClearEventHandlersCommandTest extends TestCase
+class ClearEventHandlersCommandTest extends TestCase
 {
     private Projectionist $projectionist;
 

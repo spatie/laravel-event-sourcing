@@ -5,7 +5,7 @@ namespace Spatie\EventSourcing\Tests\Factories;
 use Illuminate\Support\Collection;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
-final class AccountFactory
+class AccountFactory
 {
     public static function create(int $amount = 1): Collection
     {

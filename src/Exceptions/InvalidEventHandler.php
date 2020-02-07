@@ -5,7 +5,7 @@ namespace Spatie\EventSourcing\Exceptions;
 use Exception;
 use Spatie\EventSourcing\ShouldBeStored;
 
-final class InvalidEventHandler extends Exception
+class InvalidEventHandler extends Exception
 {
     public static function eventHandlingMethodDoesNotExist(object $eventHandler, ShouldBeStored $event, string $methodName): self
     {

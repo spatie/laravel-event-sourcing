@@ -8,7 +8,7 @@ use Spatie\EventSourcing\EventHandlers\EventHandler;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
-final class DiscoverEventHandlers
+class DiscoverEventHandlers
 {
     private array $directories = [];
 

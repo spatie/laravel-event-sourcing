@@ -4,7 +4,7 @@ namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable;
 
 use Illuminate\Mail\Mailable;
 
-final class MoneyAddedMailable extends Mailable
+class MoneyAddedMailable extends Mailable
 {
     public int $amount;
 

@@ -4,7 +4,7 @@ namespace DummyNamespace;
 
 use Spatie\EventSourcing\ShouldBeStored;
 
-final class DummyClass implements ShouldBeStored
+class DummyClass implements ShouldBeStored
 {
     public function __construct()
     {

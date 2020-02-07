@@ -5,7 +5,7 @@ namespace Spatie\EventSourcing\Tests;
 use Illuminate\Support\Str;
 use Spatie\EventSourcing\Composer;
 
-final class ComposerTest extends TestCase
+class ComposerTest extends TestCase
 {
     /** @test */
     public function it_can_get_all_loaded_files()

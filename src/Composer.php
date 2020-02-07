@@ -4,7 +4,7 @@ namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Str;
 
-final class Composer
+class Composer
 {
     public static function getAutoloadedFiles($composerJsonPath): array
     {

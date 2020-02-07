@@ -11,7 +11,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 
-final class StoredEventTest extends TestCase
+class StoredEventTest extends TestCase
 {
     protected Account $account;
 

@@ -19,7 +19,7 @@ class FakeAggregateRoot
      *
      * @return $this
      */
-    public function given($events)
+    public function given($events): self
     {
         $events = Arr::wrap($events);
 
@@ -32,14 +32,14 @@ class FakeAggregateRoot
         return $this;
     }
 
-    public function when($callable)
+    public function when($callable): self
     {
         $callable($this->aggregateRoot);
 
         return $this;
     }
 
-    public function assertNothingRecorded()
+    public function assertNothingRecorded(): self
     {
         Assert::assertCount(0, $this->aggregateRoot->getRecordedEvents());
 
@@ -51,7 +51,7 @@ class FakeAggregateRoot
      *
      * @return $this
      */
-    public function assertRecorded($expectedEvents)
+    public function assertRecorded($expectedEvents): self
     {
         $expectedEvents = Arr::wrap($expectedEvents);
 
@@ -71,7 +71,7 @@ class FakeAggregateRoot
         }
     }
 
-    public function __call($name, $arguments)
+    public function __call($name, $arguments): self
     {
         $this->aggregateRoot->$name(...$arguments);
 
