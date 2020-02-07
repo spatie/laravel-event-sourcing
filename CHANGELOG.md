@@ -8,6 +8,10 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - make all classes non-final
 - do not allow concurrent persist on an aggregate by default
 
+## 2.1.0 - 2020-02-07
+
+- add `countAllStartingFrom`
+
 ## 2.0.1 - 2020-01-20
 
 - do not dispatch job when there is nothing to be performed on queue

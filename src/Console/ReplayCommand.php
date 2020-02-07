@@ -16,17 +16,12 @@ class ReplayCommand extends Command
 
     protected $description = 'Replay stored events';
 
-    protected Projectionist $projectionist;
+    protected ?Projectionist $projectionist;
 
-    public function __construct(Projectionist $projectionist)
+    public function handle(Projectionist $projectionist): void
     {
-        parent::__construct();
-
         $this->projectionist = $projectionist;
-    }
 
-    public function handle(): void
-    {
         $projectors = $this->selectProjectors($this->argument('projector'));
 
         if (is_null($projectors)) {
@@ -62,8 +57,7 @@ class ReplayCommand extends Command
     public function replay(Collection $projectors, int $startingFrom): void
     {
         $repository = app(StoredEventRepository::class);
-        $events = $repository->retrieveAllStartingFrom($startingFrom);
-        $replayCount = $events->count();
+        $replayCount = $repository->countAllStartingFrom($startingFrom);
 
         if ($replayCount === 0) {
             $this->warn('There are no events to replay');
@@ -73,7 +67,7 @@ class ReplayCommand extends Command
 
         $this->comment("Replaying {$replayCount} events...");
 
-        $bar = $this->output->createProgressBar($events->count());
+        $bar = $this->output->createProgressBar($replayCount);
         $onEventReplayed = function () use ($bar) {
             $bar->advance();
         };
