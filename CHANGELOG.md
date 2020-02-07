@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 1.1.0 - 2020-02-07
+
+- add `countAllStartingFrom`
+
 ## 1.0.4 - 2019-11-20
 
 - fix replay from specified event id (#33)
