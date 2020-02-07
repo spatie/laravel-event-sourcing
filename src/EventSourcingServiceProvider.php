@@ -30,6 +30,12 @@ class EventSourcingServiceProvider extends ServiceProvider
             ], 'migrations');
         }
 
+        if (! class_exists('CreateSnapshotsTable')) {
+            $this->publishes([
+                __DIR__.'/../stubs/create_snapshots_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_snapshots_table.php'),
+            ], 'migrations');
+        }
+
         Event::subscribe(EventSubscriber::class);
 
         $this->discoverEventHandlers();
