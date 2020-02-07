@@ -3,9 +3,6 @@
 namespace Spatie\EventSourcing\Snapshots;
 
 use Spatie\EventSourcing\Exceptions\InvalidEloquentSnapshotModel;
-use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
-use Spatie\EventSourcing\Snapshots\Snapshot;
-use Spatie\EventSourcing\Snapshots\SnapshotRepository;
 
 class EloquentSnapshotRepository implements SnapshotRepository
 {

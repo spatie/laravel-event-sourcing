@@ -38,7 +38,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
     {
         $query = $this->prepareEventModelQuery($startingFrom, $uuid);
 
-        return $query->orderBy('id')->cursor()->map(fn(EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+        return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
     public function countAllStartingFrom(int $startingFrom, string $uuid = null): int

@@ -4,7 +4,6 @@ namespace Spatie\EventSourcing\Snapshots;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\EventSourcing\Snapshots\Snapshot;
 
 class EloquentSnapshot extends Model
 {
