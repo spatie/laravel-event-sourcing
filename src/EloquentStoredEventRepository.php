@@ -3,6 +3,7 @@
 namespace Spatie\EventSourcing;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\LazyCollection;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
@@ -35,14 +36,14 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
     public function retrieveAllStartingFrom(int $startingFrom, string $uuid = null): LazyCollection
     {
-        /** @var \Illuminate\Database\Query\Builder $query */
-        $query = $this->storedEventModel::query()->startingFrom($startingFrom);
+        $query = $this->prepareEventModelQuery($startingFrom, $uuid);
 
-        if ($uuid) {
-            $query->uuid($uuid);
-        }
+        return $query->orderBy('id')->cursor()->map(fn(EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+    }
 
-        return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+    public function countAllStartingFrom(int $startingFrom, string $uuid = null): int
+    {
+        return $this->prepareEventModelQuery($startingFrom, $uuid)->count('id');
     }
 
     public function persist(ShouldBeStored $event, string $uuid = null): StoredEvent
@@ -93,5 +94,17 @@ class EloquentStoredEventRepository implements StoredEventRepository
         }
 
         return $class;
+    }
+
+    private function prepareEventModelQuery(int $startingFrom, string $uuid = null): Builder
+    {
+        /** @var Builder $query */
+        $query = $this->storedEventModel::query()->startingFrom($startingFrom);
+
+        if ($uuid) {
+            $query->uuid($uuid);
+        }
+
+        return $query;
     }
 }

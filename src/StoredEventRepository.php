@@ -10,6 +10,8 @@ interface StoredEventRepository
 
     public function retrieveAllStartingFrom(int $startingFrom, string $uuid = null): LazyCollection;
 
+    public function countAllStartingFrom(int $startingFrom, string $uuid = null): int;
+
     public function persist(ShouldBeStored $event, string $uuid = null): StoredEvent;
 
     public function persistMany(array $events, string $uuid = null): LazyCollection;
