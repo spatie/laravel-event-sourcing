@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 3.0.2 - 2020-02-14
+
+- only replace the first instance of the `basePath` in `DiscoversEventHandlers` (#62)
+
 ## 3.0.1 - 2020-02-14
 
 - publish snapshots migration
