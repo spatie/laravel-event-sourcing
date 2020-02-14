@@ -70,7 +70,7 @@ class DiscoverEventHandlers
 
     private function fullQualifiedClassNameFromFile(SplFileInfo $file): string
     {
-        $class = trim(str_replace($this->basePath, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
+        $class = trim(Str::replaceFirst($this->basePath, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
 
         $class = str_replace(
             [DIRECTORY_SEPARATOR, 'App\\'],
