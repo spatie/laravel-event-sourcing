@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 3.0.1 - 2020-02-14
+
+- publish snapshots migration
+
 ## 3.0.0 - 2020-02-07
 
 - add the ability to snapshot aggregates
