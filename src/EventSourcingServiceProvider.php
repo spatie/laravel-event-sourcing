@@ -20,7 +20,7 @@ class EventSourcingServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/event-sourcing.php' => config_path('event-sourcing.php'),
+                __DIR__.'/../config/event-sourcing.php' => app()->configPath('event-sourcing.php'),
             ], 'config');
         }
 
