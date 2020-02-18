@@ -20,7 +20,7 @@ class DiscoverEventHandlers
 
     public function __construct()
     {
-        $this->basePath = app_path();
+        $this->basePath = app()->path();
     }
 
     public function within(array $directories): self
