@@ -4,6 +4,7 @@ namespace Spatie\EventSourcing\EventSerializers;
 
 use Spatie\EventSourcing\ShouldBeStored;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 
@@ -14,7 +15,7 @@ class JsonEventSerializer implements EventSerializer
     public function __construct()
     {
         $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
 
         $this->serializer = new SymfonySerializer($normalizers, $encoders);
     }

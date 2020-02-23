@@ -77,8 +77,11 @@ class EventSerializerTest extends TestCase
 
         $json = $this->eventSerializer->serialize($event);
 
-        $deserializeEvent = $this->eventSerializer->deserialize(get_class($event), $json);
+        /**
+         * @var EventWithDatetime $normalizedEvent
+         */
+        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json);
 
-        $this->assertEquals($deserializeEvent, $event);
+        $this->assertInstanceOf(\DateTimeImmutable::class, $normalizedEvent->value);
     }
 }
