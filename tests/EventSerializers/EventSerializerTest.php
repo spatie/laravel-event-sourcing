@@ -77,7 +77,7 @@ class EventSerializerTest extends TestCase
 
         $json = $this->eventSerializer->serialize($event);
 
-        $deserializeEvent = $this->eventSerializer->deserialize(EventWithDatetime::class, $json);
+        $deserializeEvent = $this->eventSerializer->deserialize(get_class($event), $json);
 
         $this->assertEquals($deserializeEvent, $event);
     }
