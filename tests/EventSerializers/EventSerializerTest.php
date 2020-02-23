@@ -4,6 +4,7 @@ namespace Spatie\EventSourcing\Tests\EventSerializers;
 
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Tests\TestCase;
+use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithDatetime;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithoutSerializedModels;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
@@ -67,5 +68,20 @@ class EventSerializerTest extends TestCase
             ],
             'amount' => 1234,
         ], $array);
+    }
+
+    /** @test */
+    public function it_can_deserialize_an_event_with_datetime()
+    {
+        $event = new EventWithDatetime(new \DateTimeImmutable('now'));
+
+        $json = $this->eventSerializer->serialize($event);
+
+        /**
+         * @var EventWithDatetime $normalizedEvent
+         */
+        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json);
+
+        $this->assertInstanceOf(\DateTimeImmutable::class, $normalizedEvent->value);
     }
 }
