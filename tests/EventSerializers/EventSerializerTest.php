@@ -49,6 +49,28 @@ class EventSerializerTest extends TestCase
     }
 
     /** @test */
+    public function it_serializes_an_event_to_json()
+    {
+        $account = Account::create();
+
+        $event = new MoneyAddedEvent($account, 1234);
+
+        $json = $this->eventSerializer->serialize($event);
+
+        $array = json_decode($json, true);
+
+        $this->assertEquals([
+            'account' => [
+                'class' => get_class($account),
+                'id' => 1,
+                'relations' => [],
+                'connection' => $this->dbDriver(),
+            ],
+            'amount' => 1234,
+        ], $array);
+    }
+
+    /** @test */
     public function it_can_deserialize_an_event_with_datetime()
     {
         $event = new EventWithDatetime(new \DateTimeImmutable('now'));
