@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 1.1.1 - 2020-03-04
+
+- fix tag
+
 ## 1.1.0 - 2020-02-07
 
 - add `countAllStartingFrom`
