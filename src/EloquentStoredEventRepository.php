@@ -5,6 +5,7 @@ namespace Spatie\EventSourcing;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\LazyCollection;
+use Spatie\EventSourcing\Concerns\HasMetaData;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Models\EloquentStoredEvent;
@@ -53,7 +54,10 @@ class EloquentStoredEventRepository implements StoredEventRepository
             ->uuid($uuid)
             ->afterVersion($version);
 
-        return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+        return $query
+            ->orderBy('id')
+            ->cursor()
+            ->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
     public function persist(ShouldBeStored $event, string $uuid = null, int $aggregateVersion = null): StoredEvent
@@ -66,7 +70,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             'aggregate_uuid' => $uuid,
             'aggregate_version' => $aggregateVersion,
             'event_class' => self::getEventClass(get_class($event)),
-            'meta_data' => json_encode([]),
+            'meta_data' => json_encode($event->metaData()),
             'created_at' => Carbon::now(),
         ]);
 

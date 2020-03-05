@@ -4,7 +4,7 @@ namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents;
 
 use Spatie\EventSourcing\ShouldBeStored;
 
-class MoneyAdded implements ShouldBeStored
+class MoneyAdded extends ShouldBeStored
 {
     public int $amount;
 

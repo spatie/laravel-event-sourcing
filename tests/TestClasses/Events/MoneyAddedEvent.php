@@ -6,7 +6,7 @@ use Illuminate\Queue\SerializesModels;
 use Spatie\EventSourcing\ShouldBeStored;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
-class MoneyAddedEvent implements ShouldBeStored
+class MoneyAddedEvent extends ShouldBeStored
 {
     use SerializesModels;
 

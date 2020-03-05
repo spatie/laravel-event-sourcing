@@ -4,6 +4,7 @@ namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Arr;
 use PHPUnit\Framework\Assert;
+use Spatie\EventSourcing\Enums\MetaData;
 
 class FakeAggregateRoot
 {
@@ -55,7 +56,15 @@ class FakeAggregateRoot
     {
         $expectedEvents = Arr::wrap($expectedEvents);
 
-        Assert::assertEquals($expectedEvents, $this->aggregateRoot->getRecordedEvents());
+        $recordedEvents = array_map(function(ShouldBeStored $event) {
+            $metaData = $event->metaData();
+
+            unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);
+
+            return $event->setMetaData($metaData);
+        }, $this->aggregateRoot->getRecordedEvents());
+
+        Assert::assertEquals($expectedEvents, $recordedEvents);
 
         return $this;
     }

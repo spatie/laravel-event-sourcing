@@ -35,7 +35,11 @@ trait HandlesEvents
         }
 
         if (! method_exists($this, $handlerClassOrMethod)) {
-            throw InvalidEventHandler::eventHandlingMethodDoesNotExist($this, $storedEvent->event, $handlerClassOrMethod);
+            throw InvalidEventHandler::eventHandlingMethodDoesNotExist(
+                $this,
+                $storedEvent->event,
+                $handlerClassOrMethod,
+            );
         }
 
         app()->call([$this, $handlerClassOrMethod], $parameters);

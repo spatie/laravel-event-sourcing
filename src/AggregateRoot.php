@@ -38,6 +38,8 @@ abstract class AggregateRoot
 
     public function recordThat(ShouldBeStored $domainEvent): self
     {
+        $domainEvent->setAggregateRootUuid($this->uuid);
+
         $this->recordedEvents[] = $domainEvent;
 
         $this->apply($domainEvent);
@@ -94,7 +96,7 @@ abstract class AggregateRoot
         $class = new ReflectionClass($this);
 
         return collect($class->getProperties())
-            ->reject(fn (ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
+            ->reject(fn(ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
             ->mapWithKeys(function (ReflectionProperty $property) {
                 return [$property->getName() => $this->{$property->getName()}];
             })->toArray();
