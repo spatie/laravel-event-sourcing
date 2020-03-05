@@ -1,5 +1,9 @@
 # Upgrading
 
+## From v3 to v4 (unreleased)
+
+- The `ShouldBeStored` interface is now an abstract base class. In all your events you should extend it now, instead of implementing it
+
 ## From v2 to v3
 
 - Add an `aggregate_version` property to the `stored_events` table `$table->unsignedInteger('aggregate_version')->nullable();`

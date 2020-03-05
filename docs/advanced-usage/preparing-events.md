@@ -18,7 +18,7 @@ namespace App\Events;
 
 use Spatie\EventSourcing\ShouldBeStored;
 
-class MoneyAdded implements ShouldBeStored
+class MoneyAdded extends ShouldBeStored
 {
     /** @var string */
     public $accountUuid;
@@ -50,7 +50,7 @@ namespace App\Events;
 
 use Spatie\EventSourcing\ShouldBeStored;
 
-class MyEvent implements ShouldBeStored
+class MyEvent extends ShouldBeStored
 {
     public $queue = 'alternativeQueue';
 

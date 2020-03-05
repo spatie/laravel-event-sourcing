@@ -38,6 +38,8 @@ abstract class AggregateRoot
 
     public function recordThat(ShouldBeStored $domainEvent): self
     {
+        $domainEvent->setAggregateRootUuid($this->uuid);
+
         $this->recordedEvents[] = $domainEvent;
 
         $this->apply($domainEvent);

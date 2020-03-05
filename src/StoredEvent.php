@@ -43,6 +43,9 @@ class StoredEvent implements Arrayable
                     ? $this->event_properties
                     : json_encode($this->event_properties)
             );
+
+            $this->event->setMetaData(optional($this->meta_data)->toArray());
+
         } catch (Exception $exception) {
             throw InvalidStoredEvent::couldNotUnserializeEvent($this, $exception);
         }
