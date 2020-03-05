@@ -103,7 +103,7 @@ namespace App\Events;
 
 use Spatie\EventSourcing\ShouldBeStored;
 
-class AccountCreated implements ShouldBeStored
+class AccountCreated extends ShouldBeStored
 {
     /** @var array */
     public $accountAttributes;
@@ -120,7 +120,7 @@ namespace App\Events;
 
 use Spatie\EventSourcing\ShouldBeStored;
 
-class MoneyAdded implements ShouldBeStored
+class MoneyAdded extends ShouldBeStored
 {
     /** @var string */
     public $accountUuid;
@@ -142,7 +142,7 @@ namespace App\Events;
 
 use Spatie\EventSourcing\ShouldBeStored;
 
-class MoneySubtracted implements ShouldBeStored
+class MoneySubtracted extends ShouldBeStored
 {
     /** @var string */
     public $accountUuid;
@@ -164,7 +164,7 @@ namespace App\Events;
 
 use Spatie\EventSourcing\ShouldBeStored;
 
-class AccountDeleted implements ShouldBeStored
+class AccountDeleted extends ShouldBeStored
 {
     /** @var string */
     public $accountUuid;

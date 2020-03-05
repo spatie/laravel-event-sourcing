@@ -4,7 +4,7 @@ namespace Spatie\EventSourcing\Tests\TestClasses\Events;
 
 use Spatie\EventSourcing\ShouldBeStored;
 
-class EventWithoutSerializedModels implements ShouldBeStored
+class EventWithoutSerializedModels extends ShouldBeStored
 {
     public string $value;
 
