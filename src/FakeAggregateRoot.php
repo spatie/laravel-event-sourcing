@@ -82,6 +82,4 @@ class FakeAggregateRoot
     {
         return $this->aggregateRoot;
     }
-
-
 }
