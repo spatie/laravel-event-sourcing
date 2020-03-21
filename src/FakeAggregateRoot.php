@@ -78,10 +78,7 @@ class FakeAggregateRoot
         return $this;
     }
 
-    /**
-     * @return AggregateRoot
-     */
-    public function getAggregateRoot(): AggregateRoot
+    public function aggregateRoot(): AggregateRoot
     {
         return $this->aggregateRoot;
     }
