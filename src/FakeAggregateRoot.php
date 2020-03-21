@@ -77,4 +77,9 @@ class FakeAggregateRoot
 
         return $this;
     }
+
+    public function aggregateRoot(): AggregateRoot
+    {
+        return $this->aggregateRoot;
+    }
 }
