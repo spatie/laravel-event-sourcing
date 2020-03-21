@@ -8,13 +8,12 @@ on:
 
 jobs:
     test:
-        runs-on: ${{ matrix.os }}
+        runs-on: ubuntu-latest
         strategy:
             matrix:
                 php: [7.4]
                 laravel: [7.*, 6.*]
                 dependency-version: [prefer-lowest, prefer-stable]
-                os: [ubuntu-latest]
                 include:
                     - laravel: 7.*
                       testbench: 5.*
@@ -23,7 +22,7 @@ jobs:
                     - laravel: 5.8.*
                       testbench: 3.8.*
 
-        name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+        name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
         steps:
             - name: Checkout code
