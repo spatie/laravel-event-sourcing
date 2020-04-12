@@ -56,7 +56,7 @@ return [
     'stored_event_repository' => \Spatie\EventSourcing\EloquentStoredEventRepository::class,
 
     /*
-     * This class is responsible for storing events. To add extra behaviour you
+     * This class is responsible for storing snapshots. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
      * it should implement \Spatie\EventSourcing\StoredEventRepository.
      */
