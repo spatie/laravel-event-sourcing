@@ -21,7 +21,7 @@ namespace App\Aggregates;
 use Spatie\EventSourcing\AggregateRoot;
 
 
-final class MyAggregate extends AggregateRoot
+class MyAggregate extends AggregateRoot
 {
 }
 ```
