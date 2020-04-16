@@ -12,7 +12,8 @@ class ReplayCommand extends Command
 {
     protected $signature = 'event-sourcing:replay {projector?*}
                             {--from=0 : Replay events starting from this event number}
-                            {--stored-event-model= : Replay events from this store}';
+                            {--stored-event-model= : Replay events from this store}
+                            {--force : Replay events without user prompt}';
 
     protected $description = 'Replay stored events';
 
@@ -35,7 +36,7 @@ class ReplayCommand extends Command
 
     public function selectProjectors(array $projectorClassNames): ?Collection
     {
-        if (count($projectorClassNames ?? []) === 0) {
+        if (count($projectorClassNames ?? []) === 0 && ! $this->option('force')) {
             if (! $confirmed = $this->confirm('Are you sure you want to replay events to all projectors?', true)) {
                 return null;
             }
