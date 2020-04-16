@@ -68,6 +68,16 @@ class ReplayCommandTest extends TestCase
             ->assertExitCode(0);
     }
 
+    //**/*@test*/*//
+    public function it_will_replay_all_events_without_user_prompt_if_the_force_option_is_given()
+    {
+        Projectionist::addProjector(BalanceProjector::class);
+
+        $this->artisan('event-sourcing:replay --force')
+        ->expectsOutput('Replaying 3 events…')
+        ->assertExitCode(0);
+    }
+
     /** @test */
     public function it_can_replay_events_starting_from_a_specific_number()
     {
