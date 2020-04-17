@@ -14,6 +14,7 @@ trait ProjectsEvents
         return $this->name ?? get_class($this);
     }
 
+    /** @deprecated Use reset state instead */
     public function reset(): void
     {
         if (! method_exists($this, 'resetState')) {
