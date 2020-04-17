@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 3.1.2 - 2020-04-07
+
+- make sure `created_at` is filled when creating a snapshot
+
 ## 3.1.1 - 2020-03-21
 
 - expose `AggregateRoot` for testing state (#75)

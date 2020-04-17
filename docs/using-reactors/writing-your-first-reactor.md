@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Mail;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\EventHandlers\HandlesEvents;
 
-final class BigAmountAddedReactor implements EventHandler
+class BigAmountAddedReactor implements EventHandler
 {
     use HandlesEvents;
 

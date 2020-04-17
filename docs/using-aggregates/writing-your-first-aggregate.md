@@ -21,7 +21,7 @@ namespace App\Aggregates;
 use Spatie\EventSourcing\AggregateRoot;
 
 
-final class AccountAggregate extends AggregateRoot
+class AccountAggregate extends AggregateRoot
 {
 }
 ```
@@ -38,7 +38,7 @@ namespace App\Aggregates;
 use Spatie\EventSourcing\AggregateRoot;
 
 
-final class AccountAggregate extends AggregateRoot
+class AccountAggregate extends AggregateRoot
 {
     public function createAccount(string $name, string $userId)
     {

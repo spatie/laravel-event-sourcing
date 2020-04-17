@@ -13,16 +13,16 @@ All [events](/laravel-event-sourcing/v1/advanced-usage/preparing-events/) that i
  php artisan event-sourcing:replay
  ```
 
- You can also specify projectors by using the `--projector` option. All stored events will be passed only to that projector.
+ You can also specify projectors by using the projector name. All stored events will be passed only to that projector.
 
  ```bash
-  php artisan event-sourcing:replay --projector=App\\Projectors\\AccountBalanceProjector
+  php artisan event-sourcing:replay App\\Projectors\\AccountBalanceProjector
  ```
 
- You can use the projector option multiple times:
+ You can use the projector argument multiple times:
 
   ```bash
-   php artisan event-sourcing:replay --projector=App\\Projectors\\AccountBalanceProjector --projector=App\\Projectors\\AnotherProjector
+   php artisan event-sourcing:replay App\\Projectors\\AccountBalanceProjector App\\Projectors\\AnotherProjector
   ```
 
 If your projector has a `resetState` method it will get called before replaying events. You can use that method to reset the state of your projector.
