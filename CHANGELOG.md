@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 3.1.3 - 2020-04-29
+
+- add `static` return type docblock for `AggregateRoot::retrieve`
+
 ## 3.1.2 - 2020-04-07
 
 - make sure `created_at` is filled when creating a snapshot
