@@ -30,6 +30,26 @@ class FakeAggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function it_can_assert_the_applied_events()
+    {
+        DummyAggregateRoot::fake()
+            ->given([
+                new DummyEvent(1),
+                new DummyEvent(2),
+            ])
+            ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
+                $dummyAggregateRoot->dummy();
+
+                $dummyAggregateRoot->persist();
+            })
+            ->assertApplied([
+                new DummyEvent(1),
+                new DummyEvent(2),
+                new DummyEvent(3),
+            ]);
+    }
+
+    /** @test */
     public function it_can_assert_recorded_events_without_using_when()
     {
         /** @var \Spatie\EventSourcing\Tests\TestClasses\DummyAggregateRoot|\Spatie\EventSourcing\FakeAggregateRoot $fakeAggregateRoot */
@@ -84,5 +104,13 @@ class FakeAggregateRootTest extends TestCase
         DummyAggregateRoot::fake()->assertNotRecorded(DummyEvent::class);
 
         DummyAggregateRoot::fake()->assertNotRecorded([DummyEvent::class]);
+    }
+
+    /** @test */
+    public function it_can_assert_that_an_event_is_not_applied()
+    {
+        DummyAggregateRoot::fake()->assertNotApplied(DummyEvent::class);
+
+        DummyAggregateRoot::fake()->assertNotApplied([DummyEvent::class]);
     }
 }
