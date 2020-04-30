@@ -113,4 +113,10 @@ class FakeAggregateRootTest extends TestCase
 
         DummyAggregateRoot::fake()->assertNotApplied([DummyEvent::class]);
     }
+
+    /** @test */
+    public function it_can_assert_that_noting_is_applied()
+    {
+        DummyAggregateRoot::fake()->assertNothingApplied();
+    }
 }
