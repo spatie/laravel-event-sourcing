@@ -95,7 +95,7 @@ abstract class AggregateRoot
 
     public function getAppliedEvents(): array
     {
-        return $this->recordedEvents;
+        return $this->appliedEvents;
     }
 
     protected function getState(): array
