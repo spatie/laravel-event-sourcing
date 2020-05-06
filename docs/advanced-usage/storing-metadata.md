@@ -20,9 +20,9 @@ class CustomStoredEvent extends EloquentStoredEvent
     {
         parent::boot();
         
-         static::creating(function(CustomStoredEvent $storedEvent) {
-             $storedEvent->meta_data['user_id'] = auth()->user()->id;
-         });
+        static::creating(function(CustomStoredEvent $storedEvent) {
+            $storedEvent->meta_data['user_id'] = auth()->user()->id;
+        });
     }
 }
 ```
