@@ -30,7 +30,7 @@ class AccountAggregate extends AggregateRoot
 
 You can add any methods or variables you need on the aggregate. To get you familiar with event modelling using aggregates let's implement a small piece of [the Larabank example app](https://github.com/spatie/larabank-aggregates). We are going to add methods to record the [`AccountCreated`](https://github.com/spatie/larabank-aggregates/blob/master/app/Domain/Account/Events/AccountCreated.php), [`MoneyAdded`](https://github.com/spatie/larabank-aggregates/blob/master/app/Domain/Account/Events/MoneyAdded.php) and the [`MoneySubtracted`](https://github.com/spatie/larabank-aggregates/blob/master/app/Domain/Account/Events/MoneySubtracted.php) events.
 
-First, let's add a `createAccount` methods to our aggregate that will record the `AccountCreated` event.
+First, let's add a `createAccount` method to our aggregate that will record the `AccountCreated` event.
 
 ```php
 namespace App\Aggregates;
