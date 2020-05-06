@@ -13,23 +13,23 @@ All [events](/laravel-event-sourcing/v1/advanced-usage/preparing-events/) that i
  php artisan event-sourcing:replay
  ```
 
- You can also specify projectors by using the `--projector` option. All stored events will be passed only to that projector.
+ You can also specify a single or multiple projectors. All stored events will be passed only to those projectors.
 
  ```bash
-  php artisan event-sourcing:replay --projector=App\\Projectors\\AccountBalanceProjector
+  php artisan event-sourcing:replay App\\Projectors\\AccountBalanceProjector
  ```
 
- You can use the projector option multiple times:
+ When specifying multiple projectors, just chain them like this:
 
-  ```bash
-   php artisan event-sourcing:replay --projector=App\\Projectors\\AccountBalanceProjector --projector=App\\Projectors\\AnotherProjector
-  ```
+ ```bash
+  php artisan event-sourcing:replay App\\Projectors\\AccountBalanceProjector App\\Projectors\\TransactionsCountProjector
+ ```
 
 If your projector has a `resetState` method it will get called before replaying events. You can use that method to reset the state of your projector.
 
 If you want to replay events starting from a certain event you can use the `--from` option when executing `event-sourcing:replay`. If you use this option the `resetState` on projectors will not get called. This package does not track which events have already been processed by which projectors. Be sure not to replay events to projectors that already have handled them.
 
-If you are [using your own event storage model](/laravel-event-sourcing/v1/advanced-usage/using-your-own-event-storage-model/) then you will need to use the `--store-event-model` option when executing `event-sourcing:replay` to specify the model storing the events you want to replay.
+If you are [using your own event storage model](/laravel-event-sourcing/v1/advanced-usage/using-your-own-event-storage-model/) then you will need to use the `--stored-event-model` option when executing `event-sourcing:replay` to specify the model storing the events you want to replay.
 
 ```bash
 php artisan event-sourcing:replay --stored-event-model=App\\Models\\AccountStoredEvent
