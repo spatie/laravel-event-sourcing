@@ -15,4 +15,4 @@ In production, you likely do not want the package to scan all of your classes on
 
 ## Disabling discovery
 
-If you want to turn off auto-discovery and want to enforce manually registration of projectors and reactors, just set the `auto_discover_projectors_and_reactors` key in the `event-sourcing` config file to an empty array.
+If you want to turn off auto-discovery to enforce manually registration of projectors and reactors, just set the `auto_discover_projectors_and_reactors` key in the `event-sourcing` config file to an empty array.
