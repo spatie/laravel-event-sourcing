@@ -15,7 +15,7 @@ Adding one projector:
 Projectionist::addProjector(TransactionCountProjector::class);
 ```
 
-Adding many projectors:
+Adding multiple projectors:
 
 ```php
 Projectionist::addProjector([
@@ -32,7 +32,7 @@ Adding one reactor:
 Projectionist::addReactor(SendMailReactor::class);
 ```
 
-Adding many reactors:
+Adding multiple reactors:
 
 ```php
 Projectionist::addReactor([
@@ -51,7 +51,7 @@ Removing one event handler:
 Projectionist::withoutEventHandler(SendPushNotificationReactor::class);
 ```
 
-Removing many event handlers:
+Removing multiple event handlers:
 
 ```php
 Projectionist::withoutEventHandlers([
