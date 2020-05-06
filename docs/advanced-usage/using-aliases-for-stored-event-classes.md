@@ -18,4 +18,4 @@ To get around this you can define event class aliases in the `event-sourcing.php
     ],
 ```
 
-With this configuration, instead of saving `\App\Events\MoneyAddedEvent` in the database, we just store `money_added`, now you can change the event class name and namespace. Just make sure to also change the mapping!
+With this configuration, instead of saving `\App\Events\MoneyAddedEvent` in the database, it just stores `money_added` so you can change the event's classname and namespace. Just make sure to also change the mapping!

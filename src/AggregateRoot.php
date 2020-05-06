@@ -150,7 +150,7 @@ abstract class AggregateRoot
                 $this->uuid,
                 $this->aggregateVersionAfterReconstitution,
                 $latestPersistedVersionId,
-                );
+            );
         }
     }
 
