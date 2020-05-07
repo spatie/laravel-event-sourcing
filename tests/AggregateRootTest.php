@@ -261,18 +261,18 @@ class AggregateRootTest extends TestCase
     }
 
     /** @test */
-    public function projectors_will_get_called_when_an_aggregate_root_is_persisted()
+    public function it_can_persist_without_calling_event_handlers()
     {
         Projectionist::addProjector(AccountProjector::class);
 
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid)->addMoney(123);
 
-        $aggregateRoot->addMoney(123);
+        $events = $aggregateRoot->persistWithoutApplyingToEventHandlers();
 
         $accounts = Account::get();
         $this->assertCount(0, $accounts);
 
-        $aggregateRoot->persist();
+        Projectionist::handleStoredEvents($events);
 
         $accounts = Account::get();
         $this->assertCount(1, $accounts);
