@@ -2,6 +2,13 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.0.0 - unreleased
+
+- events that extend `ShouldBeStored` now can retrieve the aggregate root uuid using `aggregateRootUuid()`
+- events that extend `ShouldBeStored` can now handle metadata using `metaData` and `setMetaData`
+- aggregate roots can now be persisted without calling event handlers using `persistWithoutApplyingToEventHandlers`
+- the projectionist can now handle manually specified events using `handleStoredEvents`
+
 ## 3.1.7 - 2020-06-18
 
 - allow aggregate roots to have dependencies in constructor (#111)

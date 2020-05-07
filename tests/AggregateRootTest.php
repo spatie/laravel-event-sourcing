@@ -263,7 +263,10 @@ class AggregateRootTest extends TestCase
     /** @test */
     public function it_can_persist_without_calling_event_handlers()
     {
+        Mail::fake();
+
         Projectionist::addProjector(AccountProjector::class);
+        Projectionist::addReactor(SendMailReactor::class);
 
         $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid)->addMoney(123);
 
@@ -277,9 +280,7 @@ class AggregateRootTest extends TestCase
         $accounts = Account::get();
         $this->assertCount(1, $accounts);
 
-        $account = Account::first();
-        $this->assertEquals(123, $account->amount);
-        $this->assertEquals($this->aggregateUuid, $account->uuid);
+        Mail::assertSent(MoneyAddedMailable::class);
     }
 
     /** @test */
