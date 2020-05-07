@@ -5,6 +5,7 @@ namespace Spatie\EventSourcing;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\EventHandlers\EventHandlerCollection;
@@ -196,6 +197,20 @@ class Projectionist
             $storedEvent,
             $this->reactors->forEvent($storedEvent)
         );
+    }
+
+    public static function persistInTransaction(AggregateRoot ...$aggregateRoots): void
+    {
+        $storedEvents = DB::transaction(function() use ($aggregateRoots) {
+           return collect($aggregateRoots)->flatMap(function(AggregateRoot $aggregateRoot) {
+                return $aggregateRoot->persistWithoutApplyingToEventHandlers();
+            });
+        });
+
+        /** @var \Spatie\EventSourcing\Projectionist $projectionist */
+        $projectionist = app('event-sourcing');
+
+        $projectionist->handleStoredEvents($storedEvents);
     }
 
     public function handleWithSyncProjectors(StoredEvent $storedEvent): void
