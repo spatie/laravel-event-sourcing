@@ -36,7 +36,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 ## 3.0.4 - 2020-02-23
 
-- fix for serializing events that use immutable datatime objects (#67)
+- fix for serializing events that use immutable datetime objects (#67)
 
 ## 3.0.3 - 2020-02-18
 
