@@ -348,7 +348,7 @@ Projectionist::addProjector(TransactionCountProjector::class);
 If you've followed along, you've already created some accounts and some events. To feed those past events to the projector we can simply perform this artisan command:
 
 ```php
-php artisan event-sourcing:replay
+php artisan event-sourcing:replay App\\Projectors\\TransactionCountProjector
 ```
 
 This command will take all events stored in the `stored_events` table and pass them to `TransactionCountProjector`. After the command completes you should see the transaction counts in the `transaction_counts` table.

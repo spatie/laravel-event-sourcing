@@ -20,9 +20,9 @@ class CustomStoredEvent extends EloquentStoredEvent
     {
         parent::boot();
         
-         static::creating(function(CustomStoredEvent $storedEvent) {
-             $storedEvent->meta_data['user_id'] = auth()->user()->id;
-         });
+        static::creating(function(CustomStoredEvent $storedEvent) {
+            $storedEvent->meta_data['user_id'] = auth()->user()->id;
+        });
     }
 }
 ```
@@ -57,9 +57,9 @@ class MetaDataProjector implements Projector
     public function onMoneyAdded(StoredEvent $storedEvent, StoredEventRepository $repository)
     {
         if (! Projectionist::isReplaying()) {
-           $storedEvent->meta_data['user_id'] = auth()->user()->id;
+            $storedEvent->meta_data['user_id'] = auth()->user()->id;
 
-           $repository->update($storedEvent);
+            $repository->update($storedEvent);
         }
         
         // ...

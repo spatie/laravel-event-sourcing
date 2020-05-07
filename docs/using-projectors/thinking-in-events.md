@@ -55,7 +55,7 @@ You might be tempted to add some kind of flag here that determines if the mail w
 
 But you should never let reactors write to models (or whatever storage mechanism you use) you've built up using projectors. If you were to do that, all changes would get lost when replaying events: events won't get passed to reactors when replaying them. Keep in mind that reactors are meant for side effects, not for building up state.
 
-If you are tempted to modify state in a reactor, just fire off a new event and let a projector modify the state. Let's modify the `BrokeReactor` to do just that. If you're following along don't forget to create migration that adds the `broke_mail_sent` field to the `accounts` table.
+If you are tempted to modify state in a reactor, just fire off a new event and let a projector modify the state. Let's modify the `BrokeReactor` to do just that. If you're following along don't forget to create a migration that adds the `broke_mail_sent` field to the `accounts` table.
 
 ```php
 // ...

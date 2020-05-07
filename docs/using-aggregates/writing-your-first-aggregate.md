@@ -30,36 +30,48 @@ class AccountAggregate extends AggregateRoot
 
 You can add any methods or variables you need on the aggregate. To get you familiar with event modelling using aggregates let's implement a small piece of [the Larabank example app](https://github.com/spatie/larabank-aggregates). We are going to add methods to record the [`AccountCreated`](https://github.com/spatie/larabank-aggregates/blob/master/app/Domain/Account/Events/AccountCreated.php), [`MoneyAdded`](https://github.com/spatie/larabank-aggregates/blob/master/app/Domain/Account/Events/MoneyAdded.php) and the [`MoneySubtracted`](https://github.com/spatie/larabank-aggregates/blob/master/app/Domain/Account/Events/MoneySubtracted.php) events.
 
-First, let's add a `createAccount` methods to our aggregate that will record the `AccountCreated` event.
+First, let's add a `createAccount` method to our aggregate that will record the `AccountCreated` event.
 
 ```php
 namespace App\Aggregates;
 
 use Spatie\EventSourcing\AggregateRoot;
 
-
 class AccountAggregate extends AggregateRoot
 {
     public function createAccount(string $name, string $userId)
     {
         $this->recordThat(new AccountCreated($name, $userId));
+        
+        return $this;
     }
 
     public function addMoney(int $amount)
     {
         $this->recordThat(new MoneyAdded($amount));
+        
+        return $this;
     }
 
     public function subtractAmount(int $amount)
     {
         $this->recordThat(new MoneySubtracted($amount));
+        
+        return $this;
+    }
+
+    public function deleteAccount()
+    {
+        $this->recordThat(new AccountDeleted());
+        
+        return $this;
     }
 }
 ```
 
 The `recordThat` function will not persist the events to the database. It will simply hold them in memory. The events will get written to the database when the aggregate itself is persisted.
 
-There are two things to notice. First, the method name is written in the present tense, not the past tense. We're trying to do something, and for the rest of our application is hasn't happened yet until the actual `AccountCreated` is saved. This will only happen when the `AccountAggregate` gets persisted.
+There are two things to notice. First, the method names are written in the present tense, not the past tense. We're trying to do something, and for the rest of our application is hasn't happened yet until the actual `AccountCreated` is saved. This will only happen when the `AccountAggregate` gets persisted.
 
 The second thing to note is that nor the method and the event contain an uuid. The aggregate itself is aware of the uuid to use because it is passed to the retrieve method (`AccountAggregate::retrieve($uuid)`, we'll get to this in a bit). When persisting the aggregateroot, it will save the recorded events along with the uuid.
 
