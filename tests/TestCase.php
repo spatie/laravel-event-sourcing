@@ -93,4 +93,19 @@ abstract class TestCase extends Orchestra
     {
         $this->assertTrue(true);
     }
+
+    protected function assertExceptionThrown(callable $callable, string $expectedExceptionClass = null): void
+    {
+        $expectedExceptionClass ??= Exception::class;
+
+        try {
+            $callable();
+
+            $this->assertTrue(false, "Expected exception `{$expectedExceptionClass}` was not thrown.");
+        } catch (Exception $exception) {
+            $actualExceptionClass = get_class($exception);
+
+            $this->assertInstanceOf($expectedExceptionClass, $exception, "Unexpected exception `$actualExceptionClass` thrown. Expected exception `$expectedExceptionClass`");
+        }
+    }
 }

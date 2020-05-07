@@ -45,7 +45,7 @@ class Projectionist
             $projector = app($projector);
         }
 
-        if (! $projector instanceof Projector) {
+        if (!$projector instanceof Projector) {
             throw InvalidEventHandler::notAProjector($projector);
         }
 
@@ -93,14 +93,14 @@ class Projectionist
 
     public function getProjector(string $name): ?Projector
     {
-        return $this->projectors->all()->first(fn (Projector $projector) => $projector->getName() === $name);
+        return $this->projectors->all()->first(fn(Projector $projector) => $projector->getName() === $name);
     }
 
     public function getAsyncProjectorsFor(StoredEvent $storedEvent): Collection
     {
         return $this->projectors
             ->forEvent($storedEvent)
-            ->reject(fn (Projector $projector) => $projector->shouldBeCalledImmediately())
+            ->reject(fn(Projector $projector) => $projector->shouldBeCalledImmediately())
             ->values();
     }
 
@@ -110,7 +110,7 @@ class Projectionist
             $reactor = app($reactor);
         }
 
-        if (! $reactor instanceof EventHandler) {
+        if (!$reactor instanceof EventHandler) {
             throw InvalidEventHandler::notAnEventHandler($reactor);
         }
 
@@ -140,7 +140,7 @@ class Projectionist
 
     public function addEventHandler($eventHandlerClass)
     {
-        if (! is_string($eventHandlerClass)) {
+        if (!is_string($eventHandlerClass)) {
             $eventHandlerClass = get_class($eventHandlerClass);
         }
 
@@ -186,7 +186,7 @@ class Projectionist
     {
         $projectors = $this->projectors
             ->forEvent($storedEvent)
-            ->reject(fn (Projector $projector) => $projector->shouldBeCalledImmediately());
+            ->reject(fn(Projector $projector) => $projector->shouldBeCalledImmediately());
 
         $this->applyStoredEventToProjectors(
             $storedEvent,
@@ -199,12 +199,13 @@ class Projectionist
         );
     }
 
-    public static function persistInTransaction(AggregateRoot ...$aggregateRoots): void
+    public static function persistAggregateRootsInTransaction(AggregateRoot ...$aggregateRoots): void
     {
-        $storedEvents = DB::transaction(function() use ($aggregateRoots) {
-           return collect($aggregateRoots)->flatMap(function(AggregateRoot $aggregateRoot) {
-                return $aggregateRoot->persistWithoutApplyingToEventHandlers();
-            });
+        $storedEvents = DB::transaction(function () use ($aggregateRoots) {
+            return collect($aggregateRoots)
+                ->flatMap(function (AggregateRoot $aggregateRoot) {
+                    return $aggregateRoot->persistWithoutApplyingToEventHandlers()->all();
+                });
         });
 
         /** @var \Spatie\EventSourcing\Projectionist $projectionist */
@@ -217,7 +218,7 @@ class Projectionist
     {
         $projectors = $this->projectors
             ->forEvent($storedEvent)
-            ->filter(fn (Projector $projector) => $projector->shouldBeCalledImmediately());
+            ->filter(fn(Projector $projector) => $projector->shouldBeCalledImmediately());
 
         $this->applyStoredEventToProjectors($storedEvent, $projectors);
     }
@@ -250,7 +251,7 @@ class Projectionist
         try {
             $eventHandler->handle($storedEvent);
         } catch (Exception $exception) {
-            if (! $this->catchExceptions) {
+            if (!$this->catchExceptions) {
                 throw $exception;
             }
 
@@ -273,7 +274,8 @@ class Projectionist
         Collection $projectors,
         int $startingFromEventId = 0,
         callable $onEventReplayed = null
-    ): void {
+    ): void
+    {
         $projectors = new EventHandlerCollection($projectors);
 
         $this->isReplaying = true;
