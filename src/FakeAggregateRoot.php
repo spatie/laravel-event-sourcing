@@ -80,10 +80,55 @@ class FakeAggregateRoot
         }
     }
 
+    public function assertNothingApplied(): self
+    {
+        Assert::assertCount(0, $this->aggregateRoot->getAppliedEvents());
+
+        return $this;
+    }
+
+    /**
+     * @param \Spatie\EventSourcing\ShouldBeStored|\Spatie\EventSourcing\ShouldBeStored[] $expectedEvents
+     *
+     * @return $this
+     */
+    public function assertApplied($expectedEvents): self
+    {
+        $expectedEvents = Arr::wrap($expectedEvents);
+
+        $appliedEvents = array_map(function(ShouldBeStored $event) {
+            $metaData = $event->metaData();
+
+            unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);
+
+            return $event->setMetaData($metaData);
+        }, $this->aggregateRoot->getAppliedEvents());
+
+        Assert::assertEquals($expectedEvents, $appliedEvents);
+
+        return $this;
+    }
+
+    public function assertNotApplied($unexpectedEventClasses): void
+    {
+        $actualEventClasses = array_map(fn (ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getAppliedEvents());
+
+        $unexpectedEventClasses = Arr::wrap($unexpectedEventClasses);
+
+        foreach ($unexpectedEventClasses as $nonExceptedEventClass) {
+            Assert::assertNotContains($nonExceptedEventClass, $actualEventClasses, "Did not expect to apply {$nonExceptedEventClass}, but it was applied.");
+        }
+    }
+
     public function __call($name, $arguments): self
     {
         $this->aggregateRoot->$name(...$arguments);
 
         return $this;
+    }
+
+    public function aggregateRoot(): AggregateRoot
+    {
+        return $this->aggregateRoot;
     }
 }

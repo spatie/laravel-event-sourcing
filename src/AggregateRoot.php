@@ -16,12 +16,19 @@ abstract class AggregateRoot
 
     private array $recordedEvents = [];
 
+    private array $appliedEvents = [];
+
     protected int $aggregateVersion = 0;
 
     protected int $aggregateVersionAfterReconstitution = 0;
 
     protected static bool $allowConcurrency = false;
 
+    /**
+     * @param string $uuid
+     *
+     * @return static
+     */
     public static function retrieve(string $uuid): self
     {
         $aggregateRoot = (new static());
@@ -84,6 +91,11 @@ abstract class AggregateRoot
     public function getRecordedEvents(): array
     {
         return $this->recordedEvents;
+    }
+
+    public function getAppliedEvents(): array
+    {
+        return $this->appliedEvents;
     }
 
     protected function getState(): array
@@ -162,6 +174,8 @@ abstract class AggregateRoot
         if (method_exists($this, $applyingMethodName)) {
             $this->$applyingMethodName($event);
         }
+
+        $this->appliedEvents[] = $event;
 
         $this->aggregateVersion++;
     }

@@ -9,7 +9,7 @@ class EloquentSnapshot extends Model
 {
     public $guarded = [];
 
-    public $timestamps = false;
+    public $timestamps = ['created_at'];
 
     protected $table = 'snapshots';
 
