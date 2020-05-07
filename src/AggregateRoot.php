@@ -72,12 +72,13 @@ abstract class AggregateRoot
     {
         $this->ensureNoOtherEventsHaveBeenPersisted();
 
-        $storedEvents = call_user_func(
-            [$this->getStoredEventRepository(), 'persistMany'],
-            $this->getAndClearRecordedEvents(),
-            $this->uuid ?? '',
-            $this->aggregateVersion,
-        );
+        $storedEvents = $this
+            ->getStoredEventRepository()
+            ->persistMany(
+                $this->getAndClearRecordedEvents(),
+                $this->uuid(),
+                $this->aggregateVersion,
+            );
 
         return $storedEvents;
     }
