@@ -8,8 +8,10 @@ use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
+use Spatie\EventSourcing\StoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootThatAllowsConcurrency;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithFailingPersist;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
@@ -281,6 +283,41 @@ class AggregateRootTest extends TestCase
         $this->assertCount(1, $accounts);
 
         Mail::assertSent(MoneyAddedMailable::class);
+    }
+
+    /** @test */
+    public function it_can_persist_aggregate_roots_in_a_transaction()
+    {
+        Mail::fake();
+
+        Projectionist::addProjector(AccountProjector::class);
+        Projectionist::addReactor(SendMailReactor::class);
+
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid)->addMoney(123);
+        Projectionist::persistAggregateRootsInTransaction($aggregateRoot);
+
+        $this->assertCount(1, EloquentStoredEvent::get());
+        $this->assertCount(1, Account::get());
+        Mail::assertSent(MoneyAddedMailable::class);
+    }
+
+    /** @test */
+    public function it_will_not_call_any_event_handlers_when_persisting_fails()
+    {
+        Mail::fake();
+
+        Projectionist::addProjector(AccountProjector::class);
+        Projectionist::addReactor(SendMailReactor::class);
+
+        $aggregateRoot = AccountAggregateRootWithFailingPersist::retrieve($this->aggregateUuid)->addMoney(123);
+
+        $this->assertExceptionThrown(
+            fn() => Projectionist::persistAggregateRootsInTransaction($aggregateRoot)
+        );
+
+        $this->assertCount(0, EloquentStoredEvent::get());
+        $this->assertCount(0, Account::get());
+        Mail::assertNothingSent();
     }
 
     /** @test */
