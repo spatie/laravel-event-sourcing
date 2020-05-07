@@ -3,6 +3,8 @@
 namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionProperty;
@@ -51,6 +53,17 @@ abstract class AggregateRoot
 
     public function persist(): self
     {
+        $storedEvents = $this->persistWithoutApplyingToEventHandlers();
+
+        $storedEvents->each(fn(StoredEvent $storedEvent) => $storedEvent->handle());
+
+        $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
+
+        return $this;
+    }
+
+    public function persistWithoutApplyingToEventHandlers(): LazyCollection
+    {
         $this->ensureNoOtherEventsHaveBeenPersisted();
 
         $storedEvents = call_user_func(
@@ -60,11 +73,7 @@ abstract class AggregateRoot
             $this->aggregateVersion,
         );
 
-        $storedEvents->each(fn(StoredEvent $storedEvent) => $storedEvent->handle());
-
-        $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
-
-        return $this;
+        return $storedEvents;
     }
 
     public function snapshot(): Snapshot
