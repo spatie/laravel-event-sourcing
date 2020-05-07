@@ -199,21 +199,6 @@ class Projectionist
         );
     }
 
-    public static function persistAggregateRootsInTransaction(AggregateRoot ...$aggregateRoots): void
-    {
-        $storedEvents = DB::transaction(function () use ($aggregateRoots) {
-            return collect($aggregateRoots)
-                ->flatMap(function (AggregateRoot $aggregateRoot) {
-                    return $aggregateRoot->persistWithoutApplyingToEventHandlers()->all();
-                });
-        });
-
-        /** @var \Spatie\EventSourcing\Projectionist $projectionist */
-        $projectionist = app('event-sourcing');
-
-        $projectionist->handleStoredEvents($storedEvents);
-    }
-
     public function handleWithSyncProjectors(StoredEvent $storedEvent): void
     {
         $projectors = $this->projectors

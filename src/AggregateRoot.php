@@ -4,6 +4,7 @@ namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
 use ReflectionClass;
@@ -62,7 +63,7 @@ abstract class AggregateRoot
         return $this;
     }
 
-    public function persistWithoutApplyingToEventHandlers(): LazyCollection
+    protected function persistWithoutApplyingToEventHandlers(): LazyCollection
     {
         $this->ensureNoOtherEventsHaveBeenPersisted();
 
@@ -197,5 +198,20 @@ abstract class AggregateRoot
         $events = Arr::wrap($events);
 
         return (new FakeAggregateRoot(app(static::class)))->given($events);
+    }
+
+    public static function persistInTransaction(AggregateRoot ...$aggregateRoots): void
+    {
+        $storedEvents = DB::transaction(function () use ($aggregateRoots) {
+            return collect($aggregateRoots)
+                ->flatMap(function (AggregateRoot $aggregateRoot) {
+                    return $aggregateRoot->persistWithoutApplyingToEventHandlers()->all();
+                });
+        });
+
+        /** @var \Spatie\EventSourcing\Projectionist $projectionist */
+        $projectionist = app('event-sourcing');
+
+        $projectionist->handleStoredEvents($storedEvents);
     }
 }
