@@ -20,7 +20,6 @@ trait HandlesEvents
 
     public function handle(StoredEvent $storedEvent)
     {
-
         $eventClass = $storedEvent->event_class;
 
         $handlerClassOrMethod = $this->getEventHandlingMethods()->get($eventClass);

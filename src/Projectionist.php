@@ -5,7 +5,6 @@ namespace Spatie\EventSourcing;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\EventHandlers\EventHandlerCollection;
@@ -45,7 +44,7 @@ class Projectionist
             $projector = app($projector);
         }
 
-        if (!$projector instanceof Projector) {
+        if (! $projector instanceof Projector) {
             throw InvalidEventHandler::notAProjector($projector);
         }
 
@@ -93,14 +92,14 @@ class Projectionist
 
     public function getProjector(string $name): ?Projector
     {
-        return $this->projectors->all()->first(fn(Projector $projector) => $projector->getName() === $name);
+        return $this->projectors->all()->first(fn (Projector $projector) => $projector->getName() === $name);
     }
 
     public function getAsyncProjectorsFor(StoredEvent $storedEvent): Collection
     {
         return $this->projectors
             ->forEvent($storedEvent)
-            ->reject(fn(Projector $projector) => $projector->shouldBeCalledImmediately())
+            ->reject(fn (Projector $projector) => $projector->shouldBeCalledImmediately())
             ->values();
     }
 
@@ -110,7 +109,7 @@ class Projectionist
             $reactor = app($reactor);
         }
 
-        if (!$reactor instanceof EventHandler) {
+        if (! $reactor instanceof EventHandler) {
             throw InvalidEventHandler::notAnEventHandler($reactor);
         }
 
@@ -140,7 +139,7 @@ class Projectionist
 
     public function addEventHandler($eventHandlerClass)
     {
-        if (!is_string($eventHandlerClass)) {
+        if (! is_string($eventHandlerClass)) {
             $eventHandlerClass = get_class($eventHandlerClass);
         }
 
@@ -178,15 +177,15 @@ class Projectionist
     public function handleStoredEvents($events): void
     {
         collect($events)
-            ->each(fn(StoredEvent $storedEvent) => $this->handleWithSyncProjectors($storedEvent))
-            ->each(fn(StoredEvent $storedEvent) => $this->handle($storedEvent));
+            ->each(fn (StoredEvent $storedEvent) => $this->handleWithSyncProjectors($storedEvent))
+            ->each(fn (StoredEvent $storedEvent) => $this->handle($storedEvent));
     }
 
     public function handle(StoredEvent $storedEvent): void
     {
         $projectors = $this->projectors
             ->forEvent($storedEvent)
-            ->reject(fn(Projector $projector) => $projector->shouldBeCalledImmediately());
+            ->reject(fn (Projector $projector) => $projector->shouldBeCalledImmediately());
 
         $this->applyStoredEventToProjectors(
             $storedEvent,
@@ -203,7 +202,7 @@ class Projectionist
     {
         $projectors = $this->projectors
             ->forEvent($storedEvent)
-            ->filter(fn(Projector $projector) => $projector->shouldBeCalledImmediately());
+            ->filter(fn (Projector $projector) => $projector->shouldBeCalledImmediately());
 
         $this->applyStoredEventToProjectors($storedEvent, $projectors);
     }
@@ -236,7 +235,7 @@ class Projectionist
         try {
             $eventHandler->handle($storedEvent);
         } catch (Exception $exception) {
-            if (!$this->catchExceptions) {
+            if (! $this->catchExceptions) {
                 throw $exception;
             }
 
@@ -259,8 +258,7 @@ class Projectionist
         Collection $projectors,
         int $startingFromEventId = 0,
         callable $onEventReplayed = null
-    ): void
-    {
+    ): void {
         $projectors = new EventHandlerCollection($projectors);
 
         $this->isReplaying = true;

@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
@@ -61,7 +60,7 @@ abstract class AggregateRoot
     {
         $storedEvents = $this->persistWithoutApplyingToEventHandlers();
 
-        $storedEvents->each(fn(StoredEvent $storedEvent) => $storedEvent->handle());
+        $storedEvents->each(fn (StoredEvent $storedEvent) => $storedEvent->handle());
 
         $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
 
@@ -117,7 +116,7 @@ abstract class AggregateRoot
         $class = new ReflectionClass($this);
 
         return collect($class->getProperties())
-            ->reject(fn(ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
+            ->reject(fn (ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
             ->mapWithKeys(function (ReflectionProperty $property) {
                 return [$property->getName() => $this->{$property->getName()}];
             })->toArray();
