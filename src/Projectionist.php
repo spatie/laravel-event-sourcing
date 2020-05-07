@@ -173,7 +173,9 @@ class Projectionist
 
     public function handleStoredEvents(LazyCollection $events): void
     {
-        $events->each(fn(StoredEvent $storedEvent) => $this->handle($storedEvent));
+        $events
+            ->each(fn(StoredEvent $storedEvent) => $this->handleWithSyncProjectors($storedEvent))
+            ->each(fn(StoredEvent $storedEvent) => $this->handle($storedEvent));
     }
 
     public function handle(StoredEvent $storedEvent): void

@@ -30,7 +30,9 @@ class EventHandlerCollection
 
     public function forEvent(StoredEvent $storedEvent): Collection
     {
-        return $this->eventHandlers->filter(fn (EventHandler $eventHandler) => in_array($storedEvent->event_class, $eventHandler->handles(), true));
+        return $this->eventHandlers->filter(
+            fn (EventHandler $eventHandler) => in_array($storedEvent->event_class, $eventHandler->handles(), true)
+        );
     }
 
     public function call(string $method)
