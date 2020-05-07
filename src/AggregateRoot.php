@@ -41,6 +41,11 @@ abstract class AggregateRoot
         return $aggregateRoot->reconstituteFromEvents();
     }
 
+    public function uuid(): string
+    {
+        return $this->uuid;
+    }
+
     public function recordThat(ShouldBeStored $domainEvent): self
     {
         $domainEvent->setAggregateRootUuid($this->uuid);
