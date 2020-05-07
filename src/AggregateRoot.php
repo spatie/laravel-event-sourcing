@@ -60,9 +60,7 @@ abstract class AggregateRoot
             $this->aggregateVersion,
         );
 
-        $storedEvents->each(function (StoredEvent $storedEvent) {
-            $storedEvent->handle();
-        });
+        $storedEvents->each(fn(StoredEvent $storedEvent) => $storedEvent->handle());
 
         $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
 
