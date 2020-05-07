@@ -5,6 +5,7 @@ namespace Spatie\EventSourcing;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\EventHandlers\EventHandlerCollection;
 use Spatie\EventSourcing\Events\EventHandlerFailedHandlingEvent;
@@ -163,11 +164,16 @@ class Projectionist
         throw InvalidEventHandler::notAnEventHandlingClassName($eventHandlerClass);
     }
 
-    public function addEventHandlers(array $eventHandlers)
+    public function addEventHandlers(array $eventHandlers): void
     {
         foreach ($eventHandlers as $eventHandler) {
             $this->addEventHandler($eventHandler);
         }
+    }
+
+    public function handleStoredEvents(LazyCollection $events): void
+    {
+        $events->each(fn(StoredEvent $storedEvent) => $this->handle($storedEvent));
     }
 
     public function handle(StoredEvent $storedEvent): void
