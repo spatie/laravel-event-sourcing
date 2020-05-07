@@ -56,7 +56,7 @@ class FakeAggregateRoot
     {
         $expectedEvents = Arr::wrap($expectedEvents);
 
-        $recordedEvents = array_map(function(ShouldBeStored $event) {
+        $recordedEvents = array_map(function (ShouldBeStored $event) {
             $metaData = $event->metaData();
 
             unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);
@@ -96,7 +96,7 @@ class FakeAggregateRoot
     {
         $expectedEvents = Arr::wrap($expectedEvents);
 
-        $appliedEvents = array_map(function(ShouldBeStored $event) {
+        $appliedEvents = array_map(function (ShouldBeStored $event) {
             $metaData = $event->metaData();
 
             unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);

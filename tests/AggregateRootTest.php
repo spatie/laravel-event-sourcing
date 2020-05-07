@@ -9,7 +9,6 @@ use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
-use Spatie\EventSourcing\StoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootThatAllowsConcurrency;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithFailingPersist;
@@ -298,7 +297,7 @@ class AggregateRootTest extends TestCase
         $aggregateRoot = AccountAggregateRootWithFailingPersist::retrieve($this->aggregateUuid)->addMoney(123);
 
         $this->assertExceptionThrown(
-            fn() => AggregateRoot::persistInTransaction($aggregateRoot)
+            fn () => AggregateRoot::persistInTransaction($aggregateRoot)
         );
 
         $this->assertCount(0, EloquentStoredEvent::get());

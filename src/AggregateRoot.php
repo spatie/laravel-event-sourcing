@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
@@ -61,7 +60,7 @@ abstract class AggregateRoot
     {
         $storedEvents = $this->persistWithoutApplyingToEventHandlers();
 
-        $storedEvents->each(fn(StoredEvent $storedEvent) => $storedEvent->handle());
+        $storedEvents->each(fn (StoredEvent $storedEvent) => $storedEvent->handle());
 
         $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
 

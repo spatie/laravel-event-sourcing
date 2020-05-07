@@ -45,7 +45,6 @@ class StoredEvent implements Arrayable
             );
 
             $this->event->setMetaData(optional($this->meta_data)->toArray());
-
         } catch (Exception $exception) {
             throw InvalidStoredEvent::couldNotUnserializeEvent($this, $exception);
         }
