@@ -94,10 +94,10 @@ abstract class TestCase extends Orchestra
         $this->assertTrue(true);
     }
 
-    protected function assertExceptionThrown(callable $callable, string $expectedExceptionClass = null): void
-    {
-        $expectedExceptionClass ??= Exception::class;
-
+    protected function assertExceptionThrown(
+        callable $callable,
+        string $expectedExceptionClass = Exception::class
+    ): void {
         try {
             $callable();
 

@@ -9,6 +9,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - aggregate roots can now be persisted without calling event handlers using `persistWithoutApplyingToEventHandlers`
 - the projectionist can now handle manually specified events using `handleStoredEvents`
 - added `persistAggregateRootsInTransaction` to `AggregateRoot`
+- you can now get the `uuid` of an aggregate root using the `uuid()` method
 
 ## 3.1.7 - 2020-06-18
 

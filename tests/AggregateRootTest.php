@@ -47,6 +47,14 @@ class AggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function it_can_get_the_uuid()
+    {
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $this->assertEquals($this->aggregateUuid, $aggregateRoot->uuid());
+    }
+
+    /** @test */
     public function persisting_an_aggregate_root_will_persist_all_events_it_recorded()
     {
         AccountAggregateRoot::retrieve($this->aggregateUuid)
