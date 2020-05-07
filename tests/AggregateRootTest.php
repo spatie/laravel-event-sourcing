@@ -3,6 +3,7 @@
 namespace Spatie\EventSourcing\Tests;
 
 use Illuminate\Support\Facades\Mail;
+use Spatie\EventSourcing\AggregateRoot;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Facades\Projectionist;
@@ -263,29 +264,6 @@ class AggregateRootTest extends TestCase
     }
 
     /** @test */
-    public function it_can_persist_without_calling_event_handlers()
-    {
-        Mail::fake();
-
-        Projectionist::addProjector(AccountProjector::class);
-        Projectionist::addReactor(SendMailReactor::class);
-
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid)->addMoney(123);
-
-        $events = $aggregateRoot->persistWithoutApplyingToEventHandlers();
-
-        $accounts = Account::get();
-        $this->assertCount(0, $accounts);
-
-        Projectionist::handleStoredEvents($events);
-
-        $accounts = Account::get();
-        $this->assertCount(1, $accounts);
-
-        Mail::assertSent(MoneyAddedMailable::class);
-    }
-
-    /** @test */
     public function it_can_persist_aggregate_roots_in_a_transaction()
     {
         Mail::fake();
@@ -294,7 +272,7 @@ class AggregateRootTest extends TestCase
         Projectionist::addReactor(SendMailReactor::class);
 
         $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid)->addMoney(123);
-        Projectionist::persistAggregateRootsInTransaction($aggregateRoot);
+        AggregateRoot::persistInTransaction($aggregateRoot);
 
         $this->assertCount(1, EloquentStoredEvent::get());
         $this->assertCount(1, Account::get());
@@ -312,7 +290,7 @@ class AggregateRootTest extends TestCase
         $aggregateRoot = AccountAggregateRootWithFailingPersist::retrieve($this->aggregateUuid)->addMoney(123);
 
         $this->assertExceptionThrown(
-            fn() => Projectionist::persistAggregateRootsInTransaction($aggregateRoot)
+            fn() => AggregateRoot::persistInTransaction($aggregateRoot)
         );
 
         $this->assertCount(0, EloquentStoredEvent::get());

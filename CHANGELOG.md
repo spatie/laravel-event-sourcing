@@ -8,7 +8,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - events that extend `ShouldBeStored` can now handle metadata using `metaData` and `setMetaData`
 - aggregate roots can now be persisted without calling event handlers using `persistWithoutApplyingToEventHandlers`
 - the projectionist can now handle manually specified events using `handleStoredEvents`
-- added `persistAggregateRootsInTransaction` to the projectionist
+- added `persistAggregateRootsInTransaction` to `AggregateRoot`
 
 ## 3.1.7 - 2020-06-18
 
