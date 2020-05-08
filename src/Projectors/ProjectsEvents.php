@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing\Projectors;
 
 use Spatie\EventSourcing\EventHandlers\HandlesEvents;
-use Spatie\EventSourcing\Exceptions\CouldNotResetProjector;
 
 trait ProjectsEvents
 {
