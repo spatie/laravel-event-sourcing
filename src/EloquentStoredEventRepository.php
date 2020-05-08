@@ -5,7 +5,6 @@ namespace Spatie\EventSourcing;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\LazyCollection;
-use Spatie\EventSourcing\Concerns\HasMetaData;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Models\EloquentStoredEvent;
