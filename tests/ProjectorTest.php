@@ -46,14 +46,6 @@ class ProjectorTest extends TestCase
     }
 
     /** @test */
-    public function it_will_throw_an_exception_if_it_does_not_have_the_needed_method_to_reset()
-    {
-        $this->expectException(CouldNotResetProjector::class);
-
-        (new BalanceProjector())->reset();
-    }
-
-    /** @test */
     public function it_can_handle_non_associative_handle_events()
     {
         $account = Account::create();

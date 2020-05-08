@@ -3,6 +3,8 @@
 ## From v3 to v4 (unreleased)
 
 - The `ShouldBeStored` interface is now an abstract base class. In all your events you should extend it now, instead of implementing it
+- the `reset` method has been removed on projectors, use `resetState` instead
+
 
 ## From v2 to v3
 

@@ -20,7 +20,7 @@ class ResettableProjector implements Projector
         $event->account->addMoney($event->amount);
     }
 
-    public function resetState()
+    public function reset()
     {
         Account::truncate();
     }
