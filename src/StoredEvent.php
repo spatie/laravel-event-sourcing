@@ -21,7 +21,8 @@ class StoredEvent implements Arrayable
 
     public string $event_class;
 
-    public SchemalessAttributes $meta_data;
+    /** @var array|string */
+    public $meta_data;
 
     public string $created_at;
 
