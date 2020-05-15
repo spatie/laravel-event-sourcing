@@ -11,6 +11,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - added `persistAggregateRootsInTransaction` to `AggregateRoot`
 - you can now get the `uuid` of an aggregate root using the `uuid()` method
 - the `reset` method has been removed on projectors
+- the `meta_data` property on `StoredEvent` is now an array or a string instead of `SchemalessAttributes`
 
 ## 3.1.4 - 2020-05-07
 
