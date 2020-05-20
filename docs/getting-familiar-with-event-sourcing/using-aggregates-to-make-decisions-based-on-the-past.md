@@ -53,4 +53,4 @@ Whenever we retrieve an aggregate, all of the previously stored events will be f
 
 In summary, aggregates are used to make decisions based on past events.
 
-If you want to know how to create and use aggregates, head over to [the `using-aggregates` section](/laravel-event-sourcing/v1/using-aggregates/writing-your-first-aggregate).
+If you want to know how to create and use aggregates, head over to [the `using-aggregates` section](/laravel-event-sourcing/v3/using-aggregates/writing-your-first-aggregate).

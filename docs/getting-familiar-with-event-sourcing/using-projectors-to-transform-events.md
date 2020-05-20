@@ -3,7 +3,7 @@ title: Using projectors to transform events
 weight: 3
 ---
 
-Let's build a bit further on the [Larabank example](https://github.com/spatie/larabank-traditional) mentioned in [the previous section](/laravel-event-sourcing/v1/getting-familiar-with-event-sourcing/the-traditional-application). The main drawback highlighted that example is the fact that when updating a value, we lose the old value. Let's solve that problem.
+Let's build a bit further on the [Larabank example](https://github.com/spatie/larabank-traditional) mentioned in [the previous section](/laravel-event-sourcing/v3/getting-familiar-with-event-sourcing/the-traditional-application). The main drawback highlighted that example is the fact that when updating a value, we lose the old value. Let's solve that problem.
 
 Instead of directly updating the value in the database, we could write every change we want to make as an event in our database.
 
@@ -37,4 +37,4 @@ This package can help you store native Laravel events in a `stored_events` table
 
 Here's our example app [Larabank rebuild with projectors](https://github.com/spatie/larabank-projectors). In [the `AccountsController`](https://github.com/spatie/larabank-projectors/blob/677777c0cb7fd2584b54073ac82c91e25fd07d2b/app/Http/Controllers/AccountsController.php#L20-L36) we're not going to directly modify the database anymore. Instead, the controller will call methods which will in [their turn fire off events](https://github.com/spatie/larabank-projectors/blob/677777c0cb7fd2584b54073ac82c91e25fd07d2b/app/Account.php#L15-L41). Our package will listen for those events (which implement the empty `ShouldBeStored` interface) and store them in the `stored_events` table. Those events will also get passed to [all registered projectors](https://github.com/spatie/larabank-projectors/blob/677777c0cb7fd2584b54073ac82c91e25fd07d2b/config/event-sourcing.php#L18-L20). The [`AccountsProjector`](https://github.com/spatie/larabank-projectors/blob/677777c0cb7fd2584b54073ac82c91e25fd07d2b/app/Projectors/AccountsProjector.php) will build the `Accounts` table using [a couple of events it listens for](https://github.com/spatie/larabank-projectors/blob/677777c0cb7fd2584b54073ac82c91e25fd07d2b/app/Projectors/AccountsProjector.php#L17-L20).
 
-If you want to know more about projectors and how to use them, head over to [the `using-projectors` section](/laravel-event-sourcing/v1/using-projectors/writing-your-first-projector).
+If you want to know more about projectors and how to use them, head over to [the `using-projectors` section](/laravel-event-sourcing/v3/using-projectors/writing-your-first-projector).
