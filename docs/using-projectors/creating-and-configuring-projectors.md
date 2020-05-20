@@ -84,7 +84,7 @@ public function onMoneyAdded(MoneyAdded $event, string $aggregateUuid)
 }
 ```
 
-The order of the parameters giving to an event handling method like `onMoneyAdded`. We'll simply pass the uuid to any arguments named `$aggregateUuid`.
+The order of the parameters giving to an event handling method like `onMoneyAdded` does not matter. We'll simply pass the uuid to any arguments named `$aggregateUuid`.
 
 ## Manually registering event handling methods
 
