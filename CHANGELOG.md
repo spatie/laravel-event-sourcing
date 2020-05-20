@@ -2,6 +2,11 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 3.1.5 - 2020-05-23
+
+- only include public properties of the aggregate when snapshotting (#105)
+
+
 ## 3.1.4 - 2020-05-07
 
 - simplify snapshot dates
