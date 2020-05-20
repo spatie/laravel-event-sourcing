@@ -5,7 +5,7 @@ weight: 2
 
 All [events](/laravel-event-sourcing/v1/advanced-usage/preparing-events/) that implement `Spatie\EventSourcing\ShouldBeStored` will be [serialized](/laravel-event-sourcing/v1/advanced-usage/using-your-own-event-serializer) and stored in the `stored_events` table. After your app has been doing its work for a while the `stored_events` table will probably contain some events.
 
- When creating a new [projector](/laravel-event-sourcing/v1/using-projectors/writing-your-first-projector/) or [reactor](/laravel-event-sourcing/v1/using-reactors/writing-your-first-reactor/) you'll want to feed all stored events to that new projector or reactor. We call this process replaying events.
+ When creating a new [projector](/laravel-event-sourcing/v1/using-projectors/writing-your-first-projector/) you'll want to feed all stored events to that new projector. We call this process replaying events.
 
  Events can be replayed to [all projectors that were added to the projectionist](/laravel-event-sourcing/v1/using-projectors/creating-and-configuring-projectors/) with this artisan command:
 
