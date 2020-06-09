@@ -13,6 +13,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - the `reset` method has been removed on projectors
 - the `fake` method on an aggregate root now accepts a uuid instead of an array of events
 - the `meta_data` property on `StoredEvent` is now an array or a string instead of `SchemalessAttributes`
+- apply methods on aggregates can now make use of method injection
 
 ## 3.1.7 - 2020-06-18
 
