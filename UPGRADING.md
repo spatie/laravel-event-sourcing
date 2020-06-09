@@ -5,6 +5,7 @@
 - The `ShouldBeStored` interface is now an abstract base class. In all your events you should extend it now, instead of implementing it
 - the `reset` method has been removed on projectors, use `resetState` instead
 - the `fake` method on an aggregate root now accepts a uuid instead of an array of events. Use `given` to pass the events you are now passing to `fake`
+- the variable used to accept the event in the apply methods on aggregates is required to be named `$event`
 
 ## From v2 to v3
 
