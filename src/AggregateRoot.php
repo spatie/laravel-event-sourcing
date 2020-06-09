@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use ReflectionClass;
@@ -163,7 +164,12 @@ abstract class AggregateRoot
         $applyingMethodName = "apply{$camelCasedBaseName}";
 
         if (method_exists($this, $applyingMethodName)) {
-            app()->call([$this, $applyingMethodName], ['event' => $event]);
+            try {
+                app()->call([$this, $applyingMethodName], ['event' => $event]);
+            }
+            catch (BindingResolutionException $e) {
+                $this->$applyingMethodName($event);
+            }
         }
 
         $this->aggregateVersion++;
