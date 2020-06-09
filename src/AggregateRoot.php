@@ -163,7 +163,7 @@ abstract class AggregateRoot
         $applyingMethodName = "apply{$camelCasedBaseName}";
 
         if (method_exists($this, $applyingMethodName)) {
-            $this->$applyingMethodName($event);
+            app()->call([$this, $applyingMethodName], ['event' => $event]);
         }
 
         $this->aggregateVersion++;

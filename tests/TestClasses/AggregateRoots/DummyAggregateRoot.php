@@ -14,8 +14,8 @@ class DummyAggregateRoot extends AggregateRoot
         $this->recordThat(new DummyEvent($this->latestInteger + 1));
     }
 
-    public function applyDummyEvent(DummyEvent $dummyEvent)
+    public function applyDummyEvent(DummyEvent $event)
     {
-        $this->latestInteger = $dummyEvent->integer;
+        $this->latestInteger = $event->integer;
     }
 }
