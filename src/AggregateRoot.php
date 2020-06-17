@@ -29,7 +29,7 @@ abstract class AggregateRoot
      */
     public static function retrieve(string $uuid): self
     {
-        $aggregateRoot = (new static());
+        $aggregateRoot = resolve(static::class);
 
         $aggregateRoot->uuid = $uuid;
 

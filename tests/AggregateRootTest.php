@@ -32,6 +32,18 @@ class AggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function aggregate_root_resolves_dependencies_from_the_container()
+    {
+        $this->app->bind(AccountAggregateRoot::class, function () {
+            return new AccountAggregateRoot(42);
+        });
+
+        $root = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $this->assertEquals(42, $root->dep);
+    }
+
+    /** @test */
     public function persisting_an_aggregate_root_will_persist_all_events_it_recorded()
     {
         AccountAggregateRoot::retrieve($this->aggregateUuid)
