@@ -14,11 +14,11 @@ class AccountAggregateRoot extends AggregateRoot
 
     public int $aggregateVersionAfterReconstitution = 0;
 
-    public $dep;
+    public $dependency;
 
-    public function __construct($dep = null)
+    public function __construct($dependency = null)
     {
-        $this->dep = $dep;
+        $this->dependency = $dependency;
     }
 
     public function addMoney(int $amount): self
