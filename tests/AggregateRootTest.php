@@ -40,7 +40,7 @@ class AggregateRootTest extends TestCase
 
         $root = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        $this->assertEquals(42, $root->dep);
+        $this->assertEquals(42, $root->dependency);
     }
 
     /** @test */
