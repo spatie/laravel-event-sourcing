@@ -7,6 +7,7 @@ use Spatie\EventSourcing\Tests\TestCase;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithDatetime;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithoutSerializedModels;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\EventSerializer\UpgradeSerializer;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
 class EventSerializerTest extends TestCase
@@ -83,5 +84,24 @@ class EventSerializerTest extends TestCase
         $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json);
 
         $this->assertInstanceOf(\DateTimeImmutable::class, $normalizedEvent->value);
+    }
+
+    /** @test */
+    public function it_can_upgrade_an_event_version()
+    {
+        $event = new EventWithDatetime(new \DateTimeImmutable('2019-08-07T00:00:00Z'));
+        $eventSerializer = app(UpgradeSerializer::class);
+
+        $json = $eventSerializer->serialize($event);
+
+        /**
+         * @var EventWithDatetime
+         */
+        $normalizedEvent = $eventSerializer->deserialize(get_class($event), $json, '{ "version": 1 }');
+
+        dump($normalizedEvent);
+
+        $this->assertInstanceOf(\DateTimeImmutable::class, $normalizedEvent->value);
+        $this->assertEquals('UTC', $normalizedEvent->value->getTimezone()->getName());
     }
 }

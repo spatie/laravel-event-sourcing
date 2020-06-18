@@ -41,7 +41,10 @@ class StoredEvent implements Arrayable
                 self::getActualClassForEvent($this->event_class),
                 is_string($this->event_properties)
                     ? $this->event_properties
-                    : json_encode($this->event_properties)
+                    : json_encode($this->event_properties),
+                is_string($this->meta_data)
+                    ? $this->meta_data
+                    : json_encode($this->meta_data),
             );
 
             $this->event->setMetaData(optional($this->meta_data)->toArray());
