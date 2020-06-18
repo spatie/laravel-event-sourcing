@@ -14,6 +14,13 @@ class AccountAggregateRoot extends AggregateRoot
 
     public int $aggregateVersionAfterReconstitution = 0;
 
+    public $dependency;
+
+    public function __construct($dependency = null)
+    {
+        $this->dependency = $dependency;
+    }
+
     public function addMoney(int $amount): self
     {
         $this->recordThat(new MoneyAdded($amount));
