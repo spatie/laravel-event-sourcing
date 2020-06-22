@@ -13,6 +13,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - the `reset` method has been removed on projectors
 - the `meta_data` property on `StoredEvent` is now an array or a string instead of `SchemalessAttributes`
 - apply methods on aggregates can now make use of method injection
+- pass metadata to serializer to allow events to be upgraded (#112)
 
 ## 3.1.4 - 2020-05-07
 
