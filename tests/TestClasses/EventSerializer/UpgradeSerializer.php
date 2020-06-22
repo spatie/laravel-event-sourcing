@@ -3,13 +3,8 @@
 namespace Spatie\EventSourcing\Tests\TestClasses\EventSerializer;
 
 use DateTimeZone;
-use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\EventSerializers\JsonEventSerializer;
 use Spatie\EventSourcing\ShouldBeStored;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 
 class UpgradeSerializer extends JsonEventSerializer
 {
