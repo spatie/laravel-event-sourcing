@@ -18,6 +18,31 @@ interface EventSerializer
 {
     public function serialize(ShouldBeStored $event): string;
 
-    public function deserialize(string $eventClass, string $json): ShouldBeStored;
+    public function deserialize(string $eventClass, string $json, string $metadata): ShouldBeStored;
 }
 ```
+
+## Upgrading Events
+
+If an event payload has changed overtime, old events can be "upgraded" to the new payload on the fly
+in the event serializer. 
+
+Using our larabank example, let's imagine that we've gone international and our new accepting 
+international payments. Our `MoneyAdded` events will need to have an additional field for
+the currency.
+
+```
+class UpgradeSerializer extends JsonEventSerializer
+{
+    public function deserialize(string $eventClass, string $json, string $metadata = null): ShouldBeStored
+    {
+        $event = parent::deserialize($eventClass, $json, $metadata);
+
+        // all currency was USD before we started accepting other currencies
+        if (empty($event->currency)) {
+            $event->currency = 'USD';
+        }
+
+        return $event;
+    }
+}
