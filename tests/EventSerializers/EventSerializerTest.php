@@ -99,8 +99,6 @@ class EventSerializerTest extends TestCase
          */
         $normalizedEvent = $eventSerializer->deserialize(get_class($event), $json, '{ "version": 1 }');
 
-        dump($normalizedEvent);
-
         $this->assertInstanceOf(\DateTimeImmutable::class, $normalizedEvent->value);
         $this->assertEquals('UTC', $normalizedEvent->value->getTimezone()->getName());
     }
