@@ -19,6 +19,8 @@ class StoredEvent implements Arrayable
 
     public string $aggregate_uuid;
 
+    public string $aggregate_version;
+
     public string $event_class;
 
     public SchemalessAttributes $meta_data;
@@ -32,6 +34,7 @@ class StoredEvent implements Arrayable
         $this->id = $data['id'] ?? null;
         $this->event_properties = $data['event_properties'];
         $this->aggregate_uuid = $data['aggregate_uuid'];
+        $this->aggregate_version = $data['aggregate_version'];
         $this->event_class = self::getActualClassForEvent($data['event_class']);
         $this->meta_data = $data['meta_data'];
         $this->created_at = $data['created_at'];
@@ -54,6 +57,7 @@ class StoredEvent implements Arrayable
             'id' => $this->id,
             'event_properties' => $this->event_properties,
             'aggregate_uuid' => $this->aggregate_uuid,
+            'aggregate_version' => $this->aggregate_version,
             'event_class' => self::getEventClass($this->event_class),
             'meta_data' => $this->meta_data instanceof Arrayable ? $this->meta_data->toArray() : (array) $this->meta_data,
             'created_at' => $this->created_at,
