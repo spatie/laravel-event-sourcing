@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
