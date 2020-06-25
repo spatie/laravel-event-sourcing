@@ -18,4 +18,9 @@ class DummyAggregateRoot extends AggregateRoot
     {
         $this->latestInteger = $dummyEvent->integer;
     }
+
+    public function getLatestInteger(): int
+    {
+        return $this->latestInteger;
+    }
 }

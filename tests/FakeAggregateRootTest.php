@@ -24,6 +24,20 @@ class FakeAggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function it_will_apply_the_given_events()
+    {
+        DummyAggregateRoot::fake()
+            ->given([
+                new DummyEvent(123),
+            ])
+            ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
+                $dummyAggregateRoot->dummy();
+
+                $this->assertEquals(123 + 1, $dummyAggregateRoot->getLatestInteger());
+            });
+    }
+
+    /** @test */
     public function it_can_assert_the_recorded_events()
     {
         DummyAggregateRoot::fake()
