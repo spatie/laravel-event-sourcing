@@ -86,20 +86,7 @@ public function it_will_not_make_subtractions_that_would_go_below_the_account_li
 }
 ```
 
-You could write the above test a bit shorter. The given events can be passed to the `fake` method. You're also not required to use the `when` function.
-
-```php
-/** @test */
-public function it_will_not_make_subtractions_that_would_go_below_the_account_limit()
-{
-    AccountAggregateRoot::fake(new MoneySubtracted(4999))
-        ->subtractMoney(2)
-        ->assertRecorded(new AccountLimitHit(2))
-        ->assertNotRecorded(MoneySubtracted::class);
-}
-```
-
-The `fake`, `given` and `assertRecorded` methods can accept a single event instances or an array with event instances. `assertNotRecorded` can also accept an array of class names.
+The `given` and `assertRecorded` methods can accept a single event instances or an array with event instances. `assertNotRecorded` can also accept an array of class names.
 
 If you don't expect any events to be recorded you can use `assertNothingRecorded`.
 

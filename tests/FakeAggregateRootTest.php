@@ -14,6 +14,16 @@ class FakeAggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function it_can_retrieve_an_aggregate_for_a_given_uuid()
+    {
+        $fakeUuid = 'fake-uuid';
+
+        $realAggregateRoot = DummyAggregateRoot::fake($fakeUuid)->aggregateRoot();
+
+        $this->assertEquals($fakeUuid, $realAggregateRoot->uuid());
+    }
+
+    /** @test */
     public function it_can_assert_the_recorded_events()
     {
         DummyAggregateRoot::fake()
@@ -65,37 +75,6 @@ class FakeAggregateRootTest extends TestCase
         $fakeAggregateRoot->assertRecorded([
             new DummyEvent(3),
         ]);
-    }
-
-    public function the_fake_method_can_accept_given_events()
-    {
-        $fakeAggregateRoot = DummyAggregateRoot::fake([
-            new DummyEvent(1),
-            new DummyEvent(2),
-        ]);
-
-        $fakeAggregateRoot->dummy();
-
-        $fakeAggregateRoot->assertRecorded([
-            new DummyEvent(3),
-        ]);
-    }
-
-    /** @test */
-    public function fake_can_accept_a_single_given_event()
-    {
-        DummyAggregateRoot::fake(new DummyEvent(1))
-            ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
-                $dummyAggregateRoot->dummy();
-            })
-            ->assertRecorded(new DummyEvent(2));
-    }
-
-    /** @test */
-    public function assertNotRecorded_can_accept_a_single_given_event()
-    {
-        DummyAggregateRoot::fake(new DummyEvent(1))
-            ->assertNotRecorded(DummyEvent::class);
     }
 
     /** @test */

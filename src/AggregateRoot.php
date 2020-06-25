@@ -193,16 +193,13 @@ abstract class AggregateRoot
         $this->aggregateVersion++;
     }
 
-    /**
-     * @param \Spatie\EventSourcing\ShouldBeStored|\Spatie\EventSourcing\ShouldBeStored[] $events
-     *
-     * @return $this
-     */
-    public static function fake($events = []): FakeAggregateRoot
+    public static function fake(string $uuid = null): FakeAggregateRoot
     {
-        $events = Arr::wrap($events);
+        $uuid ??= (string)Str::uuid();
 
-        return (new FakeAggregateRoot(app(static::class)))->given($events);
+        $aggregateRoot = static::retrieve($uuid);
+
+        return (new FakeAggregateRoot($aggregateRoot));
     }
 
     public static function persistInTransaction(AggregateRoot ...$aggregateRoots): void
