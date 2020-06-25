@@ -33,8 +33,8 @@ class AccountAggregateRoot extends AggregateRoot
         $this->balance += $event->amount;
     }
 
-    public function applyMoneyMultiplied(MoneyMultiplied $event)
+    public function applyMoneyMultiplied(MoneyMultiplied $event, Math $math)
     {
-        $this->balance *= $event->amount;
+        $this->balance = $math->multiply($this->balance, $event->amount);
     }
 }

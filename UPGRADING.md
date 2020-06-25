@@ -5,6 +5,7 @@
 - The `ShouldBeStored` interface is now an abstract base class. In all your events you should extend it now, instead of implementing it
 - the `reset` method has been removed on projectors, use `resetState` instead
 - the `fake` method on an aggregate root now accepts a uuid instead of an array of events. Use `given` to pass the events you are now passing to `fake`
+- the variable used to accept the event in the apply methods on aggregates is required to be named `$event`
 
 ## From v2 to v3
 
@@ -23,6 +24,7 @@ Nothing changed, expect that where possible property types and short closures ar
 The only change in this version is the naming change from `laravel-event-projector` to `laravel-event-sourcing`. There are no changes to the API.
 
 To upgrade from v3 of `laravel-event-projector` you have to perform these steps:
-1. Rename `config/event-projector.php` to `config/event-sourcing.php`
-2. Change `laravel-event-projector:v3` to `laravel-event-sourcing:v1` and run `composer update`
-3. The namespace has changed, so you need to replace `Spatie\EventProjector` by `Spatie\EventSourcing` in your entire project
+1. Merge the `config/event-projector.php` with `vendor/spatie/laravel-event-sourcing/config/event-sourcing.php` 
+2. Rename `config/event-projector.php` to `config/event-sourcing.php`
+3. Change `laravel-event-projector:v3` to `laravel-event-sourcing:v1` and run `composer update`
+4. The namespace has changed, so you need to replace `Spatie\EventProjector` by `Spatie\EventSourcing` in your entire project

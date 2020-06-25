@@ -8,7 +8,6 @@ use Illuminate\Support\Arr;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class StoredEvent implements Arrayable
 {
@@ -21,7 +20,8 @@ class StoredEvent implements Arrayable
 
     public string $event_class;
 
-    public SchemalessAttributes $meta_data;
+    /** @var array|string */
+    public $meta_data;
 
     public string $created_at;
 
@@ -41,7 +41,10 @@ class StoredEvent implements Arrayable
                 self::getActualClassForEvent($this->event_class),
                 is_string($this->event_properties)
                     ? $this->event_properties
-                    : json_encode($this->event_properties)
+                    : json_encode($this->event_properties),
+                is_string($this->meta_data)
+                    ? $this->meta_data
+                    : json_encode($this->meta_data),
             );
 
             $this->event->setMetaData(optional($this->meta_data)->toArray());
