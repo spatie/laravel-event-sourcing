@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 3.1.8 - 2020-06-28
+
+- use `app` helper (#117)
+
 ## 3.1.7 - 2020-06-18
 
 - allow aggregate roots to have dependencies in constructor (#111)
