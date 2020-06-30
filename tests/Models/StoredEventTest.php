@@ -123,7 +123,7 @@ class StoredEventTest extends TestCase
     }
 
     /** @test **/
-    public function it_expose_aggregate_version()
+    public function it_exposes_the_aggregate_version()
     {
         $this->fireEvents();
 
