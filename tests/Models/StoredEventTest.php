@@ -122,6 +122,18 @@ class StoredEventTest extends TestCase
         $this->assertEquals(MoneyAddedEvent::class, get_class($storedEvent->event));
     }
 
+    /** @test **/
+    public function it_expose_aggregate_version()
+    {
+        $this->fireEvents();
+
+        $eloquentEvent = EloquentStoredEvent::first();
+
+        $storedEvent = $eloquentEvent->toStoredEvent();
+
+        $this->assertEquals(0 , $storedEvent->aggregate_version);
+    }
+
     public function fireEvents(int $number = 1, string $className = MoneyAddedEvent::class)
     {
         foreach (range(1, $number) as $i) {
