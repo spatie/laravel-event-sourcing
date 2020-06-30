@@ -131,7 +131,7 @@ class StoredEventTest extends TestCase
 
         $storedEvent = $eloquentEvent->toStoredEvent();
 
-        $this->assertEquals(0 , $storedEvent->aggregate_version);
+        $this->assertEquals(0, $storedEvent->aggregate_version);
     }
 
     public function fireEvents(int $number = 1, string $className = MoneyAddedEvent::class)
