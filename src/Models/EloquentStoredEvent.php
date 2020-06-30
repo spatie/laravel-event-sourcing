@@ -27,6 +27,7 @@ class EloquentStoredEvent extends Model
             'id' => $this->id,
             'event_properties' => $this->event_properties,
             'aggregate_uuid' => $this->aggregate_uuid ?? '',
+            'aggregate_version' => $this->aggregate_version ?? 0,
             'event_class' => $this->event_class,
             'meta_data' => $this->meta_data,
             'created_at' => $this->created_at,

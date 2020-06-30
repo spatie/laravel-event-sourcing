@@ -91,6 +91,7 @@ class StoredEventTest extends TestCase
             'id' => $eloquentEvent->id,
             'event_properties' => json_encode($eloquentEvent->event_properties),
             'aggregate_uuid' => $eloquentEvent->aggregate_uuid ?? '',
+            'aggregate_version' => $eloquentEvent->aggregate_version ?? 0,
             'event_class' => $eloquentEvent->event_class,
             'meta_data' => $eloquentEvent->meta_data,
             'created_at' => $eloquentEvent->created_at,
@@ -112,12 +113,25 @@ class StoredEventTest extends TestCase
             'id' => $eloquentEvent->id,
             'event_properties' => $eloquentEvent->event_properties,
             'aggregate_uuid' => $eloquentEvent->aggregate_uuid ?? '',
+            'aggregate_version' => $eloquentEvent->aggregate_version ?? 0,
             'event_class' => $eloquentEvent->event_class,
             'meta_data' => $eloquentEvent->meta_data,
             'created_at' => $eloquentEvent->created_at,
         ]);
 
         $this->assertEquals(MoneyAddedEvent::class, get_class($storedEvent->event));
+    }
+
+    /** @test **/
+    public function it_exposes_the_aggregate_version()
+    {
+        $this->fireEvents();
+
+        $eloquentEvent = EloquentStoredEvent::first();
+
+        $storedEvent = $eloquentEvent->toStoredEvent();
+
+        $this->assertEquals(0, $storedEvent->aggregate_version);
     }
 
     public function fireEvents(int $number = 1, string $className = MoneyAddedEvent::class)
