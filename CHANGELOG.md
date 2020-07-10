@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 3.2.1 - 2020-07-09
+
+- config file comment corrections (#121)
+
 ## 3.2.0 - 2020-06-30
 
 - expose `aggregate_version` of `StoredEvent` (#115)
