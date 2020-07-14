@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 3.2.3 - 2020-07-14
+
+- default to `BigIncrements` on package table stubs (#124)
+
 ## 3.2.2  - 2020-07-14
 
 - replace model where clause with uuid model scope (#123)
