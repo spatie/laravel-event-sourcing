@@ -14,6 +14,7 @@ use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
 use Spatie\EventSourcing\Projectors\Projector;
 use Spatie\EventSourcing\Projectors\QueuedProjector;
 use Spatie\EventSourcing\Reactors\Reactor;
+use Spatie\EventSourcing\Reactors\SyncReactor;
 
 class Projectionist
 {
@@ -107,7 +108,7 @@ class Projectionist
     {
         return $this->reactors
             ->forEvent($storedEvent)
-            ->reject(fn(Reactor $reactor) => $reactor->shouldBeCalledImmediately())
+            ->reject(fn(EventHandler $reactor) => $reactor instanceof SyncReactor)
             ->values();
     }
 
@@ -192,7 +193,7 @@ class Projectionist
 
         $reactors = $this->reactors
             ->forEvent($storedEvent)
-            ->reject(fn(Reactor $reactor) => $reactor->shouldBeCalledImmediately());
+            ->reject(fn(EventHandler $reactor) => $reactor instanceof SyncReactor);
 
         $this->applyStoredEventToReactors(
             $storedEvent,
@@ -213,7 +214,7 @@ class Projectionist
     {
         $reactors = $this->reactors
             ->forEvent($storedEvent)
-            ->filter(fn(Reactor $reactor) => $reactor->shouldBeCalledImmediately());
+            ->filter(fn(EventHandler $reactor) => $reactor instanceof SyncReactor);
 
         $this->applyStoredEventToReactors($storedEvent, $reactors);
     }

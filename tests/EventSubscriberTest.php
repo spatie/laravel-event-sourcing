@@ -17,7 +17,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatInvokesAnObject;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
-use Spatie\EventSourcing\Tests\TestClasses\Reactors\AsyncReactor;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\SyncReactor;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
 class EventSubscriberTest extends TestCase
@@ -213,7 +213,7 @@ class EventSubscriberTest extends TestCase
     {
         Bus::fake();
 
-        Projectionist::addReactor(AsyncReactor::class);
+        Projectionist::addReactor(SyncReactor::class);
 
         event(new MoneySubtractedEvent($this->account, 1000));
 
@@ -227,7 +227,7 @@ class EventSubscriberTest extends TestCase
     {
         Bus::fake();
 
-        Projectionist::addReactor(AsyncReactor::class);
+        Projectionist::addReactor(SyncReactor::class);
 
         event(new MoneySubtractedEvent($this->account, 1234));
 

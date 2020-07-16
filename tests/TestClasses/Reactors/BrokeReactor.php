@@ -3,14 +3,15 @@
 namespace Spatie\EventSourcing\Tests\TestClasses\Reactors;
 
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventSourcing\Reactors\Reactor;
+use Spatie\EventSourcing\EventHandlers\EventHandler;
+use Spatie\EventSourcing\EventHandlers\HandlesEvents;
 use Spatie\EventSourcing\Reactors\ReactsEvents;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
 
-class BrokeReactor implements Reactor
+class BrokeReactor implements EventHandler
 {
-    use ReactsEvents;
+    use HandlesEvents;
 
     protected array $handlesEvents = [
         MoneySubtractedEvent::class => 'onMoneySubtracted',

@@ -3,12 +3,14 @@
 namespace Spatie\EventSourcing\Tests\TestClasses\Reactors;
 
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventSourcing\Reactors\AsyncReactor as AsyncReactorInterface;
+use Spatie\EventSourcing\EventHandlers\HandlesEvents;
+use Spatie\EventSourcing\Reactors\SyncReactor as SyncReactorInterface;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
 
-class AsyncReactor extends BrokeReactor implements AsyncReactorInterface
+class SyncReactor implements SyncReactorInterface
 {
+    use HandlesEvents;
 
     public function onMoneySubtracted(MoneySubtractedEvent $event)
     {
