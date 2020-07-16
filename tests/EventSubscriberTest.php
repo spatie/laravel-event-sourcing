@@ -17,6 +17,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatInvokesAnObject;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\AsyncReactor;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
 class EventSubscriberTest extends TestCase
@@ -147,7 +148,7 @@ class EventSubscriberTest extends TestCase
     }
 
     /** @test */
-    public function it_calls_sync_projectors_but_does_not_dipatch_job_if_event_has_no_queued_projectors_and_no_reactors()
+    public function it_calls_sync_projectors_but_does_not_dispatch_job_if_event_has_no_queued_projectors_and_no_reactors()
     {
         Bus::fake();
 
@@ -189,5 +190,49 @@ class EventSubscriberTest extends TestCase
         event(new MoneyAddedEventWithQueueOverride($this->account, 1234));
 
         Queue::assertPushedOn('testQueue', HandleStoredEventJob::class);
+    }
+
+    /** @test */
+    public function it_will_queue_reactor_by_default()
+    {
+        Bus::fake();
+
+        Projectionist::addReactor(BrokeReactor::class);
+
+        event(new MoneySubtractedEvent($this->account, 1000));
+
+        Bus::assertDispatched(HandleStoredEventJob::class, function (HandleStoredEventJob $job) {
+            return get_class($job->storedEvent->event) === MoneySubtractedEvent::class;
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function an_async_reactor_will_not_be_queued()
+    {
+        Bus::fake();
+
+        Projectionist::addReactor(AsyncReactor::class);
+
+        event(new MoneySubtractedEvent($this->account, 1000));
+
+        Bus::assertNotDispatched(HandleStoredEventJob::class, function (HandleStoredEventJob $job) {
+            return get_class($job->storedEvent->event) === MoneySubtractedEvent::class;
+        });
+    }
+
+    /** @test */
+    public function it_calls_sync_reactors_but_does_not_dispatch_job_if_event_has_no_queued_projectors_and_no_async_reactors()
+    {
+        Bus::fake();
+
+        Projectionist::addReactor(AsyncReactor::class);
+
+        event(new MoneySubtractedEvent($this->account, 1234));
+
+        Bus::assertNotDispatched(HandleStoredEventJob::class);
+
+        Mail::assertSent(AccountBroke::class);
     }
 }

@@ -68,6 +68,8 @@ class StoredEvent implements Arrayable
     {
         Projectionist::handleWithSyncProjectors($this);
 
+        Projectionist::handleWithSyncReactors($this);
+
         if (method_exists($this->event, 'tags')) {
             $tags = $this->event->tags();
         }
@@ -91,7 +93,7 @@ class StoredEvent implements Arrayable
             return true;
         }
 
-        if (Projectionist::getReactorsFor($this)->isNotEmpty()) {
+        if (Projectionist::getAsyncReactorsFor($this)->isNotEmpty()) {
             return true;
         }
 
