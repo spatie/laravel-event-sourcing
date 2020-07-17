@@ -32,7 +32,7 @@ class EventHandlerCollection extends Collection
         return new static($eventHandlers);
     }
 
-    public function call(string $method)
+    public function call(string $method): void
     {
         $this
             ->filter(fn (EventHandler $eventHandler) => method_exists($eventHandler, $method))

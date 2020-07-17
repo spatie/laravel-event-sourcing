@@ -30,9 +30,7 @@ class JsonEventSerializer implements EventSerializer
             $event->__sleep();
         }
 
-        $json = $this->serializer->serialize($event, 'json');
-
-        return $json;
+        return $this->serializer->serialize($event, 'json');
     }
 
     public function deserialize(string $eventClass, string $json, string $metadata = null): ShouldBeStored

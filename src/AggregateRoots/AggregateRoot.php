@@ -29,11 +29,6 @@ abstract class AggregateRoot
 
     protected static bool $allowConcurrency = false;
 
-    /**
-     * @param string $uuid
-     *
-     * @return static
-     */
     public static function retrieve(string $uuid): self
     {
         $aggregateRoot = app(static::class);
@@ -190,7 +185,7 @@ abstract class AggregateRoot
         if (method_exists($this, $applyingMethodName)) {
             try {
                 app()->call([$this, $applyingMethodName], ['event' => $event]);
-            } catch (BindingResolutionException $e) {
+            } catch (BindingResolutionException $exception) {
                 $this->$applyingMethodName($event);
             }
         }

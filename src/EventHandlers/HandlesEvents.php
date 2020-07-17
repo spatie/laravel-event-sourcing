@@ -86,7 +86,7 @@ trait HandlesEvents
                     ->first(fn ($typeHint) => is_subclass_of($typeHint, ShouldBeStored::class));
 
                 if (! $eventClass) {
-                    return;
+                    return null;
                 }
 
                 return [$eventClass => $method->name];

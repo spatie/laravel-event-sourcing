@@ -31,7 +31,7 @@ class EloquentSnapshotRepository implements SnapshotRepository
 
     public function persist(Snapshot $snapshot): Snapshot
     {
-        /** @var EloquentSnapshot $eloquentSnapshot */
+        /** @var \Spatie\EventSourcing\Snapshots\EloquentSnapshot $eloquentSnapshot */
         $eloquentSnapshot = new $this->snapshotModel();
 
         $eloquentSnapshot->aggregate_uuid = $snapshot->aggregateUuid;
