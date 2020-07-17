@@ -41,7 +41,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         $query = $this->prepareEventModelQuery($startingFrom, $uuid);
 
         /** @var LazyCollection $lazyCollection */
-        $lazyCollection =  $query
+        $lazyCollection = $query
             ->orderBy('id')
             ->cursor();
 
