@@ -13,7 +13,7 @@ class ListCommand extends Command
 
     protected $description = 'Lists all event handlers';
 
-    public function handle(Projectionist $projectionist)
+    public function handle(Projectionist $projectionist): void
     {
         $this->info('');
         $projectors = $projectionist->getProjectors();
@@ -34,14 +34,19 @@ class ListCommand extends Command
     {
         $events = $eventHandlers
             ->reduce(function ($events, EventHandler $eventHandler) {
-                $eventHandler->getEventHandlingMethods()->each(function (string $method, string $eventClass) use (&$events, $eventHandler) {
-                    $events[$eventClass][] = get_class($eventHandler);
-                });
+                $eventHandler
+                    ->getEventHandlingMethods()
+                    ->each(function (string $method, string $eventClass) use (&$events, $eventHandler) {
+                        $events[$eventClass][] = get_class($eventHandler);
+                    });
 
                 return $events;
             }, []);
 
-        return collect($events)->map(fn (array $eventHandlers, string $eventClass) => [$eventClass, implode(PHP_EOL, collect($eventHandlers)->sort()->toArray())])
+        return collect($events)
+            ->map(function (array $eventHandlers, string $eventClass) {
+                return [$eventClass, implode(PHP_EOL, collect($eventHandlers)->sort()->toArray())];
+            })
             ->sort()
             ->values()
             ->toArray();

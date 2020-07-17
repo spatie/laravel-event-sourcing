@@ -10,7 +10,7 @@ class EloquentSnapshotRepository implements SnapshotRepository
 
     public function __construct()
     {
-        $this->snapshotModel = config('event-sourcing.snapshot_model', EloquentSnapshot::class);
+        $this->snapshotModel = (string)config('event-sourcing.snapshot_model', EloquentSnapshot::class);
 
         if (! new $this->snapshotModel instanceof EloquentSnapshot) {
             throw new InvalidEloquentSnapshotModel("The class {$this->snapshotModel} must extend EloquentSnapshot");

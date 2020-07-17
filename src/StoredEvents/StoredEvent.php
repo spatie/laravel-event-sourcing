@@ -87,7 +87,13 @@ class StoredEvent implements Arrayable
             $tags ?? []
         );
 
-        dispatch($storedEventJob->onQueue($this->event->queue ?? config('event-sourcing.queue')));
+        dispatch($storedEventJob->onQueue($this->getQueueName()));
+    }
+
+    /** @psalm-suppress TypeDoesNotContainType */
+    protected function getQueueName(): string
+    {
+        return $this->event->queue ?? config('event-sourcing.queue');
     }
 
     protected function shouldDispatchJob(): bool

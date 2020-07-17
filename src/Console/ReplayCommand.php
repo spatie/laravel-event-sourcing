@@ -30,13 +30,13 @@ class ReplayCommand extends Command
             return;
         }
 
-        $this->replay($projectors, $this->option('from'));
+        $this->replay($projectors, (int)$this->option('from'));
     }
 
     public function selectProjectors(array $projectorClassNames): ?Collection
     {
-        if (count($projectorClassNames ?? []) === 0) {
-            if (! $confirmed = $this->confirm('Are you sure you want to replay events to all projectors?', true)) {
+        if (count($projectorClassNames) === 0) {
+            if (! $this->confirm('Are you sure you want to replay events to all projectors?', true)) {
                 return null;
             }
 
@@ -80,6 +80,7 @@ class ReplayCommand extends Command
         $this->comment('All done!');
     }
 
+    /** @psalm-suppress UnusedVariable */
     private function emptyLine(int $amount = 1): void
     {
         foreach (range(1, $amount) as $i) {

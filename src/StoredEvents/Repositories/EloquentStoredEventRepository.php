@@ -17,7 +17,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
     public function __construct()
     {
-        $this->storedEventModel = config('event-sourcing.stored_event_model', EloquentStoredEvent::class);
+        $this->storedEventModel = (string)config('event-sourcing.stored_event_model', EloquentStoredEvent::class);
 
         if (! new $this->storedEventModel instanceof EloquentStoredEvent) {
             throw new InvalidEloquentStoredEventModel("The class {$this->storedEventModel} must extend EloquentStoredEvent");
@@ -40,7 +40,12 @@ class EloquentStoredEventRepository implements StoredEventRepository
     {
         $query = $this->prepareEventModelQuery($startingFrom, $uuid);
 
-        return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+        /** @var LazyCollection $lazyCollection */
+        $lazyCollection =  $query
+            ->orderBy('id')
+            ->cursor();
+
+        return $lazyCollection->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
     public function countAllStartingFrom(int $startingFrom, string $uuid = null): int

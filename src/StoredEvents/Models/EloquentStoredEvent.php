@@ -34,7 +34,7 @@ class EloquentStoredEvent extends Model
         ]);
     }
 
-    public function getEventAttribute(): ShouldBeStored
+    public function getEventAttribute(): ?ShouldBeStored
     {
         return $this->toStoredEvent()->event;
     }
