@@ -2,7 +2,7 @@
 
 namespace DummyNamespace;
 
-use Spatie\EventSourcing\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class DummyClass extends AggregateRoot
 {

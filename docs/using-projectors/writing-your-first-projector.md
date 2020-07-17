@@ -101,7 +101,7 @@ Let's take a look at all events used in the `Account` model.
 ```php
 namespace App\Events;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class AccountCreated extends ShouldBeStored
 {
@@ -118,7 +118,7 @@ class AccountCreated extends ShouldBeStored
 ```php
 namespace App\Events;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class MoneyAdded extends ShouldBeStored
 {
@@ -140,7 +140,7 @@ class MoneyAdded extends ShouldBeStored
 ```php
 namespace App\Events;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class MoneySubtracted extends ShouldBeStored
 {
@@ -162,7 +162,7 @@ class MoneySubtracted extends ShouldBeStored
 ```php
 namespace App\Events;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class AccountDeleted extends ShouldBeStored
 {
@@ -193,8 +193,8 @@ use App\Events\AccountDeleted;
 use App\Events\MoneyAdded;
 use App\Events\MoneySubtracted;
 use Spatie\EventSourcing\Models\StoredEvent;
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 
 class AccountBalanceProjector implements Projector
 {
@@ -311,8 +311,8 @@ use App\Events\MoneyAdded;
 use App\Events\MoneySubtracted;
 use App\TransactionCount;
 use Spatie\EventSourcing\Models\StoredEvent;
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 
 class TransactionCountProjector implements Projector
 {

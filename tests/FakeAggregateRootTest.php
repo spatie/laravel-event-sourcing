@@ -76,7 +76,7 @@ class FakeAggregateRootTest extends TestCase
     /** @test */
     public function it_can_assert_recorded_events_without_using_when()
     {
-        /** @var \Spatie\EventSourcing\Tests\TestClasses\DummyAggregateRoot|\Spatie\EventSourcing\FakeAggregateRoot $fakeAggregateRoot */
+        /** @var \Spatie\EventSourcing\Tests\TestClasses\DummyAggregateRoot|\Spatie\EventSourcing\AggregateRoots\FakeAggregateRoot $fakeAggregateRoot */
         $fakeAggregateRoot = DummyAggregateRoot::fake();
 
         $fakeAggregateRoot->given([

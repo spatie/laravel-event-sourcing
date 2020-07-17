@@ -4,7 +4,7 @@ namespace Spatie\EventSourcing\Tests\TestClasses\EventSerializer;
 
 use DateTimeZone;
 use Spatie\EventSourcing\EventSerializers\JsonEventSerializer;
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class UpgradeSerializer extends JsonEventSerializer
 {

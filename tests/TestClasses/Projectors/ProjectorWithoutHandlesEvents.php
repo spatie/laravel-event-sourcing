@@ -3,15 +3,12 @@
 namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
 use Illuminate\Support\Collection;
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 
-class ProjectorWithoutHandlesEvents implements Projector
+class ProjectorWithoutHandlesEvents extends Projector
 {
-    use ProjectsEvents;
-
     public function functionThatHandlesMoneyAdd(MoneyAddedEvent $event)
     {
         $event->account->addMoney($event->amount);

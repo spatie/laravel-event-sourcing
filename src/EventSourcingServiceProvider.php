@@ -13,6 +13,10 @@ use Spatie\EventSourcing\Console\MakeReactorCommand;
 use Spatie\EventSourcing\Console\MakeStorableEventCommand;
 use Spatie\EventSourcing\Console\ReplayCommand;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\StoredEvents\EventSubscriber;
+use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
+use Spatie\EventSourcing\Support\Composer;
+use Spatie\EventSourcing\Support\DiscoverEventHandlers;
 
 class EventSourcingServiceProvider extends ServiceProvider
 {

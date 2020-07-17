@@ -3,7 +3,7 @@
 namespace Spatie\EventSourcing\Exceptions;
 
 use Exception;
-use Spatie\EventSourcing\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class CouldNotPersistAggregate extends Exception
 {

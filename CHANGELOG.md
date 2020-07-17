@@ -4,7 +4,11 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 ## 4.0.0 - unreleased
 
+- projectors now are abstract classes instead of interfaces
+- reactors can now be easily defined by extending the reactor base class
+- projectors and reactors can be marked as async by implementing the `ShouldQueue` marker interface
 - events that extend `ShouldBeStored` now can retrieve the aggregate root uuid using `aggregateRootUuid()`
+- the package has been restructured. Namespaces of most classes have been updated.
 - events that extend `ShouldBeStored` can now handle metadata using `metaData` and `setMetaData`
 - aggregate roots can now be persisted without calling event handlers using `persistWithoutApplyingToEventHandlers`
 - the projectionist can now handle manually specified events using `handleStoredEvents`

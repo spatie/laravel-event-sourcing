@@ -2,8 +2,9 @@
 
 namespace Spatie\EventSourcing\EventHandlers;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
-use Spatie\EventSourcing\StoredEvent;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 class EventHandlerCollection
 {
@@ -28,11 +29,14 @@ class EventHandlerCollection
         return $this->eventHandlers;
     }
 
-    public function forEvent(StoredEvent $storedEvent): Collection
+    public function forEvent(StoredEvent $storedEvent): EventHandlerCollection
     {
-        return $this->eventHandlers->filter(
-            fn (EventHandler $eventHandler) => in_array($storedEvent->event_class, $eventHandler->handles(), true)
-        );
+        $eventHandlers = $this->eventHandlers
+            ->filter(
+                fn (EventHandler $eventHandler) => in_array($storedEvent->event_class, $eventHandler->handles(), true)
+            )->toArray();
+
+        return new static($eventHandlers);
     }
 
     public function call(string $method)
@@ -45,6 +49,35 @@ class EventHandlerCollection
     public function remove(array $eventHandlerClassNames): void
     {
         $this->eventHandlers = $this->eventHandlers
-            ->reject(fn (EventHandler $eventHandler) => in_array(get_class($eventHandler), $eventHandlerClassNames));
+            ->reject(
+                fn (EventHandler $eventHandler) => in_array(get_class($eventHandler), $eventHandlerClassNames)
+            );
+    }
+
+    public function sycnEventHandlers(): self
+    {
+        $queuedEventHandlers = $this->eventHandlers
+            ->reject(
+                fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
+            )
+            ->toArray();
+
+        return new static($queuedEventHandlers);
+    }
+
+    public function queuedEventHandlers(): self
+    {
+        $queuedEventHandlers = $this->eventHandlers
+            ->filter(
+                fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
+            )
+            ->toArray();
+
+        return new static($queuedEventHandlers);
+    }
+
+    public function count(): int
+    {
+        return count($this->eventHandlers);
     }
 }

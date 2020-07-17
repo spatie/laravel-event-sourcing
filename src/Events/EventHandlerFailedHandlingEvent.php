@@ -4,7 +4,7 @@ namespace Spatie\EventSourcing\Events;
 
 use Exception;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
-use Spatie\EventSourcing\StoredEvent;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 class EventHandlerFailedHandlingEvent
 {

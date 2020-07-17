@@ -3,17 +3,19 @@
 namespace Spatie\EventSourcing;
 
 use Exception;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\EventHandlers\EventHandlerCollection;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Spatie\EventSourcing\Events\EventHandlerFailedHandlingEvent;
 use Spatie\EventSourcing\Events\FinishedEventReplay;
 use Spatie\EventSourcing\Events\StartingEventReplay;
 use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\QueuedProjector;
+use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 class Projectionist
 {
@@ -51,6 +53,13 @@ class Projectionist
         $this->projectors->add($projector);
 
         return $this;
+    }
+
+    public function allEventHandlers(): EventHandlerCollection
+    {
+        $eventHandlers = $this->projectors->all()->merge($this->reactors->all())->toArray();
+
+        return new EventHandlerCollection($eventHandlers);
     }
 
     public function withoutEventHandlers(array $eventHandlers = null): Projectionist
@@ -99,7 +108,7 @@ class Projectionist
     {
         return $this->projectors
             ->forEvent($storedEvent)
-            ->reject(fn (Projector $projector) => $projector->shouldBeCalledImmediately())
+            ->reject(fn (Projector $projector) => $projector instanceof ShouldQueue)
             ->values();
     }
 
@@ -149,12 +158,6 @@ class Projectionist
             return;
         }
 
-        if (is_subclass_of($eventHandlerClass, QueuedProjector::class)) {
-            $this->addProjector($eventHandlerClass);
-
-            return;
-        }
-
         if (is_subclass_of($eventHandlerClass, EventHandler::class)) {
             $this->addReactor($eventHandlerClass);
 
@@ -177,7 +180,7 @@ class Projectionist
     public function handleStoredEvents($events): void
     {
         collect($events)
-            ->each(fn (StoredEvent $storedEvent) => $this->handleWithSyncProjectors($storedEvent))
+            ->each(fn (StoredEvent $storedEvent) => $this->handleWithSyncEventHandlers($storedEvent))
             ->each(fn (StoredEvent $storedEvent) => $this->handle($storedEvent));
     }
 
@@ -185,26 +188,40 @@ class Projectionist
     {
         $projectors = $this->projectors
             ->forEvent($storedEvent)
-            ->reject(fn (Projector $projector) => $projector->shouldBeCalledImmediately());
+            ->queuedEventHandlers()
+            ->all();
 
         $this->applyStoredEventToProjectors(
             $storedEvent,
             $projectors
         );
 
+        $reactors = $this->reactors
+            ->forEvent($storedEvent)
+            ->queuedEventHandlers()
+            ->all();
+
         $this->applyStoredEventToReactors(
             $storedEvent,
-            $this->reactors->forEvent($storedEvent)
+            $reactors
         );
     }
 
-    public function handleWithSyncProjectors(StoredEvent $storedEvent): void
+    public function handleWithSyncEventHandlers(StoredEvent $storedEvent): void
     {
         $projectors = $this->projectors
             ->forEvent($storedEvent)
-            ->filter(fn (Projector $projector) => $projector->shouldBeCalledImmediately());
+            ->sycnEventHandlers()
+            ->all();
 
         $this->applyStoredEventToProjectors($storedEvent, $projectors);
+
+        $reactors = $this->reactors
+            ->forEvent($storedEvent)
+            ->sycnEventHandlers()
+            ->all();
+
+        $this->applyStoredEventToReactors($storedEvent, $reactors);
     }
 
     public function isProjecting(): bool
@@ -275,16 +292,18 @@ class Projectionist
 
         $projectors->call('onStartingEventReplay');
 
-        app(StoredEventRepository::class)->retrieveAllStartingFrom($startingFromEventId)->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
-            $this->applyStoredEventToProjectors(
-                $storedEvent,
-                $projectors->forEvent($storedEvent)
-            );
+        app(StoredEventRepository::class)
+            ->retrieveAllStartingFrom($startingFromEventId)
+            ->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
+                $this->applyStoredEventToProjectors(
+                    $storedEvent,
+                    $projectors->forEvent($storedEvent)->all()
+                );
 
-            if ($onEventReplayed) {
-                $onEventReplayed($storedEvent);
-            }
-        });
+                if ($onEventReplayed) {
+                    $onEventReplayed($storedEvent);
+                }
+            });
 
         $this->isReplaying = false;
 
