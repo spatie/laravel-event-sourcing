@@ -2,7 +2,6 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
-
 ## 4.0.0 - unreleased
 
 - projectors now are abstract classes instead of interfaces
