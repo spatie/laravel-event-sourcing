@@ -10,7 +10,7 @@ class EventHandlerCollection extends Collection
 {
     public function __construct($eventHandlers = [])
     {
-       parent::__construct([]);
+        parent::__construct([]);
 
         foreach ($eventHandlers as $eventHandler) {
             $this->addEventHandler($eventHandler);
@@ -51,14 +51,14 @@ class EventHandlerCollection extends Collection
     public function sycnEventHandlers(): self
     {
         return $this ->reject(
-                fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
-            );
+            fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
+        );
     }
 
     public function queuedEventHandlers(): self
     {
         return $this->filter(
-                fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
-            );
+            fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
+        );
     }
 }
