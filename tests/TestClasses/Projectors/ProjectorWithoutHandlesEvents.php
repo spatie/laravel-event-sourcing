@@ -4,7 +4,6 @@ namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
 use Illuminate\Support\Collection;
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
-use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 

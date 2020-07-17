@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors;
 
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
-use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
