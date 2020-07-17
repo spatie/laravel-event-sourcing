@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcing\Models;
+namespace Spatie\EventSourcing\StoredEvents\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

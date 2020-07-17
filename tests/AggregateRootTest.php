@@ -7,7 +7,7 @@ use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\EventSourcing\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootThatAllowsConcurrency;

@@ -3,7 +3,7 @@
 namespace Spatie\EventSourcing\Tests;
 
 use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\EventSourcing\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;

@@ -12,7 +12,7 @@ If you need to store metadata on all events you can leverage Laravel's native mo
 You must configure the package to [use your own eloquent event storage model](/laravel-event-sourcing/v3/advanced-usage/using-your-own-event-storage-model) that extends the `EloquentStoredEvent` model. On that model you can hook into the model lifecycle hooks.
 
 ```php
-use Spatie\EventSourcing\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 
 class CustomStoredEvent extends EloquentStoredEvent
 {

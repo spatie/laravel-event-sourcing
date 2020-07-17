@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\LazyCollection;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
-use Spatie\EventSourcing\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;

@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\Models;
 
-use Spatie\EventSourcing\Models\EloquentStoredEvent as BaseStoredEvent;
+use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent as BaseStoredEvent;
 
 class OtherEloquentStoredEvent extends BaseStoredEvent
 {
