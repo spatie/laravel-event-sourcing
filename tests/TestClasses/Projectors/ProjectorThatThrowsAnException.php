@@ -4,7 +4,6 @@ namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Spatie\EventSourcing\EventHandlers\Projectors\QueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 
 class ProjectorThatThrowsAnException extends BalanceProjector implements ShouldQueue
