@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcing\Projectors;
+namespace Spatie\EventSourcing\EventHandlers\Projectors;
 
 use Spatie\EventSourcing\EventHandlers\HandlesEvents;
 
@@ -11,10 +11,5 @@ trait ProjectsEvents
     public function getName(): string
     {
         return $this->name ?? get_class($this);
-    }
-
-    public function shouldBeCalledImmediately(): bool
-    {
-        return ! $this instanceof QueuedProjector;
     }
 }

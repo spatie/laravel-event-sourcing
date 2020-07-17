@@ -2,10 +2,10 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 
-class UnrelatedProjector implements Projector
+class UnrelatedProjector extends Projector
 {
-    use ProjectsEvents;
+
 }
