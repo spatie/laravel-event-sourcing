@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcing;
+namespace Spatie\EventSourcing\Support;
 
 use Illuminate\Support\Str;
 

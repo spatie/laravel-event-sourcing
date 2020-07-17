@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests;
 
-use Spatie\EventSourcing\Composer;
+use Spatie\EventSourcing\Support\Composer;
 use Spatie\EventSourcing\DiscoverEventHandlers;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\Projectionist;
