@@ -3,8 +3,8 @@
 namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
-use Spatie\EventSourcing\StoredEvents\StoredEvent;
 use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 
 class ProjectorThatWritesMetaData extends Projector

@@ -8,7 +8,6 @@ use Illuminate\Support\Arr;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class StoredEvent implements Arrayable
 {

@@ -10,7 +10,6 @@ use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
-use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
 
 class EloquentStoredEventRepository implements StoredEventRepository
 {
