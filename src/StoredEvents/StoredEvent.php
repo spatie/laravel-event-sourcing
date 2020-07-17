@@ -91,7 +91,7 @@ class StoredEvent implements Arrayable
     }
 
     /** @psalm-suppress TypeDoesNotContainType */
-    protected function getQueueName(): string
+    protected function getQueueName(): ?string
     {
         return $this->event->queue ?? config('event-sourcing.queue');
     }
