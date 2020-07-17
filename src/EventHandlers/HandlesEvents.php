@@ -8,8 +8,8 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
-use Spatie\EventSourcing\ShouldBeStored;
-use Spatie\EventSourcing\StoredEvent;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 trait HandlesEvents
 {

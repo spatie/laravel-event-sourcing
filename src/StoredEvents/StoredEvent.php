@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcing;
+namespace Spatie\EventSourcing\StoredEvents;
 
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class StoredEvent implements Arrayable
 {

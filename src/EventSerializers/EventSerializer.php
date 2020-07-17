@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\EventSerializers;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 interface EventSerializer
 {

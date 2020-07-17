@@ -6,7 +6,7 @@ use Illuminate\Support\Arr;
 use PHPUnit\Framework\Assert;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\Enums\MetaData;
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class FakeAggregateRoot
 {
@@ -18,7 +18,7 @@ class FakeAggregateRoot
     }
 
     /**
-     * @param \Spatie\EventSourcing\ShouldBeStored|\Spatie\EventSourcing\ShouldBeStored[] $events
+     * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored|\Spatie\EventSourcing\StoredEvents\ShouldBeStored[] $events
      *
      * @return $this
      */
@@ -50,7 +50,7 @@ class FakeAggregateRoot
     }
 
     /**
-     * @param \Spatie\EventSourcing\ShouldBeStored|\Spatie\EventSourcing\ShouldBeStored[] $expectedEvents
+     * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored|\Spatie\EventSourcing\StoredEvents\ShouldBeStored[] $expectedEvents
      *
      * @return $this
      */
@@ -90,7 +90,7 @@ class FakeAggregateRoot
     }
 
     /**
-     * @param \Spatie\EventSourcing\ShouldBeStored|\Spatie\EventSourcing\ShouldBeStored[] $expectedEvents
+     * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored|\Spatie\EventSourcing\StoredEvents\ShouldBeStored[] $expectedEvents
      *
      * @return $this
      */

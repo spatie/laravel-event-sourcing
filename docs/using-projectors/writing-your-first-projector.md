@@ -101,7 +101,7 @@ Let's take a look at all events used in the `Account` model.
 ```php
 namespace App\Events;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class AccountCreated extends ShouldBeStored
 {
@@ -118,7 +118,7 @@ class AccountCreated extends ShouldBeStored
 ```php
 namespace App\Events;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class MoneyAdded extends ShouldBeStored
 {
@@ -140,7 +140,7 @@ class MoneyAdded extends ShouldBeStored
 ```php
 namespace App\Events;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class MoneySubtracted extends ShouldBeStored
 {
@@ -162,7 +162,7 @@ class MoneySubtracted extends ShouldBeStored
 ```php
 namespace App\Events;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class AccountDeleted extends ShouldBeStored
 {

@@ -43,7 +43,7 @@ Inside an aggregate you can record new events using the `recordThat` function. A
 Here's an example event
 
 ```php
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class MoneyAdded extends ShouldBeStored
 {

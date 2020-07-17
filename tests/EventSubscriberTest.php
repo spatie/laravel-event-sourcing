@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\EventSourcing\HandleStoredEventJob;
+use Spatie\EventSourcing\StoredEvents\HandleStoredEventJob;
 use Spatie\EventSourcing\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\DoNotStoreThisEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;

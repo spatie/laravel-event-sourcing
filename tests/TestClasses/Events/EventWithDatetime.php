@@ -3,7 +3,7 @@
 namespace Spatie\EventSourcing\Tests\TestClasses\Events;
 
 use DateTimeImmutable;
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class EventWithDatetime extends ShouldBeStored
 {

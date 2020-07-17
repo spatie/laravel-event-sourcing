@@ -4,7 +4,7 @@ namespace Spatie\EventSourcing\EventHandlers;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
-use Spatie\EventSourcing\StoredEvent;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 class EventHandlerCollection
 {

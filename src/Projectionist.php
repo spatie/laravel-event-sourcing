@@ -14,6 +14,8 @@ use Spatie\EventSourcing\Events\EventHandlerFailedHandlingEvent;
 use Spatie\EventSourcing\Events\FinishedEventReplay;
 use Spatie\EventSourcing\Events\StartingEventReplay;
 use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
+use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 class Projectionist
 {

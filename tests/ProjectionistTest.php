@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Queue;
 use Mockery;
 use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
 use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\EventSourcing\HandleStoredEventJob;
+use Spatie\EventSourcing\StoredEvents\HandleStoredEventJob;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;

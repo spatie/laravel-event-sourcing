@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\Events;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class EventWithoutSerializedModels extends ShouldBeStored
 {

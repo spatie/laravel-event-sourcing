@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Spatie\EventSourcing\Projectionist;
-use Spatie\EventSourcing\StoredEventRepository;
+use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
 
 class ReplayCommand extends Command
 {

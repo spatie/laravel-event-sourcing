@@ -2,6 +2,8 @@
 
 namespace Spatie\EventSourcing;
 
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
+
 interface HandleDomainEventJob
 {
     public function handle(Projectionist $projectionist): void;

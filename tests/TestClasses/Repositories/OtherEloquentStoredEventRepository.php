@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\Repositories;
 
-use Spatie\EventSourcing\EloquentStoredEventRepository;
+use Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository;
 use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 
 class OtherEloquentStoredEventRepository extends EloquentStoredEventRepository

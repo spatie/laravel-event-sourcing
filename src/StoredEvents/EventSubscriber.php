@@ -1,6 +1,9 @@
 <?php
 
-namespace Spatie\EventSourcing;
+namespace Spatie\EventSourcing\StoredEvents;
+
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
 
 class EventSubscriber
 {

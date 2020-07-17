@@ -53,7 +53,7 @@ return [
      * can change this to a class of your own. The only restriction is that
      * it should implement \Spatie\EventSourcing\StoredEventRepository.
      */
-    'stored_event_repository' => \Spatie\EventSourcing\EloquentStoredEventRepository::class,
+    'stored_event_repository' => \Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository::class,
 
     /*
      * This class is responsible for storing snapshots. To add extra behaviour you
@@ -67,7 +67,7 @@ return [
      * can change this to a class of your own. The only restriction is that
      * it should implement \Spatie\EventSourcing\HandleDomainEventJob.
      */
-    'stored_event_job' => \Spatie\EventSourcing\HandleStoredEventJob::class,
+    'stored_event_job' => \Spatie\EventSourcing\StoredEvents\HandleStoredEventJob::class,
 
     /*
      * Similar to Relation::morphMap() you can define which alias responds to which
