@@ -51,14 +51,14 @@ return [
     /*
      * This class is responsible for storing events. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
-     * it should implement \Spatie\EventSourcing\StoredEventRepository.
+     * it should implement \Spatie\EventSourcing\EloquentStoredEventRepository.
      */
     'stored_event_repository' => \Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository::class,
 
     /*
      * This class is responsible for storing snapshots. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
-     * it should implement \Spatie\EventSourcing\StoredEventRepository.
+     * it should implement \Spatie\EventSourcing\EloquentSnapshotRepository.
      */
     'snapshot_repository' => \Spatie\EventSourcing\Snapshots\EloquentSnapshotRepository::class,
 
@@ -71,7 +71,7 @@ return [
 
     /*
      * Similar to Relation::morphMap() you can define which alias responds to which
-     * event class. This allows you to change the namespace or classnames
+     * event class. This allows you to change the namespace or class names
      * of your events but still handle older events correctly.
      */
     'event_class_map' => [],
@@ -79,7 +79,7 @@ return [
     /*
      * This class is responsible for serializing events. By default an event will be serialized
      * and stored as json. You can customize the class name. A valid serializer
-     * should implement Spatie\EventSourcing\EventSerializers\Serializer.
+     * should implement Spatie\EventSourcing\EventSerializers\EventSerializer.
      */
     'event_serializer' => \Spatie\EventSourcing\EventSerializers\JsonEventSerializer::class,
 

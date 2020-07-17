@@ -36,7 +36,7 @@ abstract class AggregateRoot
      */
     public static function retrieve(string $uuid): self
     {
-        $aggregateRoot = resolve(static::class);
+        $aggregateRoot = app(static::class);
 
         $aggregateRoot->uuid = $uuid;
 

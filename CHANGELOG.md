@@ -2,6 +2,7 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+
 ## 4.0.0 - unreleased
 
 - projectors now are abstract classes instead of interfaces
@@ -19,6 +20,27 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - the `meta_data` property on `StoredEvent` is now an array or a string instead of `SchemalessAttributes`
 - apply methods on aggregates can now make use of method injection
 - pass metadata to serializer to allow events to be upgraded (#112)
+
+## 3.2.3 - 2020-07-14
+
+- default to `BigIncrements` on package table stubs (#124)
+
+## 3.2.2  - 2020-07-14
+
+- replace model where clause with uuid model scope (#123)
+
+## 3.2.1 - 2020-07-09
+
+- config file comment corrections (#121)
+
+## 3.2.0 - 2020-06-30
+
+- expose `aggregate_version` of `StoredEvent` (#115)
+
+## 3.1.8 - 2020-06-28
+
+- use `app` helper (#117)
+>>>>>>> master
 
 ## 3.1.7 - 2020-06-18
 

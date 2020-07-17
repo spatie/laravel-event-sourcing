@@ -18,7 +18,7 @@ Projectionist::addProjector(TransactionCountProjector::class);
 Adding multiple projectors:
 
 ```php
-Projectionist::addProjector([
+Projectionist::addProjectors([
     AccountBalanceProjector::class,
     TransactionCountProjector::class,
 ]);
@@ -35,7 +35,7 @@ Projectionist::addReactor(SendMailReactor::class);
 Adding multiple reactors:
 
 ```php
-Projectionist::addReactor([
+Projectionist::addReactors([
     SendMailReactor::class,
     SendPushNotificationReactor::class,
 ]);
