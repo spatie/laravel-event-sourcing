@@ -6,32 +6,25 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
-class EventHandlerCollection
+class EventHandlerCollection extends Collection
 {
-    private Collection $eventHandlers;
-
     public function __construct($eventHandlers = [])
     {
-        $this->eventHandlers = collect();
+       parent::__construct([]);
 
         foreach ($eventHandlers as $eventHandler) {
-            $this->add($eventHandler);
+            $this->addEventHandler($eventHandler);
         }
     }
 
-    public function add(EventHandler $eventHandler): void
+    public function addEventHandler(EventHandler $eventHandler): void
     {
-        $this->eventHandlers[get_class($eventHandler)] = $eventHandler;
-    }
-
-    public function all(): Collection
-    {
-        return $this->eventHandlers;
+        $this->items[get_class($eventHandler)] = $eventHandler;
     }
 
     public function forEvent(StoredEvent $storedEvent): EventHandlerCollection
     {
-        $eventHandlers = $this->eventHandlers
+        $eventHandlers = $this
             ->filter(
                 fn (EventHandler $eventHandler) => in_array($storedEvent->event_class, $eventHandler->handles(), true)
             )->toArray();
@@ -41,43 +34,31 @@ class EventHandlerCollection
 
     public function call(string $method)
     {
-        $this->eventHandlers
+        $this
             ->filter(fn (EventHandler $eventHandler) => method_exists($eventHandler, $method))
             ->each(fn (EventHandler $eventHandler) => app()->call([$eventHandler, $method]));
     }
 
     public function remove(array $eventHandlerClassNames): void
     {
-        $this->eventHandlers = $this->eventHandlers
+        $this->items = $this
             ->reject(
                 fn (EventHandler $eventHandler) => in_array(get_class($eventHandler), $eventHandlerClassNames)
-            );
+            )
+            ->toArray();
     }
 
     public function sycnEventHandlers(): self
     {
-        $queuedEventHandlers = $this->eventHandlers
-            ->reject(
+        return $this ->reject(
                 fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
-            )
-            ->toArray();
-
-        return new static($queuedEventHandlers);
+            );
     }
 
     public function queuedEventHandlers(): self
     {
-        $queuedEventHandlers = $this->eventHandlers
-            ->filter(
+        return $this->filter(
                 fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
-            )
-            ->toArray();
-
-        return new static($queuedEventHandlers);
-    }
-
-    public function count(): int
-    {
-        return count($this->eventHandlers);
+            );
     }
 }

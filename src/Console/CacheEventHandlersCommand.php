@@ -18,8 +18,8 @@ class CacheEventHandlersCommand extends Command
     {
         $this->info('Caching registered event handlers...');
 
-        $projectionist->getProjectors()
-            ->merge($projectionist->getReactors())
+        $projectionist->allEventHandlers()
+            ->toBase()
             ->map(fn (EventHandler $eventHandler) => get_class($eventHandler))
             ->pipe(function (Collection $eventHandlerClasses) use ($files) {
                 $cachePath = config('event-sourcing.cache_path');

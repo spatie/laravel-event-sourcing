@@ -33,6 +33,7 @@ class DiscoversEventHandlersTest extends TestCase
 
         $registeredProjectors = $projectionist
             ->getProjectors()
+            ->toBase()
             ->map(function (EventHandler $eventHandler) {
                 return get_class($eventHandler);
             })
@@ -48,9 +49,11 @@ class DiscoversEventHandlersTest extends TestCase
 
         $registeredReactors = $projectionist
             ->getReactors()
+            ->toBase()
             ->map(function (EventHandler $eventHandler) {
                 return get_class($eventHandler);
             })
+
             ->values()
             ->toArray();
 
