@@ -48,7 +48,7 @@ class EventHandlerCollection extends Collection
             ->toArray();
     }
 
-    public function sycnEventHandlers(): self
+    public function syncEventHandlers(): self
     {
         return $this ->reject(
             fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue

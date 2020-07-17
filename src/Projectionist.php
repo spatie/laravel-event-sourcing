@@ -206,13 +206,13 @@ class Projectionist
     {
         $projectors = $this->projectors
             ->forEvent($storedEvent)
-            ->sycnEventHandlers();
+            ->syncEventHandlers();
 
         $this->applyStoredEventToProjectors($storedEvent, $projectors);
 
         $reactors = $this->reactors
             ->forEvent($storedEvent)
-            ->sycnEventHandlers();
+            ->syncEventHandlers();
 
         $this->applyStoredEventToReactors($storedEvent, $reactors);
     }
