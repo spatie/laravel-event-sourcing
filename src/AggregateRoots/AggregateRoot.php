@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcing;
+namespace Spatie\EventSourcing\AggregateRoots;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\DB;
@@ -9,8 +9,12 @@ use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionProperty;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
+use Spatie\EventSourcing\AggregateRoots\FakeAggregateRoot;
+use Spatie\EventSourcing\ShouldBeStored;
 use Spatie\EventSourcing\Snapshots\Snapshot;
 use Spatie\EventSourcing\Snapshots\SnapshotRepository;
+use Spatie\EventSourcing\StoredEvent;
+use Spatie\EventSourcing\StoredEventRepository;
 
 abstract class AggregateRoot
 {

@@ -18,7 +18,7 @@ This will create a class like this:
 ```php
 namespace App\Aggregates;
 
-use Spatie\EventSourcing\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 
 class MyAggregate extends AggregateRoot

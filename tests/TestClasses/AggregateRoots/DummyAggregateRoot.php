@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots;
 
-use Spatie\EventSourcing\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
 
 class DummyAggregateRoot extends AggregateRoot

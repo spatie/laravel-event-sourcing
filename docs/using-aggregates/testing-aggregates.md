@@ -8,7 +8,7 @@ In the test suite of your application you probably also want to write some tests
 Imagine you have an `AccountAggregateRoot` that handles adding and subtract an amount for a bank account. The account has a limit of -$5000.
 
 ```php
-use Spatie\EventSourcing\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class AccountAggregateRoot extends AggregateRoot
 {
