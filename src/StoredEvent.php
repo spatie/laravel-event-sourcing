@@ -67,7 +67,7 @@ class StoredEvent implements Arrayable
 
     public function handle()
     {
-        Projectionist::handleWithSyncProjectors($this);
+        Projectionist::handleWithSyncEventHandlers($this);
 
         if (method_exists($this->event, 'tags')) {
             $tags = $this->event->tags();
@@ -88,15 +88,10 @@ class StoredEvent implements Arrayable
 
     protected function shouldDispatchJob(): bool
     {
-        if (Projectionist::getAsyncProjectorsFor($this)->isNotEmpty()) {
-            return true;
-        }
+        /** @var \Spatie\EventSourcing\EventHandlers\EventHandlerCollection $eventHandlers */
+        $eventHandlers = Projectionist::allEventHandlers();
 
-        if (Projectionist::getReactorsFor($this)->isNotEmpty()) {
-            return true;
-        }
-
-        return false;
+        return $eventHandlers->queuedEventHandlers()->count() > 0;
     }
 
     protected static function getActualClassForEvent(string $class): string

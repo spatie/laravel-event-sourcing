@@ -37,8 +37,8 @@ Here's an example:
 ```php
 namespace App\Projectors;
 
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 use Spatie\EventSourcing\Models\StoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
 use App\Events\MoneyAdded;

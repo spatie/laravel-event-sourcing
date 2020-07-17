@@ -51,8 +51,8 @@ This is the contents of a class created by the artisan command mentioned in the 
 ```php
 namespace App\Projectors;
 
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 
 class MyProjector implements Projector
 {
@@ -97,8 +97,8 @@ namespace App\Projectors;
 
 use App\Account;
 use App\Events\MoneyAdded;
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 
 class AccountBalanceProjector implements Projector
 {

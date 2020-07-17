@@ -2,10 +2,9 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory;
 
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 
-class TestProjectorInSubdirectory implements Projector
+class TestProjectorInSubdirectory extends Projector
 {
-    use ProjectsEvents;
 }

@@ -193,8 +193,8 @@ use App\Events\AccountDeleted;
 use App\Events\MoneyAdded;
 use App\Events\MoneySubtracted;
 use Spatie\EventSourcing\Models\StoredEvent;
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 
 class AccountBalanceProjector implements Projector
 {
@@ -311,8 +311,8 @@ use App\Events\MoneyAdded;
 use App\Events\MoneySubtracted;
 use App\TransactionCount;
 use Spatie\EventSourcing\Models\StoredEvent;
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 
 class TransactionCountProjector implements Projector
 {
