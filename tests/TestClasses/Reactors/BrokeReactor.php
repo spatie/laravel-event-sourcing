@@ -2,12 +2,13 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\Reactors;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSourcing\EventHandlers\Reactors\Reactor;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
 
-class BrokeReactor extends Reactor
+class BrokeReactor extends Reactor implements ShouldQueue
 {
     protected array $handlesEvents = [
         MoneySubtractedEvent::class => 'onMoneySubtracted',
