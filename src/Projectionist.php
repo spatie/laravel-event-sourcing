@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing;
 
 use Exception;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
@@ -106,7 +105,7 @@ class Projectionist
     {
         return $this->projectors
             ->forEvent($storedEvent)
-            ->reject(fn (Projector $projector) => $projector instanceof ShouldQueue);
+            ->asyncEventHandlers();
     }
 
     public function addReactor($reactor): Projectionist
@@ -185,7 +184,7 @@ class Projectionist
     {
         $projectors = $this->projectors
             ->forEvent($storedEvent)
-            ->queuedEventHandlers();
+            ->asyncEventHandlers();
 
         $this->applyStoredEventToProjectors(
             $storedEvent,
@@ -194,7 +193,7 @@ class Projectionist
 
         $reactors = $this->reactors
             ->forEvent($storedEvent)
-            ->queuedEventHandlers();
+            ->asyncEventHandlers();
 
         $this->applyStoredEventToReactors(
             $storedEvent,

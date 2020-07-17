@@ -95,7 +95,7 @@ class StoredEvent implements Arrayable
         /** @var \Spatie\EventSourcing\EventHandlers\EventHandlerCollection $eventHandlers */
         $eventHandlers = Projectionist::allEventHandlers();
 
-        return $eventHandlers->queuedEventHandlers()->count() > 0;
+        return $eventHandlers->asyncEventHandlers()->count() > 0;
     }
 
     protected static function getActualClassForEvent(string $class): string

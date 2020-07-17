@@ -55,7 +55,7 @@ class EventHandlerCollection extends Collection
         );
     }
 
-    public function queuedEventHandlers(): self
+    public function asyncEventHandlers(): self
     {
         return $this->filter(
             fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
