@@ -60,7 +60,7 @@ class MoneyAdded extends ShouldBeStored
 Inside an aggregate root you can pass the event to `recordThat`:
 
 ```php
-// somehwere inside your aggregate
+// somewhere inside your aggregate
 public function addMoney(int $amount)
 {
     $this->recordThat(new MoneyAdded($amount));

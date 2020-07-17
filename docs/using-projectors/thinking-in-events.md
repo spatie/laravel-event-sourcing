@@ -97,7 +97,7 @@ Let's leverage that new event in the `AccountBalanceProjector`.
 ```php
 // ...
 
-class AccountBalanceProjector implements Projector
+class AccountBalanceProjector extends Projector
 {
     public function onBrokeMailSent(BrokeMailSent $event)
     {

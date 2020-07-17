@@ -192,14 +192,10 @@ use App\Events\AccountCreated;
 use App\Events\AccountDeleted;
 use App\Events\MoneyAdded;
 use App\Events\MoneySubtracted;
-use Spatie\EventSourcing\Models\StoredEvent;
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
-use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 
-class AccountBalanceProjector implements Projector
+class AccountBalanceProjector extends Projector
 {
-    use ProjectsEvents;
-
     public function onAccountCreated(AccountCreated $event)
     {
         Account::create($event->accountAttributes);
@@ -230,7 +226,7 @@ class AccountBalanceProjector implements Projector
 }
 ```
 
-Just by typehinting an event in a method will make the package call that method when the event occurs. By default the package will automatically discover and registering projectors.
+Just by type hinting an event in a method will make the package call that method when the event occurs. By default the package will automatically discover and registering projectors.
 
 ## Let's fire off some events
 
@@ -312,12 +308,9 @@ use App\Events\MoneySubtracted;
 use App\TransactionCount;
 use Spatie\EventSourcing\Models\StoredEvent;
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
-use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 
-class TransactionCountProjector implements Projector
+class TransactionCountProjector extends Projector
 {
-    use ProjectsEvents;
-
     public function onMoneyAdded(MoneyAdded $event)
     {
         $transactionCounter = TransactionCount::firstOrCreate(['account_uuid' => $event->accountUuid]);

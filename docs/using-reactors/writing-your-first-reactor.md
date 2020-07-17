@@ -19,14 +19,12 @@ namespace App\Reactors;
 use App\Account;
 use App\Events\MoneyAdded;
 use App\Mail\BigAmountAddedMail;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventSourcing\EventHandlers\EventHandler;
-use Spatie\EventSourcing\EventHandlers\HandlesEvents;
+use Spatie\EventSourcing\EventHandlers\Reactors\Reactor;
 
-class BigAmountAddedReactor implements EventHandler
+class BigAmountAddedReactor extends Reactor implements ShouldQueue
 {
-    use HandlesEvents;
-
     public function onMoneyAdded(MoneyAdded $event)
     {
         if ($event->amount < 900) {

@@ -60,10 +60,8 @@ use App\Account;
 
 // ...
 
-class AccountBalanceProjector implements Projector
+class AccountBalanceProjector extends Projector
 {
-    use ProjectsEvents;
-
     // ...
 
     public function onStartingEventReplay()

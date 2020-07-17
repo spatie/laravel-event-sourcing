@@ -38,15 +38,12 @@ Here's an example:
 namespace App\Projectors;
 
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
-use Spatie\EventSourcing\EventHandlers\Projectors\ProjectsEvents;
 use Spatie\EventSourcing\Models\StoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
 use App\Events\MoneyAdded;
 
-class MetaDataProjector implements Projector
+class MetaDataProjector extends Projector
 {
-    use ProjectsEvents;
-
     /*
      * Here you can specify which event should trigger which method.
      */
