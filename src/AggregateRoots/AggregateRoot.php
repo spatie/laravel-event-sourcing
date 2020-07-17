@@ -9,12 +9,11 @@ use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionProperty;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
-use Spatie\EventSourcing\AggregateRoots\FakeAggregateRoot;
-use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\Snapshots\Snapshot;
 use Spatie\EventSourcing\Snapshots\SnapshotRepository;
-use Spatie\EventSourcing\StoredEvents\StoredEvent;
 use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 abstract class AggregateRoot
 {

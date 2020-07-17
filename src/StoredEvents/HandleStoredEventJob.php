@@ -8,7 +8,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Spatie\EventSourcing\HandleDomainEventJob;
 use Spatie\EventSourcing\Projectionist;
-use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 class HandleStoredEventJob implements HandleDomainEventJob, ShouldQueue
 {

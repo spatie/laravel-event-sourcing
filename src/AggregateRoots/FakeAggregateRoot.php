@@ -4,7 +4,6 @@ namespace Spatie\EventSourcing\AggregateRoots;
 
 use Illuminate\Support\Arr;
 use PHPUnit\Framework\Assert;
-use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
