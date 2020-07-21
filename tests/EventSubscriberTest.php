@@ -18,6 +18,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatInvokesAnObject;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use Spatie\EventSourcing\Tests\TestClasses\Reactors\SyncBrokeReactor;
 
 class EventSubscriberTest extends TestCase
 {
@@ -144,6 +145,35 @@ class EventSubscriberTest extends TestCase
         });
 
         $this->assertEquals(0, $this->account->refresh()->amount);
+    }
+
+    /** @test */
+    public function a_queued_reactor_will_be_queued()
+    {
+        Bus::fake();
+
+        Projectionist::addProjector(BalanceProjector::class);
+        Projectionist::addReactor(BrokeReactor::class);
+
+        event(new MoneySubtractedEvent($this->account, 1000));
+
+        Bus::assertDispatched(HandleStoredEventJob::class, function (HandleStoredEventJob $job) {
+            return get_class($job->storedEvent->event) === MoneySubtractedEvent::class;
+        });
+    }
+
+    /** @test */
+    public function a_non_queued_reactor_will_not_be_queued()
+    {
+        Bus::fake();
+
+        Projectionist::addProjector(BalanceProjector::class);
+        Projectionist::addReactor(SyncBrokeReactor::class);
+
+        event(new MoneySubtractedEvent($this->account, 1000));
+
+        Bus::assertNotDispatched(HandleStoredEventJob::class);
+
     }
 
     /** @test */
