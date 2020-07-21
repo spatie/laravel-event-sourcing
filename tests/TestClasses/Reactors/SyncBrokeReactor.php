@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\Reactors;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSourcing\EventHandlers\Reactors\Reactor;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;

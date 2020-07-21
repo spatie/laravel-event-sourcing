@@ -173,7 +173,6 @@ class EventSubscriberTest extends TestCase
         event(new MoneySubtractedEvent($this->account, 1000));
 
         Bus::assertNotDispatched(HandleStoredEventJob::class);
-
     }
 
     /** @test */
