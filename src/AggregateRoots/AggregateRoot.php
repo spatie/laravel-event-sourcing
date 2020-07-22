@@ -29,7 +29,12 @@ abstract class AggregateRoot
 
     protected static bool $allowConcurrency = false;
 
-    public static function retrieve(string $uuid): self
+    /**
+     * @param string $uuid
+     *
+     * @return static
+     */
+    public static function retrieve(string $uuid)
     {
         $aggregateRoot = app(static::class);
 
@@ -43,7 +48,12 @@ abstract class AggregateRoot
         return $this->uuid;
     }
 
-    public function recordThat(ShouldBeStored $domainEvent): self
+    /**
+     * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored $domainEvent
+     *
+     * @return static
+     */
+    public function recordThat(ShouldBeStored $domainEvent)
     {
         $domainEvent->setAggregateRootUuid($this->uuid);
 
@@ -54,7 +64,10 @@ abstract class AggregateRoot
         return $this;
     }
 
-    public function persist(): self
+    /**
+     * @return static
+     */
+    public function persist()
     {
         $storedEvents = $this->persistWithoutApplyingToEventHandlers();
 
