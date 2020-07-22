@@ -2,7 +2,7 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
-## 4.0.0 - unreleased
+## 4.0.0 - 2020-07-22
 
 - projectors now are abstract classes instead of interfaces
 - reactors can now be easily defined by extending the reactor base class
