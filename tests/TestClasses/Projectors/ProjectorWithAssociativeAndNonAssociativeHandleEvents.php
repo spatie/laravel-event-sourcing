@@ -2,15 +2,12 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 
-class ProjectorWithAssociativeAndNonAssociativeHandleEvents implements Projector
+class ProjectorWithAssociativeAndNonAssociativeHandleEvents extends Projector
 {
-    use ProjectsEvents;
-
     protected array $handlesEvents = [
         MoneyAddedEvent::class,
         MoneySubtractedEvent::class => 'onMoneySubtracted',

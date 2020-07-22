@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\EventSerializers;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -30,12 +30,10 @@ class JsonEventSerializer implements EventSerializer
             $event->__sleep();
         }
 
-        $json = $this->serializer->serialize($event, 'json');
-
-        return $json;
+        return $this->serializer->serialize($event, 'json');
     }
 
-    public function deserialize(string $eventClass, string $json): ShouldBeStored
+    public function deserialize(string $eventClass, string $json, string $metadata = null): ShouldBeStored
     {
         $restoredEvent = $this->serializer->deserialize($json, $eventClass, 'json');
 

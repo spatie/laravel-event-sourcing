@@ -3,10 +3,10 @@
 namespace Spatie\EventSourcing\Tests\TestClasses\Events;
 
 use Illuminate\Queue\SerializesModels;
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
-class MoneySubtractedEvent implements ShouldBeStored
+class MoneySubtractedEvent extends ShouldBeStored
 {
     use SerializesModels;
 

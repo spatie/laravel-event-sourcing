@@ -8,8 +8,8 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
-use Spatie\EventSourcing\ShouldBeStored;
-use Spatie\EventSourcing\StoredEvent;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 trait HandlesEvents
 {
@@ -35,7 +35,11 @@ trait HandlesEvents
         }
 
         if (! method_exists($this, $handlerClassOrMethod)) {
-            throw InvalidEventHandler::eventHandlingMethodDoesNotExist($this, $storedEvent->event, $handlerClassOrMethod);
+            throw InvalidEventHandler::eventHandlingMethodDoesNotExist(
+                $this,
+                $storedEvent->event,
+                $handlerClassOrMethod,
+            );
         }
 
         app()->call([$this, $handlerClassOrMethod], $parameters);
@@ -82,7 +86,7 @@ trait HandlesEvents
                     ->first(fn ($typeHint) => is_subclass_of($typeHint, ShouldBeStored::class));
 
                 if (! $eventClass) {
-                    return;
+                    return null;
                 }
 
                 return [$eventClass => $method->name];

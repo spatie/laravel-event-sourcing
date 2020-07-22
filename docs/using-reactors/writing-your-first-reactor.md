@@ -9,6 +9,8 @@ Now that you've [written your first projector](/laravel-event-sourcing/v3/using-
 
 A reactor is a class, that much like a projector, listens for incoming events. Unlike projectors however, reactors will not get called when events are replayed. Reactors only will get called when the original event fires.
 
+Reactors that perform some kind of API calls, think sending a mail or a notification, will be slow. We highly recommend that all reactors implement `Illuminate\Contracts\Queue\ShouldQueue`. Letting your reactor implement this marker interface will make the package start a queue job. The reactor will be called when that queued job is handled.
+
 ## Creating your first reactor
 
 Let's create your first reactor. You can perform `php artisan make:reactor BigAmountAddedReactor` to create a reactor in `app\Reactors`. We will make this reactor send a mail to the director of the bank whenever a big amount of money is added to an account. Typehinting `MoneyAdded` will make our package call `onMoneyAdded` when the event occurs.
@@ -19,14 +21,12 @@ namespace App\Reactors;
 use App\Account;
 use App\Events\MoneyAdded;
 use App\Mail\BigAmountAddedMail;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
-use Spatie\EventSourcing\EventHandlers\EventHandler;
-use Spatie\EventSourcing\EventHandlers\HandlesEvents;
+use Spatie\EventSourcing\EventHandlers\Reactors\Reactor;
 
-class BigAmountAddedReactor implements EventHandler
+class BigAmountAddedReactor extends Reactor implements ShouldQueue
 {
-    use HandlesEvents;
-
     public function onMoneyAdded(MoneyAdded $event)
     {
         if ($event->amount < 900) {
@@ -40,7 +40,7 @@ class BigAmountAddedReactor implements EventHandler
 }
 ```
 
-By default the package will automatically find and use your reactor.
+By default, the package will automatically find and use your reactor.
 
 ## Using the reactor
 

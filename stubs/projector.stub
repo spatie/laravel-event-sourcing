@@ -2,13 +2,10 @@
 
 namespace DummyNamespace;
 
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 
-class DummyClass implements Projector
+class DummyClass extends Projector
 {
-    use ProjectsEvents;
-
     public function onEventHappened(EventHappened $event)
     {
     }

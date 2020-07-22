@@ -31,6 +31,6 @@ class ClearEventHandlersCommandTest extends TestCase
 
         $this->artisan('event-sourcing:clear-event-handlers')->assertExitCode(0);
 
-        $this->assertFileNotExists(config('event-sourcing.cache_path').'/event-handlers.php');
+        $this->assertFileDoesNotExist(config('event-sourcing.cache_path').'/event-handlers.php');
     }
 }

@@ -8,7 +8,7 @@ Whenever an aggregate is persisted, its versions will increment for each event t
 If you want to disable this check, and thus allow concurrent persists, you can set the `$allowConcurrency` static property on the aggregate.
 
 ```php
-use Spatie\EventSourcing\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class AggregateRootThatAllowsConcurrency extends AggregateRoot
 {

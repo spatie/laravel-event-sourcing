@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcing;
+namespace Spatie\EventSourcing\StoredEvents;
 
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
@@ -8,7 +8,6 @@ use Illuminate\Support\Arr;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class StoredEvent implements Arrayable
 {
@@ -23,7 +22,8 @@ class StoredEvent implements Arrayable
 
     public string $event_class;
 
-    public SchemalessAttributes $meta_data;
+    /** @var array|string */
+    public $meta_data;
 
     public string $created_at;
 
@@ -44,8 +44,13 @@ class StoredEvent implements Arrayable
                 self::getActualClassForEvent($this->event_class),
                 is_string($this->event_properties)
                     ? $this->event_properties
-                    : json_encode($this->event_properties)
+                    : json_encode($this->event_properties),
+                is_string($this->meta_data)
+                    ? $this->meta_data
+                    : json_encode($this->meta_data),
             );
+
+            $this->event->setMetaData(optional($this->meta_data)->toArray());
         } catch (Exception $exception) {
             throw InvalidStoredEvent::couldNotUnserializeEvent($this, $exception);
         }
@@ -66,7 +71,7 @@ class StoredEvent implements Arrayable
 
     public function handle()
     {
-        Projectionist::handleWithSyncProjectors($this);
+        Projectionist::handleWithSyncEventHandlers($this);
 
         if (method_exists($this->event, 'tags')) {
             $tags = $this->event->tags();
@@ -82,20 +87,21 @@ class StoredEvent implements Arrayable
             $tags ?? []
         );
 
-        dispatch($storedEventJob->onQueue($this->event->queue ?? config('event-sourcing.queue')));
+        dispatch($storedEventJob->onQueue($this->getQueueName()));
+    }
+
+    /** @psalm-suppress TypeDoesNotContainType */
+    protected function getQueueName(): ?string
+    {
+        return $this->event->queue ?? config('event-sourcing.queue');
     }
 
     protected function shouldDispatchJob(): bool
     {
-        if (Projectionist::getAsyncProjectorsFor($this)->isNotEmpty()) {
-            return true;
-        }
+        /** @var \Spatie\EventSourcing\EventHandlers\EventHandlerCollection $eventHandlers */
+        $eventHandlers = Projectionist::allEventHandlers();
 
-        if (Projectionist::getReactorsFor($this)->isNotEmpty()) {
-            return true;
-        }
-
-        return false;
+        return $eventHandlers->asyncEventHandlers()->count() > 0;
     }
 
     protected static function getActualClassForEvent(string $class): string

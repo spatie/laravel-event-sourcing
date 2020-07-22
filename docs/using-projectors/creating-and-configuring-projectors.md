@@ -51,13 +51,10 @@ This is the contents of a class created by the artisan command mentioned in the 
 ```php
 namespace App\Projectors;
 
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 
-class MyProjector implements Projector
+class MyProjector extends Projector
 {
-    use ProjectsEvents;
-
     public function onEventHappened(EventHappended $event)
     {
         // do some work
@@ -97,13 +94,10 @@ namespace App\Projectors;
 
 use App\Account;
 use App\Events\MoneyAdded;
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 
-class AccountBalanceProjector implements Projector
+class AccountBalanceProjector extends Projector
 {
-    use ProjectsEvents;
-
     /*
      * Here you can specify which event should trigger which method.
      */

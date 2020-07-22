@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\EventSourcing\Models;
+namespace Spatie\EventSourcing\StoredEvents\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\EventSourcing\ShouldBeStored;
-use Spatie\EventSourcing\StoredEvent;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class EloquentStoredEvent extends Model
@@ -34,7 +34,7 @@ class EloquentStoredEvent extends Model
         ]);
     }
 
-    public function getEventAttribute(): ShouldBeStored
+    public function getEventAttribute(): ?ShouldBeStored
     {
         return $this->toStoredEvent()->event;
     }

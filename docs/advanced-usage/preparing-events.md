@@ -16,9 +16,9 @@ Here's an example of such event:
 ```php
 namespace App\Events;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
-class MoneyAdded implements ShouldBeStored
+class MoneyAdded extends ShouldBeStored
 {
     /** @var string */
     public $accountUuid;
@@ -48,9 +48,9 @@ On an event you can override the queue that should be used by adding a `queue` p
 ```php
 namespace App\Events;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
-class MyEvent implements ShouldBeStored
+class MyEvent extends ShouldBeStored
 {
     public $queue = 'alternativeQueue';
 

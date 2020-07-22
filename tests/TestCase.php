@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use CreateStoredEventsTable;
 use Exception;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Artisan;
@@ -46,7 +47,7 @@ abstract class TestCase extends Orchestra
 
         Schema::dropIfExists('stored_events');
         include_once __DIR__.'/../stubs/create_stored_events_table.php.stub';
-        (new \CreateStoredEventsTable())->up();
+        (new CreateStoredEventsTable())->up();
 
         Schema::dropIfExists('snapshots');
         include_once __DIR__.'/../stubs/create_snapshots_table.php.stub';
@@ -74,6 +75,7 @@ abstract class TestCase extends Orchestra
     protected function setConfig(string $name, $value)
     {
         config()->set($name, $value);
+
         (new EventSourcingServiceProvider($this->app))->register();
     }
 
@@ -92,5 +94,20 @@ abstract class TestCase extends Orchestra
     protected function assertTestPassed(): void
     {
         $this->assertTrue(true);
+    }
+
+    protected function assertExceptionThrown(
+        callable $callable,
+        string $expectedExceptionClass = Exception::class
+    ): void {
+        try {
+            $callable();
+
+            $this->assertTrue(false, "Expected exception `{$expectedExceptionClass}` was not thrown.");
+        } catch (Exception $exception) {
+            $actualExceptionClass = get_class($exception);
+
+            $this->assertInstanceOf($expectedExceptionClass, $exception, "Unexpected exception `$actualExceptionClass` thrown. Expected exception `$expectedExceptionClass`");
+        }
     }
 }

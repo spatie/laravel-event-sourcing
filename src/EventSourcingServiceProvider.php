@@ -13,6 +13,10 @@ use Spatie\EventSourcing\Console\MakeReactorCommand;
 use Spatie\EventSourcing\Console\MakeStorableEventCommand;
 use Spatie\EventSourcing\Console\ReplayCommand;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\StoredEvents\EventSubscriber;
+use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
+use Spatie\EventSourcing\Support\Composer;
+use Spatie\EventSourcing\Support\DiscoverEventHandlers;
 
 class EventSourcingServiceProvider extends ServiceProvider
 {
@@ -20,7 +24,7 @@ class EventSourcingServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/event-sourcing.php' => app()->configPath('event-sourcing.php'),
+                __DIR__.'/../config/event-sourcing.php' => config_path('event-sourcing.php'),
             ], 'config');
         }
 

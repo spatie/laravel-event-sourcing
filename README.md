@@ -1,8 +1,8 @@
 # Event sourcing for Artisans 📽
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-event-sourcing.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-sourcing)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/spatie/laravel-event-sourcing/run-tests?label=tests)
-[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-event-sourcing.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-event-sourcing)
+![Tests](https://github.com/spatie/laravel-event-sourcing/workflows/run-tests/badge.svg)
+![Psalm](https://github.com/spatie/laravel-event-sourcing/workflows/Psalm/badge.svg)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-event-sourcing.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-event-sourcing)
 
 This package aims to be the entry point to get started with event sourcing in Laravel. It can help you with setting up aggregates, projectors, and reactors. 

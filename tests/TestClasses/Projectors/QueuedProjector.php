@@ -2,8 +2,8 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
-use Spatie\EventSourcing\Projectors\QueuedProjector as QueuedProjectorInterface;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class QueuedProjector extends BalanceProjector implements QueuedProjectorInterface
+class QueuedProjector extends BalanceProjector implements ShouldQueue
 {
 }

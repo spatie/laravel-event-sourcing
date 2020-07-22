@@ -2,10 +2,10 @@
 
 namespace Spatie\EventSourcing\Tests;
 
-use Spatie\EventSourcing\Composer;
-use Spatie\EventSourcing\DiscoverEventHandlers;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\Projectionist;
+use Spatie\EventSourcing\Support\Composer;
+use Spatie\EventSourcing\Support\DiscoverEventHandlers;
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestProjectorInSubdirectory;
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestQueuedProjectorInSubdirectory;
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirectory\TestReactorInSubdirectory;
@@ -33,6 +33,7 @@ class DiscoversEventHandlersTest extends TestCase
 
         $registeredProjectors = $projectionist
             ->getProjectors()
+            ->toBase()
             ->map(function (EventHandler $eventHandler) {
                 return get_class($eventHandler);
             })
@@ -48,9 +49,11 @@ class DiscoversEventHandlersTest extends TestCase
 
         $registeredReactors = $projectionist
             ->getReactors()
+            ->toBase()
             ->map(function (EventHandler $eventHandler) {
                 return get_class($eventHandler);
             })
+
             ->values()
             ->toArray();
 

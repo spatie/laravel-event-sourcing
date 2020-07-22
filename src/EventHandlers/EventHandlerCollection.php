@@ -2,47 +2,63 @@
 
 namespace Spatie\EventSourcing\EventHandlers;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
-use Spatie\EventSourcing\StoredEvent;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
-class EventHandlerCollection
+class EventHandlerCollection extends Collection
 {
-    private Collection $eventHandlers;
-
     public function __construct($eventHandlers = [])
     {
-        $this->eventHandlers = collect();
+        parent::__construct([]);
 
         foreach ($eventHandlers as $eventHandler) {
-            $this->add($eventHandler);
+            $this->addEventHandler($eventHandler);
         }
     }
 
-    public function add(EventHandler $eventHandler): void
+    public function addEventHandler(EventHandler $eventHandler): void
     {
-        $this->eventHandlers[get_class($eventHandler)] = $eventHandler;
+        $this->items[get_class($eventHandler)] = $eventHandler;
     }
 
-    public function all(): Collection
+    public function forEvent(StoredEvent $storedEvent): EventHandlerCollection
     {
-        return $this->eventHandlers;
+        $eventHandlers = $this
+            ->filter(
+                fn (EventHandler $eventHandler) => in_array($storedEvent->event_class, $eventHandler->handles(), true)
+            )->toArray();
+
+        return new static($eventHandlers);
     }
 
-    public function forEvent(StoredEvent $storedEvent): Collection
+    public function call(string $method): void
     {
-        return $this->eventHandlers->filter(fn (EventHandler $eventHandler) => in_array($storedEvent->event_class, $eventHandler->handles(), true));
-    }
-
-    public function call(string $method)
-    {
-        $this->eventHandlers
+        $this
             ->filter(fn (EventHandler $eventHandler) => method_exists($eventHandler, $method))
             ->each(fn (EventHandler $eventHandler) => app()->call([$eventHandler, $method]));
     }
 
     public function remove(array $eventHandlerClassNames): void
     {
-        $this->eventHandlers = $this->eventHandlers
-            ->reject(fn (EventHandler $eventHandler) => in_array(get_class($eventHandler), $eventHandlerClassNames));
+        $this->items = $this
+            ->reject(
+                fn (EventHandler $eventHandler) => in_array(get_class($eventHandler), $eventHandlerClassNames)
+            )
+            ->toArray();
+    }
+
+    public function syncEventHandlers(): self
+    {
+        return $this ->reject(
+            fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
+        );
+    }
+
+    public function asyncEventHandlers(): self
+    {
+        return $this->filter(
+            fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
+        );
     }
 }

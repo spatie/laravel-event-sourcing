@@ -2,16 +2,13 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
-use Spatie\EventSourcing\StoredEvent;
-use Spatie\EventSourcing\StoredEventRepository;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 
-class ProjectorThatWritesMetaData implements Projector
+class ProjectorThatWritesMetaData extends Projector
 {
-    use ProjectsEvents;
-
     protected array $handlesEvents = [
         MoneyAddedEvent::class => 'onMoneyAdded',
     ];

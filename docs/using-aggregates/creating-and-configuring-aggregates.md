@@ -18,7 +18,7 @@ This will create a class like this:
 ```php
 namespace App\Aggregates;
 
-use Spatie\EventSourcing\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 
 class MyAggregate extends AggregateRoot
@@ -43,7 +43,7 @@ Inside an aggregate you can record new events using the `recordThat` function. A
 Here's an example event
 
 ```php
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class MoneyAdded extends ShouldBeStored
 {
@@ -60,7 +60,7 @@ class MoneyAdded extends ShouldBeStored
 Inside an aggregate root you can pass the event to `recordThat`:
 
 ```php
-// somehwere inside your aggregate
+// somewhere inside your aggregate
 public function addMoney(int $amount)
 {
     $this->recordThat(new MoneyAdded($amount));

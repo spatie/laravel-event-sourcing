@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests;
 
-use Spatie\EventSourcing\EloquentStoredEventRepository;
+use Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 
 class EloquentStoredEventRepositoryTest extends TestCase

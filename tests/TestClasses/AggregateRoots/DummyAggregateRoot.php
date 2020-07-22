@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots;
 
-use Spatie\EventSourcing\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
 
 class DummyAggregateRoot extends AggregateRoot
@@ -17,5 +17,10 @@ class DummyAggregateRoot extends AggregateRoot
     public function applyDummyEvent(DummyEvent $dummyEvent)
     {
         $this->latestInteger = $dummyEvent->integer;
+    }
+
+    public function getLatestInteger(): int
+    {
+        return $this->latestInteger;
     }
 }

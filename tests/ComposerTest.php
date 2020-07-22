@@ -3,7 +3,7 @@
 namespace Spatie\EventSourcing\Tests;
 
 use Illuminate\Support\Str;
-use Spatie\EventSourcing\Composer;
+use Spatie\EventSourcing\Support\Composer;
 
 class ComposerTest extends TestCase
 {

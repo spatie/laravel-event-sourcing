@@ -1,6 +1,8 @@
 <?php
 
-namespace Spatie\EventSourcing;
+namespace Spatie\EventSourcing\StoredEvents;
+
+use Spatie\EventSourcing\Projectionist;
 
 interface HandleDomainEventJob
 {

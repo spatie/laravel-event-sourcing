@@ -1,10 +1,11 @@
 <?php
 
-namespace Spatie\EventSourcing;
+namespace Spatie\EventSourcing\Support;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
+use Spatie\EventSourcing\Projectionist;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 

@@ -78,7 +78,7 @@ return [
      * can change this to a class of your own. The only restriction is that
      * it should implement \Spatie\EventSourcing\HandleDomainEventJob.
      */
-    'stored_event_job' => \Spatie\EventSourcing\HandleStoredEventJob::class,
+    'stored_event_job' => \Spatie\EventSourcing\StoredEvents\HandleStoredEventJob::class,
 
     /*
      * Similar to Relation::morphMap() you can define which alias responds to which

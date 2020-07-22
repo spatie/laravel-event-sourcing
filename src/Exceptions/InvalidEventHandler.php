@@ -3,7 +3,7 @@
 namespace Spatie\EventSourcing\Exceptions;
 
 use Exception;
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class InvalidEventHandler extends Exception
 {

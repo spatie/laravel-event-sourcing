@@ -13,7 +13,7 @@ class MakeProjectorCommand extends GeneratorCommand
 
     protected $type = 'Projector';
 
-    public function handle()
+    public function handle(): void
     {
         parent::handle();
 

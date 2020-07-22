@@ -2,15 +2,12 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors;
 
-use Spatie\EventSourcing\Projectors\Projector;
-use Spatie\EventSourcing\Projectors\ProjectsEvents;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
-class AccountProjector implements Projector
+class AccountProjector extends Projector
 {
-    use ProjectsEvents;
-
     protected array $handlesEvents = [
         MoneyAdded::class => 'onMoneyAdded',
     ];

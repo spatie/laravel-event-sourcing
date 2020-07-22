@@ -3,13 +3,15 @@
 namespace Spatie\EventSourcing\Tests;
 
 use Illuminate\Support\Facades\Mail;
+use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\EventSourcing\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
+use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootThatAllowsConcurrency;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithFailingPersist;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
@@ -41,6 +43,14 @@ class AggregateRootTest extends TestCase
         $root = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
         $this->assertEquals(42, $root->dependency);
+    }
+
+    /** @test */
+    public function it_can_get_the_uuid()
+    {
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $this->assertEquals($this->aggregateUuid, $aggregateRoot->uuid());
     }
 
     /** @test */
@@ -261,25 +271,38 @@ class AggregateRootTest extends TestCase
     }
 
     /** @test */
-    public function projectors_will_get_called_when_an_aggregate_root_is_persisted()
+    public function it_can_persist_aggregate_roots_in_a_transaction()
     {
+        Mail::fake();
+
         Projectionist::addProjector(AccountProjector::class);
+        Projectionist::addReactor(SendMailReactor::class);
 
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid)->addMoney(123);
+        AggregateRoot::persistInTransaction($aggregateRoot);
 
-        $aggregateRoot->addMoney(123);
+        $this->assertCount(1, EloquentStoredEvent::get());
+        $this->assertCount(1, Account::get());
+        Mail::assertSent(MoneyAddedMailable::class);
+    }
 
-        $accounts = Account::get();
-        $this->assertCount(0, $accounts);
+    /** @test */
+    public function it_will_not_call_any_event_handlers_when_persisting_fails()
+    {
+        Mail::fake();
 
-        $aggregateRoot->persist();
+        Projectionist::addProjector(AccountProjector::class);
+        Projectionist::addReactor(SendMailReactor::class);
 
-        $accounts = Account::get();
-        $this->assertCount(1, $accounts);
+        $aggregateRoot = AccountAggregateRootWithFailingPersist::retrieve($this->aggregateUuid)->addMoney(123);
 
-        $account = Account::first();
-        $this->assertEquals(123, $account->amount);
-        $this->assertEquals($this->aggregateUuid, $account->uuid);
+        $this->assertExceptionThrown(
+            fn () => AggregateRoot::persistInTransaction($aggregateRoot)
+        );
+
+        $this->assertCount(0, EloquentStoredEvent::get());
+        $this->assertCount(0, Account::get());
+        Mail::assertNothingSent();
     }
 
     /** @test */

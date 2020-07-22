@@ -3,10 +3,10 @@
 namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
 use Exception;
-use Spatie\EventSourcing\Projectors\QueuedProjector;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 
-class ProjectorThatThrowsAnException extends BalanceProjector implements QueuedProjector
+class ProjectorThatThrowsAnException extends BalanceProjector implements ShouldQueue
 {
     public function onMoneyAdded(MoneyAddedEvent $event)
     {

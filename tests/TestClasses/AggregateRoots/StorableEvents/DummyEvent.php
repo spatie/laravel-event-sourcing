@@ -2,9 +2,9 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents;
 
-use Spatie\EventSourcing\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
-class DummyEvent implements ShouldBeStored
+class DummyEvent extends ShouldBeStored
 {
     public int $integer;
 

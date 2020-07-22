@@ -1,8 +1,10 @@
 <?php
 
-namespace Spatie\EventSourcing;
+namespace Spatie\EventSourcing\StoredEvents\Repositories;
 
 use Illuminate\Support\LazyCollection;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 interface StoredEventRepository
 {

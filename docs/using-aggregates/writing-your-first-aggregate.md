@@ -18,7 +18,7 @@ This will create a class like this:
 ```php
 namespace App\Aggregates;
 
-use Spatie\EventSourcing\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 
 class AccountAggregate extends AggregateRoot
@@ -35,7 +35,7 @@ First, let's add a `createAccount` method to our aggregate that will record the 
 ```php
 namespace App\Aggregates;
 
-use Spatie\EventSourcing\AggregateRoot;
+use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class AccountAggregate extends AggregateRoot
 {

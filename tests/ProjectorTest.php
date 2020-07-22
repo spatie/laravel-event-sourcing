@@ -2,13 +2,11 @@
 
 namespace Spatie\EventSourcing\Tests;
 
-use Spatie\EventSourcing\Exceptions\CouldNotResetProjector;
 use Spatie\EventSourcing\Facades\Projectionist;
-use Spatie\EventSourcing\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
-use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatWritesMetaData;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithAssociativeAndNonAssociativeHandleEvents;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutHandlesEvents;
@@ -43,14 +41,6 @@ class ProjectorTest extends TestCase
         $projector->reset();
 
         $this->assertCount(0, Account::all());
-    }
-
-    /** @test */
-    public function it_will_throw_an_exception_if_it_does_not_have_the_needed_method_to_reset()
-    {
-        $this->expectException(CouldNotResetProjector::class);
-
-        (new BalanceProjector())->reset();
     }
 
     /** @test */

@@ -2,6 +2,24 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.0.0 - unreleased
+
+- projectors now are abstract classes instead of interfaces
+- reactors can now be easily defined by extending the reactor base class
+- projectors and reactors can be marked as async by implementing the `ShouldQueue` marker interface
+- events that extend `ShouldBeStored` now can retrieve the aggregate root uuid using `aggregateRootUuid()`
+- the package has been restructured. Namespaces of most classes have been updated.
+- events that extend `ShouldBeStored` can now handle metadata using `metaData` and `setMetaData`
+- aggregate roots can now be persisted without calling event handlers using `persistWithoutApplyingToEventHandlers`
+- the projectionist can now handle manually specified events using `handleStoredEvents`
+- added `persistAggregateRootsInTransaction` to `AggregateRoot`
+- you can now get the `uuid` of an aggregate root using the `uuid()` method
+- the `reset` method has been removed on projectors
+- the `fake` method on an aggregate root now accepts a uuid instead of an array of events
+- the `meta_data` property on `StoredEvent` is now an array or a string instead of `SchemalessAttributes`
+- apply methods on aggregates can now make use of method injection
+- pass metadata to serializer to allow events to be upgraded (#112)
+
 ## 3.2.3 - 2020-07-14
 
 - default to `BigIncrements` on package table stubs (#124)
@@ -21,6 +39,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 ## 3.1.8 - 2020-06-28
 
 - use `app` helper (#117)
+>>>>>>> master
 
 ## 3.1.7 - 2020-06-18
 
@@ -56,7 +75,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 ## 3.0.4 - 2020-02-23
 
-- fix for serializing events that use immutable datatime objects (#67)
+- fix for serializing events that use immutable datetime objects (#67)
 
 ## 3.0.3 - 2020-02-18
 
