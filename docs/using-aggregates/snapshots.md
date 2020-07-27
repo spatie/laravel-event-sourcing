@@ -14,7 +14,7 @@ $myAggregate = MyAggregate::retrieve($uuid);
 $myAggregate->snapshot();
 ```
 
-This will create a new snapshot in the `snapshots` table. By default we store the values of all the private, protected and public properties on the aggregate at that point in time.
+This will create a new snapshot in the `snapshots` table. By default we store the values of the public properties on the aggregate at that point in time.
 
 When you retrieve the aggregate the next time, it will find the snapshot, set its internal properties back to what they were at the time of the snapshot, and apply any new events starting from the snapshot.   
 
