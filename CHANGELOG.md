@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.0.1 - 2020-07-29
+
+- add `snapshot_model` config key
+
 ## 4.0.0 - 2020-07-22
 
 - projectors now are abstract classes instead of interfaces

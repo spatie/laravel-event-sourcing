@@ -44,7 +44,7 @@ return [
     /*
      * This class is responsible for storing events in the EloquentStoredEventRepository.
      * To add extra behaviour you can change this to a class of your own. It should
-     * extend the \Spatie\EventSourcing\Models\EloquentStoredEvent model.
+     * extend the \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent model.
      */
     'stored_event_model' => \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent::class,
 
@@ -61,6 +61,13 @@ return [
      * it should implement \Spatie\EventSourcing\EloquentSnapshotRepository.
      */
     'snapshot_repository' => \Spatie\EventSourcing\Snapshots\EloquentSnapshotRepository::class,
+
+    /*
+     * This class is responsible for storing events in the EloquentSnapshotRepository.
+     * To add extra behaviour you can change this to a class of your own. It should
+     * extend the \Spatie\EventSourcing\Snapshots\EloquentSnapshot model.
+     */
+    'snapshot_model' => \Spatie\EventSourcing\Snapshots\EloquentSnapshot::class,
 
     /*
      * This class is responsible for handling stored events. To add extra behaviour you
