@@ -46,35 +46,35 @@ return [
      * To add extra behaviour you can change this to a class of your own. It should
      * extend the \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent model.
      */
-    'stored_event_model' => \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent::class,
+    'stored_event_model' => Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent::class,
 
     /*
      * This class is responsible for storing events. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
      * it should implement \Spatie\EventSourcing\EloquentStoredEventRepository.
      */
-    'stored_event_repository' => \Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository::class,
+    'stored_event_repository' => Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository::class,
 
     /*
      * This class is responsible for storing snapshots. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
      * it should implement \Spatie\EventSourcing\EloquentSnapshotRepository.
      */
-    'snapshot_repository' => \Spatie\EventSourcing\Snapshots\EloquentSnapshotRepository::class,
+    'snapshot_repository' => Spatie\EventSourcing\Snapshots\EloquentSnapshotRepository::class,
 
     /*
      * This class is responsible for storing events in the EloquentSnapshotRepository.
      * To add extra behaviour you can change this to a class of your own. It should
      * extend the \Spatie\EventSourcing\Snapshots\EloquentSnapshot model.
      */
-    'snapshot_model' => \Spatie\EventSourcing\Snapshots\EloquentSnapshot::class,
+    'snapshot_model' => Spatie\EventSourcing\Snapshots\EloquentSnapshot::class,
 
     /*
      * This class is responsible for handling stored events. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
      * it should implement \Spatie\EventSourcing\HandleDomainEventJob.
      */
-    'stored_event_job' => \Spatie\EventSourcing\StoredEvents\HandleStoredEventJob::class,
+    'stored_event_job' => Spatie\EventSourcing\StoredEvents\HandleStoredEventJob::class,
 
     /*
      * Similar to Relation::morphMap() you can define which alias responds to which
@@ -88,7 +88,7 @@ return [
      * and stored as json. You can customize the class name. A valid serializer
      * should implement Spatie\EventSourcing\EventSerializers\EventSerializer.
      */
-    'event_serializer' => \Spatie\EventSourcing\EventSerializers\JsonEventSerializer::class,
+    'event_serializer' => Spatie\EventSourcing\EventSerializers\JsonEventSerializer::class,
 
     /*
      * When replaying events, potentially a lot of events will have to be retrieved.
