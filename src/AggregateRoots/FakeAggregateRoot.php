@@ -57,13 +57,7 @@ class FakeAggregateRoot
     {
         $expectedEvents = Arr::wrap($expectedEvents);
 
-        $recordedEvents = array_map(function (ShouldBeStored $event) {
-            $metaData = $event->metaData();
-
-            unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);
-
-            return $event->setMetaData($metaData);
-        }, $this->aggregateRoot->getRecordedEvents());
+        $recordedEvents = $this->getRecordedEventsWithoutUuid();
 
         Assert::assertEquals($expectedEvents, $recordedEvents);
 
@@ -79,6 +73,14 @@ class FakeAggregateRoot
         foreach ($unexpectedEventClasses as $nonExceptedEventClass) {
             Assert::assertNotContains($nonExceptedEventClass, $actualEventClasses, "Did not expect to record {$nonExceptedEventClass}, but it was recorded.");
         }
+    }
+
+    public function assertEventRecorded(ShouldBeStored $expectedEvent): self {
+        $recordedEvents = $this->getRecordedEventsWithoutUuid();
+
+        Assert::assertContainsEquals($expectedEvent, $recordedEvents);
+
+        return $this;
     }
 
     public function assertNothingApplied(): self
@@ -131,5 +133,16 @@ class FakeAggregateRoot
     public function aggregateRoot(): AggregateRoot
     {
         return $this->aggregateRoot;
+    }
+
+    private function getRecordedEventsWithoutUuid(): array
+    {
+        return array_map(static function (ShouldBeStored $event) {
+            $metaData = $event->metaData();
+
+            unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);
+
+            return $event->setMetaData($metaData);
+        }, $this->aggregateRoot->getRecordedEvents());
     }
 }
