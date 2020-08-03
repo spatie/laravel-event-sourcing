@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.1.0 - 2020-08-03
+
+- add assertion that specific event is recorded (#134)
+
 ## 4.0.2 - 2020-07-29
 
 - config style fix
