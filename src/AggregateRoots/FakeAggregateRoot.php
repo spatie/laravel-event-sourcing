@@ -75,7 +75,8 @@ class FakeAggregateRoot
         }
     }
 
-    public function assertEventRecorded(ShouldBeStored $expectedEvent): self {
+    public function assertEventRecorded(ShouldBeStored $expectedEvent): self
+    {
         $recordedEvents = $this->getRecordedEventsWithoutUuid();
 
         Assert::assertContainsEquals($expectedEvent, $recordedEvents);
