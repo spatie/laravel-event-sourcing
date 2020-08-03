@@ -88,6 +88,8 @@ public function it_will_not_make_subtractions_that_would_go_below_the_account_li
 
 The `given` and `assertRecorded` methods can accept a single event instances or an array with event instances. `assertNotRecorded` can also accept an array of class names.
 
+When you'd like to assert that only a specific event is recorded, you can use the `assertEventRecorded` method.
+
 If you don't expect any events to be recorded you can use `assertNothingRecorded`.
 
 ## Disabling dispatching events
