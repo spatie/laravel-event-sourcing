@@ -107,8 +107,9 @@ return [
     'cache_path' => storage_path('app/event-sourcing'),
 
     /*
-    * Configure if events recorded in an aggregate root are dispatched on the Laravel event bus.
-    */
+     * When storable evens are fired from aggregates roots, the package can fire off these
+     * events as regular events as well.
+     */
 
     'dispatch_events_from_aggregate_roots' => false,
 ];
