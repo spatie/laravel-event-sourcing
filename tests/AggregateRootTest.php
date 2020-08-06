@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
@@ -356,5 +357,25 @@ class AggregateRootTest extends TestCase
         $aggregateRoot->persist();
 
         $this->assertTestPassed();
+    }
+
+    /** @test */
+    public function it_fires_the_triggered_events_on_the_event_bus_when_configured()
+    {
+        config()->set('event-sourcing.dispatch_events_from_aggregate_roots', true);
+
+        Event::fake([
+            MoneyAdded::class,
+        ]);
+
+        AccountAggregateRoot::retrieve($this->aggregateUuid)
+            ->addMoney(100)
+            ->persist();
+
+        Event::assertDispatched(function (MoneyAdded $event) {
+            $this->assertEquals(100, $event->amount);
+            $this->assertTrue($event->firedFromAggregateRoot);
+            return true;
+        });
     }
 }

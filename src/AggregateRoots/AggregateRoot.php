@@ -71,7 +71,7 @@ abstract class AggregateRoot
     {
         $storedEvents = $this->persistWithoutApplyingToEventHandlers();
 
-        $storedEvents->each(fn (StoredEvent $storedEvent) => $storedEvent->handle());
+        $storedEvents->each(fn (StoredEvent $storedEvent) => $storedEvent->handleForAggregateRoot());
 
         $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
 
