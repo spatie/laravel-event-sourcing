@@ -206,7 +206,7 @@ abstract class AggregateRoot
             } catch (BindingResolutionException $exception) {
                 $this->$applyingMethodName($event);
             }
-        } else if ($applyMethodExists) {
+        } elseif ($applyMethodExists) {
             $this->$applyingMethodName($event);
         }
 
