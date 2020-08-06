@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.2.0 - 2020-08-06
+
+- allow events to be dispatched from an aggregate root (#135)
+
 ## 4.1.0 - 2020-08-03
 
 - add assertion that specific event is recorded (#134)
