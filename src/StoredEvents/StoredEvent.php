@@ -80,6 +80,7 @@ class StoredEvent implements Arrayable
         $this->event->firedFromAggregateRoot = true;
         event($this->event);
     }
+
     public function handle()
     {
         Projectionist::handleWithSyncEventHandlers($this);
