@@ -372,7 +372,7 @@ class AggregateRootTest extends TestCase
             ->addMoney(100)
             ->persist();
 
-        Event::assertDispatched(function (MoneyAdded $event) {
+        Event::assertDispatched(MoneyAdded::class, function (MoneyAdded $event) {
             $this->assertEquals(100, $event->amount);
             $this->assertTrue($event->firedFromAggregateRoot);
             return true;
