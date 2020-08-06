@@ -82,3 +82,5 @@ MyAggregate::retrieve($uuid) // will cause all events for this uuid to be fed to
 ```
 
 Persisting an aggregate root will write all newly recorded events to the database. The newly persisted events will get passed to all projectors and reactors.
+
+By default, the event won't be fired on Laravels event bus. To dispatch events when they are stored, you can set the `dispatch_events_from_aggregate_roots` value in the `event-sourcing` config file to `true`. 

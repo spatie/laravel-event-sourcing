@@ -105,4 +105,11 @@ return [
      * Here you can specify where the cache should be stored.
      */
     'cache_path' => storage_path('app/event-sourcing'),
+
+    /*
+     * When storable evens are fired from aggregates roots, the package can fire off these
+     * events as regular events as well.
+     */
+
+    'dispatch_events_from_aggregate_roots' => false,
 ];

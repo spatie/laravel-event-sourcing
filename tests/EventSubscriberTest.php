@@ -78,6 +78,17 @@ class EventSubscriberTest extends TestCase
     }
 
     /** @test */
+    public function it_will_not_store_events_when_events_are_fired_from_a_aggregate_root()
+    {
+        $event = new MoneyAddedEvent($this->account, 1234);
+        $event->firedFromAggregateRoot = true;
+
+        event($event);
+
+        $this->assertCount(0, EloquentStoredEvent::get());
+    }
+
+    /** @test */
     public function it_will_call_registered_projectors()
     {
         Projectionist::addProjector(BalanceProjector::class);

@@ -24,6 +24,10 @@ class EventSubscriber
             return;
         }
 
+        if ($this->isFiredFromAggregateRoot($payload[0])) {
+            return;
+        }
+
         $this->storeEvent($payload[0]);
     }
 
@@ -40,5 +44,10 @@ class EventSubscriber
         }
 
         return is_subclass_of($event, ShouldBeStored::class);
+    }
+
+    private function isFiredFromAggregateRoot($event): bool
+    {
+        return $event->firedFromAggregateRoot ?? false;
     }
 }

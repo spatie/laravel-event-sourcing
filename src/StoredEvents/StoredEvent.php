@@ -69,6 +69,17 @@ class StoredEvent implements Arrayable
         ];
     }
 
+    public function handleForAggregateRoot(): void
+    {
+        $this->handle();
+
+        if (! config('event-sourcing.dispatch_events_from_aggregate_roots', false)) {
+            return;
+        }
+
+        $this->event->firedFromAggregateRoot = true;
+        event($this->event);
+    }
     public function handle()
     {
         Projectionist::handleWithSyncEventHandlers($this);
