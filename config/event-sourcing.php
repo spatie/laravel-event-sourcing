@@ -107,7 +107,7 @@ return [
     'cache_path' => storage_path('app/event-sourcing'),
 
     /*
-    * Configure if events recorded in a aggregate root are dispatched on the Laravel event bus.
+    * Configure if events recorded in an aggregate root are dispatched on the Laravel event bus.
     */
 
     'dispatch_events_from_aggregate_roots' => false,
