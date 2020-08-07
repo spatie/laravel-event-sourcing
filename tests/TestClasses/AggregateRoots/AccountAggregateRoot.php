@@ -35,7 +35,7 @@ class AccountAggregateRoot extends AggregateRoot
         return $this;
     }
 
-    public function applyMoneyAdded(MoneyAdded $event)
+    protected function applyMoneyAdded(MoneyAdded $event)
     {
         $this->balance += $event->amount;
     }

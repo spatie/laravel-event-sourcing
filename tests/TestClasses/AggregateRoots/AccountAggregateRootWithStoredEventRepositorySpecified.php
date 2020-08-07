@@ -19,7 +19,7 @@ class AccountAggregateRootWithStoredEventRepositorySpecified extends AggregateRo
         return $this;
     }
 
-    public function applyMoneyAdded(MoneyAdded $event)
+    protected function applyMoneyAdded(MoneyAdded $event)
     {
         $this->balance += $event->amount;
     }
