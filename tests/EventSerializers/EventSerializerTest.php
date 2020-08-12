@@ -2,8 +2,11 @@
 
 namespace Spatie\EventSourcing\Tests\EventSerializers;
 
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Tests\TestCase;
+use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithCarbon;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithDatetime;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithoutSerializedModels;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
@@ -84,6 +87,18 @@ class EventSerializerTest extends TestCase
         $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json);
 
         $this->assertInstanceOf(\DateTimeImmutable::class, $normalizedEvent->value);
+    }
+
+    /** @test */
+    public function it_can_deserialize_an_event_with_carbon()
+    {
+        $event = new EventWithCarbon(Carbon::now());
+
+        $json = $this->eventSerializer->serialize($event);
+
+        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json);
+
+        $this->assertInstanceOf(CarbonInterface::class, $normalizedEvent->value);
     }
 
     /** @test */
