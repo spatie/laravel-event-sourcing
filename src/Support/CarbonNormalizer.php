@@ -19,7 +19,7 @@ class CarbonNormalizer implements NormalizerInterface, DenormalizerInterface
             throw new InvalidArgumentException('Cannot serialize an object that is not a CarbonInterface in CarbonNormalizer.');
         }
 
-        return $object->toISOString();
+        return $object->toRfc3339String();
     }
 
     /**
