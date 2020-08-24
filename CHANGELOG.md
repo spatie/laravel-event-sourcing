@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.3.0 - 2020-08-24
+
+- support Carbon dates in events (#137)
+
 ## 4.2.0 - 2020-08-06
 
 - allow events to be dispatched from an aggregate root (#135)
