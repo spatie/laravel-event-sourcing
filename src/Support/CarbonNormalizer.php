@@ -3,10 +3,10 @@
 namespace Spatie\EventSourcing\Support;
 
 use Carbon\CarbonInterface;
-use InvalidArgumentException;
 use Illuminate\Support\Facades\Date;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class CarbonNormalizer implements NormalizerInterface, DenormalizerInterface
 {

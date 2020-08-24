@@ -2,8 +2,8 @@
 
 namespace Spatie\EventSourcing\EventSerializers;
 
-use Spatie\EventSourcing\Support\CarbonNormalizer;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
+use Spatie\EventSourcing\Support\CarbonNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
