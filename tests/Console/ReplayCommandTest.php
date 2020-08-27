@@ -11,9 +11,11 @@ use Spatie\EventSourcing\Events\StartingEventReplay;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestCase;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
@@ -115,18 +117,19 @@ class ReplayCommandTest extends TestCase
         ]);
     }
 
+    /** @test */
     public function it_will_replay_events_from_a_specific_store()
     {
-        $account = AccountAggregateRootWithStoredEventRepositorySpecified::create();
+        config()->set('event-sourcing.stored_event_model', OtherEloquentStoredEvent::class);
 
-        foreach (range(1, 5) as $i) {
-            event(new MoneyAddedEvent($account, 2000));
-        }
-
-        OtherEloquentStoredEvent::truncate();
+        AccountAggregateRoot::retrieve(FakeUuid::generate())
+            ->addMoney(100)
+            ->multiplyMoney(2)
+            ->persist();
 
         $this->artisan('event-sourcing:replay', ['--stored-event-model' => OtherEloquentStoredEvent::class])
-            ->expectsOutput('Replaying 5 events...')
+            ->expectsQuestion('Are you sure you want to replay events to all projectors?', 'Y')
+            ->expectsOutput('Replaying 2 events...')
             ->assertExitCode(0);
     }
 }
