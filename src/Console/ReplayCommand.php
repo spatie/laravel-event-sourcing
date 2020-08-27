@@ -103,7 +103,7 @@ class ReplayCommand extends Command
 
         if (! is_subclass_of($storedEventRepository, StoredEventRepository::class)) {
             throw new InvalidArgumentException(
-                "Stored event model class `$storedEventRepository` does not implement `" . StoredEventRepository::class . '`'
+                "Stored event repository class `$storedEventRepository` does not implement `" . StoredEventRepository::class . '`'
             );
         }
 
