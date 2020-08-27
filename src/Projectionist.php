@@ -266,7 +266,8 @@ class Projectionist
     public function replay(
         Collection $projectors,
         int $startingFromEventId = 0,
-        callable $onEventReplayed = null
+        callable $onEventReplayed = null,
+        string $storedEventRepositoryClass = null
     ): void {
         $projectors = new EventHandlerCollection($projectors);
 
@@ -284,7 +285,7 @@ class Projectionist
 
         $projectors->call('onStartingEventReplay');
 
-        app(StoredEventRepository::class)
+        app($storedEventRepositoryClass ?? StoredEventRepository::class)
             ->retrieveAllStartingFrom($startingFromEventId)
             ->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
                 $this->applyStoredEventToProjectors(

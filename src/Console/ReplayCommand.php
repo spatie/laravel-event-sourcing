@@ -5,21 +5,27 @@ namespace Spatie\EventSourcing\Console;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 use Spatie\EventSourcing\Projectionist;
+use Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository;
 use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
 
 class ReplayCommand extends Command
 {
     protected $signature = 'event-sourcing:replay {projector?*}
                             {--from=0 : Replay events starting from this event number}
-                            {--stored-event-model= : Replay events from this store}';
+                            {--stored-event-repository= : Replay events from a specific repository}';
 
     protected $description = 'Replay stored events';
 
     protected ?Projectionist $projectionist;
 
+    protected ?StoredEventRepository $storedEventRepository;
+
     public function handle(Projectionist $projectionist): void
     {
+        $this->storedEventRepository = app($this->getStoredEventRepositoryClass());
+
         $this->projectionist = $projectionist;
 
         $projectors = $this->selectProjectors($this->argument('projector'));
@@ -56,8 +62,7 @@ class ReplayCommand extends Command
 
     public function replay(Collection $projectors, int $startingFrom): void
     {
-        $repository = app(StoredEventRepository::class);
-        $replayCount = $repository->countAllStartingFrom($startingFrom);
+        $replayCount = $this->storedEventRepository->countAllStartingFrom($startingFrom);
 
         if ($replayCount === 0) {
             $this->warn('There are no events to replay');
@@ -72,7 +77,7 @@ class ReplayCommand extends Command
             $bar->advance();
         };
 
-        $this->projectionist->replay($projectors, $startingFrom, $onEventReplayed);
+        $this->projectionist->replay($projectors, $startingFrom, $onEventReplayed, $this->getStoredEventRepositoryClass());
 
         $bar->finish();
 
@@ -86,5 +91,22 @@ class ReplayCommand extends Command
         foreach (range(1, $amount) as $i) {
             $this->line('');
         }
+    }
+
+    private function getStoredEventRepositoryClass(): string
+    {
+        $storedEventRepository = $this->option('stored-event-repository');
+
+        if (! $storedEventRepository) {
+            return EloquentStoredEventRepository::class;
+        }
+
+        if (! is_subclass_of($storedEventRepository, StoredEventRepository::class)) {
+            throw new InvalidArgumentException(
+                "Stored event model class `$storedEventRepository` does not implement `" . StoredEventRepository::class . '`'
+            );
+        }
+
+        return $storedEventRepository;
     }
 }
