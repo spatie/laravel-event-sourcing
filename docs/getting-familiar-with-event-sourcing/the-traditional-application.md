@@ -11,14 +11,15 @@ You might think that you still have the old state inside your backups. But they 
     <figcaption class="scheme_caption">
         First, we write value X
     </figcaption>
-    <img class="scheme_figure" src="../../images/db-01.svg">
+    <img class="scheme_figure" src="/docs/laravel-event-sourcing/v4/images/db-01.svg">
+    https://spatie.be/docs/laravel-event-sourcing/v4/images/db-01.svg
 </figure>
 
 <figure class="scheme">
     <figcaption class="scheme_caption">
         Next, we overwrite X by Y. X cannot be accessed anymore.
     </figcaption>
-    <img class="scheme_figure" src="../../images/db-02.svg">
+    <img class="scheme_figure" src="/docs/laravel-event-sourcing/v4/images/db-02.svg">
 </figure>
 
 Here's a demo application that uses a traditional architecture. Inside the [`AccountsController`](https://github.com/spatie/larabank-traditional/blob/9cc38858c50a4f2ac5a36e64719c891fac85bd3f/app/Http/Controllers/AccountsController.php) we are just going to [create new accounts](https://github.com/spatie/larabank-traditional/blob/9cc38858c50a4f2ac5a36e64719c891fac85bd3f/app/Http/Controllers/AccountsController.php#L19-L27) and [update the balance](https://github.com/spatie/larabank-traditional/blob/9cc38858c50a4f2ac5a36e64719c891fac85bd3f/app/Http/Controllers/AccountsController.php#L29-L36). We're using an eloquent model to update the database. Whenever we change the balance of the account, the old value is lost.
