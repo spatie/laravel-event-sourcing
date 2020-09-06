@@ -33,7 +33,7 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 
 ## Documentation
 
-You can find installation instructions and detailed instructions on how to use this package at [the dedicated documentation site](https://docs.spatie.be/laravel-event-sourcing/v1/introduction/).
+You can find installation instructions and detailed instructions on how to use this package at [the dedicated documentation site](https://docs.spatie.be/laravel-event-sourcing/v4/introduction/).
 
 ## Upgrading from laravel-event-projector
 
