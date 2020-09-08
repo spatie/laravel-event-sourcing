@@ -94,7 +94,7 @@ class Account extends Model
 
 ## Defining events
 
-Instead of creating, updating and deleting accounts, we're simply firing off events. All these events should implement `\Spatie\EventSourcing\ShouldBeStored`. This is an empty interface that signifies to our package that the event should be stored.
+Instead of creating, updating and deleting accounts, we're simply firing off events. All these events should extend `\Spatie\EventSourcing\StoredEvents\ShouldBeStored`. This abstract class signifies to our package that the event should be stored.
 
 Let's take a look at all events used in the `Account` model.
 
