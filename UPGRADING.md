@@ -1,6 +1,6 @@
 # Upgrading
 
-## From v3 to v4 (unreleased)
+## From v3 to v4
 
 - Projectors should not implement the `Projector` interface anymore. Instead, they should extend from `Spatie\EventSourcing\EventHandlers\Projectors\Projector` class. You don't need the use the `ProjectsEvents` trait anymore, as it's already applied on the base class.
 - The `QueuedProjector` interface does not exist anymore. If you want to queue a projector you should let it implement the marker interface `lluminate\Contracts\Queue\ShouldQueue`.
