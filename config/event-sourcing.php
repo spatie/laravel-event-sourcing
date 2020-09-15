@@ -110,6 +110,12 @@ return [
      * When storable evens are fired from aggregates roots, the package can fire off these
      * events as regular events as well.
      */
-
     'dispatch_events_from_aggregate_roots' => false,
+
+    /*
+     * For performance reasons, stored events are retrieved and played in ID-order by default.
+     * If you're storing events in a way that doesn't guarantee ordered IDs, you may need to 
+     * change this to "created_at".
+     */
+    'stored_event_order_by' => 'id',
 ];

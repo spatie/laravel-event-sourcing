@@ -14,10 +14,13 @@ use Spatie\EventSourcing\StoredEvents\StoredEvent;
 class EloquentStoredEventRepository implements StoredEventRepository
 {
     protected string $storedEventModel;
+    
+    protected string $orderBy;
 
     public function __construct()
     {
         $this->storedEventModel = (string)config('event-sourcing.stored_event_model', EloquentStoredEvent::class);
+        $this->orderBy = (string)config('event-sourcing.stored_event_order_by', 'id');
 
         if (! new $this->storedEventModel instanceof EloquentStoredEvent) {
             throw new InvalidEloquentStoredEventModel("The class {$this->storedEventModel} must extend EloquentStoredEvent");
@@ -33,7 +36,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             $query->uuid($uuid);
         }
 
-        return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+        return $query->orderBy($this->orderBy)->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
     public function retrieveAllStartingFrom(int $startingFrom, string $uuid = null): LazyCollection
@@ -42,7 +45,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
         /** @var LazyCollection $lazyCollection */
         $lazyCollection = $query
-            ->orderBy('id')
+            ->orderBy($this->orderBy)
             ->cursor();
 
         return $lazyCollection->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
@@ -61,7 +64,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             ->afterVersion($version);
 
         return $query
-            ->orderBy('id')
+            ->orderBy($this->orderBy)
             ->cursor()
             ->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
