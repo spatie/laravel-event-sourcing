@@ -15,7 +15,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
 {
     protected string $storedEventModel;
     
-    protected string $orderBy;
+    protected string $orderBy = 'id';
 
     public function __construct()
     {
