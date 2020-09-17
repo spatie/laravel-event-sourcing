@@ -24,9 +24,10 @@ class JsonEventSerializer implements EventSerializer
     public function __construct()
     {
         $encoders = [new JsonEncoder()];
-        
-        $normalizerClassNames = config('event-sourcing.event_normalizers', self::DEFAULT_NORMALIZERS);
-        $normalizers = array_map(fn ($className) => app($className), $normalizerClassNames);
+        $normalizers = array_map(
+            fn ($className) => app($className),
+            config('event-sourcing.event_normalizers', self::DEFAULT_NORMALIZERS)
+        );
 
         $this->serializer = new SymfonySerializer($normalizers, $encoders);
     }
