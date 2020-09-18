@@ -54,6 +54,30 @@ class FakeAggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function when_can_return_values_which_are_captured_and_passed_to_assert_that()
+    {
+        DummyAggregateRoot::fake()
+            ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
+                return $dummyAggregateRoot->uuid();
+            })
+            ->then(function ($uuid) {
+                $this->assertNotNull($uuid);
+            });
+    }
+
+    /** @test */
+    public function assert_that_can_return_a_boolean()
+    {
+        DummyAggregateRoot::fake()
+            ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
+                return $dummyAggregateRoot->uuid();
+            })
+            ->then(function ($uuid) {
+                return true;
+            });
+    }
+
+    /** @test */
     public function it_can_assert_the_applied_events()
     {
         DummyAggregateRoot::fake()

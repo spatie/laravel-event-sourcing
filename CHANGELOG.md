@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.4.0 - 2020-09-18
+
+- Support `then` for aggregate root fakes (#154)
+
 ## 4.3.1 - 2020-09-09
 
 - Support Laravel 8

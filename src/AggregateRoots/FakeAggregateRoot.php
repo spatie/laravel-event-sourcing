@@ -11,6 +11,8 @@ class FakeAggregateRoot
 {
     private AggregateRoot $aggregateRoot;
 
+    private $whenResult = null;
+
     public function __construct(AggregateRoot $aggregateRoot)
     {
         $this->aggregateRoot = $aggregateRoot;
@@ -36,7 +38,18 @@ class FakeAggregateRoot
 
     public function when($callable): self
     {
-        $callable($this->aggregateRoot);
+        $this->whenResult = $callable($this->aggregateRoot);
+
+        return $this;
+    }
+
+    public function then(callable $callback): self
+    {
+        $result = $callback($this->whenResult);
+
+        if ($result !== null) {
+            Assert::assertTrue($result);
+        }
 
         return $this;
     }
@@ -64,7 +77,7 @@ class FakeAggregateRoot
         return $this;
     }
 
-    public function assertNotRecorded($unexpectedEventClasses): void
+    public function assertNotRecorded($unexpectedEventClasses): self
     {
         $actualEventClasses = array_map(fn (ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getRecordedEvents());
 
@@ -73,6 +86,8 @@ class FakeAggregateRoot
         foreach ($unexpectedEventClasses as $nonExceptedEventClass) {
             Assert::assertNotContains($nonExceptedEventClass, $actualEventClasses, "Did not expect to record {$nonExceptedEventClass}, but it was recorded.");
         }
+
+        return $this;
     }
 
     public function assertEventRecorded(ShouldBeStored $expectedEvent): self
