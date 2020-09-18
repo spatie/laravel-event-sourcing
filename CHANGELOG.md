@@ -2,7 +2,7 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
-## 4.4.0 - ?
+## 4.4.0 - 2020-09-18
 
 - Support assertTat for aggregate root fakes (#154)
 
