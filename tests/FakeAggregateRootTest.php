@@ -60,7 +60,7 @@ class FakeAggregateRootTest extends TestCase
             ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
                 return $dummyAggregateRoot->uuid();
             })
-            ->assertThat(function ($uuid) {
+            ->then(function ($uuid) {
                 $this->assertNotNull($uuid);
             });
     }
@@ -72,7 +72,7 @@ class FakeAggregateRootTest extends TestCase
             ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
                 return $dummyAggregateRoot->uuid();
             })
-            ->assertThat(function ($uuid) {
+            ->then(function ($uuid) {
                 return true;
             });
     }

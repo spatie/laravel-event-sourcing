@@ -43,7 +43,7 @@ class FakeAggregateRoot
         return $this;
     }
 
-    public function assertThat(callable $callback): self
+    public function then(callable $callback): self
     {
         $result = $callback($this->whenResult);
 

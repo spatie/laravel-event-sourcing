@@ -92,7 +92,7 @@ When you'd like to assert that only a specific event is recorded, you can use th
 
 If you don't expect any events to be recorded you can use `assertNothingRecorded`.
 
-Finally, you can also use `assertThat`, it accepts a closure which is passed any input you've returned from the `when` function:
+Finally, you can also use `then`, it accepts a closure which is passed any input you've returned from the `when` function:
 
 ```php
 /** @test */
@@ -105,13 +105,13 @@ public function it_will_not_make_subtractions_that_would_go_below_the_account_li
 
             return $accountAggregate->uuid();
         })
-        ->assertThat(function($aggregateRootUuid) {
+        ->then(function($aggregateRootUuid) {
             // …
         });
 }
 ```
 
-You can choose to do manually perform assertions in the `assertThat` closure. Alternatevily, you can return `true` or `false` from. Returning false will fail the test.
+You can choose to do manually perform assertions in the `assertThat` closure. Alternitivly, you can return `true` or `false` from. Returning false will fail the test.
 
 ## Disabling dispatching events
 
