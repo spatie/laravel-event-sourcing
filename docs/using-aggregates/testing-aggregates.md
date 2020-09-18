@@ -111,6 +111,8 @@ public function it_will_not_make_subtractions_that_would_go_below_the_account_li
 }
 ```
 
+You can choose to do manual assertions in the `assertThat` closure. You can also return `true` or `false` from it, which will result in an extra assertion being automatically performed.
+
 ## Disabling dispatching events
 
 When calling the `given` method the aggregate will fire of events for your projector and reactor to react to. If you don't want events being dispatched. Simply [use the `Event` facade's `fake` method](https://laravel.com/docs/master/mocking#event-fake) before your test executes.
