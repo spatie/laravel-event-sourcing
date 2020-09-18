@@ -45,9 +45,11 @@ class FakeAggregateRoot
 
     public function assertThat(callable $callback): self
     {
-        $result = $callback($this->whenResult) ?? true;
+        $result = $callback($this->whenResult);
 
-        Assert::assertTrue($result);
+        if ($result !== null) {
+            Assert::assertTrue($result);
+        }
 
         return $this;
     }
