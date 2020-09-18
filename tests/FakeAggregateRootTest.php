@@ -78,6 +78,18 @@ class FakeAggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function when_can_return_values_which_are_captured_and_passed_to_assert_that()
+    {
+        DummyAggregateRoot::fake()
+            ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
+                return 1;
+            })
+            ->assertThat(function ($i) {
+                $this->assertEquals(1, $i);
+            });
+    }
+
+    /** @test */
     public function it_can_assert_the_applied_events()
     {
         DummyAggregateRoot::fake()
