@@ -111,7 +111,7 @@ public function it_will_not_make_subtractions_that_would_go_below_the_account_li
 }
 ```
 
-You can choose to do manual assertions in the `assertThat` closure. You can also return `true` or `false` from it, which will result in an extra assertion being automatically performed.
+You can choose to do manually perform assertions in the `assertThat` closure. Alternatevily, you can return `true` or `false` from. Returning false will fail the test.
 
 ## Disabling dispatching events
 
