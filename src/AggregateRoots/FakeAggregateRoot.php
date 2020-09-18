@@ -11,6 +11,8 @@ class FakeAggregateRoot
 {
     private AggregateRoot $aggregateRoot;
 
+    private $whenResult = null;
+
     public function __construct(AggregateRoot $aggregateRoot)
     {
         $this->aggregateRoot = $aggregateRoot;
@@ -36,7 +38,16 @@ class FakeAggregateRoot
 
     public function when($callable): self
     {
-        $callable($this->aggregateRoot);
+        $this->whenResult = $callable($this->aggregateRoot);
+
+        return $this;
+    }
+
+    public function assertThat(callable $callback): self
+    {
+        $result = $callback($this->whenResult) ?? true;
+
+        Assert::assertTrue($result);
 
         return $this;
     }
@@ -49,12 +60,16 @@ class FakeAggregateRoot
     }
 
     /**
-     * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored|\Spatie\EventSourcing\StoredEvents\ShouldBeStored[] $expectedEvents
+     * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored|\Spatie\EventSourcing\StoredEvents\ShouldBeStored[]|\Closure $expectedEvents
      *
      * @return $this
      */
     public function assertRecorded($expectedEvents): self
     {
+        if (is_callable($expectedEvents)) {
+            return $this->assertThat($expectedEvents);
+        }
+
         $expectedEvents = Arr::wrap($expectedEvents);
 
         $recordedEvents = $this->getRecordedEventsWithoutUuid();
@@ -64,15 +79,21 @@ class FakeAggregateRoot
         return $this;
     }
 
-    public function assertNotRecorded($unexpectedEventClasses): void
+    public function assertNotRecorded($unexpectedEventClasses): self
     {
-        $actualEventClasses = array_map(fn (ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getRecordedEvents());
+        if (is_callable($unexpectedEventClasses)) {
+            return $this->assertThat($unexpectedEventClasses);
+        }
+
+        $actualEventClasses = array_map(fn(ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getRecordedEvents());
 
         $unexpectedEventClasses = Arr::wrap($unexpectedEventClasses);
 
         foreach ($unexpectedEventClasses as $nonExceptedEventClass) {
             Assert::assertNotContains($nonExceptedEventClass, $actualEventClasses, "Did not expect to record {$nonExceptedEventClass}, but it was recorded.");
         }
+
+        return $this;
     }
 
     public function assertEventRecorded(ShouldBeStored $expectedEvent): self
@@ -115,7 +136,7 @@ class FakeAggregateRoot
 
     public function assertNotApplied($unexpectedEventClasses): void
     {
-        $actualEventClasses = array_map(fn (ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getAppliedEvents());
+        $actualEventClasses = array_map(fn(ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getAppliedEvents());
 
         $unexpectedEventClasses = Arr::wrap($unexpectedEventClasses);
 
