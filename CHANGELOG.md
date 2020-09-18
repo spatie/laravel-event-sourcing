@@ -4,7 +4,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 ## 4.4.0 - ?
 
-- Support closures in assert recorded (#150)
+- Support assertTat for aggregate root fakes (#154)
 
 ## 4.3.1 - 2020-09-09
 
