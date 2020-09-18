@@ -86,11 +86,30 @@ public function it_will_not_make_subtractions_that_would_go_below_the_account_li
 }
 ```
 
-The `given` and `assertRecorded` methods can accept a single event instances or an array with event instances. `assertNotRecorded` can also accept an array of class names.
+The `given` and `assertRecorded` methods can accept a single event instances or an array with event instances. `assertNotRecorded` can also accept an array of class names. 
 
 When you'd like to assert that only a specific event is recorded, you can use the `assertEventRecorded` method.
 
 If you don't expect any events to be recorded you can use `assertNothingRecorded`.
+
+Finally, you can also use `assertThat`, it accepts a closure which is passed any input you've returned from the `when` function:
+
+```php
+/** @test */
+public function it_will_not_make_subtractions_that_would_go_below_the_account_limit()
+{
+    AccountAggregateRoot::fake()
+        ->given([new AccountCreated('Luke'), new MoneySubtracted(4999)])
+        ->when(function (AccountAggregate $accountAggregate) {
+            $accountAggregate->subtractMoney(2);
+
+            return $accountAggregate->uuid();
+        })
+        ->assertThat(function($aggregateRootUuid) {
+            // …
+        });
+}
+```
 
 ## Disabling dispatching events
 

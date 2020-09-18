@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.4.0 - ?
+
+- Support closures in assert recorded (#150)
+
 ## 4.3.1 - 2020-09-09
 
 - Support Laravel 8
