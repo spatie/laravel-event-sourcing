@@ -60,16 +60,12 @@ class FakeAggregateRoot
     }
 
     /**
-     * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored|\Spatie\EventSourcing\StoredEvents\ShouldBeStored[]|\Closure $expectedEvents
+     * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored|\Spatie\EventSourcing\StoredEvents\ShouldBeStored[] $expectedEvents
      *
      * @return $this
      */
     public function assertRecorded($expectedEvents): self
     {
-        if (is_callable($expectedEvents)) {
-            return $this->assertThat($expectedEvents);
-        }
-
         $expectedEvents = Arr::wrap($expectedEvents);
 
         $recordedEvents = $this->getRecordedEventsWithoutUuid();
@@ -81,11 +77,7 @@ class FakeAggregateRoot
 
     public function assertNotRecorded($unexpectedEventClasses): self
     {
-        if (is_callable($unexpectedEventClasses)) {
-            return $this->assertThat($unexpectedEventClasses);
-        }
-
-        $actualEventClasses = array_map(fn (ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getRecordedEvents());
+        $actualEventClasses = array_map(fn(ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getRecordedEvents());
 
         $unexpectedEventClasses = Arr::wrap($unexpectedEventClasses);
 

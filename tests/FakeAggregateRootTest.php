@@ -54,38 +54,14 @@ class FakeAggregateRootTest extends TestCase
     }
 
     /** @test */
-    public function when_can_return_values_which_are_captured_and_passed_to_assert_recorded()
-    {
-        DummyAggregateRoot::fake()
-            ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
-                return 1;
-            })
-            ->assertRecorded(function ($i) {
-                $this->assertEquals(1, $i);
-            });
-    }
-
-    /** @test */
-    public function when_can_return_values_which_are_captured_and_passed_to_assert_not_recorded()
-    {
-        DummyAggregateRoot::fake()
-            ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
-                return 1;
-            })
-            ->assertNotRecorded(function ($i) {
-                $this->assertEquals(1, $i);
-            });
-    }
-
-    /** @test */
     public function when_can_return_values_which_are_captured_and_passed_to_assert_that()
     {
         DummyAggregateRoot::fake()
             ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
-                return 1;
+                return $dummyAggregateRoot->uuid();
             })
-            ->assertThat(function ($i) {
-                $this->assertEquals(1, $i);
+            ->assertThat(function ($uuid) {
+                $this->assertNotNull($uuid);
             });
     }
 
