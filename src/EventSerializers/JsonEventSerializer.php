@@ -12,13 +12,6 @@ use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 
 class JsonEventSerializer implements EventSerializer
 {
-    private const DEFAULT_NORMALIZERS = [
-        CarbonNormalizer::class,
-        ModelIdentifierNormalizer::class,
-        DateTimeNormalizer::class,
-        ObjectNormalizer::class,
-    ];
-    
     private SymfonySerializer $serializer;
 
     public function __construct()
@@ -26,7 +19,7 @@ class JsonEventSerializer implements EventSerializer
         $encoders = [new JsonEncoder()];
         $normalizers = array_map(
             fn ($className) => new $className,
-            config('event-sourcing.event_normalizers', self::DEFAULT_NORMALIZERS)
+            config('event-sourcing.event_normalizers')
         );
 
         $this->serializer = new SymfonySerializer($normalizers, $encoders);
