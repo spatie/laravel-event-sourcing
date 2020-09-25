@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.5.0 - 2020-09-25
+
+- make normalizers configurable (#153)
+
 ## 4.4.0 - 2020-09-18
 
 - Support `then` for aggregate root fakes (#154)
