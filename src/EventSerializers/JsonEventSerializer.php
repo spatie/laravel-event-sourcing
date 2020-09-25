@@ -3,11 +3,7 @@
 namespace Spatie\EventSourcing\EventSerializers;
 
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
-use Spatie\EventSourcing\Support\CarbonNormalizer;
-use Spatie\EventSourcing\Support\ModelIdentifierNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 
 class JsonEventSerializer implements EventSerializer

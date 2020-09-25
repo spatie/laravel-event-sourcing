@@ -40,8 +40,8 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
     public function denormalize($data, $class, string $format = null, array $context = [])
     {
         $identifier = $data instanceof ModelIdentifier
-	        ? $data
-	        : new ModelIdentifier($data['class'], $data['id'], $data['relations'], $data['connection']);
+            ? $data
+            : new ModelIdentifier($data['class'], $data['id'], $data['relations'], $data['connection']);
         
         return $this->getRestoredPropertyValue($identifier);
     }
