@@ -33,8 +33,15 @@ An aggregate can be retrieved like this:
 ```php
 MyAggregate::retrieve($uuid)
 ```
+If you don't want to use the static retrieve method, you can also retrieve an aggregate on an initialized AggregateRoot like this: 
+
+```php
+$myAggregate = new MyAggregate();
+$myAggregate->loadUuid($uuid);
+```
 
 This will cause all events with the given `uuid` to be retrieved and fed to the aggregate. For example, an event `MoneyAdded` will be passed to the `applyMoneyAdded` method on the aggregate if such a method exists.
+
 
 ## Recording events
 
