@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.5.1 - 2020-09-27
+
+- added `loadUuid` (#156)
+
 ## 4.5.0 - 2020-09-25
 
 - make normalizers configurable (#153)
