@@ -43,6 +43,13 @@ abstract class AggregateRoot
         return $aggregateRoot->reconstituteFromEvents();
     }
 
+    public function loadUuid(string $uuid): self
+    {
+        $this->uuid = $uuid;
+
+        return $this->reconstituteFromEvents();
+    }
+
     public function uuid(): string
     {
         return $this->uuid;
