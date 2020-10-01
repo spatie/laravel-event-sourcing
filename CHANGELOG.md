@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.5.2 - 2020-10-02
+
+- fix Paths and Reference URL in event-sourcing.php config file (#159)
+
 ## 4.5.1 - 2020-09-27
 
 - added `loadUuid` (#156)
