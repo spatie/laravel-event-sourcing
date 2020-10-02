@@ -20,6 +20,8 @@ class EloquentStoredEvent extends Model
         'event_properties' => 'array',
         'meta_data' => 'array',
     ];
+    
+    protected ?ShouldBeStored $originalEvent = null;
 
     public function toStoredEvent(): StoredEvent
     {
@@ -31,12 +33,19 @@ class EloquentStoredEvent extends Model
             'event_class' => $this->event_class,
             'meta_data' => $this->meta_data,
             'created_at' => $this->created_at,
-        ]);
+        ], $this->originalEvent);
+    }
+    
+    public function setOriginalEvent(ShouldBeStored $event): self
+    {
+        $this->originalEvent = $event;
+        
+        return $this;
     }
 
     public function getEventAttribute(): ?ShouldBeStored
     {
-        return $this->toStoredEvent()->event;
+        return $this->originalEvent ??= $this->toStoredEvent()->event;
     }
 
     public function getMetaDataAttribute(): SchemalessAttributes
