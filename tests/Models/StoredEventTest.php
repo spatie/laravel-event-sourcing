@@ -2,8 +2,6 @@
 
 namespace Spatie\EventSourcing\Tests\Models;
 
-use Carbon\Carbon;
-use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
