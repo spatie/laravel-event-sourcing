@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.5.3 - 2020-10-02
+
+- re-use existing instance of `ShouldBeStored` when possible (#158)
+
 ## 4.5.2 - 2020-10-02
 
 - fix Paths and Reference URL in event-sourcing.php config file (#159)
