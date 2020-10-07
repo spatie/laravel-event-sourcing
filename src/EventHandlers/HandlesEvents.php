@@ -27,7 +27,9 @@ trait HandlesEvents
         $parameters = [
             'event' => $storedEvent->event,
             'storedEvent' => $storedEvent,
+            'stored_event' => $storedEvent,
             'aggregateUuid' => $storedEvent->aggregate_uuid,
+            'aggregate_uuid' => $storedEvent->aggregate_uuid,
         ];
 
         if (class_exists($handlerClassOrMethod)) {
