@@ -7,6 +7,7 @@ use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 use Spatie\EventSourcing\Tests\TestCase;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
@@ -132,6 +133,18 @@ class StoredEventTest extends TestCase
         $storedEvent = $eloquentEvent->toStoredEvent();
 
         $this->assertEquals(0, $storedEvent->aggregate_version);
+    }
+    
+    /** @test */
+    public function it_uses_the_original_event_if_set()
+    {
+        $originalEvent = new MoneyAdded(100);
+        
+        $eloquentStoredEvent = new EloquentStoredEvent();
+        
+        $eloquentStoredEvent->setOriginalEvent($originalEvent);
+        
+        $this->assertSame($originalEvent, $eloquentStoredEvent->event);
     }
 
     public function fireEvents(int $number = 1, string $className = MoneyAddedEvent::class)

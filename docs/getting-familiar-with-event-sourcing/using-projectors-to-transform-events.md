@@ -11,26 +11,26 @@ Instead of directly updating the value in the database, we could write every cha
     <figcaption class="scheme_caption">
         Here we write our first event in the database
     </figcaption>
-    <img class="scheme_figure" src="../../images/transform-01.svg">
+    <img class="scheme_figure" src="/docs/laravel-event-sourcing/v4/images/transform-01.svg">
 </figure>
 
 <figure class="scheme">
     <figcaption class="scheme_caption">
         When new events come in, we'll write them to the events table as well
     </figcaption>
-    <img class="scheme_figure" src="../../images/transform-02.svg">
+    <img class="scheme_figure" src="/docs/laravel-event-sourcing/v4/images/transform-02.svg">
 </figure>
 
 All events get passed to a class we call a projector. The projector transforms the events to a format that is handy to use in our app. In our Larabank example, the events table hold the info of the individual transactions like `MoneyAdded` and `MoneySubtracted`. A projector could build an `Accounts` table based on those transactions.
 
 <figure class="scheme">
-    <img class="scheme_figure" src="../../images/transform-03.svg">
+    <img class="scheme_figure" src="/docs/laravel-event-sourcing/v4/images/transform-03.svg">
 </figure>
 
 Imagine that you've already stored some events, and your first projector is doing its job creating that `Accounts` table. The bank director now wants to know on which accounts the most transactions were performed. No problem, we could create another projector that reads all previous events and adds the `MoneyAdded` and `MoneySubtracted` events to make projections.
 
 <figure class="scheme">
-    <img class="scheme_figure" src="../../images/transform-04.svg">
+    <img class="scheme_figure" src="/docs/laravel-event-sourcing/v4/images/transform-04.svg">
 </figure>
 
 This package can help you store native Laravel events in a `stored_events` table and create projectors that transform those events.

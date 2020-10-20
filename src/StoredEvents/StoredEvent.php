@@ -29,7 +29,7 @@ class StoredEvent implements Arrayable
 
     public ?ShouldBeStored $event;
 
-    public function __construct(array $data)
+    public function __construct(array $data, ?ShouldBeStored $originalEvent = null)
     {
         $this->id = $data['id'] ?? null;
         $this->event_properties = $data['event_properties'];
@@ -38,22 +38,8 @@ class StoredEvent implements Arrayable
         $this->event_class = self::getActualClassForEvent($data['event_class']);
         $this->meta_data = $data['meta_data'];
         $this->created_at = $data['created_at'];
-
-        try {
-            $this->event = app(EventSerializer::class)->deserialize(
-                self::getActualClassForEvent($this->event_class),
-                is_string($this->event_properties)
-                    ? $this->event_properties
-                    : json_encode($this->event_properties),
-                is_string($this->meta_data)
-                    ? $this->meta_data
-                    : json_encode($this->meta_data),
-            );
-
-            $this->event->setMetaData(optional($this->meta_data)->toArray());
-        } catch (Exception $exception) {
-            throw InvalidStoredEvent::couldNotUnserializeEvent($this, $exception);
-        }
+        
+        $this->instantiateEvent($originalEvent);
     }
 
     public function toArray()
@@ -114,6 +100,31 @@ class StoredEvent implements Arrayable
         $eventHandlers = Projectionist::allEventHandlers();
 
         return $eventHandlers->asyncEventHandlers()->count() > 0;
+    }
+    
+    protected function instantiateEvent(?ShouldBeStored $originalEvent): void
+    {
+        if ($originalEvent) {
+            $this->event = $originalEvent;
+
+            return;
+        }
+    
+        try {
+            $this->event = app(EventSerializer::class)->deserialize(
+                self::getActualClassForEvent($this->event_class),
+                is_string($this->event_properties)
+                    ? $this->event_properties
+                    : json_encode($this->event_properties),
+                is_string($this->meta_data)
+                    ? $this->meta_data
+                    : json_encode($this->meta_data),
+            );
+        
+            $this->event->setMetaData(optional($this->meta_data)->toArray());
+        } catch (Exception $exception) {
+            throw InvalidStoredEvent::couldNotUnserializeEvent($this, $exception);
+        }
     }
 
     protected static function getActualClassForEvent(string $class): string

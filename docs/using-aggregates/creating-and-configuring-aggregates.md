@@ -33,8 +33,25 @@ An aggregate can be retrieved like this:
 ```php
 MyAggregate::retrieve($uuid)
 ```
+If you don't want to use the static retrieve method, you can also retrieve an aggregate on an initialized AggregateRoot like this: 
+
+```php
+$myAggregate = new MyAggregate();
+$myAggregate->loadUuid($uuid);
+```
+
+The `load` method is handy when injecting aggretate roots in constructors or classes where method injection is supported.
+
+```php
+public function handle(MyAggregate $aggregate) {
+    $aggregate->load($uuid);
+    
+    // ...
+}
+```
 
 This will cause all events with the given `uuid` to be retrieved and fed to the aggregate. For example, an event `MoneyAdded` will be passed to the `applyMoneyAdded` method on the aggregate if such a method exists.
+
 
 ## Recording events
 

@@ -15,7 +15,7 @@ php artisan make:projector AccountBalanceProjector
 
 ## Registering projectors
 
-By default, the package will automatically find an register all projectors found in your application.
+By default, the package will automatically find and register all projectors found in your application.
 
 Alternatively, you can manually register projectors in the `projectors` key of the `event-sourcings` config file.
 

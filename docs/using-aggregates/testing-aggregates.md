@@ -92,6 +92,27 @@ When you'd like to assert that only a specific event is recorded, you can use th
 
 If you don't expect any events to be recorded you can use `assertNothingRecorded`.
 
+Finally, you can also use `then`, it accepts a closure which is passed any input you've returned from the `when` function:
+
+```php
+/** @test */
+public function it_will_not_make_subtractions_that_would_go_below_the_account_limit()
+{
+    AccountAggregateRoot::fake()
+        ->given([new AccountCreated('Luke'), new MoneySubtracted(4999)])
+        ->when(function (AccountAggregate $accountAggregate) {
+            $accountAggregate->subtractMoney(2);
+
+            return $accountAggregate->uuid();
+        })
+        ->then(function($aggregateRootUuid) {
+            // …
+        });
+}
+```
+
+You can choose to do manually perform assertions in the `then` closure. Alternatively, you can return `true` or `false` from. Returning false will fail the test.
+
 ## Disabling dispatching events
 
 When calling the `given` method the aggregate will fire of events for your projector and reactor to react to. If you don't want events being dispatched. Simply [use the `Event` facade's `fake` method](https://laravel.com/docs/master/mocking#event-fake) before your test executes.

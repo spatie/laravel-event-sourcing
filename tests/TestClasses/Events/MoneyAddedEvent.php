@@ -2,15 +2,12 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\Events;
 
-use Illuminate\Queue\SerializesModels;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
 class MoneyAddedEvent extends ShouldBeStored
 {
-    use SerializesModels;
-
-    public object $account;
+    public Account $account;
 
     public int $amount;
 

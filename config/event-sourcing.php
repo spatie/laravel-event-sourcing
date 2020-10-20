@@ -51,14 +51,14 @@ return [
     /*
      * This class is responsible for storing events. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
-     * it should implement \Spatie\EventSourcing\EloquentStoredEventRepository.
+     * it should implement \Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository.
      */
     'stored_event_repository' => Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository::class,
 
     /*
      * This class is responsible for storing snapshots. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
-     * it should implement \Spatie\EventSourcing\EloquentSnapshotRepository.
+     * it should implement \Spatie\EventSourcing\Snapshots\EloquentSnapshotRepository.
      */
     'snapshot_repository' => Spatie\EventSourcing\Snapshots\EloquentSnapshotRepository::class,
 
@@ -72,7 +72,7 @@ return [
     /*
      * This class is responsible for handling stored events. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
-     * it should implement \Spatie\EventSourcing\HandleDomainEventJob.
+     * it should implement \Spatie\EventSourcing\StoredEvents\HandleDomainEventJob.
      */
     'stored_event_job' => Spatie\EventSourcing\StoredEvents\HandleStoredEventJob::class,
 
@@ -89,6 +89,19 @@ return [
      * should implement Spatie\EventSourcing\EventSerializers\EventSerializer.
      */
     'event_serializer' => Spatie\EventSourcing\EventSerializers\JsonEventSerializer::class,
+    
+    /*
+     * These classes normalize and restore your events when they're serialized. They allow
+     * you to efficiently store PHP objects like Carbon instances, Eloquent models, and
+     * Collections. If you need to store other complex data, you can add your own normalizers
+     * to the chain. See https://symfony.com/doc/current/components/serializer.html#normalizers
+     */
+    'event_normalizers' => [
+        Spatie\EventSourcing\Support\CarbonNormalizer::class,
+        Spatie\EventSourcing\Support\ModelIdentifierNormalizer::class,
+        Symfony\Component\Serializer\Normalizer\DateTimeNormalizer::class,
+        Symfony\Component\Serializer\Normalizer\ObjectNormalizer::class,
+    ],
 
     /*
      * When replaying events, potentially a lot of events will have to be retrieved.
@@ -100,14 +113,15 @@ return [
     /*
      * In production, you likely don't want the package to auto-discover the event handlers
      * on every request. The package can cache all registered event handlers.
-     * More info: https://docs.spatie.be/laravel-event-sourcing/v1/advanced-usage/discovering-projectors-and-reactors
+     * More info:
+     * https://spatie.be/docs/laravel-event-sourcing/v4/advanced-usage/discovering-projectors-and-reactors#caching-discovered-projectors-and-reactors
      *
      * Here you can specify where the cache should be stored.
      */
     'cache_path' => storage_path('app/event-sourcing'),
 
     /*
-     * When storable evens are fired from aggregates roots, the package can fire off these
+     * When storable events are fired from aggregates roots, the package can fire off these
      * events as regular events as well.
      */
 

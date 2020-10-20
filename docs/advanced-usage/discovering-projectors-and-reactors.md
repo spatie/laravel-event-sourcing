@@ -7,7 +7,7 @@ By default the package will automatically discover all projectors and reactors a
 
 If you want to see a list of the discovered projectors and reactors perform the `event-sourcing:list` Artisan command. Here's how the output could look like:
 
-<img src="../../images/list.png" />
+<img src="/docs/laravel-event-sourcing/v4/images/list.png" />
 
 ## Caching discovered projectors and reactors
 

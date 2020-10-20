@@ -396,4 +396,30 @@ class AggregateRootTest extends TestCase
 
         Event::assertDispatched(MoneyMultiplied::class);
     }
+  
+    public function it_can_load_the_uuid()
+    {
+        $aggregateRoot = (new AccountAggregateRoot())->loadUuid($this->aggregateUuid);
+
+        $this->assertEquals($this->aggregateUuid, $aggregateRoot->uuid());
+    }
+
+    /** @test */
+    public function it_persists_when_uuid_is_loaded()
+    {
+        (new AccountAggregateRoot())
+            ->loadUuid($this->aggregateUuid)
+            ->addMoney(100)
+            ->persist();
+
+        $storedEvents = EloquentStoredEvent::get();
+        $this->assertCount(1, $storedEvents);
+
+        $storedEvent = $storedEvents->first();
+        $this->assertEquals($this->aggregateUuid, $storedEvent->aggregate_uuid);
+
+        $event = $storedEvent->event;
+        $this->assertInstanceOf(MoneyAdded::class, $event);
+        $this->assertEquals(100, $event->amount);
+    }
 }
