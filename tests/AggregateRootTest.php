@@ -12,6 +12,7 @@ use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootThatAllowsConcurrency;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithBeforeApply;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithFailingPersist;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
@@ -405,5 +406,15 @@ class AggregateRootTest extends TestCase
         $event = $storedEvent->event;
         $this->assertInstanceOf(MoneyAdded::class, $event);
         $this->assertEquals(100, $event->amount);
+    }
+
+    /** @test */
+    public function it_runs_before_apply_before_it_applies_a_method()
+    {
+        $aggregateRoot = new AccountAggregateRootWithBeforeApply();
+
+        $aggregateRoot->addMoney(100);
+
+        $this->assertTrue($aggregateRoot->beforeApplyWasCalled);
     }
 }

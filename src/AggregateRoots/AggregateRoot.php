@@ -196,6 +196,8 @@ abstract class AggregateRoot
 
     private function apply(ShouldBeStored $event): void
     {
+        $this->beforeApply($event);
+
         $classBaseName = class_basename($event);
 
         $camelCasedBaseName = ucfirst(Str::camel($classBaseName));
@@ -213,6 +215,10 @@ abstract class AggregateRoot
         $this->appliedEvents[] = $event;
 
         $this->aggregateVersion++;
+    }
+
+    protected function beforeApply(ShouldBeStored $event): void
+    {
     }
 
     public static function fake(string $uuid = null): FakeAggregateRoot
