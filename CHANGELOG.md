@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.6.0 - 2020-10-21
+
+- allow protected apply methods (#136)
+
 ## 4.5.3 - 2020-10-02
 
 - re-use existing instance of `ShouldBeStored` when possible (#158)
