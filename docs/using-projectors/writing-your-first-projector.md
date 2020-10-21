@@ -226,7 +226,7 @@ class AccountBalanceProjector extends Projector
 }
 ```
 
-Just by type hinting an event in a method will make the package call that method when the event occurs. By default the package will automatically discover and registering projectors.
+Just by type hinting an event in a method will make the package call that method when the event occurs. Just make sure the parameter name is `$event`. By default the package will automatically discover and registering projectors.
 
 ## Let's fire off some events
 
