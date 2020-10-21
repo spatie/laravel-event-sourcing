@@ -202,12 +202,19 @@ abstract class AggregateRoot
 
         $applyingMethodName = "apply{$camelCasedBaseName}";
 
-        if (method_exists($this, $applyingMethodName)) {
+        $reflectionClass = new ReflectionClass($this);
+
+        $applyMethodExists = $reflectionClass->hasMethod($applyingMethodName);
+        $applyMethodIsPublic = $applyMethodExists && $reflectionClass->getMethod($applyingMethodName)->isPublic();
+
+        if ($applyMethodExists && $applyMethodIsPublic) {
             try {
                 app()->call([$this, $applyingMethodName], ['event' => $event]);
             } catch (BindingResolutionException $exception) {
                 $this->$applyingMethodName($event);
             }
+        } elseif ($applyMethodExists) {
+            $this->$applyingMethodName($event);
         }
 
         $this->appliedEvents[] = $event;

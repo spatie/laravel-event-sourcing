@@ -18,6 +18,7 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMai
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyMultiplied;
 use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
@@ -381,6 +382,21 @@ class AggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function when_an_apply_method_is_public_it_can_have_additional_dependencies()
+    {
+        config()->set('event-sourcing.dispatch_events_from_aggregate_roots', true);
+
+        Event::fake([
+            MoneyMultiplied::class,
+        ]);
+
+        AccountAggregateRoot::retrieve($this->aggregateUuid)
+            ->multiplyMoney(100)
+            ->persist();
+
+        Event::assertDispatched(MoneyMultiplied::class);
+    }
+  
     public function it_can_load_the_uuid()
     {
         $aggregateRoot = (new AccountAggregateRoot())->loadUuid($this->aggregateUuid);
