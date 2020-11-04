@@ -4,7 +4,9 @@ namespace Spatie\EventSourcing\Tests;
 
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\EmptyAccountEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEventWithQueueOverride;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\AttributeProjector;
@@ -112,7 +114,26 @@ class ProjectorTest extends TestCase
         Projectionist::addProjector(AttributeProjector::class);
 
         event(new MoneyAddedEvent($account, 1234));
-        $account->refresh();
-        $this->assertEquals(1234, $account->amount);
+
+        $this->assertEquals([
+            MoneyAddedEvent::class,
+        ], array_keys(AttributeProjector::$handledEvents));
+    }
+
+    /** @test */
+    public function it_can_use_multiple_attributes_on_the_same_method()
+    {
+        $account = Account::create();
+
+        Projectionist::addProjector(AttributeProjector::class);
+
+        event(new MoneySubtractedEvent($account, 10));
+        event(new MoneyAddedEventWithQueueOverride($account, 10));
+
+        $this->assertEquals([
+            MoneySubtractedEvent::class,
+            MoneyAddedEventWithQueueOverride::class,
+        ], array_keys(AttributeProjector::$handledEvents));
     }
 }
+
