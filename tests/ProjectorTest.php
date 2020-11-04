@@ -7,6 +7,8 @@ use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\AttributeProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatWritesMetaData;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithAssociativeAndNonAssociativeHandleEvents;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutHandlesEvents;
@@ -101,5 +103,17 @@ class ProjectorTest extends TestCase
         event(new MoneySubtractedEvent($account, 34));
         $this->assertCount(2, EloquentStoredEvent::get());
         $this->assertEquals(1200, $account->refresh()->amount);
+    }
+
+    /** @test */
+    public function it_uses_attributes_to_route_events()
+    {
+        $account = Account::create();
+
+        Projectionist::addProjector(AttributeProjector::class);
+
+        event(new MoneyAddedEvent($account, 1234));
+        $account->refresh();
+        $this->assertEquals(1234, $account->amount);
     }
 }

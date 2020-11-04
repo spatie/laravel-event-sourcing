@@ -22,7 +22,7 @@
     ],
     "require": {
         "ext-json": "*",
-        "php": "^8.0|^7.4",
+        "php": "^8.0",
         "illuminate/console": "^6.0|^7.0|^8.0",
         "illuminate/database": "^6.0|^7.0|^8.0",
         "illuminate/events": "^6.0|^7.0|^8.0",
@@ -55,10 +55,8 @@
     },
     "scripts": {
         "psalm": "vendor/bin/psalm",
-        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes",
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
-
     },
     "config": {
         "sort-packages": true
