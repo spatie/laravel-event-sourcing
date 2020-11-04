@@ -6,22 +6,25 @@ use Spatie\EventSourcing\Attributes\ListensTo;
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EmptyAccountEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEventWithQueueOverride;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 
 class AttributeProjector extends Projector
 {
+    public static array $handledEvents = [];
+
     #[ListensTo(MoneyAddedEvent::class)]
-    public function onMoneyAdded(object $event)
+    public function handleSingleAttributeEvent($event, $storedEvent, $aggregateUuid)
     {
-        $event->account->addMoney($event->amount);
+        self::$handledEvents[$event::class] = $event;
     }
 
     #[
         ListensTo(MoneySubtractedEvent::class),
-        ListensTo(EmptyAccountEvent::class),
+        ListensTo(MoneyAddedEventWithQueueOverride::class),
     ]
-    public function onMoneySubtracted(object $event)
+    public function handleMultiAttributeEvent($event, $storedEvent, $aggregateUuid)
     {
-        $event->account->subtractMoney($event->amount);
+        self::$handledEvents[$event::class] = $event;
     }
 }

@@ -8,7 +8,7 @@ use Attribute;
 class ListensTo
 {
     public function __construct(
-        public string $eventName,
+        public string $eventClass,
     )
     {
     }
