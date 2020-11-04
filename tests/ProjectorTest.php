@@ -4,7 +4,6 @@ namespace Spatie\EventSourcing\Tests;
 
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
-use Spatie\EventSourcing\Tests\TestClasses\Events\EmptyAccountEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEventWithQueueOverride;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
@@ -136,4 +135,3 @@ class ProjectorTest extends TestCase
         ], array_keys(AttributeProjector::$handledEvents));
     }
 }
-
