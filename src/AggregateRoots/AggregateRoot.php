@@ -85,6 +85,18 @@ abstract class AggregateRoot
         return $this;
     }
 
+    /**
+     * @return static
+     */
+    public function persistWithTransaction()
+    {
+        DB::transaction(function () {
+            $this->persist();
+        });
+
+        return $this;
+    }
+
     protected function persistWithoutApplyingToEventHandlers(): LazyCollection
     {
         $this->ensureNoOtherEventsHaveBeenPersisted();

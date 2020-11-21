@@ -16,6 +16,7 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWi
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\ProjectorThatThrowsAnException;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyMultiplied;
@@ -308,6 +309,41 @@ class AggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function it_can_persist_an_aggregate_root_with_a_transaction()
+    {
+        Mail::fake();
+
+        Projectionist::addProjector(AccountProjector::class);
+        Projectionist::addReactor(SendMailReactor::class);
+
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid)->addMoney(123);
+        $aggregateRoot->persistWithTransaction();
+
+        $this->assertCount(1, EloquentStoredEvent::get());
+        $this->assertCount(1, Account::get());
+        Mail::assertSent(MoneyAddedMailable::class);
+    }
+
+    /** @test */
+    public function it_will_not_store_events_when_projector_fails_with_a_transaction()
+    {
+        Mail::fake();
+
+        Projectionist::addProjector(ProjectorThatThrowsAnException::class);
+        Projectionist::addReactor(SendMailReactor::class);
+
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid)->addMoney(123);
+
+        $this->assertExceptionThrown(
+            fn () => $aggregateRoot->persistWithTransaction()
+        );
+
+        $this->assertCount(0, EloquentStoredEvent::get());
+        $this->assertCount(0, Account::get());
+        Mail::assertNothingSent();
+    }
+
+    /** @test */
     public function reactors_will_get_called_when_an_aggregate_root_is_persisted()
     {
         Projectionist::addReactor(SendMailReactor::class);
@@ -396,7 +432,7 @@ class AggregateRootTest extends TestCase
 
         Event::assertDispatched(MoneyMultiplied::class);
     }
-  
+
     public function it_can_load_the_uuid()
     {
         $aggregateRoot = (new AccountAggregateRoot())->loadUuid($this->aggregateUuid);
