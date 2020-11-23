@@ -89,7 +89,7 @@ return [
      * should implement Spatie\EventSourcing\EventSerializers\EventSerializer.
      */
     'event_serializer' => Spatie\EventSourcing\EventSerializers\JsonEventSerializer::class,
-    
+
     /*
      * These classes normalize and restore your events when they're serialized. They allow
      * you to efficiently store PHP objects like Carbon instances, Eloquent models, and
@@ -102,13 +102,6 @@ return [
         Symfony\Component\Serializer\Normalizer\DateTimeNormalizer::class,
         Symfony\Component\Serializer\Normalizer\ObjectNormalizer::class,
     ],
-
-    /*
-     * When replaying events, potentially a lot of events will have to be retrieved.
-     * In order to avoid memory problems events will be retrieved as chunks.
-     * You can specify the chunk size here.
-     */
-    'replay_chunk_size' => 1000,
 
     /*
      * In production, you likely don't want the package to auto-discover the event handlers
