@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.6.1 - 2020-10-23
+
+- remove unused `replay_chunk_size` config value
+
 ## 4.6.0 - 2020-10-21
 
 - allow protected apply methods (#136)
