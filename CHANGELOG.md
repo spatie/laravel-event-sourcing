@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.7.0 - 2020-12-02
+
+- add support for PHP 8
+
 ## 4.6.1 - 2020-10-23
 
 - remove unused `replay_chunk_size` config value
