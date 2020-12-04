@@ -197,7 +197,7 @@ abstract class AggregateRoot
         if ($applyMethodExists && $applyMethodIsPublic) {
             try {
                 app()->call([$this, $applyingMethodName], ['event' => $event]);
-            } catch (BindingResolutionException $exception) {
+            } catch (BindingResolutionException) {
                 $this->$applyingMethodName($event);
             }
         } elseif ($applyMethodExists) {
