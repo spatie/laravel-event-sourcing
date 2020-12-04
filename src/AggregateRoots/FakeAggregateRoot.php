@@ -9,14 +9,11 @@ use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class FakeAggregateRoot
 {
-    private AggregateRoot $aggregateRoot;
-
     private $whenResult = null;
 
-    public function __construct(AggregateRoot $aggregateRoot)
-    {
-        $this->aggregateRoot = $aggregateRoot;
-    }
+    public function __construct(
+        private AggregateRoot $aggregateRoot
+    ) {}
 
     /**
      * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored|\Spatie\EventSourcing\StoredEvents\ShouldBeStored[] $events
