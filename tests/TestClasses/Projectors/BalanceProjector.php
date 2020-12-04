@@ -15,7 +15,7 @@ class BalanceProjector extends Projector
         MoneyAddedEventWithQueueOverride::class => 'onMoneyAdded',
     ];
 
-    public function onMoneyAdded(LoggableEvent $event)
+    public function onMoneyAdded(MoneyAddedEvent $event)
     {
         $event->account->addMoney($event->amount);
     }

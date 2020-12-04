@@ -24,8 +24,6 @@ class Projectionist
 
     private bool $catchExceptions;
 
-    private bool $replayChunkSize;
-
     private bool $isProjecting = false;
 
     private bool $isReplaying = false;
@@ -36,7 +34,6 @@ class Projectionist
         $this->reactors = new EventHandlerCollection();
 
         $this->catchExceptions = $config['catch_exceptions'];
-        $this->replayChunkSize = $config['replay_chunk_size'];
     }
 
     public function addProjector($projector): Projectionist

@@ -95,13 +95,6 @@ return [
     'event_serializer' => \Spatie\EventSourcing\EventSerializers\JsonEventSerializer::class,
 
     /*
-     * When replaying events potentially a lot of events will have to be retrieved.
-     * In order to avoid memory problems events will be retrieved in
-     * a chunked way. You can specify the chunk size here.
-     */
-    'replay_chunk_size' => 1000,
-
-    /*
      * In production, you likely don't want the package to auto discover the event handlers
      * on every request. The package can cache all registered event handlers.
      * More info: https://docs.spatie.be/laravel-event-sourcing/v4/advanced-usage/discovering-projectors-and-reactors
