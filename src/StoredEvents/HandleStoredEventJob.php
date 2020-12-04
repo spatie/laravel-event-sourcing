@@ -12,16 +12,10 @@ class HandleStoredEventJob implements HandleDomainEventJob, ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
-    public StoredEvent $storedEvent;
-
-    public array $tags;
-
-    public function __construct(StoredEvent $storedEvent, array $tags)
-    {
-        $this->storedEvent = $storedEvent;
-
-        $this->tags = $tags;
-    }
+    public function __construct(
+        public StoredEvent $storedEvent,
+        public array $tags
+    ) {}
 
     public function handle(Projectionist $projectionist): void
     {
