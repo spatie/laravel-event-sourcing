@@ -25,4 +25,3 @@ class ProjectionModel extends Projection
         return 'projectionModel';
     }
 }
-
