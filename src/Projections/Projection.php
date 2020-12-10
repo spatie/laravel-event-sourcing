@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static create(array $parameters = [])
+ * @method static find(string $uuid): static|null
  */
 abstract class Projection extends Model
 {
