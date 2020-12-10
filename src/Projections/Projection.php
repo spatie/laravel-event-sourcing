@@ -23,6 +23,26 @@ abstract class Projection extends Model
         return new static();
     }
 
+    public function getKeyName()
+    {
+        return 'uuid';
+    }
+
+    public function getKeyType()
+    {
+        return 'string';
+    }
+
+    public function getIncrementing()
+    {
+        return false;
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
     public function writeable(): static
     {
         $clone = clone $this;
