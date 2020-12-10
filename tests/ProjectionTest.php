@@ -25,6 +25,7 @@ class ProjectionTest extends TestCase
     {
         $this->assertExceptionThrown(function (): void {
             ProjectionModel::create([
+                'uuid' => 'test-uuid',
                 'field' => 'test',
             ]);
         }, ReadonlyProjection::class);
@@ -32,6 +33,7 @@ class ProjectionTest extends TestCase
         $this->assertDatabaseCount((new ProjectionModel())->getTable(), 0);
 
         $model = ProjectionModel::new()->writeable()->create([
+            'uuid' => 'test-uuid-2',
             'field' => 'test',
         ]);
 
@@ -161,17 +163,17 @@ class ProjectionTest extends TestCase
     private function createProjection(): ProjectionModel
     {
         ProjectionModel::new()->writeable()->create([
-            'id' => 1,
+            'uuid' => 'test-uuid',
             'field' => 'original',
         ]);
 
-        return ProjectionModel::find(1);
+        return ProjectionModel::find('test-uuid');
     }
 
     private function assertNothingChanged(): void
     {
         $this->assertDatabaseHas((new ProjectionModel())->getTable(), [
-            'id' => 1,
+            'uuid' => 'test-uuid',
             'field' => 'original',
         ]);
     }
