@@ -29,7 +29,7 @@ abstract class AggregateRoot
 
     protected static bool $allowConcurrency = false;
 
-    public static function retrieve(string $uuid): self
+    public static function retrieve(string $uuid): static
     {
         $aggregateRoot = app(static::class);
 
