@@ -15,7 +15,7 @@ class ProjectionModel extends Projection
 
     public function getBlueprint(Blueprint $table): void
     {
-        $table->id();
+        $table->uuid('uuid');
         $table->string('field')->nullable();
         $table->timestamps();
     }
