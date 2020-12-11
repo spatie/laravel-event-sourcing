@@ -173,7 +173,7 @@ class ProjectionistTest extends TestCase
         Projectionist::withoutEventHandlers([MoneyAddedCountProjector::class, BrokeReactor::class]);
 
         $this->assertCount(1, Projectionist::getProjectors());
-        $this->assertEquals(BalanceProjector::class, get_class(Projectionist::getProjectors()->first()));
+        $this->assertInstanceOf(BalanceProjector::class, Projectionist::getProjectors()->first());
         $this->assertCount(0, Projectionist::getReactors());
 
         Projectionist::withoutEventHandler(BalanceProjector::class);

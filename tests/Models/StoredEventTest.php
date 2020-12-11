@@ -98,7 +98,7 @@ class StoredEventTest extends TestCase
             'created_at' => $eloquentEvent->created_at,
         ]);
 
-        $this->assertEquals(MoneyAddedEvent::class, get_class($storedEvent->event));
+        $this->assertInstanceOf(MoneyAddedEvent::class, $storedEvent->event);
     }
 
     /** @test * */
@@ -120,7 +120,7 @@ class StoredEventTest extends TestCase
             'created_at' => $eloquentEvent->created_at,
         ]);
 
-        $this->assertEquals(MoneyAddedEvent::class, get_class($storedEvent->event));
+        $this->assertInstanceOf(MoneyAddedEvent::class, $storedEvent->event);
     }
 
     /** @test **/
@@ -132,7 +132,7 @@ class StoredEventTest extends TestCase
 
         $storedEvent = $eloquentEvent->toStoredEvent();
 
-        $this->assertEquals(0, $storedEvent->aggregate_version);
+        $this->assertSame('0', $storedEvent->aggregate_version);
     }
     
     /** @test */
