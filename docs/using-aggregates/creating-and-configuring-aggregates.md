@@ -55,7 +55,7 @@ This will cause all events with the given `uuid` to be retrieved and fed to the 
 The aggregate also allows you to travel back in time, by passing a version number to retrieve. To check our account balance in the past:
 
 ```php
-$account = MyAggregate::retrieve($uuid, 3);
+$account = AccountAggregate::retrieve($uuid, 3);
 return $account->balance;
 ```
 
