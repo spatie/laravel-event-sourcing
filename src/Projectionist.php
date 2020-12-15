@@ -36,6 +36,13 @@ class Projectionist
         $this->catchExceptions = $config['catch_exceptions'];
     }
 
+    public function fake(string $originalHandlerClass, string $fakeHandlerClass): void
+    {
+        $this->removeEventHandler($originalHandlerClass);
+
+        $this->addEventHandler($fakeHandlerClass);
+    }
+
     public function addProjector($projector): Projectionist
     {
         if (is_string($projector)) {
@@ -47,6 +54,13 @@ class Projectionist
         }
 
         $this->projectors->addEventHandler($projector);
+
+        return $this;
+    }
+
+    public function removeProjector(string $projectorClass): Projectionist
+    {
+        $this->projectors->remove([$projectorClass]);
 
         return $this;
     }
@@ -129,6 +143,13 @@ class Projectionist
         return $this;
     }
 
+    public function removeReactor(string $reactorClass): Projectionist
+    {
+        $this->reactors->remove([$reactorClass]);
+
+        return $this;
+    }
+
     public function getReactors(): Collection
     {
         return $this->reactors;
@@ -153,6 +174,23 @@ class Projectionist
 
         if (is_subclass_of($eventHandlerClass, EventHandler::class)) {
             $this->addReactor($eventHandlerClass);
+
+            return;
+        }
+
+        throw InvalidEventHandler::notAnEventHandlingClassName($eventHandlerClass);
+    }
+
+    public function removeEventHandler(string $eventHandlerClass): void
+    {
+        if (is_subclass_of($eventHandlerClass, Projector::class)) {
+            $this->removeProjector($eventHandlerClass);
+
+            return;
+        }
+
+        if (is_subclass_of($eventHandlerClass, EventHandler::class)) {
+            $this->removeReactor($eventHandlerClass);
 
             return;
         }

@@ -13,6 +13,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\FakeMoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
@@ -178,5 +179,21 @@ class ProjectionistTest extends TestCase
 
         Projectionist::withoutEventHandler(BalanceProjector::class);
         $this->assertCount(0, Projectionist::getProjectors());
+    }
+
+    /** @test */
+    public function it_can_fake_event_handlers()
+    {
+        FakeMoneyAddedCountProjector::$eventsHandledCount = 0;
+
+        Projectionist::addProjector(MoneyAddedCountProjector::class);
+
+        Projectionist::fake(MoneyAddedCountProjector::class, FakeMoneyAddedCountProjector::class);
+
+        $this->assertCount(1, Projectionist::getProjectors());
+
+        event(new MoneyAddedEvent($this->account, 500));
+
+        $this->assertEquals(1, FakeMoneyAddedCountProjector::$eventsHandledCount);
     }
 }
