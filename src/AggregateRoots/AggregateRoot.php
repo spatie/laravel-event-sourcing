@@ -167,7 +167,7 @@ abstract class AggregateRoot
         }
 
         $storedEventRepository->retrieveAllAfterVersion($this->aggregateVersion, $this->uuid)
-            ->takeWhile(function (StoredEvent $storedEvent) use ($maxAggregateVersion) {
+            ->filter(function (StoredEvent $storedEvent) use ($maxAggregateVersion) {
                 return ! $maxAggregateVersion || $storedEvent->aggregate_version <= $maxAggregateVersion;
             })
             ->each(function (StoredEvent $storedEvent) {
