@@ -116,6 +116,7 @@ class FakeAggregateRoot
             $metaData = $event->metaData();
 
             unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);
+            unset($metaData[MetaData::STORED_EVENT_ID]);
 
             return $event->setMetaData($metaData);
         }, $this->aggregateRoot->getAppliedEvents());

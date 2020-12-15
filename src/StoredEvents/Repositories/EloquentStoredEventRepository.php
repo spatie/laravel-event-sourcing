@@ -5,6 +5,7 @@ namespace Spatie\EventSourcing\StoredEvents\Repositories;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\LazyCollection;
+use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
@@ -22,6 +23,14 @@ class EloquentStoredEventRepository implements StoredEventRepository
         if (! new $this->storedEventModel instanceof EloquentStoredEvent) {
             throw new InvalidEloquentStoredEventModel("The class {$this->storedEventModel} must extend EloquentStoredEvent");
         }
+    }
+
+    public function find(int $id): StoredEvent
+    {
+        /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentStoredEvent */
+        $eloquentStoredEvent = $this->storedEventModel::query()->where('id', $id)->first();
+
+        return $eloquentStoredEvent->toStoredEvent();
     }
 
     public function retrieveAll(string $uuid = null): LazyCollection
@@ -72,7 +81,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         $eloquentStoredEvent = new $this->storedEventModel();
 
         $eloquentStoredEvent->setOriginalEvent($event);
-        
+
         $eloquentStoredEvent->setRawAttributes([
             'event_properties' => app(EventSerializer::class)->serialize(clone $event),
             'aggregate_uuid' => $uuid,
@@ -83,6 +92,15 @@ class EloquentStoredEventRepository implements StoredEventRepository
         ]);
 
         $eloquentStoredEvent->save();
+
+        $event->setMetaData(array_merge(
+            $eloquentStoredEvent->meta_data->toArray(),
+            [MetaData::STORED_EVENT_ID => $eloquentStoredEvent->id]
+        ));
+
+        $eloquentStoredEvent->update([
+            'meta_data' => $event->metaData(),
+        ]);
 
         return $eloquentStoredEvent->toStoredEvent();
     }

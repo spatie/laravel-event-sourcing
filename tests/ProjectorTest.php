@@ -17,6 +17,13 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\ResettableProjector;
 
 class ProjectorTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        AttributeProjector::$handledEvents = [];
+    }
+
     /** @test */
     public function it_can_reach_the_stored_event_and_write_meta_data_to_it()
     {

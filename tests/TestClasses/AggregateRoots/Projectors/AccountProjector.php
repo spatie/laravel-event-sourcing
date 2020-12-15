@@ -12,9 +12,9 @@ class AccountProjector extends Projector
         MoneyAdded::class => 'onMoneyAdded',
     ];
 
-    public function onMoneyAdded(MoneyAdded $event, string $aggregateUuid)
+    public function onMoneyAdded(MoneyAdded $event)
     {
-        $account = Account::firstOrCreate(['uuid' => $aggregateUuid]);
+        $account = Account::firstOrCreate(['uuid' => $event->aggregateRootUuid()]);
 
         $account->amount += $event->amount;
 

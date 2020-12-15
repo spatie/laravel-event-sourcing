@@ -26,14 +26,10 @@ trait HandlesEvents
 
         $handlerClassOrMethod = $this->getEventHandlingMethods()->get($eventClass);
 
-        $parameters = [
-            'event' => $storedEvent->event,
-            'storedEvent' => $storedEvent,
-            'aggregateUuid' => $storedEvent->aggregate_uuid,
-        ];
+        if (class_exists($handlerClassOrMethod) && method_exists($handlerClassOrMethod, '__invoke')) {
+            $handler = app($handlerClassOrMethod);
 
-        if (class_exists($handlerClassOrMethod)) {
-            return app()->call([app($handlerClassOrMethod), '__invoke'], $parameters);
+            return $handler($storedEvent->event);
         }
 
         if (! method_exists($this, $handlerClassOrMethod)) {
@@ -44,7 +40,7 @@ trait HandlesEvents
             );
         }
 
-        app()->call([$this, $handlerClassOrMethod], $parameters);
+        $this->{$handlerClassOrMethod}($storedEvent->event);
     }
 
     public function handleException(Exception $exception): void

@@ -134,16 +134,16 @@ class StoredEventTest extends TestCase
 
         $this->assertSame('0', $storedEvent->aggregate_version);
     }
-    
+
     /** @test */
     public function it_uses_the_original_event_if_set()
     {
         $originalEvent = new MoneyAdded(100);
-        
+
         $eloquentStoredEvent = new EloquentStoredEvent();
-        
+
         $eloquentStoredEvent->setOriginalEvent($originalEvent);
-        
+
         $this->assertSame($originalEvent, $eloquentStoredEvent->event);
     }
 
