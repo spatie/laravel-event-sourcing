@@ -14,7 +14,7 @@ class AttributeProjector extends Projector
     public static array $handledEvents = [];
 
     #[ListensTo(MoneyAddedEvent::class)]
-    public function handleSingleAttributeEvent($event, $storedEvent, $aggregateUuid)
+    public function handleSingleAttributeEvent($event)
     {
         self::$handledEvents[$event::class] = $event;
     }
@@ -23,7 +23,7 @@ class AttributeProjector extends Projector
         ListensTo(MoneySubtractedEvent::class),
         ListensTo(MoneyAddedEventWithQueueOverride::class),
     ]
-    public function handleMultiAttributeEvent($event, $storedEvent, $aggregateUuid)
+    public function handleMultiAttributeEvent($event)
     {
         self::$handledEvents[$event::class] = $event;
     }

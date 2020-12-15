@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 5.0.0 - ?
+
+- Event handlers are no longer called with `app()->call()` ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
+
 ## 4.8.0 - 2021-01-28
 
 - Add support for asserting events with a closure

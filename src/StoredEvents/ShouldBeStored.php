@@ -13,6 +13,11 @@ abstract class ShouldBeStored
         return $this->metaData[MetaData::AGGREGATE_ROOT_UUID] ?? null;
     }
 
+    public function storedEventId(): ?int
+    {
+        return $this->metaData[MetaData::STORED_EVENT_ID] ?? null;
+    }
+
     public function setAggregateRootUuid(string $uuid): self
     {
         $this->metaData[MetaData::AGGREGATE_ROOT_UUID] = $uuid;
