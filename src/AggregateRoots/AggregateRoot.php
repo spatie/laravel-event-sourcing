@@ -43,6 +43,15 @@ abstract class AggregateRoot
         return $aggregateRoot->reconstituteFromEvents();
     }
 
+    public static function retrieveAtVersion(string $uuid, int $aggregateVersion)
+    {
+        $aggregateRoot = app(static::class);
+
+        $aggregateRoot->uuid = $uuid;
+
+        return $aggregateRoot->reconstituteFromEvents($aggregateVersion);
+    }
+
     public function loadUuid(string $uuid): self
     {
         $this->uuid = $uuid;
@@ -156,10 +165,10 @@ abstract class AggregateRoot
         return $recordedEvents;
     }
 
-    protected function reconstituteFromEvents(): self
+    protected function reconstituteFromEvents(int $maxAggregateVersion = null): self
     {
         $storedEventRepository = $this->getStoredEventRepository();
-        $snapshot = $this->getSnapshotRepository()->retrieve($this->uuid);
+        $snapshot = $this->getSnapshotRepository()->retrieve($this->uuid, $maxAggregateVersion);
 
         if ($snapshot) {
             $this->aggregateVersion = $snapshot->aggregateVersion;
@@ -167,6 +176,9 @@ abstract class AggregateRoot
         }
 
         $storedEventRepository->retrieveAllAfterVersion($this->aggregateVersion, $this->uuid)
+            ->takeWhile(function (StoredEvent $storedEvent) use ($maxAggregateVersion) {
+                return ! $maxAggregateVersion || $storedEvent->aggregate_version <= $maxAggregateVersion;
+            })
             ->each(function (StoredEvent $storedEvent) {
                 $this->apply($storedEvent->event);
             });

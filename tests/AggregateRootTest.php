@@ -148,6 +148,22 @@ class AggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function when_retrieving_up_until_a_version_an_aggregate_root_not_all_events_will_be_replayed_to_it()
+    {
+        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $aggregateRoot
+            ->addMoney(100)->persist() // v1
+            ->addMoney(100)->persist() // v2
+            ->addMoney(100)->persist(); // v3
+
+        $aggregateRoot = AccountAggregateRoot::retrieveAtVersion($this->aggregateUuid, 2);
+
+        $this->assertEquals(200, $aggregateRoot->balance);
+    }
+
+    /** @test */
     public function when_applying_events_it_increases_the_version_number()
     {
         /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
@@ -222,6 +238,26 @@ class AggregateRootTest extends TestCase
         $this->assertEquals(4, $aggregateRootRetrieved->aggregateVersion);
         $this->assertEquals(400, $aggregateRootRetrieved->balance);
     }
+
+/** @test */
+public function events_saved_after_the_snapshot_are_not_reconstituted_if_retrieving_until_version()
+{
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+    $aggregateRoot
+        ->addMoney(100)->persist() // v1
+        ->addMoney(100)->persist() // v2
+        ->addMoney(100)->persist(); // v3
+
+    $aggregateRoot->snapshot();
+    $aggregateRoot->addMoney(100)->persist(); // v4
+
+    $aggregateRootRetrieved = AccountAggregateRoot::retrieveAtVersion($this->aggregateUuid, 2);
+
+    $this->assertEquals(2, $aggregateRootRetrieved->aggregateVersion);
+    $this->assertEquals(200, $aggregateRootRetrieved->balance);
+}
 
     /** @test */
     public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it_in_the_correct_order()
@@ -396,7 +432,7 @@ class AggregateRootTest extends TestCase
 
         Event::assertDispatched(MoneyMultiplied::class);
     }
-  
+
     public function it_can_load_the_uuid()
     {
         $aggregateRoot = (new AccountAggregateRoot())->loadUuid($this->aggregateUuid);

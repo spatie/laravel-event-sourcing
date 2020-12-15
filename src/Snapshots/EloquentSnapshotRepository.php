@@ -17,10 +17,14 @@ class EloquentSnapshotRepository implements SnapshotRepository
         }
     }
 
-    public function retrieve(string $aggregateUuid): ?Snapshot
+    public function retrieve(string $aggregateUuid, int $maxAggregateVersion = null): ?Snapshot
     {
         /** @var \Illuminate\Database\Query\Builder $query */
         $query = $this->snapshotModel::query();
+
+        if ($maxAggregateVersion) {
+            $query->where('aggregate_version', '<=', $maxAggregateVersion);
+        }
 
         if ($snapshot = $query->latest()->uuid($aggregateUuid)->first()) {
             return $snapshot->toSnapshot();
