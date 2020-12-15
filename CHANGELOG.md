@@ -5,6 +5,8 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 ## 5.0.0 - ?
 
 - Event handlers are no longer called with `app()->call()` ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
+- `$storedEvent` and `$aggregateRootUuid` are no longer passed to event handler methods. Use `$event->storedEventUuid()` and `$event->aggregateRootUuid()` instead. ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
+- Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
 
 ## 4.7.1 - 2021-01-21
 
