@@ -158,7 +158,7 @@ class AggregateRootTest extends TestCase
             ->addMoney(100)->persist() // v2
             ->addMoney(100)->persist(); // v3
 
-        $aggregateRoot = AccountAggregateRoot::retrieveAtVersion($this->aggregateUuid, 2);
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid, 2);
 
         $this->assertEquals(200, $aggregateRoot->balance);
     }
@@ -253,7 +253,7 @@ public function events_saved_after_the_snapshot_are_not_reconstituted_if_retriev
     $aggregateRoot->snapshot();
     $aggregateRoot->addMoney(100)->persist(); // v4
 
-    $aggregateRootRetrieved = AccountAggregateRoot::retrieveAtVersion($this->aggregateUuid, 2);
+    $aggregateRootRetrieved = AccountAggregateRoot::retrieve($this->aggregateUuid, 2);
 
     $this->assertEquals(2, $aggregateRootRetrieved->aggregateVersion);
     $this->assertEquals(200, $aggregateRootRetrieved->balance);

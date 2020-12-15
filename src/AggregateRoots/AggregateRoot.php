@@ -34,16 +34,7 @@ abstract class AggregateRoot
      *
      * @return static
      */
-    public static function retrieve(string $uuid)
-    {
-        $aggregateRoot = app(static::class);
-
-        $aggregateRoot->uuid = $uuid;
-
-        return $aggregateRoot->reconstituteFromEvents();
-    }
-
-    public static function retrieveAtVersion(string $uuid, int $aggregateVersion)
+    public static function retrieve(string $uuid, int $aggregateVersion = null)
     {
         $aggregateRoot = app(static::class);
 
@@ -52,11 +43,11 @@ abstract class AggregateRoot
         return $aggregateRoot->reconstituteFromEvents($aggregateVersion);
     }
 
-    public function loadUuid(string $uuid): self
+    public function loadUuid(string $uuid, int $aggregateVersion = null): self
     {
         $this->uuid = $uuid;
 
-        return $this->reconstituteFromEvents();
+        return $this->reconstituteFromEvents($aggregateVersion);
     }
 
     public function uuid(): string

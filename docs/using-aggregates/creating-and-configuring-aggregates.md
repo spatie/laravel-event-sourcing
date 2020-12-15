@@ -40,7 +40,7 @@ $myAggregate = new MyAggregate();
 $myAggregate->loadUuid($uuid);
 ```
 
-The `load` method is handy when injecting aggretate roots in constructors or classes where method injection is supported.
+The `load` method is handy when injecting aggregate roots in constructors or classes where method injection is supported.
 
 ```php
 public function handle(MyAggregate $aggregate) {
@@ -52,6 +52,12 @@ public function handle(MyAggregate $aggregate) {
 
 This will cause all events with the given `uuid` to be retrieved and fed to the aggregate. For example, an event `MoneyAdded` will be passed to the `applyMoneyAdded` method on the aggregate if such a method exists.
 
+The aggregate also allows you to travel back in time, by passing a version number to retrieve. To check our account balance in the past:
+
+```php
+$account = MyAggregate::retrieve($uuid, 3);
+return $account->balance;
+```
 
 ## Recording events
 
