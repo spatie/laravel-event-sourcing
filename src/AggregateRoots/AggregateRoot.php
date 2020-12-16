@@ -8,6 +8,7 @@ use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionProperty;
+use Spatie\EventSourcing\Attributes\Handler;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
 use Spatie\EventSourcing\Snapshots\Snapshot;
 use Spatie\EventSourcing\Snapshots\SnapshotRepository;
@@ -65,7 +66,7 @@ abstract class AggregateRoot
     {
         $storedEvents = $this->persistWithoutApplyingToEventHandlers();
 
-        $storedEvents->each(fn (StoredEvent $storedEvent) => $storedEvent->handleForAggregateRoot());
+        $storedEvents->each(fn(StoredEvent $storedEvent) => $storedEvent->handleForAggregateRoot());
 
         $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
 
@@ -121,7 +122,7 @@ abstract class AggregateRoot
         $class = new ReflectionClass($this);
 
         return collect($class->getProperties(ReflectionProperty::IS_PUBLIC))
-            ->reject(fn (ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
+            ->reject(fn(ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
             ->mapWithKeys(function (ReflectionProperty $property) {
                 return [$property->getName() => $this->{$property->getName()}];
             })->toArray();
@@ -183,6 +184,14 @@ abstract class AggregateRoot
 
     private function apply(ShouldBeStored $event): void
     {
+        $handlers = Handler::find($event, $this);
+
+        if ($handlers->isNotEmpty()) {
+            $handlers->each(fn(Handler $handler) => $this->{$handler->method}($event));
+
+            return;
+        }
+
         $classBaseName = class_basename($event);
 
         $camelCasedBaseName = ucfirst(Str::camel($classBaseName));
@@ -211,7 +220,7 @@ abstract class AggregateRoot
 
     public static function fake(string $uuid = null): FakeAggregateRoot
     {
-        $uuid ??= (string)Str::uuid();
+        $uuid ??= (string) Str::uuid();
 
         $aggregateRoot = static::retrieve($uuid);
 
