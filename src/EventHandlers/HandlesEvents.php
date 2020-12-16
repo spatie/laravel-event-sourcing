@@ -8,7 +8,7 @@ use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
-use Spatie\EventSourcing\Attributes\ListensTo;
+use Spatie\EventSourcing\Attributes\Handles;
 use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
@@ -76,21 +76,21 @@ trait HandlesEvents
             ->flatMap(function (ReflectionMethod $method) {
                 $method = new ReflectionMethod($this, $method->name);
 
-                $listensToAttributes = $method->getAttributes(ListensTo::class);
+                $listensToAttributes = $method->getAttributes(Handles::class);
 
                 return empty($listensToAttributes)
                     ? $this->determineAcceptedEventsFromTypeHint($method)
                     : $this->determineAcceptedEventsFromAttribute($method);
             })
-            ->mapWithKeys(fn (array $items) => $items)
+            ->mapWithKeys(fn(array $items) => $items)
             ->filter();
     }
 
     private function determineAcceptedEventsFromTypeHint(ReflectionMethod $method): ?array
     {
         $eventClass = collect($method->getParameters())
-            ->map(fn (ReflectionParameter $parameter) => optional($parameter->getType())->getName())
-            ->first(fn ($typeHint) => is_subclass_of($typeHint, ShouldBeStored::class));
+            ->map(fn(ReflectionParameter $parameter) => optional($parameter->getType())->getName())
+            ->first(fn($typeHint) => is_subclass_of($typeHint, ShouldBeStored::class));
 
         if (! $eventClass) {
             return null;
@@ -103,9 +103,10 @@ trait HandlesEvents
 
     private function determineAcceptedEventsFromAttribute(ReflectionMethod $method): array
     {
-        return collect($method->getAttributes(ListensTo::class))
-            ->map(fn (ReflectionAttribute $attribute) => $attribute->newInstance())
-            ->map(fn (ListensTo $listensTo) => [$listensTo->eventClass => $method->name])
+        return collect($method->getAttributes(Handles::class))
+            ->map(fn(ReflectionAttribute $attribute) => $attribute->newInstance())
+            ->flatMap(fn(Handles $handlesAttribute) => $handlesAttribute->eventClasses)
+            ->map(fn (string $eventClass) => [$eventClass => $method->getName()])
             ->toArray();
     }
 }
