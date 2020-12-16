@@ -9,6 +9,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
 - Rename `EloquentStoredEvent::query()->uuid()` to `EloquentStoredEvent::query()->whereAggregateRoot()`
 - Add `EloquentStoredEvent::query()->whereEvent(EventA::class, …)`
+- Add support for `#[Handles(EventA::class, …)]` attribute in projectors and reactors
 
 ## 4.7.2 - 2021-01-28
 
