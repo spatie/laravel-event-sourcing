@@ -3,11 +3,11 @@
 namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
 use Spatie\EventSourcing\Attributes\Handles;
-use Spatie\EventSourcing\EventHandlers\Projectors\InMemoryProjector;
+use Spatie\EventSourcing\EventHandlers\Projectors\EventQuery;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 
-class ReportProjector extends InMemoryProjector
+class ReportProjector extends EventQuery
 {
     public int $money = 0;
 
