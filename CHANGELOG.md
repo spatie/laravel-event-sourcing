@@ -10,6 +10,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - Rename `EloquentStoredEvent::query()->uuid()` to `EloquentStoredEvent::query()->whereAggregateRoot()`
 - Add `EloquentStoredEvent::query()->whereEvent(EventA::class, …)`
 - Add support for `#[Handles(EventA::class, …)]` attribute in projectors and reactors
+- Add `InMemoryProjector`
 
 ## 4.8.0 - 2021-01-28
 

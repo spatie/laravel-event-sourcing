@@ -12,13 +12,8 @@ class Handler
 {
     public function __construct(
         private object $handler,
-        private string $handlerMethod,
+        public string $method,
     ) {
-    }
-
-    public function call(...$arguments): void
-    {
-        $this->handler->{$this->handlerMethod}(...$arguments);
     }
 
     /**
@@ -31,7 +26,7 @@ class Handler
     {
         $handlerClass = new ReflectionClass($handler);
 
-        return collect($handlerClass->getMethods(ReflectionMethod::IS_PUBLIC))
+        return collect($handlerClass->getMethods(ReflectionMethod::IS_PUBLIC|ReflectionMethod::IS_PROTECTED))
             ->mapWithKeys(fn(ReflectionMethod $reflectionMethod) => [$reflectionMethod->getName() => $reflectionMethod->getAttributes(Handles::class)])
             ->filter(function (array $handleAttributes) use ($event) {
                 return ! is_null(
