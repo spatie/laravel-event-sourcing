@@ -14,15 +14,18 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootThatAllowsConcurrency;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithFailingPersist;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AttributeAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyMultiplied;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\AttributeProjector;
 
 class AggregateRootTest extends TestCase
 {
@@ -396,7 +399,17 @@ class AggregateRootTest extends TestCase
 
         Event::assertDispatched(MoneyMultiplied::class);
     }
-  
+
+    /** @test */
+    public function it_uses_attributes_to_route_events()
+    {
+        $aggregateRoot = AttributeAggregateRoot::retrieve('uuid-1');
+
+        $aggregateRoot->addMoney(1);
+
+        $this->assertTrue($aggregateRoot->applied);
+    }
+
     public function it_can_load_the_uuid()
     {
         $aggregateRoot = (new AccountAggregateRoot())->loadUuid($this->aggregateUuid);
