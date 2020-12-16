@@ -4,7 +4,7 @@ namespace Spatie\EventSourcing\Tests;
 
 use Carbon\Carbon;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
-use Spatie\EventSourcing\Tests\TestClasses\Projectors\ReportProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ReportEventQuery;
 
 class EventQueryTest extends TestCase
 {
@@ -20,7 +20,7 @@ class EventQueryTest extends TestCase
         event(new MoneyAdded(10));
         event(new MoneyAdded(20));
 
-        $report = new ReportProjector('2020-01-01');
+        $report = new ReportEventQuery('2020-01-01');
 
         $this->assertEquals(30, $report->money);
     }
