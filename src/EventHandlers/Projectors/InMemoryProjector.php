@@ -17,7 +17,7 @@ abstract class InMemoryProjector
     private function applyStoredEvent(StoredEvent $storedEvent)
     {
         Handler::find($storedEvent->event, $this)->each(
-            fn(Handler $handler) => $this->{$handler->method}($storedEvent->event)
+            fn (Handler $handler) => $this->{$handler->method}($storedEvent->event)
         );
     }
 }
