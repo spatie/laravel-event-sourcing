@@ -82,15 +82,15 @@ trait HandlesEvents
                     ? $this->determineAcceptedEventsFromTypeHint($method)
                     : $this->determineAcceptedEventsFromAttribute($method);
             })
-            ->mapWithKeys(fn(array $items) => $items)
+            ->mapWithKeys(fn (array $items) => $items)
             ->filter();
     }
 
     private function determineAcceptedEventsFromTypeHint(ReflectionMethod $method): ?array
     {
         $eventClass = collect($method->getParameters())
-            ->map(fn(ReflectionParameter $parameter) => optional($parameter->getType())->getName())
-            ->first(fn($typeHint) => is_subclass_of($typeHint, ShouldBeStored::class));
+            ->map(fn (ReflectionParameter $parameter) => optional($parameter->getType())->getName())
+            ->first(fn ($typeHint) => is_subclass_of($typeHint, ShouldBeStored::class));
 
         if (! $eventClass) {
             return null;
@@ -104,8 +104,8 @@ trait HandlesEvents
     private function determineAcceptedEventsFromAttribute(ReflectionMethod $method): array
     {
         return collect($method->getAttributes(Handles::class))
-            ->map(fn(ReflectionAttribute $attribute) => $attribute->newInstance())
-            ->flatMap(fn(Handles $handlesAttribute) => $handlesAttribute->eventClasses)
+            ->map(fn (ReflectionAttribute $attribute) => $attribute->newInstance())
+            ->flatMap(fn (Handles $handlesAttribute) => $handlesAttribute->eventClasses)
             ->map(fn (string $eventClass) => [$eventClass => $method->getName()])
             ->toArray();
     }
