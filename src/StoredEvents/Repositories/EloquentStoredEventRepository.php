@@ -5,10 +5,10 @@ namespace Spatie\EventSourcing\StoredEvents\Repositories;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\LazyCollection;
-use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
@@ -27,19 +27,17 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
     public function find(int $id): StoredEvent
     {
-        /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentStoredEvent */
-        $eloquentStoredEvent = $this->storedEventModel::query()->where('id', $id)->first();
+        $eloquentStoredEvent = $this->getQuery()->where('id', $id)->first();
 
         return $eloquentStoredEvent->toStoredEvent();
     }
 
     public function retrieveAll(string $uuid = null): LazyCollection
     {
-        /** @var \Illuminate\Database\Query\Builder $query */
-        $query = $this->storedEventModel::query();
+        $query = $this->getQuery();
 
         if ($uuid) {
-            $query->uuid($uuid);
+            $query->whereAggregateRoot($uuid);
         }
 
         return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
@@ -64,9 +62,8 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
     public function retrieveAllAfterVersion(int $version, string $uuid): LazyCollection
     {
-        /** @var \Illuminate\Database\Query\Builder $query */
-        $query = $this->storedEventModel::query()
-            ->uuid($uuid)
+        $query = $this->getQuery()
+            ->whereAggregateRoot($uuid)
             ->afterVersion($version);
 
         return $query
@@ -93,14 +90,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
         $eloquentStoredEvent->save();
 
-        $event->setMetaData(array_merge(
-            $eloquentStoredEvent->meta_data->toArray(),
-            [MetaData::STORED_EVENT_ID => $eloquentStoredEvent->id]
-        ));
-
-        $eloquentStoredEvent->update([
-            'meta_data' => $event->metaData(),
-        ]);
+        $eloquentStoredEvent->event->setStoredEventId($eloquentStoredEvent->id);
 
         return $eloquentStoredEvent->toStoredEvent();
     }
@@ -119,7 +109,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
     public function update(StoredEvent $storedEvent): StoredEvent
     {
         /** @var EloquentStoredEvent $eloquentStoredEvent */
-        $eloquentStoredEvent = $this->storedEventModel::find($storedEvent->id);
+        $eloquentStoredEvent = $this->getQuery()->find($storedEvent->id);
 
         $eloquentStoredEvent->update($storedEvent->toArray());
 
@@ -139,20 +129,24 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
     public function getLatestAggregateVersion(string $aggregateUuid): int
     {
-        return $this->storedEventModel::query()
-            ->uuid($aggregateUuid)
+        return $this->getQuery()
+            ->whereAggregateRoot($aggregateUuid)
             ->max('aggregate_version') ?? 0;
     }
 
     private function prepareEventModelQuery(int $startingFrom, string $uuid = null): Builder
     {
-        /** @var Builder $query */
-        $query = $this->storedEventModel::query()->startingFrom($startingFrom);
+        $query = $this->getQuery()->startingFrom($startingFrom);
 
         if ($uuid) {
-            $query->uuid($uuid);
+            $query->whereAggregateRoot($uuid);
         }
 
         return $query;
+    }
+
+    private function getQuery(): EloquentStoredEventQueryBuilder
+    {
+        return $this->storedEventModel::query();
     }
 }
