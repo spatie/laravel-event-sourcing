@@ -5,7 +5,7 @@ namespace Spatie\EventSourcing\EventHandlers\Projectors;
 use Spatie\EventSourcing\Attributes\Handler;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
-abstract class InMemoryProjector
+abstract class EventQuery
 {
     protected function apply(StoredEvent ...$storedEvents): void
     {
