@@ -20,12 +20,10 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProj
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyMultiplied;
-use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
-use Spatie\EventSourcing\Tests\TestClasses\Projectors\AttributeProjector;
 
 class AggregateRootTest extends TestCase
 {
