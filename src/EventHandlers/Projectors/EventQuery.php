@@ -14,7 +14,7 @@ abstract class EventQuery
         $this
             ->query(EloquentStoredEvent::query())
             ->cursor()
-            ->each(fn(EloquentStoredEvent $event) => $this->apply($event->toStoredEvent()));
+            ->each(fn (EloquentStoredEvent $event) => $this->apply($event->toStoredEvent()));
     }
 
     abstract protected function query(EloquentStoredEventQueryBuilder $query): EloquentStoredEventQueryBuilder;
