@@ -28,7 +28,7 @@ class InMemoryProjectorTest extends TestCase
     /** @test */
     public function test_apply_from_the_past_as_wel_as_new_ones()
     {
-        $this->markTestSkipped("Not sure if we need to implement this");
+        $this->markTestSkipped("Not sure if we want to support this");
 
         Carbon::setTestNow('2020-01-01');
 
