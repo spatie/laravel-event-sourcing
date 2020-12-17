@@ -26,21 +26,35 @@ trait HandlesEvents
 
         $handlerClassOrMethod = $this->getEventHandlingMethods()->get($eventClass);
 
-        if (class_exists($handlerClassOrMethod) && method_exists($handlerClassOrMethod, '__invoke')) {
-            $handler = app($handlerClassOrMethod);
+        $handlerClassOrMethods = is_array($handlerClassOrMethod) ? $handlerClassOrMethod : [$handlerClassOrMethod];
 
-            return $handler($storedEvent->event);
-        }
+        $result = true;
 
-        if (! method_exists($this, $handlerClassOrMethod)) {
-            throw InvalidEventHandler::eventHandlingMethodDoesNotExist(
-                $this,
-                $storedEvent->event,
-                $handlerClassOrMethod,
-            );
-        }
+        foreach ($handlerClassOrMethods as $handlerClassOrMethod){
 
-        $this->{$handlerClassOrMethod}($storedEvent->event);
+			if (class_exists($handlerClassOrMethod) && method_exists($handlerClassOrMethod, '__invoke')) {
+				$handler = app($handlerClassOrMethod);
+
+				$result = $handler($storedEvent->event);
+			}elseif (! method_exists($this, $handlerClassOrMethod)) {
+
+				throw InvalidEventHandler::eventHandlingMethodDoesNotExist(
+					$this,
+					$storedEvent->event,
+					$handlerClassOrMethod,
+				);
+
+			}else{
+
+				$result = $this->{$handlerClassOrMethod}($storedEvent->event);
+
+			}
+
+		}
+
+        return $result;
+
+
     }
 
     public function handleException(Exception $exception): void
@@ -73,15 +87,17 @@ trait HandlesEvents
     private function autoDetectHandlesEvents(): Collection
     {
         return collect((new ReflectionClass($this))->getMethods(ReflectionMethod::IS_PUBLIC))
-            ->flatMap(function (ReflectionMethod $method) {
+            ->reduce(function (Collection $result, ReflectionMethod $method) {
                 $method = new ReflectionMethod($this, $method->name);
 
                 $listensToAttributes = $method->getAttributes(Handles::class);
 
-                return empty($listensToAttributes)
+                $acceptedEvents = empty($listensToAttributes)
                     ? $this->determineAcceptedEventsFromTypeHint($method)
                     : $this->determineAcceptedEventsFromAttribute($method);
-            })
+
+                return $result->mergeRecursive($acceptedEvents);
+            }, collect())
             ->filter();
     }
 
@@ -103,7 +119,12 @@ trait HandlesEvents
         return collect($method->getAttributes(Handles::class))
             ->map(fn (ReflectionAttribute $attribute) => $attribute->newInstance())
             ->flatMap(fn (Handles $handlesAttribute) => $handlesAttribute->eventClasses)
-            ->mapWithKeys(fn (string $eventClass) => [$eventClass => $method->getName()])
+            ->reduce(function(Collection $lookup, string $eventClass) use ($method) {
+            	$methods = $lookup->get($eventClass, []);
+            	$methods[] = $method->getName();
+            	$lookup->put($eventClass, $methods);
+				return $lookup;
+			}, collect())
             ->toArray();
     }
 }

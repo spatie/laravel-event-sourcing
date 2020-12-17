@@ -134,11 +134,32 @@ class ProjectorTest extends TestCase
         Projectionist::addProjector(AttributeProjector::class);
 
         event(new MoneySubtractedEvent($account, 10));
-        event(new MoneyAddedEventWithQueueOverride($account, 10));
+		event(new MoneyAddedEventWithQueueOverride($account, 10));
+		event(new MoneyAddedEvent($account, 10));
 
         $this->assertEquals([
             MoneySubtractedEvent::class,
             MoneyAddedEventWithQueueOverride::class,
+			MoneyAddedEvent::class,
         ], array_keys(AttributeProjector::$handledEvents));
+
+		$this->assertTrue(AttributeProjector::$multiAttributeEventHandled);
     }
+
+	/** @test */
+	public function it_can_use_multiple_methods_for_one_event()
+	{
+		AttributeProjector::$singleAttributeEventHandled = false;
+		AttributeProjector::$multiAttributeEventHandled = false;
+
+		$account = Account::create();
+
+		Projectionist::addProjector(AttributeProjector::class);
+
+		event(new MoneyAddedEvent($account, 10));
+
+		$this->assertTrue(AttributeProjector::$singleAttributeEventHandled);
+		$this->assertTrue(AttributeProjector::$multiAttributeEventHandled);
+
+	}
 }
