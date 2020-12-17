@@ -82,7 +82,6 @@ trait HandlesEvents
                     ? $this->determineAcceptedEventsFromTypeHint($method)
                     : $this->determineAcceptedEventsFromAttribute($method);
             })
-            ->mapWithKeys(fn (array $items) => $items)
             ->filter();
     }
 
@@ -106,7 +105,7 @@ trait HandlesEvents
         return collect($method->getAttributes(Handles::class))
             ->map(fn (ReflectionAttribute $attribute) => $attribute->newInstance())
             ->flatMap(fn (Handles $handlesAttribute) => $handlesAttribute->eventClasses)
-            ->map(fn (string $eventClass) => [$eventClass => $method->getName()])
+            ->mapWithKeys(fn (string $eventClass) => [$eventClass => $method->getName()])
             ->toArray();
     }
 }
