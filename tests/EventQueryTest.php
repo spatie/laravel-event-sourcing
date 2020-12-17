@@ -22,6 +22,6 @@ class EventQueryTest extends TestCase
 
         $report = new ReportEventQuery('2020-01-01');
 
-        $this->assertEquals(30, $report->money);
+        $this->assertEquals(30, $report());
     }
 }
