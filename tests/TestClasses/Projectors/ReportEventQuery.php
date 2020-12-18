@@ -10,8 +10,6 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAd
 
 class ReportEventQuery extends EventQuery
 {
-    use AppliesEvents;
-
     private int $money = 0;
 
     public function __construct(private string $minDate)
