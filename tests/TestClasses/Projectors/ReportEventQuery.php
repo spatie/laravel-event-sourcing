@@ -16,16 +16,15 @@ class ReportEventQuery extends EventQuery
 
     public function __construct(private string $minDate)
     {
-    }
-
-    public function __invoke(): int
-    {
         EloquentStoredEvent::query()
             ->whereEvent(MoneyAdded::class)
             ->whereDate('created_at', '>=', $this->minDate)
             ->cursor()
             ->each(fn (EloquentStoredEvent $eloquentStoredEvent) => $this->apply($eloquentStoredEvent->toStoredEvent()));
+    }
 
+    public function money(): int
+    {
         return $this->money;
     }
 
