@@ -119,12 +119,9 @@ trait HandlesEvents
         return collect($method->getAttributes(Handles::class))
             ->map(fn (ReflectionAttribute $attribute) => $attribute->newInstance())
             ->flatMap(fn (Handles $handlesAttribute) => $handlesAttribute->eventClasses)
-            ->reduce(function(Collection $lookup, string $eventClass) use ($method) {
-            	$methods = $lookup->get($eventClass, []);
-            	$methods[] = $method->getName();
-            	$lookup->put($eventClass, $methods);
-				return $lookup;
-			}, collect())
+            ->reduce(fn(Collection $lookup, string $eventClass) => $lookup->mergeRecursive([
+				$eventClass => [$method->getName()]
+			]), collect())
             ->toArray();
     }
 }
