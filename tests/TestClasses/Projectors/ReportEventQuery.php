@@ -10,22 +10,19 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAd
 
 class ReportEventQuery extends EventQuery
 {
-    use AppliesEvents;
-
     private int $money = 0;
 
     public function __construct(private string $minDate)
-    {
-    }
-
-    public function __invoke(): int
     {
         EloquentStoredEvent::query()
             ->whereEvent(MoneyAdded::class)
             ->whereDate('created_at', '>=', $this->minDate)
             ->cursor()
             ->each(fn (EloquentStoredEvent $eloquentStoredEvent) => $this->apply($eloquentStoredEvent->toStoredEvent()));
+    }
 
+    public function money(): int
+    {
         return $this->money;
     }
 
