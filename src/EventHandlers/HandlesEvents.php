@@ -95,9 +95,7 @@ trait HandlesEvents
             return null;
         }
 
-        return [
-            [$eventClass => $method->name],
-        ];
+        return [$eventClass => $method->name];
     }
 
     private function determineAcceptedEventsFromAttribute(ReflectionMethod $method): array
