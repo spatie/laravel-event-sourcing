@@ -45,7 +45,7 @@ abstract class AggregateRoot
 
     /**
      * @param string $uuid
-     * @param DateTimeImmutable $tillDateTime
+     * @param \DateTimeImmutable $tillDateTime
      *
      * @return static
      */
