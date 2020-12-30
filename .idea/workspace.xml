@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="89808dde-9a37-412a-9841-9b00b20afc8c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/AggregateRoots/AggregateRoot.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/AggregateRoots/AggregateRoot.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StoredEvents/Repositories/EloquentStoredEventRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/StoredEvents/Repositories/EloquentStoredEventRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StoredEvents/Repositories/StoredEventRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/StoredEvents/Repositories/StoredEventRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/AggregateRootTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AggregateRootTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,8 +130,14 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/docs/advanced-usage" />
     <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
     <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/advanced-usage" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -144,7 +147,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1609295110910</updated>
-      <workItem from="1609295112233" duration="1499000" />
+      <workItem from="1609295112233" duration="2105000" />
     </task>
     <servers />
   </component>
