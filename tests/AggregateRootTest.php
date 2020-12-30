@@ -3,6 +3,7 @@
 namespace Spatie\EventSourcing\Tests;
 
 use Carbon\Carbon;
+use DateTimeImmutable;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
@@ -440,7 +441,7 @@ class AggregateRootTest extends TestCase
             ->persist();
 
 
-        $tillDateTime = Carbon::now()->subDay()->toDateTimeImmutable();
+        $tillDateTime = new DateTimeImmutable('2020-01-01 23:00:00');
 
         $firstEvent = EloquentStoredEvent::first();
         $firstEvent->created_at = $tillDateTime;
