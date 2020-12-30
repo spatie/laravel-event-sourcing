@@ -3,7 +3,7 @@ title: Temporal Query
 weight: 12
 ---
 
-One feature of ES is able to perform a temporal query quoted by Martin Fowler:
+One feature of event sourcing is able to perform a temporal query quoted by Martin Fowler:
 
 ```
 Temporal Query: We can determine the application state at any point in time. 
