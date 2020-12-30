@@ -10,6 +10,8 @@ interface StoredEventRepository
 {
     public function retrieveAll(string $uuid = null): LazyCollection;
 
+    public function retrieveAllUntil(\DateTimeImmutable $tillDateTime, string $uuid = null): LazyCollection;
+
     public function retrieveAllStartingFrom(int $startingFrom, string $uuid = null): LazyCollection;
 
     public function retrieveAllAfterVersion(int $aggregateVersion, string $aggregateUuid): LazyCollection;

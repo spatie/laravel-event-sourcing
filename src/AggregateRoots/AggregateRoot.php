@@ -43,6 +43,21 @@ abstract class AggregateRoot
         return $aggregateRoot->reconstituteFromEvents();
     }
 
+    /**
+     * @param string $uuid
+     * @param DateTimeImmutable $tillDateTime
+     *
+     * @return static
+     */
+    public static function retrieveUntil(string $uuid, \DateTimeImmutable $tillDateTime)
+    {
+        $aggregateRoot = app(static::class);
+
+        $aggregateRoot->uuid = $uuid;
+
+        return $aggregateRoot->reconstituteTillEvents($tillDateTime);
+    }
+
     public function loadUuid(string $uuid): self
     {
         $this->uuid = $uuid;
@@ -167,6 +182,20 @@ abstract class AggregateRoot
         }
 
         $storedEventRepository->retrieveAllAfterVersion($this->aggregateVersion, $this->uuid)
+            ->each(function (StoredEvent $storedEvent) {
+                $this->apply($storedEvent->event);
+            });
+
+        $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
+
+        return $this;
+    }
+
+    protected function reconstituteTillEvents(\DateTimeImmutable $tillDateTime): self
+    {
+        $storedEventRepository = $this->getStoredEventRepository();
+
+        $storedEventRepository->retrieveAllUntil($tillDateTime, $this->uuid)
             ->each(function (StoredEvent $storedEvent) {
                 $this->apply($storedEvent->event);
             });

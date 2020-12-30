@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
@@ -74,7 +75,8 @@ class AggregateRootTest extends TestCase
     }
 
     /** @test */
-    public function when_an_aggregate_root_specifies_a_stored_event_repository_persisting_will_persist_all_events_it_recorded_via_repository()
+    public function when_an_aggregate_root_specifies_a_stored_event_repository_persisting_will_persist_all_events_it_recorded_via_repository(
+    )
     {
         AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid)
             ->addMoney(100)
@@ -95,7 +97,8 @@ class AggregateRootTest extends TestCase
     }
 
     /** @test */
-    public function when_an_the_config_specifies_a_stored_event_model_persisting_will_persist_all_events_it_recorded_via_stored_event()
+    public function when_an_the_config_specifies_a_stored_event_model_persisting_will_persist_all_events_it_recorded_via_stored_event(
+    )
     {
         config()->set('event-sourcing.stored_event_model', OtherEloquentStoredEvent::class);
 
@@ -241,7 +244,8 @@ class AggregateRootTest extends TestCase
     }
 
     /** @test */
-    public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it_with_the_stored_event_repository_specified()
+    public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it_with_the_stored_event_repository_specified(
+    )
     {
         /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified $aggregateRoot */
         $aggregateRoot = AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid);
@@ -299,7 +303,7 @@ class AggregateRootTest extends TestCase
         $aggregateRoot = AccountAggregateRootWithFailingPersist::retrieve($this->aggregateUuid)->addMoney(123);
 
         $this->assertExceptionThrown(
-            fn () => AggregateRoot::persistInTransaction($aggregateRoot)
+            fn() => AggregateRoot::persistInTransaction($aggregateRoot)
         );
 
         $this->assertCount(0, EloquentStoredEvent::get());
@@ -396,7 +400,7 @@ class AggregateRootTest extends TestCase
 
         Event::assertDispatched(MoneyMultiplied::class);
     }
-  
+
     public function it_can_load_the_uuid()
     {
         $aggregateRoot = (new AccountAggregateRoot())->loadUuid($this->aggregateUuid);
@@ -421,5 +425,29 @@ class AggregateRootTest extends TestCase
         $event = $storedEvent->event;
         $this->assertInstanceOf(MoneyAdded::class, $event);
         $this->assertEquals(100, $event->amount);
+    }
+
+    /** @test */
+    public function aggregate_root_supports_temporal_query()
+    {
+        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+        $aggregateRoot
+            ->addMoney(100)
+            ->addMoney(100)
+            ->addMoney(100)
+            ->persist();
+
+
+        $tillDateTime = Carbon::now()->subDay()->toDateTimeImmutable();
+
+        $firstEvent = EloquentStoredEvent::first();
+        $firstEvent->created_at = $tillDateTime;
+        $firstEvent->save();
+
+        $aggregateRoot = AccountAggregateRoot::retrieveUntil($this->aggregateUuid, $tillDateTime);
+
+        $this->assertEquals(100, $aggregateRoot->balance);
     }
 }
