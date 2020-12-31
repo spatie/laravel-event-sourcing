@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="89808dde-9a37-412a-9841-9b00b20afc8c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AggregateRoots/AggregateRoot.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/AggregateRoots/AggregateRoot.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/advanced-usage/temporal-query.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/advanced-usage/temporal-query.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,7 +155,7 @@
       <updated>1609295110910</updated>
       <workItem from="1609295112233" duration="2105000" />
       <workItem from="1609297660057" duration="939000" />
-      <workItem from="1609376590127" duration="428000" />
+      <workItem from="1609376590127" duration="621000" />
     </task>
     <servers />
   </component>
