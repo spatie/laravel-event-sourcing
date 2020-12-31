@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\AggregateRoots;
 
+use DateTimeImmutable;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
@@ -43,13 +44,7 @@ abstract class AggregateRoot
         return $aggregateRoot->reconstituteFromEvents();
     }
 
-    /**
-     * @param string $uuid
-     * @param \DateTimeImmutable $tillDateTime
-     *
-     * @return static
-     */
-    public static function retrieveUntil(string $uuid, \DateTimeImmutable $tillDateTime)
+    public static function retrieveUntil(string $uuid, DateTimeImmutable $tillDateTime)
     {
         $aggregateRoot = app(static::class);
 
