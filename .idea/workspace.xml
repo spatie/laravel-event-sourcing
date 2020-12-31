@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="89808dde-9a37-412a-9841-9b00b20afc8c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/laravel-event-sourcing.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/laravel-event-sourcing.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/AggregateRootTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AggregateRootTest.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +155,8 @@
       <option name="presentableId" value="Default" />
       <updated>1609295110910</updated>
       <workItem from="1609295112233" duration="2105000" />
-      <workItem from="1609297660057" duration="178000" />
+      <workItem from="1609297660057" duration="939000" />
+      <workItem from="1609376590127" duration="128000" />
     </task>
     <servers />
   </component>
