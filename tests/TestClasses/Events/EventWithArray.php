@@ -7,7 +7,7 @@ use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 class EventWithArray extends ShouldBeStored
 {
     /**
-     * @var \Carbon\CarbonInterface[];
+     * @var \Carbon\CarbonInterface[]
      */
     public $values;
 

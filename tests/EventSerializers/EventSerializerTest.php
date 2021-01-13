@@ -112,8 +112,6 @@ class EventSerializerTest extends TestCase
 
         $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json);
 
-        dump($normalizedEvent);
-
         $this->assertInstanceOf(CarbonInterface::class, $normalizedEvent->values[0]);
     }
 
@@ -125,8 +123,6 @@ class EventSerializerTest extends TestCase
         $json = $this->eventSerializer->serialize($event);
 
         $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json);
-
-        dump($normalizedEvent);
 
         $this->assertInstanceOf(CarbonInterface::class, $normalizedEvent->value);
     }
