@@ -33,6 +33,8 @@ abstract class AggregateRoot
     /**
      * @param string $uuid
      *
+     * Psalm needs this doc block to properly know the return type.
+     *
      * @return static
      */
     public static function retrieve(string $uuid): static
