@@ -30,6 +30,11 @@ abstract class AggregateRoot
 
     protected static bool $allowConcurrency = false;
 
+    /**
+     * @param string $uuid
+     *
+     * @return static
+     */
     public static function retrieve(string $uuid): static
     {
         $aggregateRoot = app(static::class);
