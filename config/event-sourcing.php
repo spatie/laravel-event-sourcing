@@ -100,7 +100,8 @@ return [
         Spatie\EventSourcing\Support\CarbonNormalizer::class,
         Spatie\EventSourcing\Support\ModelIdentifierNormalizer::class,
         Symfony\Component\Serializer\Normalizer\DateTimeNormalizer::class,
-        Symfony\Component\Serializer\Normalizer\ObjectNormalizer::class,
+        Symfony\Component\Serializer\Normalizer\ArrayDenormalizer::class,
+        Spatie\EventSourcing\Support\ObjectNormalizer::class,
     ],
 
     /*
