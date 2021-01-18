@@ -7,10 +7,6 @@ This package aims to be the entry point to get started with event sourcing in La
 
 If you've never worked with event sourcing, or are uncertain about what projectors, reactors and aggregates are, head over to [the getting familiar with event sourcing section](/laravel-event-sourcing/v4/getting-familiar-with-event-sourcing/introduction).
 
-Are you visual learner? Then start by watching this video. It explains event sourcing in general and how you can use projectors, reactors and aggregates.
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/9tbxl_I1EGE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 Event sourcing might be a good choice for your project if:
 
 - your app needs to make decisions based on the past
@@ -18,6 +14,15 @@ Event sourcing might be a good choice for your project if:
 - you foresee that there will be a reporting need in the future, but you don't know yet which data you need to collect for those reports
 
 Some concepts in the package, for example the testing methods of aggregates, were inspired by [Frank De Jonge](https://twitter.com/frankdejonge/)'s [EventSauce](https://eventsauce.io/) package.
+
+## A premium course on event sourcing
+
+Our team is currently developing [a premium course on event sourcing](https://spatie.be/event-sourcing).
+
+In this course, we'll walk you through all the basics. Though the knowledge presented is framework agnostic, the examples will embrace Laravel.
+The course will include a cart package that will be event sourced and can be used in your e-commerce projects.
+
+Subscribe to [our mailing list at spatie.be](https://spatie.be/event-sourcing) now to be notified when we launch it!
 
 ## We have badges!
 
