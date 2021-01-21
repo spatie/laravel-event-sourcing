@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.7.1 - 2021-01-21
+
+- Fix for array serialization (#189)
+
 ## 4.7.0 - 2020-12-02
 
 - add support for PHP 8
