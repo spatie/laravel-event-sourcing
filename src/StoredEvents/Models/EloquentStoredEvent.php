@@ -9,7 +9,7 @@ use Spatie\EventSourcing\StoredEvents\StoredEvent;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 /**
- * @method static self|\Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder query()
+ * @method static self|\Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder|\Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder query()
  */
 class EloquentStoredEvent extends Model
 {
