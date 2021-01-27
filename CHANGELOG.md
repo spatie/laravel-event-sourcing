@@ -14,6 +14,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
     - Reactor listeners
     - Event queries
 - `$handlesEvents` on Projectors and Reactors isn't supported anymore
+- Dependency injection in handlers isn't supported anymore, you should use constructor injection instead
 - Rename `EloquentStoredEvent::query()->uuid()` to `EloquentStoredEvent::query()->whereAggregateRoot()`
 - Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
 - Add `EloquentStoredEvent::query()->whereEvent(EventA::class, …)`
