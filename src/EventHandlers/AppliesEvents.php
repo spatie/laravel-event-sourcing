@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\EventHandlers;
 
-use Spatie\EventSourcing\Attributes\Handlers;
+use Spatie\EventSourcing\Handlers;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 trait AppliesEvents

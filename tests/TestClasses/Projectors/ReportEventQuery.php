@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
-use Spatie\EventSourcing\Attributes\Handles;
 use Spatie\EventSourcing\EventHandlers\Projectors\EventQuery;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
@@ -25,7 +24,6 @@ class ReportEventQuery extends EventQuery
         return $this->money;
     }
 
-    #[Handles(MoneyAdded::class)]
     protected function applyMoneyAdded(
         MoneyAdded $moneyAdded
     ) {

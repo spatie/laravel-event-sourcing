@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots;
 
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
-use Spatie\EventSourcing\Attributes\Handles;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 
 class AttributeAggregateRoot extends AggregateRoot
@@ -17,7 +16,6 @@ class AttributeAggregateRoot extends AggregateRoot
         return $this;
     }
 
-    #[Handles(MoneyAdded::class)]
     protected function applyingWithAttribute()
     {
         $this->applied = true;
