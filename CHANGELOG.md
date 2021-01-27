@@ -4,6 +4,8 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 ## 5.0.0 - ?
 
+- PHP version requirement is now `^8.0`
+- Laravel version requirement is now `^8.0`
 - Event handlers are no longer called with `app()->call()` ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
 - `$storedEvent` and `$aggregateRootUuid` are no longer passed to event handler methods. Use `$event->storedEventId()` and `$event->aggregateRootUuid()` instead. ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
 - All event listeners are now registered in the same way: by looking at an event's type hint. This applies to all:
