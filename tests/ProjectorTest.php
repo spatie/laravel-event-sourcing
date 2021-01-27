@@ -111,34 +111,4 @@ class ProjectorTest extends TestCase
         $this->assertCount(2, EloquentStoredEvent::get());
         $this->assertEquals(1200, $account->refresh()->amount);
     }
-
-    /** @test */
-    public function it_uses_attributes_to_route_events()
-    {
-        $account = Account::create();
-
-        Projectionist::addProjector(AttributeProjector::class);
-
-        event(new MoneyAddedEvent($account, 1234));
-
-        $this->assertEquals([
-            MoneyAddedEvent::class,
-        ], array_keys(AttributeProjector::$handledEvents));
-    }
-
-    /** @test */
-    public function it_can_use_multiple_attributes_on_the_same_method()
-    {
-        $account = Account::create();
-
-        Projectionist::addProjector(AttributeProjector::class);
-
-        event(new MoneySubtractedEvent($account, 10));
-        event(new MoneyAddedEventWithQueueOverride($account, 10));
-
-        $this->assertEquals([
-            MoneySubtractedEvent::class,
-            MoneyAddedEventWithQueueOverride::class,
-        ], array_keys(AttributeProjector::$handledEvents));
-    }
 }

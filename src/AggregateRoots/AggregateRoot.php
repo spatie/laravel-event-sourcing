@@ -8,7 +8,7 @@ use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionProperty;
-use Spatie\EventSourcing\Attributes\Handler;
+use Spatie\EventSourcing\Attributes\Handlers;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
 use Spatie\EventSourcing\Snapshots\Snapshot;
 use Spatie\EventSourcing\Snapshots\SnapshotRepository;
@@ -191,34 +191,9 @@ abstract class AggregateRoot
 
     private function apply(ShouldBeStored $event): void
     {
-        $handlers = Handler::find($event, $this);
+        $handlers = Handlers::find($event, $this);
 
-        if ($handlers->isNotEmpty()) {
-            $handlers->each(fn(Handler $handler) => $this->{$handler->method}($event));
-
-            return;
-        }
-
-        $classBaseName = class_basename($event);
-
-        $camelCasedBaseName = ucfirst(Str::camel($classBaseName));
-
-        $applyingMethodName = "apply{$camelCasedBaseName}";
-
-        $reflectionClass = new ReflectionClass($this);
-
-        $applyMethodExists = $reflectionClass->hasMethod($applyingMethodName);
-        $applyMethodIsPublic = $applyMethodExists && $reflectionClass->getMethod($applyingMethodName)->isPublic();
-
-        if ($applyMethodExists && $applyMethodIsPublic) {
-            try {
-                app()->call([$this, $applyingMethodName], ['event' => $event]);
-            } catch (BindingResolutionException) {
-                $this->$applyingMethodName($event);
-            }
-        } elseif ($applyMethodExists) {
-            $this->$applyingMethodName($event);
-        }
+        $handlers->each(fn(string $handler) => $this->{$handler}($event));
 
         $this->appliedEvents[] = $event;
 

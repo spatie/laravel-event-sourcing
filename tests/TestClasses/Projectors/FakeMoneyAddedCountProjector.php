@@ -9,10 +9,6 @@ class FakeMoneyAddedCountProjector extends Projector
 {
     public static int $eventsHandledCount = 0;
 
-    protected array $handlesEvents = [
-        MoneyAddedEvent::class => 'onMoneyAdded',
-    ];
-
     public function onMoneyAdded(MoneyAddedEvent $event)
     {
         self::$eventsHandledCount++;

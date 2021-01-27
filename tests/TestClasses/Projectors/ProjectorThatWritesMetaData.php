@@ -8,10 +8,6 @@ use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 
 class ProjectorThatWritesMetaData extends Projector
 {
-    protected array $handlesEvents = [
-        MoneyAddedEvent::class => 'onMoneyAdded',
-    ];
-
     protected $trackStream = '*';
 
     public function __construct(

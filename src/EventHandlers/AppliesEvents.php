@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\EventHandlers;
 
-use Spatie\EventSourcing\Attributes\Handler;
+use Spatie\EventSourcing\Attributes\Handlers;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 trait AppliesEvents
@@ -16,8 +16,8 @@ trait AppliesEvents
 
     private function applyStoredEvent(StoredEvent $storedEvent)
     {
-        Handler::find($storedEvent->event, $this)->each(
-            fn (Handler $handler) => $this->{$handler->method}($storedEvent->event)
+        Handlers::find($storedEvent->event, $this)->each(
+            fn (string $handler) => $this->{$handler}($storedEvent->event)
         );
     }
 }
