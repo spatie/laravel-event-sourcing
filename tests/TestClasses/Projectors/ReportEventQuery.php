@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
 use Spatie\EventSourcing\Attributes\Handles;
-use Spatie\EventSourcing\EventHandlers\AppliesEvents;
 use Spatie\EventSourcing\EventHandlers\Projectors\EventQuery;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;

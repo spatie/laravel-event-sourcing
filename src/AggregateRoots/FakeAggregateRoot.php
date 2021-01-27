@@ -13,7 +13,8 @@ class FakeAggregateRoot
 
     public function __construct(
         private AggregateRoot $aggregateRoot
-    ) {}
+    ) {
+    }
 
     /**
      * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored|\Spatie\EventSourcing\StoredEvents\ShouldBeStored[] $events

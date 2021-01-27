@@ -15,7 +15,8 @@ class HandleStoredEventJob implements HandleDomainEventJob, ShouldQueue
     public function __construct(
         public StoredEvent $storedEvent,
         public array $tags
-    ) {}
+    ) {
+    }
 
     public function handle(Projectionist $projectionist): void
     {
