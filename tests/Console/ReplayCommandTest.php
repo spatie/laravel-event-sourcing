@@ -42,16 +42,12 @@ class ReplayCommandTest extends TestCase
     {
         Event::fake([FinishedEventReplay::class, StartingEventReplay::class]);
 
-        $projector = Mockery::mock(BalanceProjector::class.'[onMoneyAdded]');
-
-        $projector->shouldReceive('onMoneyAdded')->andReturnNull()->times(3);
-
-        Projectionist::addProjector($projector);
+        Projectionist::addProjector(BalanceProjector::class);
 
         Event::assertNotDispatched(StartingEventReplay::class);
         Event::assertNotDispatched(FinishedEventReplay::class);
 
-        $this->artisan('event-sourcing:replay '.get_class($projector));
+        $this->artisan("event-sourcing:replay \\\\Spatie\\\\EventSourcing\\\\Tests\\\\TestClasses\\\\Projectors\\\\BalanceProjector");
 
         Event::assertDispatched(StartingEventReplay::class);
         Event::assertDispatched(FinishedEventReplay::class);

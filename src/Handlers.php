@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcing\Attributes;
+namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Collection;
 use ReflectionClass;

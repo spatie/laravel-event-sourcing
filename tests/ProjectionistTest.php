@@ -66,15 +66,15 @@ class ProjectionistTest extends TestCase
     /** @test */
     public function it_will_call_the_method_on_the_projector_when_the_projector_throws_an_exception()
     {
+        ProjectorThatThrowsAnException::$exceptionsHandled = 0;
+
         $this->setConfig('event-sourcing.catch_exceptions', true);
 
-        $projector = Mockery::mock(ProjectorThatThrowsAnException::class.'[handleException]');
-
-        $projector->shouldReceive('handleException')->once();
-
-        Projectionist::addProjector($projector);
+        Projectionist::addProjector(ProjectorThatThrowsAnException::class);
 
         event(new MoneyAddedEvent($this->account, 1000));
+
+        $this->assertEquals(1, ProjectorThatThrowsAnException::$exceptionsHandled);
     }
 
     /** @test */

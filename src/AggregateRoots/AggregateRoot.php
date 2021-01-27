@@ -7,7 +7,7 @@ use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionProperty;
-use Spatie\EventSourcing\Attributes\Handlers;
+use Spatie\EventSourcing\Handlers;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
 use Spatie\EventSourcing\Snapshots\Snapshot;
 use Spatie\EventSourcing\Snapshots\SnapshotRepository;

@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\Attributes;
 
-use Spatie\EventSourcing\Attributes\Handlers;
+use Spatie\EventSourcing\Handlers;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\Tests\TestCase;
 

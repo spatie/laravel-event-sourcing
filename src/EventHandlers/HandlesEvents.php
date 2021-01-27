@@ -4,7 +4,7 @@ namespace Spatie\EventSourcing\EventHandlers;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Spatie\EventSourcing\Attributes\Handlers;
+use Spatie\EventSourcing\Handlers;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 trait HandlesEvents
