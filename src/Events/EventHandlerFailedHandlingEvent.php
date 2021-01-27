@@ -12,5 +12,6 @@ class EventHandlerFailedHandlingEvent
         public EventHandler $eventHandler,
         public StoredEvent $storedEvent,
         public Exception $exception
-    ) {}
+    ) {
+    }
 }

@@ -8,5 +8,6 @@ class Snapshot
         public string $aggregateUuid,
         public int $aggregateVersion,
         public $state
-    ) {}
+    ) {
+    }
 }

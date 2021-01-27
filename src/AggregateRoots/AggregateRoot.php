@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSourcing\AggregateRoots;
 
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
@@ -73,7 +72,7 @@ abstract class AggregateRoot
     {
         $storedEvents = $this->persistWithoutApplyingToEventHandlers();
 
-        $storedEvents->each(fn(StoredEvent $storedEvent) => $storedEvent->handleForAggregateRoot());
+        $storedEvents->each(fn (StoredEvent $storedEvent) => $storedEvent->handleForAggregateRoot());
 
         $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
 
@@ -129,7 +128,7 @@ abstract class AggregateRoot
         $class = new ReflectionClass($this);
 
         return collect($class->getProperties(ReflectionProperty::IS_PUBLIC))
-            ->reject(fn(ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
+            ->reject(fn (ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
             ->mapWithKeys(function (ReflectionProperty $property) {
                 return [$property->getName() => $this->{$property->getName()}];
             })->toArray();
@@ -193,7 +192,7 @@ abstract class AggregateRoot
     {
         $handlers = Handlers::find($event, $this);
 
-        $handlers->each(fn(string $handler) => $this->{$handler}($event));
+        $handlers->each(fn (string $handler) => $this->{$handler}($event));
 
         $this->appliedEvents[] = $event;
 

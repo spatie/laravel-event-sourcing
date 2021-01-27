@@ -4,9 +4,9 @@ namespace Spatie\EventSourcing\Attributes;
 
 use Illuminate\Support\Collection;
 use ReflectionClass;
+use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionUnionType;
-use ReflectionMethod;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class Handlers
@@ -17,7 +17,7 @@ class Handlers
      *
      * @return \Illuminate\Support\Collection|string[]
      */
-    public static function find(object|string $event, object $handler): Collection
+    public static function find(object | string $event, object $handler): Collection
     {
         $eventName = is_object($event)
             ? $event::class
@@ -46,8 +46,8 @@ class Handlers
                 };
 
                 return collect($types)
-                    ->filter(fn(ReflectionNamedType $type) => is_subclass_of($type->getName(), ShouldBeStored::class))
-                    ->contains(fn(ReflectionNamedType $type) => $type->getName() === $eventName);
+                    ->filter(fn (ReflectionNamedType $type) => is_subclass_of($type->getName(), ShouldBeStored::class))
+                    ->contains(fn (ReflectionNamedType $type) => $type->getName() === $eventName);
             })
             ->map(fn (ReflectionMethod $method) => $method->getName());
     }
