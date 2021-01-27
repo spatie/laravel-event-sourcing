@@ -6,11 +6,39 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 - Event handlers are no longer called with `app()->call()` ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
 - `$storedEvent` and `$aggregateRootUuid` are no longer passed to event handler methods. Use `$event->storedEventId()` and `$event->aggregateRootUuid()` instead. ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
-- Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
+- All event listeners are now registered in the same way: by looking at an event's type hint. This applies to all:
+    - Aggregate root `apply` methods
+    - Projection listeners
+    - Reactor listeners
+    - Event queries
+- `$handlesEvents` on Projectors and Reactors isn't supported anymore
 - Rename `EloquentStoredEvent::query()->uuid()` to `EloquentStoredEvent::query()->whereAggregateRoot()`
+- Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
 - Add `EloquentStoredEvent::query()->whereEvent(EventA::class, …)`
 - Add `EventQuery`
-- Add support for `#[Handles(EventA::class, …)]` attribute in projectors, reactors, aggregate roots and event queries
+
+### A note on changed listeners
+
+Since most code is probably already type hinting events, the listener change is likely to not have an impact on your code. It's good to know though that you don't have to worry about certain naming conventions any more:
+
+- In **aggregate roots**, you don't have to prefix apply methods with `apply` anymore if you don't want to
+- In **projectors**, you don't need a manual mapping anymore, neither does the event variable need to be called `$event`
+- In **reactors**, you don't need a manual mapping anymore, neither does the event variable need to be called `$event`
+- **Event queries** are a new concept and work in the same way
+
+Here's an example:
+
+```php
+class MyProjector extends Projector
+{
+    public function anEventHandlerWithAnotherName(MyEvent $eventVariableWithAnotherName): void
+    {
+        // This handler will automatically handle `MyEvent`
+    }
+}
+```
+
+Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
 ## 4.7.1 - 2021-01-21
 

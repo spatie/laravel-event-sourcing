@@ -9,10 +9,6 @@ use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
 
 class SyncBrokeReactor extends Reactor
 {
-    protected array $handlesEvents = [
-        MoneySubtractedEvent::class => 'onMoneySubtracted',
-    ];
-
     public function onMoneySubtracted(MoneySubtractedEvent $event)
     {
         if ($event->account->isBroke()) {

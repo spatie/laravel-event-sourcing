@@ -48,16 +48,6 @@ class ProjectionistTest extends TestCase
     }
 
     /** @test */
-    public function it_will_thrown_an_exception_when_an_event_handler_does_not_have_the_expected_event_handling_method()
-    {
-        $this->expectException(InvalidEventHandler::class);
-
-        Projectionist::addProjector(InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod::class);
-
-        event(new MoneyAddedEvent($this->account, 1234));
-    }
-
-    /** @test */
     public function it_will_not_register_the_same_projector_twice()
     {
         Projectionist::addProjector(BalanceProjector::class);
