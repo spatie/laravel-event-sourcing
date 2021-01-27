@@ -32,7 +32,7 @@ class HandlerTest extends TestCase
                 'onY',
                 'onZ',
                 '__invoke',
-            ]
+            ],
         ], Handlers::list($listener)->toArray());
     }
 }
@@ -49,31 +49,25 @@ class TestListener
 {
     public function onX(EventA $event): void
     {
-
     }
 
-    protected function onY(EventA|EventB $event): void
+    protected function onY(EventA | EventB $event): void
     {
-
     }
 
     public function onZ(EventB $event): void
     {
-
     }
 
     public function __invoke(EventB $event): void
     {
-
     }
 
     protected function nothing()
     {
-
     }
 
     private function nothingAsWell()
     {
-
     }
 }

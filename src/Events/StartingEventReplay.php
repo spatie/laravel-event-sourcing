@@ -8,5 +8,6 @@ class StartingEventReplay
 {
     public function __construct(
         public Collection $projectors
-    ) {}
+    ) {
+    }
 }

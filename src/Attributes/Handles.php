@@ -15,7 +15,7 @@ class Handles
         $this->eventClasses = $eventClasses;
     }
 
-    public function handles(string|object $handler): bool
+    public function handles(string | object $handler): bool
     {
         if (is_object($handler)) {
             $handler = $handler::class;
