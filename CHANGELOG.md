@@ -7,6 +7,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - PHP version requirement is now `^8.0`
 - Laravel version requirement is now `^8.0`
 - Event handlers are no longer called with `app()->call()` ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
+    - Dependency injection in handlers isn't supported anymore, you should use constructor injection instead
 - `$storedEvent` and `$aggregateRootUuid` are no longer passed to event handler methods. Use `$event->storedEventId()` and `$event->aggregateRootUuid()` instead. ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
 - All event listeners are now registered in the same way: by looking at an event's type hint. This applies to all:
     - Aggregate root `apply` methods
@@ -14,9 +15,8 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
     - Reactor listeners
     - Event queries
 - `$handlesEvents` on Projectors and Reactors isn't supported anymore
-- Dependency injection in handlers isn't supported anymore, you should use constructor injection instead
-- Rename `EloquentStoredEvent::query()->uuid()` to `EloquentStoredEvent::query()->whereAggregateRoot()`
 - Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
+- Rename `EloquentStoredEvent::query()->uuid()` to `EloquentStoredEvent::query()->whereAggregateRoot()`
 - Add `EloquentStoredEvent::query()->whereEvent(EventA::class, …)`
 - Add `EventQuery`
 
