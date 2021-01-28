@@ -1,12 +1,11 @@
 <?php
 
-namespace Spatie\EventSourcing\Tests\Attributes;
+namespace Spatie\EventSourcing\Tests;
 
 use Spatie\EventSourcing\Handlers;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
-use Spatie\EventSourcing\Tests\TestCase;
 
-class HandlerTest extends TestCase
+class HandlersTest extends TestCase
 {
     /** @test */
     public function test_find()
