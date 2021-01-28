@@ -64,7 +64,7 @@ class FakeAggregateRootTest extends TestCase
             ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
                 $dummyAggregateRoot->dummy();
             })
-            ->assertRecorded(function (DummyEvent $event){
+            ->assertRecorded(function (DummyEvent $event) {
                 $this->assertEquals(3, $event->integer);
             });
     }
