@@ -2,7 +2,7 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
-## 4.7.3 - 2021-01-28
+## 4.8.0 - 2021-01-28
 
 - Add support for asserting events with a closure
 
