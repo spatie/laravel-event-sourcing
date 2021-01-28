@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\AggregateRoots;
 
+use Closure;
 use Illuminate\Support\Arr;
 use PHPUnit\Framework\Assert;
 use Spatie\EventSourcing\Enums\MetaData;
@@ -62,24 +63,30 @@ class FakeAggregateRoot
     }
 
     /**
-     * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored|\Spatie\EventSourcing\StoredEvents\ShouldBeStored[] $expectedEvents
+     * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored|\Spatie\EventSourcing\StoredEvents\ShouldBeStored[]|\Closure $expectedEvents
      *
      * @return $this
      */
     public function assertRecorded($expectedEvents): self
     {
-        $expectedEvents = Arr::wrap($expectedEvents);
-
         $recordedEvents = $this->getRecordedEventsWithoutUuid();
 
-        Assert::assertEquals($expectedEvents, $recordedEvents);
+        if ($expectedEvents instanceof Closure) {
+            foreach ($recordedEvents as $recordedEvent) {
+                $expectedEvents($recordedEvent);
+            }
+        } else {
+            $expectedEvents = Arr::wrap($expectedEvents);
+
+            Assert::assertEquals($expectedEvents, $recordedEvents);
+        }
 
         return $this;
     }
 
     public function assertNotRecorded($unexpectedEventClasses): self
     {
-        $actualEventClasses = array_map(fn (ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getRecordedEvents());
+        $actualEventClasses = array_map(fn(ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getRecordedEvents());
 
         $unexpectedEventClasses = Arr::wrap($unexpectedEventClasses);
 
@@ -130,7 +137,7 @@ class FakeAggregateRoot
 
     public function assertNotApplied($unexpectedEventClasses): void
     {
-        $actualEventClasses = array_map(fn (ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getAppliedEvents());
+        $actualEventClasses = array_map(fn(ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getAppliedEvents());
 
         $unexpectedEventClasses = Arr::wrap($unexpectedEventClasses);
 
