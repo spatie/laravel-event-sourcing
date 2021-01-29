@@ -25,7 +25,7 @@ abstract class AggregateEntity
         $this->aggregateRoot->recordThat($event);
     }
 
-    public function apply(StoredEvent|ShouldBeStored ...$storedEvents): void
+    public function apply(StoredEvent | ShouldBeStored ...$storedEvents): void
     {
         foreach ($storedEvents as $storedEvent) {
             $this->applyStoredEvent($storedEvent);
