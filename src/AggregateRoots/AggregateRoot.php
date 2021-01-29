@@ -36,7 +36,7 @@ abstract class AggregateRoot
 
     public function __construct()
     {
-        collect((new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED|ReflectionProperty::IS_PUBLIC))
+        collect((new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC))
             ->mapWithKeys(fn (ReflectionProperty $property) => [$property->getName() => $property->getType()])
             ->filter(fn (?ReflectionType $type) => $type instanceof ReflectionNamedType)
             ->filter(fn (ReflectionNamedType $type) => is_subclass_of($type->getName(), AggregateEntity::class))
