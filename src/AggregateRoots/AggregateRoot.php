@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionProperty;
+use ReflectionType;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
 use Spatie\EventSourcing\Handlers;
 use Spatie\EventSourcing\Snapshots\Snapshot;
@@ -35,28 +36,19 @@ abstract class AggregateRoot
 
     public function __construct()
     {
-        $reflectionClass = new ReflectionClass($this);
+        collect((new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED|ReflectionProperty::IS_PUBLIC))
+            ->mapWithKeys(fn (ReflectionProperty $property) => [$property->getName() => $property->getType()])
+            ->filter(fn (?ReflectionType $type) => $type instanceof ReflectionNamedType)
+            ->filter(fn (ReflectionNamedType $type) => is_subclass_of($type->getName(), AggregateEntity::class))
+            ->each(function (ReflectionNamedType $type, string $propertyName) {
+                $entityClass = $type->getName();
 
-        foreach ($reflectionClass->getProperties() as $property) {
-            $type = $property->getType();
+                $entity = new $entityClass($this);
 
-            if (! $type instanceof ReflectionNamedType) {
-                continue;
-            }
+                $this->{$propertyName} = $entity;
 
-            $entityClass = $type->getName();
-
-            if (! is_subclass_of($entityClass, AggregateEntity::class)) {
-                continue;
-            }
-
-
-            $entity = new $entityClass($this);
-
-            $this->{$property->getName()} = $entity;
-
-            $this->entities[] = $entity;
-        }
+                $this->entities[] = $entity;
+            });
     }
 
     /**
