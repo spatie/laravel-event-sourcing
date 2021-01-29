@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
 use ReflectionClass;
+use ReflectionNamedType;
 use ReflectionProperty;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
 use Spatie\EventSourcing\Handlers;
@@ -28,6 +29,35 @@ abstract class AggregateRoot
     protected int $aggregateVersionAfterReconstitution = 0;
 
     protected static bool $allowConcurrency = false;
+
+    /** @var \Spatie\EventSourcing\AggregateRoots\AggregateEntity[] */
+    private array $entities = [];
+
+    public function __construct()
+    {
+        $reflectionClass = new ReflectionClass($this);
+
+        foreach ($reflectionClass->getProperties() as $property) {
+            $type = $property->getType();
+
+            if (! $type instanceof ReflectionNamedType) {
+                continue;
+            }
+
+            $entityClass = $type->getName();
+
+            if (! is_subclass_of($entityClass, AggregateEntity::class)) {
+                continue;
+            }
+
+
+            $entity = new $entityClass($this);
+
+            $this->{$property->getName()} = $entity;
+
+            $this->entities[] = $entity;
+        }
+    }
 
     /**
      * @param string $uuid
@@ -188,8 +218,12 @@ abstract class AggregateRoot
         }
     }
 
-    private function apply(ShouldBeStored $event): void
+    protected function apply(ShouldBeStored $event): void
     {
+        foreach ($this->entities as $entity) {
+            $entity->apply($event);
+        }
+
         $handlers = Handlers::find($event, $this);
 
         $handlers->each(fn (string $handler) => $this->{$handler}($event));
