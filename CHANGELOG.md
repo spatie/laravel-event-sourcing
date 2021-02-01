@@ -43,6 +43,10 @@ class MyProjector extends Projector
 
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
+## 4.8.0 - 2021-01-28
+
+- Add support for asserting events with a closure
+
 ## 4.7.2 - 2021-01-28
 
 - Fix for broken dependency in 4.7.1
