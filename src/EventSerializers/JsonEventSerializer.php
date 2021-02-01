@@ -33,8 +33,12 @@ class JsonEventSerializer implements EventSerializer
         return $this->serializer->serialize($event, 'json');
     }
 
-    public function deserialize(string $eventClass, string $json, string $metadata = null): ShouldBeStored
-    {
+    public function deserialize(
+        string $eventClass,
+        string $json,
+        int $version,
+        string $metadata = null
+    ): ShouldBeStored {
         return $this->serializer->deserialize($json, $eventClass, 'json');
     }
 }
