@@ -14,7 +14,7 @@ class UpgradeSerializer extends JsonEventSerializer
         int $version,
         string $metadata = null
     ): ShouldBeStored {
-        $event = parent::deserialize($eventClass, $json, $metadata);
+        $event = parent::deserialize($eventClass, $json, $version, $metadata);
 
         $metadata = json_decode($metadata, true);
         if ($metadata['version'] < 2) {

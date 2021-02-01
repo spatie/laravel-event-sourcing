@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use ReflectionClass;
+use ReflectionException;
 use Spatie\EventSourcing\Attributes\EventSerializer as EventSerializerAttribute;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
@@ -116,7 +117,11 @@ class StoredEvent implements Arrayable
             return;
         }
 
-        $reflectionClass = new ReflectionClass($this->event_class);
+        try {
+            $reflectionClass = new ReflectionClass($this->event_class);
+        } catch (ReflectionException $exception) {
+            throw new InvalidStoredEvent();
+        }
 
         if ($serializerAttribute = $reflectionClass->getAttributes(EventSerializerAttribute::class)[0] ?? null) {
             $serializerClass = ($serializerAttribute->newInstance())->serializerClass;
