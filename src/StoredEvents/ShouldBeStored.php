@@ -2,11 +2,24 @@
 
 namespace Spatie\EventSourcing\StoredEvents;
 
+use ReflectionClass;
+use Spatie\EventSourcing\Attributes\EventVersion;
 use Spatie\EventSourcing\Enums\MetaData;
 
 abstract class ShouldBeStored
 {
     private array $metaData = [];
+
+    public function eventVersion(): int
+    {
+        $versionAttribute = (new ReflectionClass($this))->getAttributes(EventVersion::class)[0] ?? null;
+
+        if (! $versionAttribute) {
+            return 1;
+        }
+
+        return $versionAttribute->newInstance()->version;
+    }
 
     public function aggregateRootUuid(): ?string
     {

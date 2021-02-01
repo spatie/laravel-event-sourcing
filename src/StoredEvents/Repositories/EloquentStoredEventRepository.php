@@ -83,6 +83,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             'event_properties' => app(EventSerializer::class)->serialize(clone $event),
             'aggregate_uuid' => $uuid,
             'aggregate_version' => $aggregateVersion,
+            'event_version' => $event->eventVersion(),
             'event_class' => $this->getEventClass(get_class($event)),
             'meta_data' => json_encode($event->metaData()),
             'created_at' => Carbon::now(),

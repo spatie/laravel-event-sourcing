@@ -8,9 +8,13 @@ use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class UpgradeSerializer extends JsonEventSerializer
 {
-    public function deserialize(string $eventClass, string $json, string $metadata = null): ShouldBeStored
-    {
-        $event = parent::deserialize($eventClass, $json, $metadata);
+    public function deserialize(
+        string $eventClass,
+        string $json,
+        int $version,
+        string $metadata = null
+    ): ShouldBeStored {
+        $event = parent::deserialize($eventClass, $json, $version, $metadata);
 
         $metadata = json_decode($metadata, true);
         if ($metadata['version'] < 2) {
