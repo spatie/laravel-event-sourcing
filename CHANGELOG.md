@@ -19,6 +19,8 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - Rename `EloquentStoredEvent::query()->uuid()` to `EloquentStoredEvent::query()->whereAggregateRoot()`
 - Add `EloquentStoredEvent::query()->whereEvent(EventA::class, …)`
 - Add `EventQuery`
+- Add `AggregateEntity`
+    - If you're overriding an aggregate root's constructor, make sure to call `parent::__construct` from it
 
 ### A note on changed listeners
 

@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
 use ReflectionClass;
+use ReflectionNamedType;
 use ReflectionProperty;
+use ReflectionType;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
 use Spatie\EventSourcing\Handlers;
 use Spatie\EventSourcing\Snapshots\Snapshot;
@@ -28,6 +30,26 @@ abstract class AggregateRoot
     protected int $aggregateVersionAfterReconstitution = 0;
 
     protected static bool $allowConcurrency = false;
+
+    /** @var \Spatie\EventSourcing\AggregateRoots\AggregateEntity[] */
+    protected array $entities = [];
+
+    public function __construct()
+    {
+        collect((new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC))
+            ->mapWithKeys(fn (ReflectionProperty $property) => [$property->getName() => $property->getType()])
+            ->filter(fn (?ReflectionType $type) => $type instanceof ReflectionNamedType)
+            ->filter(fn (ReflectionNamedType $type) => is_subclass_of($type->getName(), AggregateEntity::class))
+            ->each(function (ReflectionNamedType $type, string $propertyName) {
+                $entityClass = $type->getName();
+
+                $entity = new $entityClass($this);
+
+                $this->{$propertyName} = $entity;
+
+                $this->entities[] = $entity;
+            });
+    }
 
     /**
      * @param string $uuid
@@ -188,8 +210,12 @@ abstract class AggregateRoot
         }
     }
 
-    private function apply(ShouldBeStored $event): void
+    protected function apply(ShouldBeStored $event): void
     {
+        foreach ($this->entities as $entity) {
+            $entity->apply($event);
+        }
+
         $handlers = Handlers::find($event, $this);
 
         $handlers->each(fn (string $handler) => $this->{$handler}($event));
