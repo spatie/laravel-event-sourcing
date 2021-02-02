@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\AggregateRoots;
 
+use Ramsey\Uuid\Uuid;
 use Spatie\EventSourcing\EventHandlers\AppliesEvents;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
@@ -30,5 +31,16 @@ abstract class AggregateEntity
         foreach ($storedEvents as $storedEvent) {
             $this->applyStoredEvent($storedEvent);
         }
+    }
+
+    public static function fake(): static
+    {
+        $aggregateRoot = FakeAggregateRootForEntity::retrieve(Uuid::uuid4()->toString());
+
+        $entity = new static($aggregateRoot);
+
+        $aggregateRoot->addEntity($entity);
+
+        return $entity;
     }
 }

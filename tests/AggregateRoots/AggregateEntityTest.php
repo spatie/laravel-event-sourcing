@@ -43,6 +43,18 @@ class AggregateEntityTest extends TestCase
             $cart->checkout();
         });
     }
+
+    /** @test */
+    public function test_entity_fakes()
+    {
+        $cartItems = CartItems::fake();
+
+        $this->assertTrue($cartItems->isEmpty());
+
+        $cartItems->addItem('test');
+
+        $this->assertFalse($cartItems->isEmpty());
+    }
 }
 
 class Cart extends AggregateRoot

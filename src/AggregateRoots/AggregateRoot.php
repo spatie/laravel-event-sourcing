@@ -32,7 +32,7 @@ abstract class AggregateRoot
     protected static bool $allowConcurrency = false;
 
     /** @var \Spatie\EventSourcing\AggregateRoots\AggregateEntity[] */
-    private array $entities = [];
+    protected array $entities = [];
 
     public function __construct()
     {
