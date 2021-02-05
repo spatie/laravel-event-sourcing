@@ -62,6 +62,11 @@ class Cart extends AggregateRoot
     // Public for testing
     public CartItems $cartItems;
 
+    public function __construct()
+    {
+        $this->cartItems = new CartItems($this);
+    }
+
     public function checkout(): self
     {
         if ($this->cartItems->isEmpty()) {

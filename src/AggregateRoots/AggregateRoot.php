@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\AggregateRoots;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
@@ -31,25 +32,8 @@ abstract class AggregateRoot
 
     protected static bool $allowConcurrency = false;
 
-    /** @var \Spatie\EventSourcing\AggregateRoots\AggregateEntity[] */
-    protected array $entities = [];
-
-    public function __construct()
-    {
-        collect((new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC))
-            ->mapWithKeys(fn (ReflectionProperty $property) => [$property->getName() => $property->getType()])
-            ->filter(fn (?ReflectionType $type) => $type instanceof ReflectionNamedType)
-            ->filter(fn (ReflectionNamedType $type) => is_subclass_of($type->getName(), AggregateEntity::class))
-            ->each(function (ReflectionNamedType $type, string $propertyName) {
-                $entityClass = $type->getName();
-
-                $entity = new $entityClass($this);
-
-                $this->{$propertyName} = $entity;
-
-                $this->entities[] = $entity;
-            });
-    }
+    /** @var \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregateEntity[] */
+    protected Collection $entities;
 
     /**
      * @param string $uuid
@@ -212,7 +196,7 @@ abstract class AggregateRoot
 
     protected function apply(ShouldBeStored $event): void
     {
-        foreach ($this->entities as $entity) {
+        foreach ($this->resolveEntities() as $entity) {
             $entity->apply($event);
         }
 
@@ -223,6 +207,22 @@ abstract class AggregateRoot
         $this->appliedEvents[] = $event;
 
         $this->aggregateVersion++;
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregateEntity[]
+     */
+    protected function resolveEntities(): Collection
+    {
+        if (! isset($this->entities)) {
+            $this->entities = collect((new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC))
+                ->mapWithKeys(fn (ReflectionProperty $property) => [$property->getName() => $property->getType()])
+                ->filter(fn (?ReflectionType $type) => $type instanceof ReflectionNamedType)
+                ->filter(fn (ReflectionNamedType $type) => is_subclass_of($type->getName(), AggregateEntity::class))
+                ->map(fn (ReflectionNamedType $type, string $propertyName) => $this->{$propertyName});
+        }
+
+        return $this->entities;
     }
 
     public static function fake(string $uuid = null): FakeAggregateRoot

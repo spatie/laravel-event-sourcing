@@ -11,6 +11,8 @@ class FakeAggregateRootForEntity extends AggregateRoot
 
     public function addEntity(AggregateEntity $aggregateEntity): void
     {
+        $this->resolveEntities();
+
         $this->entities[] = $aggregateEntity;
     }
 }

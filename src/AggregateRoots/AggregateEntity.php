@@ -12,7 +12,7 @@ abstract class AggregateEntity
     use AppliesEvents;
 
     public function __construct(
-        private AggregateRoot $aggregateRoot
+        protected AggregateRoot $aggregateRoot
     ) {
     }
 
