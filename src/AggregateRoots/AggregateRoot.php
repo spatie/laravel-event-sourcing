@@ -35,6 +35,8 @@ abstract class AggregateRoot
     /** @var \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregateEntity[] */
     protected Collection $entities;
 
+    private bool $handleEvents = true;
+
     /**
      * @param string $uuid
      *
@@ -78,7 +80,9 @@ abstract class AggregateRoot
     {
         $storedEvents = $this->persistWithoutApplyingToEventHandlers();
 
-        $storedEvents->each(fn (StoredEvent $storedEvent) => $storedEvent->handleForAggregateRoot());
+        if ($this->handleEvents) {
+            $storedEvents->each(fn (StoredEvent $storedEvent) => $storedEvent->handleForAggregateRoot());
+        }
 
         $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
 
@@ -229,7 +233,7 @@ abstract class AggregateRoot
     {
         $uuid ??= (string) Str::uuid();
 
-        $aggregateRoot = static::retrieve($uuid);
+        $aggregateRoot = static::retrieve($uuid)->disableEventHandling();
 
         return (new FakeAggregateRoot($aggregateRoot));
     }
@@ -247,5 +251,12 @@ abstract class AggregateRoot
         $projectionist = app('event-sourcing');
 
         $projectionist->handleStoredEvents($storedEvents);
+    }
+
+    private function disableEventHandling(): self
+    {
+        $this->handleEvents = false;
+
+        return $this;
     }
 }
