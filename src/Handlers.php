@@ -12,16 +12,16 @@ use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 class Handlers
 {
     /**
-     * @param object|string $event
+     * @param object|string $object
      * @param object $handler
      *
      * @return \Illuminate\Support\Collection|string[]
      */
-    public static function find(object | string $event, object $handler): Collection
+    public static function find(object | string $object, object $handler): Collection
     {
-        $eventName = is_object($event)
-            ? $event::class
-            : $event;
+        $eventName = is_object($object)
+            ? $object::class
+            : $object;
 
         $handlerClass = new ReflectionClass($handler);
 
@@ -46,9 +46,9 @@ class Handlers
                 };
 
                 return collect($types)
-                    ->filter(fn (ReflectionNamedType $type) => is_subclass_of($type->getName(), ShouldBeStored::class))
                     ->contains(fn (ReflectionNamedType $type) => $type->getName() === $eventName);
             })
+            ->values()
             ->map(fn (ReflectionMethod $method) => $method->getName());
     }
 

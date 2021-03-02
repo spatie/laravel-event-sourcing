@@ -21,6 +21,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - Add `EventQuery`
 - Add `AggregateEntity`
     - If you're overriding an aggregate root's constructor, make sure to call `parent::__construct` from it
+- Add command bus and aggregate root handlers
 
 ### A note on changed listeners
 

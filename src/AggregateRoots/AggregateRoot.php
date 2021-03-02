@@ -11,6 +11,7 @@ use ReflectionNamedType;
 use ReflectionProperty;
 use ReflectionType;
 use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
+use Spatie\EventSourcing\Exceptions\UnhandledCommand;
 use Spatie\EventSourcing\Handlers;
 use Spatie\EventSourcing\Snapshots\Snapshot;
 use Spatie\EventSourcing\Snapshots\SnapshotRepository;
@@ -63,6 +64,29 @@ abstract class AggregateRoot
     public function uuid(): string
     {
         return $this->uuid;
+    }
+
+    public function handleCommand(object $command): self
+    {
+        if ($handler = Handlers::find($command, $this)[0] ?? null) {
+            $this->{$handler}($command);
+
+            return $this;
+        }
+
+        foreach ($this->resolveEntities() as $entity) {
+            $handler = Handlers::find($command, $entity)[0] ?? null;
+
+            if (! $handler) {
+                continue;
+            }
+
+            $entity->{$handler}($command);
+
+            return $this;
+        }
+
+        throw new UnhandledCommand($command::class);
     }
 
     public function recordThat(ShouldBeStored $domainEvent): self
