@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing\Exceptions;
 
 use Exception;
-use Throwable;
 
 class UnhandledCommand extends Exception
 {
