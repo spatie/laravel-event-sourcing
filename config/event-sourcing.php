@@ -11,6 +11,12 @@ return [
     ],
 
     /*
+     * This directory will be used as the base path when scanning
+     * for projectors and reactors.
+     */
+    'auto_discover_base_path' => base_path(),
+
+    /*
      * Projectors are classes that build up projections. You can create them by performing
      * `php artisan event-sourcing:create-projector`. When not using auto-discovery,
      * Projectors can be registered in this array or a service provider.
