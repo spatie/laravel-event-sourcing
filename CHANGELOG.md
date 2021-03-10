@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.9.0 - 2021-03-10
+
+- Make base path configurable (#202)
+
 ## 4.8.0 - 2021-01-28
 
 - Add support for asserting events with a closure
