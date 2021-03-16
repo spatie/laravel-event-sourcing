@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\AggregateRoots;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
@@ -91,7 +92,9 @@ abstract class AggregateRoot
 
     public function recordThat(ShouldBeStored $domainEvent): self
     {
-        $domainEvent->setAggregateRootUuid($this->uuid);
+        $domainEvent
+            ->setAggregateRootUuid($this->uuid)
+            ->setCreatedAt(CarbonImmutable::now());
 
         $this->recordedEvents[] = $domainEvent;
 

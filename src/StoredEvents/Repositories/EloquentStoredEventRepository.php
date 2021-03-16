@@ -88,12 +88,9 @@ class EloquentStoredEventRepository implements StoredEventRepository
             'aggregate_version' => $aggregateVersion,
             'event_version' => $event->eventVersion(),
             'event_class' => $this->getEventClass(get_class($event)),
-            'meta_data' => json_encode(array_merge(
-                $event->metaData(),
-                [
-                    MetaData::CREATED_AT => $createdAt->toDateTimeString(),
-                ]
-            )),
+            'meta_data' => json_encode($event->metaData() + [
+                MetaData::CREATED_AT => $createdAt->toDateTimeString(),
+            ]),
             'created_at' => $createdAt,
         ]);
 

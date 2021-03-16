@@ -27,6 +27,13 @@ abstract class ShouldBeStored
         return CarbonImmutable::make($this->metaData[MetaData::CREATED_AT] ?? null);
     }
 
+    public function setCreatedAt(CarbonImmutable $createdAt): self
+    {
+        $this->metaData[MetaData::CREATED_AT] = $createdAt;
+
+        return $this;
+    }
+
     public function aggregateRootUuid(): ?string
     {
         return $this->metaData[MetaData::AGGREGATE_ROOT_UUID] ?? null;
