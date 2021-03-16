@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSourcing\StoredEvents;
 
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use ReflectionClass;
 use Spatie\EventSourcing\Attributes\EventVersion;
