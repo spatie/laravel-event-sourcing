@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSourcing\Tests;
 
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
