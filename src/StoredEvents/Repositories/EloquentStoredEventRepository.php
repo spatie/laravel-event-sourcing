@@ -5,6 +5,7 @@ namespace Spatie\EventSourcing\StoredEvents\Repositories;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\LazyCollection;
+use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
@@ -18,7 +19,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
     public function __construct()
     {
-        $this->storedEventModel = (string)config('event-sourcing.stored_event_model', EloquentStoredEvent::class);
+        $this->storedEventModel = (string) config('event-sourcing.stored_event_model', EloquentStoredEvent::class);
 
         if (! new $this->storedEventModel instanceof EloquentStoredEvent) {
             throw new InvalidEloquentStoredEventModel("The class {$this->storedEventModel} must extend EloquentStoredEvent");
@@ -79,15 +80,26 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
         $eloquentStoredEvent->setOriginalEvent($event);
 
+        $createdAt = Carbon::now();
+
         $eloquentStoredEvent->setRawAttributes([
             'event_properties' => app(EventSerializer::class)->serialize(clone $event),
             'aggregate_uuid' => $uuid,
             'aggregate_version' => $aggregateVersion,
             'event_version' => $event->eventVersion(),
             'event_class' => $this->getEventClass(get_class($event)),
-            'meta_data' => json_encode($event->metaData()),
-            'created_at' => Carbon::now(),
+            'meta_data' => json_encode(array_merge(
+                $event->metaData(),
+                [
+                    MetaData::CREATED_AT => $createdAt->toDateTimeString(),
+                ]
+            )),
+            'created_at' => $createdAt,
         ]);
+
+        $eloquentStoredEvent->save();
+
+        $eloquentStoredEvent->meta_data->set(MetaData::STORED_EVENT_ID, $eloquentStoredEvent->id);
 
         $eloquentStoredEvent->save();
 
@@ -131,8 +143,8 @@ class EloquentStoredEventRepository implements StoredEventRepository
     public function getLatestAggregateVersion(string $aggregateUuid): int
     {
         return $this->getQuery()
-            ->whereAggregateRoot($aggregateUuid)
-            ->max('aggregate_version') ?? 0;
+                ->whereAggregateRoot($aggregateUuid)
+                ->max('aggregate_version') ?? 0;
     }
 
     private function prepareEventModelQuery(int $startingFrom, string $uuid = null): Builder

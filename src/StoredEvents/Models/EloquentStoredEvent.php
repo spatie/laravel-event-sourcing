@@ -10,6 +10,7 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 /**
  * @method static self|\Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder|\Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder query()
+ * @property-read \Spatie\SchemalessAttributes\SchemalessAttributes $meta_data
  */
 class EloquentStoredEvent extends Model
 {

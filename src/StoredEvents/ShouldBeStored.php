@@ -2,6 +2,8 @@
 
 namespace Spatie\EventSourcing\StoredEvents;
 
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use ReflectionClass;
 use Spatie\EventSourcing\Attributes\EventVersion;
 use Spatie\EventSourcing\Enums\MetaData;
@@ -19,6 +21,11 @@ abstract class ShouldBeStored
         }
 
         return $versionAttribute->newInstance()->version;
+    }
+
+    public function createdAt(): ?CarbonImmutable
+    {
+        return CarbonImmutable::make($this->metaData[MetaData::CREATED_AT] ?? null);
     }
 
     public function aggregateRootUuid(): ?string

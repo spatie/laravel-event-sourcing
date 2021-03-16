@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\Models;
 
+use Carbon\Carbon;
 use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
@@ -145,6 +146,36 @@ class StoredEventTest extends TestCase
         $eloquentStoredEvent->setOriginalEvent($originalEvent);
 
         $this->assertSame($originalEvent, $eloquentStoredEvent->event);
+    }
+
+    /** @test */
+    public function created_at_is_set_on_event()
+    {
+        $now = Carbon::make('2021-01-01 10:00:00');
+
+        Carbon::setTestNow($now);
+
+        $this->fireEvents();
+
+        /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentEvent */
+        $eloquentEvent = EloquentStoredEvent::first();
+
+        $event = $eloquentEvent->toStoredEvent()->event;
+
+        $this->assertTrue($event->createdAt()->eq($now));
+    }
+
+    /** @test */
+    public function the_stored_event_id_is_set()
+    {
+        $this->fireEvents();
+
+        /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentEvent */
+        $eloquentEvent = EloquentStoredEvent::first();
+
+        $event = $eloquentEvent->toStoredEvent()->event;
+
+        $this->assertEquals($eloquentEvent->id, $event->storedEventId());
     }
 
     public function fireEvents(int $number = 1, string $className = MoneyAddedEvent::class)
