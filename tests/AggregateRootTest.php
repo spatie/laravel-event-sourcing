@@ -2,6 +2,8 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
@@ -422,5 +424,25 @@ class AggregateRootTest extends TestCase
         $event = $storedEvent->event;
         $this->assertInstanceOf(MoneyAdded::class, $event);
         $this->assertEquals(100, $event->amount);
+    }
+
+    /** @test */
+    public function created_at_is_set_from_within_the_aggregate_root()
+    {
+        $now = CarbonImmutable::make('2021-02-01 00:00:00');
+
+        CarbonImmutable::setTestNow($now);
+
+        app(AccountAggregateRoot::class)
+            ->loadUuid($this->aggregateUuid)
+            ->addMoney(100)
+            ->persist();
+
+        /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentEvent */
+        $eloquentEvent = EloquentStoredEvent::first();
+
+        $event = $eloquentEvent->toStoredEvent()->event;
+
+        $this->assertTrue($now->eq($event->createdAt()));
     }
 }
