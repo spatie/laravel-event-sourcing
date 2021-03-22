@@ -12,7 +12,6 @@ You might think that you still have the old state inside your backups. But they 
         First, we write value X
     </figcaption>
     <img class="scheme_figure" src="/docs/laravel-event-sourcing/v4/images/db-01.svg">
-    https://spatie.be/docs/laravel-event-sourcing/v4/images/db-01.svg
 </figure>
 
 <figure class="scheme">
