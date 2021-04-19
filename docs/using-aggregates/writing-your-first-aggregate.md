@@ -103,7 +103,7 @@ In our demo app we retrieve and persist the aggregate [in the `AccountsControlle
 
 Let's now implement the rule that an account cannot go below -$5000. Here's the thing to keep in mind: when retrieving an aggregate all events for the given uuid will be retrieved and will be passed to methods named `apply<className>` on the aggregate.
 
-So for our aggregate to receive all past `MoneyAdded` and `MoneySubtracted` events we need to add `applyMoneySubtracted` and`applyMoneySubtracted` methods to our aggregate. Because those events are all fed to the same instance of the aggregate, we can simply add an instance variable to hold the calculated balance.
+So for our aggregate to receive all past `MoneyAdded` and `MoneySubtracted` events we need to add `applyMoneyAdded` and`applyMoneySubtracted` methods to our aggregate. Because those events are all fed to the same instance of the aggregate, we can simply add an instance variable to hold the calculated balance.
 
 ```php
 // in our aggregate
