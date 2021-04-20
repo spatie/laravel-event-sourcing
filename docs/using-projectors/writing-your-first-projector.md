@@ -370,3 +370,21 @@ You'll notice that both projectors are immediately handling these new events. Th
 The cool thing about projectors is that you can write them after events have happened. Imagine that someone at the bank wants to have a report of the average balance of each account. You would be able to write a new projector, replay all events, and have that data.
 
 Projections are very fast to query. Imagine that our application has processed millions of events. If you want to create a screen where you display the accounts with the most transactions you can easily query the `transaction_counts` table. This way you don't need to fire off some expensive query. The projector will keep the projections (the `transaction_counts` table) up to date.
+
+## Using Factories in Tests
+
+In the example above the `Account` model contains the necessary logic to create an `Account`, this pattern may require you to revise how you create test data using model factories. One possible solution is illustated below.
+
+```php
+public function test_can_have_many_accounts()
+{
+    Account::factory()->times(5)->make()->each(function($account) {
+        Account::createWithAttributes($account->toArray());
+    });
+
+    $this->assertCount(5, auth()->user()->accounts);
+    $this->assertInstanceOf(Account::class, auth()->user()->accounts()->first());
+}
+```
+
+
