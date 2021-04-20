@@ -46,6 +46,10 @@ class MyProjector extends Projector
 
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
+## 4.9.0 - 2021-03-10
+
+- Make base path configurable (#202)
+
 ## 4.8.0 - 2021-01-28
 
 - Add support for asserting events with a closure
