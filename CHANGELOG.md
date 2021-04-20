@@ -4,6 +4,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 ## 4.10.0 - ?
 
+- Deprecate `AggregateRoot::$allowConcurrency`
 - Fix for race condition in aggregate roots (#170), you will need to run a migration to be able to use it:
 
 ```php
@@ -14,6 +15,8 @@ public function up()
     });
 }
 ```
+
+**Note**: if you run this migration, all aggregate roots using `$allowConcurrency` will not work any more.
 
 ## 4.9.0 - 2021-03-10
 

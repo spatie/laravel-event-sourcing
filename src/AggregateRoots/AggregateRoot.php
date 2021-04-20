@@ -27,6 +27,10 @@ abstract class AggregateRoot
 
     protected int $aggregateVersionAfterReconstitution = 0;
 
+    /**
+     * @var bool
+     * @deprecated Will be removed in v5
+     */
     protected static bool $allowConcurrency = false;
 
     /**
