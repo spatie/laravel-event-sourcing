@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\AggregateRoots;
 
-use Spatie\EventSourcing\AggregateRoots\AggregateEntity;
+use Spatie\EventSourcing\AggregateRoots\AggregatePartial;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\Commands\AggregateUuid;
 use Spatie\EventSourcing\Commands\CommandBus;
@@ -80,7 +80,7 @@ class CartForCommand extends AggregateRoot
     }
 }
 
-class CartItemsForCommand extends AggregateEntity
+class CartItemsForCommand extends AggregatePartial
 {
     // Public for testing
     public array $items = [];

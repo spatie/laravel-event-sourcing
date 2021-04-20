@@ -7,7 +7,7 @@ use Spatie\EventSourcing\EventHandlers\AppliesEvents;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
-abstract class AggregateEntity
+abstract class AggregatePartial
 {
     use AppliesEvents;
 
@@ -35,12 +35,12 @@ abstract class AggregateEntity
 
     public static function fake(): static
     {
-        $aggregateRoot = FakeAggregateRootForEntity::retrieve(Uuid::uuid4()->toString());
+        $aggregateRoot = FakeAggregateRootForPartial::retrieve(Uuid::uuid4()->toString());
 
-        $entity = new static($aggregateRoot);
+        $partial = new static($aggregateRoot);
 
-        $aggregateRoot->addEntity($entity);
+        $aggregateRoot->addPartial($partial);
 
-        return $entity;
+        return $partial;
     }
 }

@@ -34,7 +34,7 @@ abstract class AggregateRoot
 
     protected static bool $allowConcurrency = false;
 
-    /** @var \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregateEntity[] */
+    /** @var \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregatePartial[] */
     protected Collection $entities;
 
     private bool $handleEvents = true;
@@ -75,14 +75,14 @@ abstract class AggregateRoot
             return $this;
         }
 
-        foreach ($this->resolveEntities() as $entity) {
-            $handler = Handlers::find($command, $entity)[0] ?? null;
+        foreach ($this->resolvePartials() as $partial) {
+            $handler = Handlers::find($command, $partial)[0] ?? null;
 
             if (! $handler) {
                 continue;
             }
 
-            $entity->{$handler}($command);
+            $partial->{$handler}($command);
 
             return $this;
         }
@@ -227,8 +227,8 @@ abstract class AggregateRoot
 
     protected function apply(ShouldBeStored $event): void
     {
-        foreach ($this->resolveEntities() as $entity) {
-            $entity->apply($event);
+        foreach ($this->resolvePartials() as $partial) {
+            $partial->apply($event);
         }
 
         $handlers = Handlers::find($event, $this);
@@ -241,15 +241,15 @@ abstract class AggregateRoot
     }
 
     /**
-     * @return \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregateEntity[]
+     * @return \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregatePartial[]
      */
-    protected function resolveEntities(): Collection
+    protected function resolvePartials(): Collection
     {
         if (! isset($this->entities)) {
             $this->entities = collect((new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC))
                 ->mapWithKeys(fn (ReflectionProperty $property) => [$property->getName() => $property->getType()])
                 ->filter(fn (?ReflectionType $type) => $type instanceof ReflectionNamedType)
-                ->filter(fn (ReflectionNamedType $type) => is_subclass_of($type->getName(), AggregateEntity::class))
+                ->filter(fn (ReflectionNamedType $type) => is_subclass_of($type->getName(), AggregatePartial::class))
                 ->map(fn (ReflectionNamedType $type, string $propertyName) => $this->{$propertyName});
         }
 

@@ -3,13 +3,13 @@
 namespace Spatie\EventSourcing\Tests\AggregateRoots;
 
 use Exception;
-use Spatie\EventSourcing\AggregateRoots\AggregateEntity;
+use Spatie\EventSourcing\AggregateRoots\AggregatePartial;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\Tests\TestCase;
 
-class AggregateEntityTest extends TestCase
+class AggregatePartialTest extends TestCase
 {
     private const CART_UUID = 'cart-uuid';
 
@@ -45,7 +45,7 @@ class AggregateEntityTest extends TestCase
     }
 
     /** @test */
-    public function test_entity_fakes()
+    public function test_partial_fakes()
     {
         $cartItems = CartItems::fake();
 
@@ -98,7 +98,7 @@ class Cart extends AggregateRoot
     }
 }
 
-class CartItems extends AggregateEntity
+class CartItems extends AggregatePartial
 {
     // Public for testing
     public array $items = [];
