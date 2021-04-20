@@ -68,6 +68,8 @@ abstract class AggregateRoot
 
         $this->apply($domainEvent);
 
+        $domainEvent->setAggregateRootVersion($this->aggregateVersion);
+
         return $this;
     }
 
@@ -159,6 +161,7 @@ abstract class AggregateRoot
     protected function reconstituteFromEvents(): self
     {
         $storedEventRepository = $this->getStoredEventRepository();
+
         $snapshot = $this->getSnapshotRepository()->retrieve($this->uuid);
 
         if ($snapshot) {

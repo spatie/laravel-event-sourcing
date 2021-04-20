@@ -72,7 +72,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         $eloquentStoredEvent = new $this->storedEventModel();
 
         $eloquentStoredEvent->setOriginalEvent($event);
-        
+
         $eloquentStoredEvent->setRawAttributes([
             'event_properties' => app(EventSerializer::class)->serialize(clone $event),
             'aggregate_uuid' => $uuid,
@@ -91,8 +91,9 @@ class EloquentStoredEventRepository implements StoredEventRepository
     {
         $storedEvents = [];
 
+        /** @var \Spatie\EventSourcing\StoredEvents\ShouldBeStored $event */
         foreach ($events as $event) {
-            $storedEvents[] = $this->persist($event, $uuid, $aggregateVersion);
+            $storedEvents[] = $this->persist($event, $uuid, $event->aggregateRootVersion() ?? $aggregateVersion);
         }
 
         return new LazyCollection($storedEvents);
