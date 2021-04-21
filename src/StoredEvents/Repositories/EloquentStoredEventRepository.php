@@ -73,7 +73,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             ->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
-    public function persist(ShouldBeStored $event, string $uuid = null, int $aggregateVersion = null): StoredEvent
+    public function persist(ShouldBeStored $event, string $uuid = null): StoredEvent
     {
         /** @var EloquentStoredEvent $eloquentStoredEvent */
         $eloquentStoredEvent = new $this->storedEventModel();
@@ -85,7 +85,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         $eloquentStoredEvent->setRawAttributes([
             'event_properties' => app(EventSerializer::class)->serialize(clone $event),
             'aggregate_uuid' => $uuid,
-            'aggregate_version' => $aggregateVersion,
+            'aggregate_version' => $event->aggregateRootVersion(),
             'event_version' => $event->eventVersion(),
             'event_class' => $this->getEventClass(get_class($event)),
             'meta_data' => json_encode($event->metaData() + [
@@ -105,12 +105,13 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $eloquentStoredEvent->toStoredEvent();
     }
 
-    public function persistMany(array $events, string $uuid = null, int $aggregateVersion = null): LazyCollection
+    public function persistMany(array $events, string $uuid = null): LazyCollection
     {
         $storedEvents = [];
 
+        /** @var \Spatie\EventSourcing\StoredEvents\ShouldBeStored $event */
         foreach ($events as $event) {
-            $storedEvents[] = $this->persist($event, $uuid, $aggregateVersion);
+            $storedEvents[] = $this->persist($event, $uuid);
         }
 
         return new LazyCollection($storedEvents);

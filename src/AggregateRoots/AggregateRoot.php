@@ -125,7 +125,6 @@ abstract class AggregateRoot
             ->persistMany(
                 $this->getAndClearRecordedEvents(),
                 $this->uuid(),
-                $this->aggregateVersion,
             );
 
         return $storedEvents;
@@ -191,17 +190,18 @@ abstract class AggregateRoot
     {
         $storedEventRepository = $this->getStoredEventRepository();
 
-        $snapshot = $this->getSnapshotRepository()->retrieve($this->uuid);
-
-        if ($snapshot) {
+        if ($snapshot = $this->getSnapshotRepository()->retrieve($this->uuid)) {
             $this->aggregateVersion = $snapshot->aggregateVersion;
             $this->useState($snapshot->state);
+
+            $events = $storedEventRepository->retrieveAllAfterVersion($this->aggregateVersion, $this->uuid);
+        } else {
+            $events = $storedEventRepository->retrieveAll($this->uuid);
         }
 
-        $storedEventRepository->retrieveAllAfterVersion($this->aggregateVersion, $this->uuid)
-            ->each(function (StoredEvent $storedEvent) {
-                $this->apply($storedEvent->event);
-            });
+        $events->each(function (StoredEvent $storedEvent) {
+            $this->apply($storedEvent->event);
+        });
 
         $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
 
