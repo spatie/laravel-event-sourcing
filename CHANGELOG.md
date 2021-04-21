@@ -49,6 +49,10 @@ class MyProjector extends Projector
 
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
+## 4.10.1 - 2021-04-21
+
+- Also store aggregate root version when one event is persisted
+
 ## 4.10.0 - 2021-04-21
 
 - Deprecate `AggregateRoot::$allowConcurrency`
