@@ -20,6 +20,18 @@ abstract class ShouldBeStored
         return $this;
     }
 
+    public function aggregateRootVersion(): ?int
+    {
+        return $this->metaData[MetaData::AGGREGATE_ROOT_VERSION] ?? null;
+    }
+
+    public function setAggregateRootVersion(int $version): self
+    {
+        $this->metaData[MetaData::AGGREGATE_ROOT_VERSION] = $version;
+
+        return $this;
+    }
+
     public function metaData(): array
     {
         return $this->metaData;
