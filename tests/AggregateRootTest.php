@@ -12,7 +12,6 @@ use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
-use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootThatAllowsConcurrency;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithFailingPersist;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
@@ -344,23 +343,6 @@ class AggregateRootTest extends TestCase
 
         $this->expectException(CouldNotPersistAggregate::class);
         $aggregateRoot->persist();
-    }
-
-    /** @test */
-    public function it_can_allow_to_be_persisted_from_concurrent_events()
-    {
-        $this->markTestSkipped("\$allowConcurrency doesn't work anymore with the changes regarding race conditions in ARs.");
-        $aggregateRoot = AccountAggregateRootThatAllowsConcurrency::retrieve($this->aggregateUuid);
-        $aggregateRoot->addMoney(100);
-
-        $aggregateRootInAnotherRequest = AccountAggregateRootThatAllowsConcurrency::retrieve($this->aggregateUuid);
-        $aggregateRootInAnotherRequest->addMoney(100);
-        $aggregateRootInAnotherRequest->persist();
-
-        /** This line will now not throw an exception */
-        $aggregateRoot->persist();
-
-        $this->assertTestPassed();
     }
 
     /** @test */

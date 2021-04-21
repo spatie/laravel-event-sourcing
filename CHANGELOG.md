@@ -6,6 +6,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 - PHP version requirement is now `^8.0`
 - Laravel version requirement is now `^8.0`
+- Removed `AggregateRoot::$allowConcurrency`
 - Event handlers are no longer called with `app()->call()` ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
     - Dependency injection in handlers isn't supported anymore, you should use constructor injection instead
 - `$storedEvent` and `$aggregateRootUuid` are no longer passed to event handler methods. Use `$event->storedEventId()` and `$event->aggregateRootUuid()` instead. ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))

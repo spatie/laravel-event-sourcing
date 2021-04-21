@@ -32,12 +32,6 @@ abstract class AggregateRoot
 
     protected int $aggregateVersionAfterReconstitution = 0;
 
-    /**
-     * @var bool
-     * @deprecated Will be removed in v5
-     */
-    protected static bool $allowConcurrency = false;
-
     /** @var \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregatePartial[] */
     protected Collection $entities;
 
@@ -216,10 +210,6 @@ abstract class AggregateRoot
 
     protected function ensureNoOtherEventsHaveBeenPersisted(): void
     {
-        if (static::$allowConcurrency) {
-            return;
-        }
-
         $latestPersistedVersionId = $this->getStoredEventRepository()->getLatestAggregateVersion($this->uuid);
 
         if ($this->aggregateVersionAfterReconstitution !== $latestPersistedVersionId) {
