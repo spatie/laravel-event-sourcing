@@ -32,6 +32,10 @@ abstract class AggregateRoot
 
     protected int $aggregateVersionAfterReconstitution = 0;
 
+    /**
+     * @var bool
+     * @deprecated Will be removed in v5
+     */
     protected static bool $allowConcurrency = false;
 
     /** @var \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregatePartial[] */
@@ -99,6 +103,8 @@ abstract class AggregateRoot
         $this->recordedEvents[] = $domainEvent;
 
         $this->apply($domainEvent);
+
+        $domainEvent->setAggregateRootVersion($this->aggregateVersion);
 
         return $this;
     }
@@ -190,6 +196,7 @@ abstract class AggregateRoot
     protected function reconstituteFromEvents(): self
     {
         $storedEventRepository = $this->getStoredEventRepository();
+
         $snapshot = $this->getSnapshotRepository()->retrieve($this->uuid);
 
         if ($snapshot) {

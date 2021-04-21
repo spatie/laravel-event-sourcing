@@ -126,6 +126,7 @@ class FakeAggregateRoot
             unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);
             unset($metaData[MetaData::STORED_EVENT_ID]);
             unset($metaData[MetaData::CREATED_AT]);
+            unset($metaData[MetaData::AGGREGATE_ROOT_VERSION]);
 
             return $event->setMetaData($metaData);
         }, $this->aggregateRoot->getAppliedEvents());
@@ -166,6 +167,7 @@ class FakeAggregateRoot
             unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);
             unset($metaData[MetaData::STORED_EVENT_ID]);
             unset($metaData[MetaData::CREATED_AT]);
+            unset($metaData[MetaData::AGGREGATE_ROOT_VERSION]);
 
             return $event->setMetaData($metaData);
         }, $this->aggregateRoot->getRecordedEvents());
