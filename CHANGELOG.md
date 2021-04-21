@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.10.1 - 2021-04-21
+
+- Also store aggregate root version when one event is persisted
+
 ## 4.10.0 - 2021-04-21
 
 - Deprecate `AggregateRoot::$allowConcurrency`
