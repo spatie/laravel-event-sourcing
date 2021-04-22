@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcing\Exceptions;
+namespace Spatie\EventSourcing\Commands\Exceptions;
 
 use Exception;
 

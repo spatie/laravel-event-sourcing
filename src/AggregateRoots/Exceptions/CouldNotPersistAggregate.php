@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcing\Exceptions;
+namespace Spatie\EventSourcing\AggregateRoots\Exceptions;
 
 use Exception;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;

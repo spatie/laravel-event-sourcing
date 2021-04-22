@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\Snapshots;
 
-use Spatie\EventSourcing\Exceptions\InvalidEloquentSnapshotModel;
+use Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentSnapshotModel;
 
 class EloquentSnapshotRepository implements SnapshotRepository
 {

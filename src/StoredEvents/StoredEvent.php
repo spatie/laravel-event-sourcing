@@ -9,7 +9,7 @@ use ReflectionClass;
 use ReflectionException;
 use Spatie\EventSourcing\Attributes\EventSerializer as EventSerializerAttribute;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
-use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
+use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
 
 class StoredEvent implements Arrayable

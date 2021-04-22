@@ -4,8 +4,8 @@ namespace Spatie\EventSourcing\Commands;
 
 use ReflectionClass;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
-use Spatie\EventSourcing\Exceptions\CommandHandlerNotFound;
-use Spatie\EventSourcing\Exceptions\MissingAggregateUuid;
+use Spatie\EventSourcing\Commands\Exceptions\CommandHandlerNotFound;
+use Spatie\EventSourcing\AggregateRoots\Exceptions\MissingAggregateUuid;
 
 class CommandHandler
 {

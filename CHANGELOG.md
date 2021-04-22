@@ -25,6 +25,11 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - Add `AggregateEntity`
     - If you're overriding an aggregate root's constructor, make sure to call `parent::__construct` from it
 - Add command bus and aggregate root handlers
+- Moved `Spatie\EventSourcing\Exception\CouldNotPersistAggregate` to `Spatie\EventSourcing\AggregateRoots\Exceptions\CouldNotPersistAggregate`
+- Moved `Spatie\EventSourcing\Exception\InvalidEloquentSnapshotModel` to `Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentSnapshotModel`
+- Moved `Spatie\EventSourcing\Exception\InvalidEloquentStoredEventModel` to `Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel`
+- Moved `Spatie\EventSourcing\Exception\MissingAggregateUuid` to `Spatie\EventSourcing\AggregateRoots\Exceptions\MissingAggregateUuid`
+- Moved `Spatie\EventSourcing\Exception\InvalidStoredEvent` to `Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent`
 
 ### A note on changed listeners
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\EventSourcing\Exceptions;
+namespace Spatie\EventSourcing\StoredEvents\Exceptions;
 
 use Exception;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
