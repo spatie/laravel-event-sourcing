@@ -3,8 +3,8 @@
 namespace Spatie\EventSourcing\Tests\Models;
 
 use Carbon\Carbon;
-use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 use Spatie\EventSourcing\Tests\TestCase;

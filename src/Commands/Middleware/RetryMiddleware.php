@@ -3,9 +3,9 @@
 namespace Spatie\EventSourcing\Commands\Middleware;
 
 use Closure;
+use Spatie\EventSourcing\AggregateRoots\Exceptions\CouldNotPersistAggregate;
 use Spatie\EventSourcing\Commands\Exceptions\CommandFailed;
 use Spatie\EventSourcing\Commands\Middleware;
-use Spatie\EventSourcing\AggregateRoots\Exceptions\CouldNotPersistAggregate;
 
 class RetryMiddleware implements Middleware
 {
