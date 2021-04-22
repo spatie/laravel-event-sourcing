@@ -2,18 +2,30 @@
 
 namespace Spatie\EventSourcing\Commands;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Pipeline\Pipeline;
 
 class CommandBus
 {
-    public function dispatch(object $command): mixed
-    {
-        if ($command instanceof ShouldQueue) {
-            dispatch($command);
+    private array $middlewares = [];
 
-            return null;
+    public function middleware(Middleware ...$middlewares): self
+    {
+        $clone = clone $this;
+
+        foreach ($middlewares as $middleware) {
+            $clone->middlewares[] = $middleware;
         }
 
-        return CommandHandler::for($command)->handle();
+        return $clone;
+    }
+
+    public function dispatch(object $command): mixed
+    {
+        return (new Pipeline())
+            ->through($this->middlewares)
+            ->send($command)
+            ->then(function (object $command) {
+                return CommandHandler::for($command)->handle();
+            });
     }
 }

@@ -36,6 +36,7 @@
         "symfony/serializer": "^5.0"
     },
     "require-dev": {
+        "laravel/horizon": "^5.7",
         "mockery/mockery": "^1.4",
         "orchestra/testbench": "^4.0|^5.0|^6.0",
         "phpunit/phpunit": "^9.4",

@@ -124,5 +124,5 @@ When calling the `given` method the aggregate will fire of events for your proje
 If you would prefer to disable Projectors reacting to events whilst retaining `Event` functionality simply use the `Projectionist` facade's `withoutEventHandlers` method before your test executes.
 
 ```php
-\Spatie\EventSourcing\Facades\Projectionist::withoutEventHandlers();
+use Spatie\EventSourcing\Facades\Projectionist;Projectionist::withoutEventHandlers();
 ```

@@ -25,7 +25,7 @@ php artisan vendor:publish --provider="Spatie\EventSourcing\EventSourcingService
 This is the default content of the config file that will be published at `config/event-sourcing.php`:
 
 ```php
-return [
+use Spatie\EventSourcing\EventSerializers\JsonEventSerializer;use Spatie\EventSourcing\Models\EloquentStoredEvent;use Spatie\EventSourcing\StoredEvents\HandleStoredEventJob;return [
 
     /*
      * These directories will be scanned for projectors and reactors. They
@@ -71,14 +71,14 @@ return [
      * can change this to a class of your own. The only restriction is that
      * it should extend \Spatie\EventSourcing\Models\EloquentStoredEvent.
      */
-    'stored_event_model' => \Spatie\EventSourcing\Models\EloquentStoredEvent::class,
+    'stored_event_model' => EloquentStoredEvent::class,
 
     /*
      * This class is responsible for handle stored events. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
      * it should implement \Spatie\EventSourcing\HandleDomainEventJob.
      */
-    'stored_event_job' => \Spatie\EventSourcing\StoredEvents\HandleStoredEventJob::class,
+    'stored_event_job' => HandleStoredEventJob::class,
 
     /*
      * Similar to Relation::morphMap() you can define which alias responds to which
@@ -92,7 +92,7 @@ return [
      * and stored as json. You can customize the class name. A valid serializer
      * should implement Spatie\EventSourcing\EventSerializers\EventSerializer.
      */
-    'event_serializer' => \Spatie\EventSourcing\EventSerializers\JsonEventSerializer::class,
+    'event_serializer' => JsonEventSerializer::class,
 
     /*
      * In production, you likely don't want the package to auto discover the event handlers

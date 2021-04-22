@@ -3,6 +3,7 @@
 namespace Spatie\EventSourcing\AggregateRoots;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
@@ -120,12 +121,23 @@ abstract class AggregateRoot
     {
         $this->ensureNoOtherEventsHaveBeenPersisted();
 
-        $storedEvents = $this
-            ->getStoredEventRepository()
-            ->persistMany(
-                $this->getAndClearRecordedEvents(),
-                $this->uuid(),
+        try {
+            $storedEvents = $this
+                ->getStoredEventRepository()
+                ->persistMany(
+                    $this->getAndClearRecordedEvents(),
+                    $this->uuid(),
+                );
+        } catch (QueryException $exception) {
+            if (! str_contains($exception->getMessage(), 'Duplicate')) {
+                throw $exception;
+            }
+
+            throw CouldNotPersistAggregate::invalidVersion(
+                $this,
+                $this->aggregateVersion
             );
+        }
 
         return $storedEvents;
     }
