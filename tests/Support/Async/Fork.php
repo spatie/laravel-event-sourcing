@@ -92,7 +92,7 @@ class Fork
                     $process->triggerSuccess();
 
                     unset($processes[$key]);
-                } else if ($processStatus == 0) {
+                } elseif ($processStatus == 0) {
                     if ($process->getStartTime() + $process->getMaxRunTime() < time() || pcntl_wifstopped($status)) {
                         if (! posix_kill($process->getPid(), SIGKILL)) {
                             throw new Exception("Failed to kill {$process->getPid()}: " . posix_strerror(posix_get_last_error()));

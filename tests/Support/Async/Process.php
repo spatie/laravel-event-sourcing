@@ -118,4 +118,3 @@ class Process
         return $this->maxRunTime;
     }
 }
-

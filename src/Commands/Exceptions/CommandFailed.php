@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing\Commands\Exceptions;
 
 use Exception;
-use Throwable;
 
 class CommandFailed extends Exception
 {
