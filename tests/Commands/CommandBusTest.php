@@ -10,8 +10,8 @@ use Spatie\EventSourcing\Commands\CommandBus;
 use Spatie\EventSourcing\Commands\HandledBy;
 use Spatie\EventSourcing\Commands\Middleware\RetryMiddleware;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
-use Spatie\EventSourcing\Tests\Support\Async\Fork;
 use Spatie\EventSourcing\Tests\TestCase;
+use Spatie\Fork\Fork;
 
 class CommandBusTest extends TestCase
 {

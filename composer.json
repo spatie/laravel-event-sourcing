@@ -40,6 +40,7 @@
         "mockery/mockery": "^1.4",
         "orchestra/testbench": "^4.0|^5.0|^6.0",
         "phpunit/phpunit": "^9.4",
+        "spatie/fork": "^0.0.1",
         "spatie/phpunit-snapshot-assertions": "^4.0"
     },
     "autoload": {
