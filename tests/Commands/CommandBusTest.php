@@ -20,7 +20,7 @@ class CommandBusTest extends TestCase
     public const UUID = 'cart-uuid';
 
     /** @test */
-    public function test_retry()
+    public function test_with_retry_middleware()
     {
         $bus = app(CommandBus::class)->middleware(new RetryMiddleware());
 
