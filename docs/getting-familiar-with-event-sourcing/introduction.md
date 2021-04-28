@@ -16,3 +16,7 @@ If you want to skip to reading code immediately, here are the Larabank example a
 - [Larabank built traditionally without event sourcing](https://github.com/spatie/larabank-traditional)
 - [Larabank built with projectors](https://github.com/spatie/larabank-projectors)
 - [Larabank built with aggregates and projectors](https://github.com/spatie/larabank-aggregates)
+
+## Want to know more?
+
+In our course [Event Sourcing in Laravel](https://event-sourcing-laravel.com/), we discuss the event-driven mindset in depth, and also learn how an event bus works, how event are stored and how to model an event-driven system.

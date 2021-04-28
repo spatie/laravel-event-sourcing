@@ -86,3 +86,11 @@ public function onAccountCreated(StoredEvent $storedEvent, AccountCreated $event
 ## What about reactors?
 
 Reactors are used to handle side effects, like sending mails and such. You'll only want reactors to do their work when an event is originally fired. You don't want to send out mails when replaying events. That's why reactors will never get called when replaying events.
+
+## Want to know more?
+
+Our course, [Event Sourcing in Laravel](https://event-sourcing-laravel.com/) covers this topic in depth:
+
+- 08. [Projectors in Depth](https://event-sourcing-laravel.com/projectors-in-depth)
+- 18. Event Versioning
+- 22. Deployment Strategies
