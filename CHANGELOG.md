@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 4.10.2 - 2021-05-04
+
+- Add missing config key in config stub (#203)
+
 ## 4.10.1 - 2021-04-21
 
 - Also store aggregate root version when one event is persisted
