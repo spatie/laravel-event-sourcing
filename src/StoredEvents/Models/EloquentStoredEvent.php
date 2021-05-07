@@ -14,7 +14,7 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
  */
 class EloquentStoredEvent extends Model
 {
-    public $guarded = [];
+    public array $guarded = [];
 
     public $timestamps = false;
 
