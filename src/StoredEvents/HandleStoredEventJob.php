@@ -10,7 +10,9 @@ use Spatie\EventSourcing\Projectionist;
 
 class HandleStoredEventJob implements HandleDomainEventJob, ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public function __construct(
         public StoredEvent $storedEvent,

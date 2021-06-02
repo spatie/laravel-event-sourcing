@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Cache;
 
 class RunCommandJob implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public function __construct(
         public object $command
