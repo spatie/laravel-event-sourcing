@@ -2,7 +2,7 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
-## 5.0.0 - ?
+## 5.0.0 - unreleased
 
 - PHP version requirement is now `^8.0`
 - Laravel version requirement is now `^8.0`
@@ -53,6 +53,10 @@ class MyProjector extends Projector
 ```
 
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
+
+## 4.10.2 - 2021-05-04
+
+- Add missing config key in config stub (#203)
 
 ## 4.10.1 - 2021-04-21
 

@@ -20,6 +20,10 @@ If you want to skip to reading code immediately, here are some example apps. In 
 - [Larabank built with projectors](https://github.com/spatie/larabank-event-projector)
 - [Larabank built with aggregates and projectors](https://github.com/spatie/larabank-event-projector-aggregates)
 
+## Even sourcing in Laravel course
+
+If you want to learn more about event sourcing, check out [our upcoming course on event sourcing in Laravel](https://event-sourcing-laravel.com)
+
 ## Support us
 
 [<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-event-sourcing.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-event-sourcing)
