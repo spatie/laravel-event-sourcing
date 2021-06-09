@@ -9,7 +9,7 @@ use Spatie\EventSourcing\Enums\MetaData;
 
 abstract class ShouldBeStored
 {
-    private array $metaData = [];
+    protected array $metaData = [];
 
     public function eventVersion(): int
     {
