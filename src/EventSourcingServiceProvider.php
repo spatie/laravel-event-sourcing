@@ -27,7 +27,6 @@ class EventSourcingServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-event-sourcing')
             ->hasConfigFile()
-            ->hasCommands()
             ->hasMigrations([
                 'create_stored_events_table',
                 'create_snapshots_table'
@@ -79,7 +78,7 @@ class EventSourcingServiceProvider extends PackageServiceProvider
         $this->app->bind(EventSerializer::class, config('event-sourcing.event_serializer'));
     }
 
-    private function discoverEventHandlers()
+    protected function discoverEventHandlers()
     {
         $projectionist = app(Projectionist::class);
 
@@ -98,7 +97,7 @@ class EventSourcingServiceProvider extends PackageServiceProvider
             ->addToProjectionist($projectionist);
     }
 
-    private function getCachedEventHandlers(): ?array
+    protected function getCachedEventHandlers(): ?array
     {
         $cachedEventHandlersPath = config('event-sourcing.cache_path').'/event-handlers.php';
 
