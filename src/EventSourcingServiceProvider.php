@@ -17,38 +17,42 @@ use Spatie\EventSourcing\StoredEvents\EventSubscriber;
 use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
 use Spatie\EventSourcing\Support\Composer;
 use Spatie\EventSourcing\Support\DiscoverEventHandlers;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class EventSourcingServiceProvider extends ServiceProvider
+class EventSourcingServiceProvider extends PackageServiceProvider
 {
-    public function boot(): void
+    public function configurePackage(Package $package): void
     {
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/../config/event-sourcing.php' => config_path('event-sourcing.php'),
-            ], 'config');
-        }
+        $package
+            ->name('laravel-event-sourcing')
+            ->hasConfigFile()
+            ->hasCommands()
+            ->hasMigrations([
+                'create_stored_events_table',
+                'create_snapshots_table'
+            ])
+            ->hasCommands([
+                CacheEventHandlersCommand::class,
+                ClearCachedEventHandlersCommand::class,
+                ListCommand::class,
+                MakeAggregateCommand::class,
+                MakeProjectorCommand::class,
+                MakeReactorCommand::class,
+                MakeStorableEventCommand::class,
+                ReplayCommand::class,
+            ]);
+    }
 
-        if (! class_exists('CreateStoredEventsTable')) {
-            $this->publishes([
-                __DIR__.'/../stubs/create_stored_events_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_stored_events_table.php'),
-            ], 'migrations');
-        }
-
-        if (! class_exists('CreateSnapshotsTable')) {
-            $this->publishes([
-                __DIR__.'/../stubs/create_snapshots_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_snapshots_table.php'),
-            ], 'migrations');
-        }
-
+    public function packageBooted(): void
+    {
         Event::subscribe(EventSubscriber::class);
 
         $this->discoverEventHandlers();
     }
 
-    public function register(): void
+    public function packageRegistered(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/event-sourcing.php', 'event-sourcing');
-
         $this->app->singleton(Projectionist::class, function () {
             $config = config('event-sourcing');
 
@@ -73,31 +77,6 @@ class EventSourcingServiceProvider extends ServiceProvider
             ->give(config('event-sourcing.stored_event_repository'));
 
         $this->app->bind(EventSerializer::class, config('event-sourcing.event_serializer'));
-
-        $this->bindCommands();
-    }
-
-    private function bindCommands()
-    {
-        $this->app->bind('command.event-sourcing:list', ListCommand::class);
-        $this->app->bind('command.event-sourcing:replay', ReplayCommand::class);
-        $this->app->bind('command.event-sourcing:cache-event-handlers', CacheEventHandlersCommand::class);
-        $this->app->bind('command.event-sourcing:clear-event-handlers', ClearCachedEventHandlersCommand::class);
-        $this->app->bind('command.make:projector', MakeProjectorCommand::class);
-        $this->app->bind('command.make:reactor', MakeReactorCommand::class);
-        $this->app->bind('command.make:aggregate', MakeAggregateCommand::class);
-        $this->app->bind('command.make:storable-event', MakeStorableEventCommand::class);
-
-        $this->commands([
-            'command.event-sourcing:list',
-            'command.event-sourcing:replay',
-            'command.event-sourcing:cache-event-handlers',
-            'command.event-sourcing:clear-event-handlers',
-            'command.make:projector',
-            'command.make:reactor',
-            'command.make:aggregate',
-            'command.make:storable-event',
-        ]);
     }
 
     private function discoverEventHandlers()
