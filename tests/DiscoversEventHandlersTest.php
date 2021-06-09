@@ -63,7 +63,7 @@ class DiscoversEventHandlersTest extends TestCase
         ], $registeredReactors);
     }
 
-    private function getDiscoveryBasePath(): string
+    protected function getDiscoveryBasePath(): string
     {
         return realpath($this->pathToTests().'/../');
     }

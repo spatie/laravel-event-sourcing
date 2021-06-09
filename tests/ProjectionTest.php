@@ -160,7 +160,7 @@ class ProjectionTest extends TestCase
         $this->assertEquals(1, ProjectionModel::all()->count());
     }
 
-    private function createProjection(): ProjectionModel
+    protected function createProjection(): ProjectionModel
     {
         ProjectionModel::new()->writeable()->create([
             'uuid' => 'test-uuid',
@@ -170,7 +170,7 @@ class ProjectionTest extends TestCase
         return ProjectionModel::find('test-uuid');
     }
 
-    private function assertNothingChanged(): void
+    protected function assertNothingChanged(): void
     {
         $this->assertDatabaseHas((new ProjectionModel())->getTable(), [
             'uuid' => 'test-uuid',

@@ -66,7 +66,7 @@ class TestListener
     {
     }
 
-    private function nothingAsWell()
+    protected function nothingAsWell()
     {
     }
 }

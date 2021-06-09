@@ -16,7 +16,7 @@ class AccountAggregateRoot extends AggregateRoot
 
     public $dependency;
 
-    private Math $math;
+    protected Math $math;
 
     public function __construct(Math $math, $dependency = null)
     {

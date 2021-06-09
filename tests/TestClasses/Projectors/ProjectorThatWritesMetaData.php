@@ -11,7 +11,7 @@ class ProjectorThatWritesMetaData extends Projector
     protected $trackStream = '*';
 
     public function __construct(
-        private StoredEventRepository $repository
+        protected StoredEventRepository $repository
     ) {
     }
 

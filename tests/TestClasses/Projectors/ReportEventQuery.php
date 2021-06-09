@@ -8,9 +8,9 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAd
 
 class ReportEventQuery extends EventQuery
 {
-    private int $money = 0;
+    protected int $money = 0;
 
-    public function __construct(private string $minDate)
+    public function __construct(protected string $minDate)
     {
         EloquentStoredEvent::query()
             ->whereEvent(MoneyAdded::class)
