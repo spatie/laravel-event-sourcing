@@ -2,15 +2,20 @@
 
 namespace Spatie\EventSourcing\StoredEvents\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Collection;
 
-class EloquentStoredEventCollection extends Collection
+class EloquentStoredEventCollection extends EloquentCollection
 {
     /**
      * @return \Illuminate\Support\Collection|\Spatie\EventSourcing\StoredEvents\StoredEvent[]
      */
-    public function toStoredEvents(): \Illuminate\Support\Collection
+    public function toStoredEvents(): Collection
     {
-        return $this->map(fn (EloquentStoredEvent $eloquentStoredEvent) => $eloquentStoredEvent->toStoredEvent())->values();
+        return $this
+            ->map(
+                fn(EloquentStoredEvent $eloquentStoredEvent) => $eloquentStoredEvent->toStoredEvent()
+            )
+            ->values();
     }
 }
