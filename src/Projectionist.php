@@ -43,7 +43,7 @@ class Projectionist
             ->addEventHandler($fakeHandlerClass);
     }
 
-    public function addProjector($projector): Projectionist
+    public function addProjector(string|Projector $projector): Projectionist
     {
         if (is_string($projector)) {
             $projector = app($projector);
