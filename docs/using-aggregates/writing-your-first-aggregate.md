@@ -199,8 +199,8 @@ If you want to toy around with this example, clone the [Larabank with aggregates
 
 Aggregate roots are a crucial part in large applications. Our course, [Event Sourcing in Laravel](https://event-sourcing-laravel.com/) covers them in depth:
 
-- 11. Aggregate Roots
-- 12. State Management in Aggregate Roots
-- 13. Multi-Entity Aggregate Roots
-- 14. State Machines with Aggregate Entities
+- 09. Aggregate Roots
+- 10. State Management in Aggregate Roots
+- 11. Multi-Entity Aggregate Roots
+- 12. State Machines with Aggregate Entities
 
