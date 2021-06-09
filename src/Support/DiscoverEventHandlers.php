@@ -11,13 +11,13 @@ use Symfony\Component\Finder\Finder;
 
 class DiscoverEventHandlers
 {
-    private array $directories = [];
+    protected array $directories = [];
 
-    private string $basePath = '';
+    protected string $basePath = '';
 
-    private string $rootNamespace = '';
+    protected string $rootNamespace = '';
 
-    private array $ignoredFiles = [];
+    protected array $ignoredFiles = [];
 
     public function __construct()
     {
