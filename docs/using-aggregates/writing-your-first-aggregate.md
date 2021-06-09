@@ -71,7 +71,7 @@ class AccountAggregate extends AggregateRoot
 
 The `recordThat` function will not persist the events to the database. It will simply hold them in memory. The events will get written to the database when the aggregate itself is persisted.
 
-There are two things to notice. First, the method names are written in the present tense, not the past tense. We're trying to do something, and for the rest of our application is hasn't happened yet until the actual `AccountCreated` is saved. This will only happen when the `AccountAggregate` gets persisted.
+There are two things to notice. First, the method names are written in the present tense, not the past tense. We're trying to do something, and for the rest of our application it hasn't happened yet until the actual `AccountCreated` is saved. This will only happen when the `AccountAggregate` gets persisted.
 
 The second thing to note is that nor the method and the event contain an uuid. The aggregate itself is aware of the uuid to use because it is passed to the retrieve method (`AccountAggregate::retrieve($uuid)`, we'll get to this in a bit). When persisting the aggregateroot, it will save the recorded events along with the uuid.
 
@@ -199,8 +199,8 @@ If you want to toy around with this example, clone the [Larabank with aggregates
 
 Aggregate roots are a crucial part in large applications. Our course, [Event Sourcing in Laravel](https://event-sourcing-laravel.com/) covers them in depth:
 
-- 11. Aggregate Roots
-- 12. State Management in Aggregate Roots
-- 13. Multi-Entity Aggregate Roots
-- 14. State Machines with Aggregate Entities
+- 09. Aggregate Roots
+- 10. State Management in Aggregate Roots
+- 11. Multi-Entity Aggregate Roots
+- 12. State Machines with Aggregate Entities
 

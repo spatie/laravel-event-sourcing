@@ -19,6 +19,6 @@ In a local environment, where events have a very low chance of getting fired con
 
 We discuss projections and complex patterns such as CQRS in depth in our [Event Sourcing in Laravel](https://event-sourcing-laravel.com/) course. In practice, you want to check out these chapters:
 
-- 07. Storing and Projecting Events
-- 08. [Projectors in Depth](https://event-sourcing-laravel.com/projectors-in-depth)
-- 16. CQRS
+- 05. Storing and Projecting Events
+- 06. [Projectors in Depth](https://event-sourcing-laravel.com/projectors-in-depth)
+- 14. CQRS

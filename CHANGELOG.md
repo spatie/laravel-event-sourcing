@@ -6,7 +6,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 - Add `EloquentStoredEvent::query()->whereEvent(EventA::class, …)`
 - Add `EventQuery`
-- Add `AggregateEntity`
+- Add `AggregatePartial`
     - If you're overriding an aggregate root's constructor, make sure to call `parent::__construct` from it
 - Add command bus and aggregate root handlers
 - Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))

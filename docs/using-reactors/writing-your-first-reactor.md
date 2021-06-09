@@ -65,5 +65,5 @@ no mail will be sent.
 
 Reactors and process managers (which are built on top of the core reactor principle) are thoroughly discussed in [Event Sourcing in Laravel](https://event-sourcing-laravel.com/). More specifically, you want to read these chapters:
 
-- 10. Reactors
-- 17. Sagas
+- 08. Reactors
+- 15. Sagas

@@ -91,6 +91,6 @@ Reactors are used to handle side effects, like sending mails and such. You'll on
 
 Our course, [Event Sourcing in Laravel](https://event-sourcing-laravel.com/) covers this topic in depth:
 
-- 08. [Projectors in Depth](https://event-sourcing-laravel.com/projectors-in-depth)
-- 18. Event Versioning
-- 22. Deployment Strategies
+- 06. [Projectors in Depth](https://event-sourcing-laravel.com/projectors-in-depth)
+- 16. Event Versioning
+- 20. Deployment Strategies
