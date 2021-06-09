@@ -31,6 +31,6 @@ The course includes:
 
 <section class="article_badges">
     <a href="https://github.com/spatie/laravel-event-sourcing/releases"><img src="https://img.shields.io/github/release/spatie/laravel-event-sourcing.svg?style=flat-square" alt="Latest Version"></a>
-    <a href="https://github.com/spatie/laravel-event-sourcing/blob/master/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="Software License"></a>
+    <a href="https://github.com/spatie/laravel-event-sourcing/blob/main/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="Software License"></a>
     <a href="https://packagist.org/packages/spatie/laravel-event-sourcing"><img src="https://img.shields.io/packagist/dt/spatie/laravel-event-sourcing.svg?style=flat-square" alt="Total Downloads"></a>
 </section>
