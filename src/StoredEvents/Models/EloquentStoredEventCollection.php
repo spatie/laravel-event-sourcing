@@ -14,7 +14,7 @@ class EloquentStoredEventCollection extends EloquentCollection
     {
         return $this
             ->map(
-                fn(EloquentStoredEvent $eloquentStoredEvent) => $eloquentStoredEvent->toStoredEvent()
+                fn (EloquentStoredEvent $eloquentStoredEvent) => $eloquentStoredEvent->toStoredEvent()
             )
             ->values();
     }
