@@ -30,7 +30,7 @@ class ListCommand extends Command
             : $this->warn('No reactors registered');
     }
 
-    private function convertEventHandlersToTableRows(Collection $eventHandlers): array
+    protected function convertEventHandlersToTableRows(Collection $eventHandlers): array
     {
         $events = $eventHandlers
             ->reduce(function ($events, EventHandler $eventHandler) {
