@@ -2,19 +2,20 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
-use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
-use Spatie\EventSourcing\Exceptions\InvalidEloquentStoredEventModel;
+use Spatie\EventSourcing\AggregateRoots\Exceptions\CouldNotPersistAggregate;
+use Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
-use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootThatAllowsConcurrency;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithFailingPersist;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Math;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
@@ -26,7 +27,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 
 class AggregateRootTest extends TestCase
 {
-    private string $aggregateUuid;
+    protected string $aggregateUuid;
 
     public function setUp(): void
     {
@@ -39,7 +40,7 @@ class AggregateRootTest extends TestCase
     public function aggregate_root_resolves_dependencies_from_the_container()
     {
         $this->app->bind(AccountAggregateRoot::class, function () {
-            return new AccountAggregateRoot(42);
+            return new AccountAggregateRoot(app(Math::class), 42);
         });
 
         $root = AccountAggregateRoot::retrieve($this->aggregateUuid);
@@ -137,14 +138,14 @@ class AggregateRootTest extends TestCase
 
         $aggregateRoot
             ->addMoney(100)
-            ->addMoney(100)
-            ->addMoney(100);
+            ->addMoney(200)
+            ->addMoney(300);
 
         $aggregateRoot->persist();
 
         $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        $this->assertEquals(300, $aggregateRoot->balance);
+        $this->assertEquals(600, $aggregateRoot->balance);
     }
 
     /** @test */
@@ -345,23 +346,6 @@ class AggregateRootTest extends TestCase
     }
 
     /** @test */
-    public function it_can_allow_to_be_persisted_from_concurrent_events()
-    {
-        $this->markTestSkipped("\$allowConcurrency doesn't work anymore with the changes regarding race conditions in ARs.");
-        $aggregateRoot = AccountAggregateRootThatAllowsConcurrency::retrieve($this->aggregateUuid);
-        $aggregateRoot->addMoney(100);
-
-        $aggregateRootInAnotherRequest = AccountAggregateRootThatAllowsConcurrency::retrieve($this->aggregateUuid);
-        $aggregateRootInAnotherRequest->addMoney(100);
-        $aggregateRootInAnotherRequest->persist();
-
-        /** This line will now not throw an exception */
-        $aggregateRoot->persist();
-
-        $this->assertTestPassed();
-    }
-
-    /** @test */
     public function it_fires_the_triggered_events_on_the_event_bus_when_configured()
     {
         config()->set('event-sourcing.dispatch_events_from_aggregate_roots', true);
@@ -408,7 +392,7 @@ class AggregateRootTest extends TestCase
     /** @test */
     public function it_persists_when_uuid_is_loaded()
     {
-        (new AccountAggregateRoot())
+        app(AccountAggregateRoot::class)
             ->loadUuid($this->aggregateUuid)
             ->addMoney(100)
             ->persist();
@@ -422,5 +406,25 @@ class AggregateRootTest extends TestCase
         $event = $storedEvent->event;
         $this->assertInstanceOf(MoneyAdded::class, $event);
         $this->assertEquals(100, $event->amount);
+    }
+
+    /** @test */
+    public function created_at_is_set_from_within_the_aggregate_root()
+    {
+        $now = CarbonImmutable::make('2021-02-01 00:00:00');
+
+        CarbonImmutable::setTestNow($now);
+
+        app(AccountAggregateRoot::class)
+            ->loadUuid($this->aggregateUuid)
+            ->addMoney(100)
+            ->persist();
+
+        /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentEvent */
+        $eloquentEvent = EloquentStoredEvent::first();
+
+        $event = $eloquentEvent->toStoredEvent()->event;
+
+        $this->assertTrue($now->eq($event->createdAt()));
     }
 }

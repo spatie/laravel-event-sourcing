@@ -51,3 +51,11 @@ protected function useState(array $state): void
     }
 }
 ```
+
+## Want to know more?
+
+Aggregate roots are a crucial part in large applications. Our course, [Event Sourcing in Laravel](https://event-sourcing-laravel.com/) covers them in depth:
+
+- 11. Aggregate Roots
+- 18. Event Versioning
+- 19. Snapshotting

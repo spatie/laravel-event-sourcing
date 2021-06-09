@@ -16,9 +16,12 @@ class AccountAggregateRoot extends AggregateRoot
 
     public $dependency;
 
-    public function __construct($dependency = null)
+    protected Math $math;
+
+    public function __construct(Math $math, $dependency = null)
     {
         $this->dependency = $dependency;
+        $this->math = $math;
     }
 
     public function addMoney(int $amount): self
@@ -40,8 +43,8 @@ class AccountAggregateRoot extends AggregateRoot
         $this->balance += $event->amount;
     }
 
-    public function applyMoneyMultiplied(MoneyMultiplied $event, Math $math)
+    public function applyMoneyMultiplied(MoneyMultiplied $event)
     {
-        $this->balance = $math->multiply($this->balance, $event->amount);
+        $this->balance = $this->math->multiply($this->balance, $event->amount);
     }
 }

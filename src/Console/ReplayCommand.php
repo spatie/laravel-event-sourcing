@@ -81,7 +81,7 @@ class ReplayCommand extends Command
     }
 
     /** @psalm-suppress UnusedVariable */
-    private function emptyLine(int $amount = 1): void
+    protected function emptyLine(int $amount = 1): void
     {
         foreach (range(1, $amount) as $i) {
             $this->line('');

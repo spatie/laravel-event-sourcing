@@ -8,11 +8,6 @@ use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 
 class ProjectorWithAssociativeAndNonAssociativeHandleEvents extends Projector
 {
-    protected array $handlesEvents = [
-        MoneyAddedEvent::class,
-        MoneySubtractedEvent::class => 'onMoneySubtracted',
-    ];
-
     public function onMoneyAddedEvent(MoneyAddedEvent $event)
     {
         $event->account->addMoney($event->amount);

@@ -2,13 +2,19 @@
 
 namespace Spatie\EventSourcing\AggregateRoots;
 
-use Illuminate\Contracts\Container\BindingResolutionException;
+use Carbon\CarbonImmutable;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
 use ReflectionClass;
+use ReflectionNamedType;
 use ReflectionProperty;
-use Spatie\EventSourcing\Exceptions\CouldNotPersistAggregate;
+use ReflectionType;
+use Spatie\EventSourcing\AggregateRoots\Exceptions\CouldNotPersistAggregate;
+use Spatie\EventSourcing\Commands\Exceptions\UnhandledCommand;
+use Spatie\EventSourcing\Handlers;
 use Spatie\EventSourcing\Snapshots\Snapshot;
 use Spatie\EventSourcing\Snapshots\SnapshotRepository;
 use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
@@ -27,18 +33,19 @@ abstract class AggregateRoot
 
     protected int $aggregateVersionAfterReconstitution = 0;
 
-    /**
-     * @var bool
-     * @deprecated Will be removed in v5
-     */
-    protected static bool $allowConcurrency = false;
+    /** @var \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregatePartial[] */
+    protected Collection $entities;
+
+    private bool $handleEvents = true;
 
     /**
      * @param string $uuid
      *
+     * Psalm needs this doc block to properly know the return type.
+     *
      * @return static
      */
-    public static function retrieve(string $uuid)
+    public static function retrieve(string $uuid): static
     {
         $aggregateRoot = app(static::class);
 
@@ -59,14 +66,34 @@ abstract class AggregateRoot
         return $this->uuid;
     }
 
-    /**
-     * @param \Spatie\EventSourcing\StoredEvents\ShouldBeStored $domainEvent
-     *
-     * @return static
-     */
-    public function recordThat(ShouldBeStored $domainEvent)
+    public function handleCommand(object $command): self
     {
-        $domainEvent->setAggregateRootUuid($this->uuid);
+        if ($handler = Handlers::find($command, $this)[0] ?? null) {
+            $this->{$handler}($command);
+
+            return $this;
+        }
+
+        foreach ($this->resolvePartials() as $partial) {
+            $handler = Handlers::find($command, $partial)[0] ?? null;
+
+            if (! $handler) {
+                continue;
+            }
+
+            $partial->{$handler}($command);
+
+            return $this;
+        }
+
+        throw new UnhandledCommand($command::class);
+    }
+
+    public function recordThat(ShouldBeStored $domainEvent): self
+    {
+        $domainEvent
+            ->setAggregateRootUuid($this->uuid)
+            ->setCreatedAt(CarbonImmutable::now());
 
         $this->recordedEvents[] = $domainEvent;
 
@@ -77,14 +104,13 @@ abstract class AggregateRoot
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function persist()
+    public function persist(): self
     {
         $storedEvents = $this->persistWithoutApplyingToEventHandlers();
 
-        $storedEvents->each(fn (StoredEvent $storedEvent) => $storedEvent->handleForAggregateRoot());
+        if ($this->handleEvents) {
+            $storedEvents->each(fn (StoredEvent $storedEvent) => $storedEvent->handleForAggregateRoot());
+        }
 
         $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
 
@@ -95,13 +121,23 @@ abstract class AggregateRoot
     {
         $this->ensureNoOtherEventsHaveBeenPersisted();
 
-        $storedEvents = $this
-            ->getStoredEventRepository()
-            ->persistMany(
-                $this->getAndClearRecordedEvents(),
-                $this->uuid(),
-                $this->aggregateVersion,
+        try {
+            $storedEvents = $this
+                ->getStoredEventRepository()
+                ->persistMany(
+                    $this->getAndClearRecordedEvents(),
+                    $this->uuid(),
+                );
+        } catch (QueryException $exception) {
+            if (! str_contains($exception->getMessage(), 'Duplicate')) {
+                throw $exception;
+            }
+
+            throw CouldNotPersistAggregate::invalidVersion(
+                $this,
+                $this->aggregateVersion
             );
+        }
 
         return $storedEvents;
     }
@@ -166,17 +202,18 @@ abstract class AggregateRoot
     {
         $storedEventRepository = $this->getStoredEventRepository();
 
-        $snapshot = $this->getSnapshotRepository()->retrieve($this->uuid);
-
-        if ($snapshot) {
+        if ($snapshot = $this->getSnapshotRepository()->retrieve($this->uuid)) {
             $this->aggregateVersion = $snapshot->aggregateVersion;
             $this->useState($snapshot->state);
+
+            $events = $storedEventRepository->retrieveAllAfterVersion($this->aggregateVersion, $this->uuid);
+        } else {
+            $events = $storedEventRepository->retrieveAll($this->uuid);
         }
 
-        $storedEventRepository->retrieveAllAfterVersion($this->aggregateVersion, $this->uuid)
-            ->each(function (StoredEvent $storedEvent) {
-                $this->apply($storedEvent->event);
-            });
+        $events->each(function (StoredEvent $storedEvent) {
+            $this->apply($storedEvent->event);
+        });
 
         $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
 
@@ -185,10 +222,6 @@ abstract class AggregateRoot
 
     protected function ensureNoOtherEventsHaveBeenPersisted(): void
     {
-        if (static::$allowConcurrency) {
-            return;
-        }
-
         $latestPersistedVersionId = $this->getStoredEventRepository()->getLatestAggregateVersion($this->uuid);
 
         if ($this->aggregateVersionAfterReconstitution !== $latestPersistedVersionId) {
@@ -201,39 +234,42 @@ abstract class AggregateRoot
         }
     }
 
-    private function apply(ShouldBeStored $event): void
+    protected function apply(ShouldBeStored $event): void
     {
-        $classBaseName = class_basename($event);
-
-        $camelCasedBaseName = ucfirst(Str::camel($classBaseName));
-
-        $applyingMethodName = "apply{$camelCasedBaseName}";
-
-        $reflectionClass = new ReflectionClass($this);
-
-        $applyMethodExists = $reflectionClass->hasMethod($applyingMethodName);
-        $applyMethodIsPublic = $applyMethodExists && $reflectionClass->getMethod($applyingMethodName)->isPublic();
-
-        if ($applyMethodExists && $applyMethodIsPublic) {
-            try {
-                app()->call([$this, $applyingMethodName], ['event' => $event]);
-            } catch (BindingResolutionException $exception) {
-                $this->$applyingMethodName($event);
-            }
-        } elseif ($applyMethodExists) {
-            $this->$applyingMethodName($event);
+        foreach ($this->resolvePartials() as $partial) {
+            $partial->apply($event);
         }
+
+        $handlers = Handlers::find($event, $this);
+
+        $handlers->each(fn (string $handler) => $this->{$handler}($event));
 
         $this->appliedEvents[] = $event;
 
         $this->aggregateVersion++;
     }
 
+    /**
+     * @return \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregatePartial[]
+     */
+    protected function resolvePartials(): Collection
+    {
+        if (! isset($this->entities)) {
+            $this->entities = collect((new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC))
+                ->mapWithKeys(fn (ReflectionProperty $property) => [$property->getName() => $property->getType()])
+                ->filter(fn (?ReflectionType $type) => $type instanceof ReflectionNamedType)
+                ->filter(fn (ReflectionNamedType $type) => is_subclass_of($type->getName(), AggregatePartial::class))
+                ->map(fn (ReflectionNamedType $type, string $propertyName) => $this->{$propertyName});
+        }
+
+        return $this->entities;
+    }
+
     public static function fake(string $uuid = null): FakeAggregateRoot
     {
-        $uuid ??= (string)Str::uuid();
+        $uuid ??= (string) Str::uuid();
 
-        $aggregateRoot = static::retrieve($uuid);
+        $aggregateRoot = static::retrieve($uuid)->disableEventHandling();
 
         return (new FakeAggregateRoot($aggregateRoot));
     }
@@ -251,5 +287,12 @@ abstract class AggregateRoot
         $projectionist = app('event-sourcing');
 
         $projectionist->handleStoredEvents($storedEvents);
+    }
+
+    private function disableEventHandling(): self
+    {
+        $this->handleEvents = false;
+
+        return $this;
     }
 }

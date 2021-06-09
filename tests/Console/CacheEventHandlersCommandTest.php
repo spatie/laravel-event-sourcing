@@ -12,7 +12,7 @@ class CacheEventHandlersCommandTest extends TestCase
 {
     use MatchesSnapshots;
 
-    private Projectionist $projectionist;
+    protected Projectionist $projectionist;
 
     public function setUp(): void
     {

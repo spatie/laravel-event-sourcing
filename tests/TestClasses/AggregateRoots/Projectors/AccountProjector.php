@@ -8,13 +8,9 @@ use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
 class AccountProjector extends Projector
 {
-    protected array $handlesEvents = [
-        MoneyAdded::class => 'onMoneyAdded',
-    ];
-
-    public function onMoneyAdded(MoneyAdded $event, string $aggregateUuid)
+    public function onMoneyAdded(MoneyAdded $event)
     {
-        $account = Account::firstOrCreate(['uuid' => $aggregateUuid]);
+        $account = Account::firstOrCreate(['uuid' => $event->aggregateRootUuid()]);
 
         $account->amount += $event->amount;
 

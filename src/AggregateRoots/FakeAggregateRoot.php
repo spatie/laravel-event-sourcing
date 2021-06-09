@@ -10,13 +10,11 @@ use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class FakeAggregateRoot
 {
-    private AggregateRoot $aggregateRoot;
+    protected ?string $whenResult = null;
 
-    private $whenResult = null;
-
-    public function __construct(AggregateRoot $aggregateRoot)
-    {
-        $this->aggregateRoot = $aggregateRoot;
+    public function __construct(
+        private AggregateRoot $aggregateRoot
+    ) {
     }
 
     /**
@@ -126,6 +124,8 @@ class FakeAggregateRoot
             $metaData = $event->metaData();
 
             unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);
+            unset($metaData[MetaData::STORED_EVENT_ID]);
+            unset($metaData[MetaData::CREATED_AT]);
             unset($metaData[MetaData::AGGREGATE_ROOT_VERSION]);
 
             return $event->setMetaData($metaData);
@@ -165,6 +165,8 @@ class FakeAggregateRoot
             $metaData = $event->metaData();
 
             unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);
+            unset($metaData[MetaData::STORED_EVENT_ID]);
+            unset($metaData[MetaData::CREATED_AT]);
             unset($metaData[MetaData::AGGREGATE_ROOT_VERSION]);
 
             return $event->setMetaData($metaData);

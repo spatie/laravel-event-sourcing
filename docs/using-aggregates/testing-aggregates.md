@@ -124,5 +124,14 @@ When calling the `given` method the aggregate will fire of events for your proje
 If you would prefer to disable Projectors reacting to events whilst retaining `Event` functionality simply use the `Projectionist` facade's `withoutEventHandlers` method before your test executes.
 
 ```php
-\Spatie\EventSourcing\Facades\Projectionist::withoutEventHandlers();
+use Spatie\EventSourcing\Facades\Projectionist;Projectionist::withoutEventHandlers();
 ```
+
+## Want to know more?
+
+Aggregate roots are a crucial part in large applications. Our course, [Event Sourcing in Laravel](https://event-sourcing-laravel.com/) covers them in depth:
+
+- 11. Aggregate Roots
+- 12. State Management in Aggregate Roots
+- 13. Multi-Entity Aggregate Roots
+- 14. State Machines with Aggregate Entities

@@ -5,9 +5,12 @@ namespace Spatie\EventSourcing\StoredEvents;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
+use ReflectionClass;
+use ReflectionException;
+use Spatie\EventSourcing\Attributes\EventSerializer as EventSerializerAttribute;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
-use Spatie\EventSourcing\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 
 class StoredEvent implements Arrayable
 {
@@ -19,6 +22,8 @@ class StoredEvent implements Arrayable
     public string $aggregate_uuid;
 
     public string $aggregate_version;
+
+    public int $event_version;
 
     public string $event_class;
 
@@ -35,10 +40,11 @@ class StoredEvent implements Arrayable
         $this->event_properties = $data['event_properties'];
         $this->aggregate_uuid = $data['aggregate_uuid'];
         $this->aggregate_version = $data['aggregate_version'];
+        $this->event_version = $data['event_version'] ?? 1;
         $this->event_class = self::getActualClassForEvent($data['event_class']);
         $this->meta_data = $data['meta_data'];
         $this->created_at = $data['created_at'];
-        
+
         $this->instantiateEvent($originalEvent);
     }
 
@@ -49,6 +55,7 @@ class StoredEvent implements Arrayable
             'event_properties' => $this->event_properties,
             'aggregate_uuid' => $this->aggregate_uuid,
             'aggregate_version' => $this->aggregate_version,
+            'event_version' => $this->event_version,
             'event_class' => self::getEventClass($this->event_class),
             'meta_data' => $this->meta_data instanceof Arrayable ? $this->meta_data->toArray() : (array) $this->meta_data,
             'created_at' => $this->created_at,
@@ -101,7 +108,7 @@ class StoredEvent implements Arrayable
 
         return $eventHandlers->asyncEventHandlers()->count() > 0;
     }
-    
+
     protected function instantiateEvent(?ShouldBeStored $originalEvent): void
     {
         if ($originalEvent) {
@@ -109,18 +116,31 @@ class StoredEvent implements Arrayable
 
             return;
         }
-    
+
         try {
-            $this->event = app(EventSerializer::class)->deserialize(
+            $reflectionClass = new ReflectionClass($this->event_class);
+        } catch (ReflectionException $exception) {
+            throw new InvalidStoredEvent();
+        }
+
+        if ($serializerAttribute = $reflectionClass->getAttributes(EventSerializerAttribute::class)[0] ?? null) {
+            $serializerClass = ($serializerAttribute->newInstance())->serializerClass;
+        } else {
+            $serializerClass = EventSerializer::class;
+        }
+
+        try {
+            $this->event = app($serializerClass)->deserialize(
                 self::getActualClassForEvent($this->event_class),
                 is_string($this->event_properties)
                     ? $this->event_properties
                     : json_encode($this->event_properties),
+                $this->event_version,
                 is_string($this->meta_data)
                     ? $this->meta_data
                     : json_encode($this->meta_data),
             );
-        
+
             $this->event->setMetaData(optional($this->meta_data)->toArray());
         } catch (Exception $exception) {
             throw InvalidStoredEvent::couldNotUnserializeEvent($this, $exception);

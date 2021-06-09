@@ -12,6 +12,7 @@ class CreateStoredEventsTable extends Migration
             $table->bigIncrements('id');
             $table->uuid('aggregate_uuid')->nullable();
             $table->unsignedBigInteger('aggregate_version')->nullable();
+            $table->integer('event_version')->default(1);
             $table->string('event_class');
             $table->json('event_properties');
             $table->json('meta_data');

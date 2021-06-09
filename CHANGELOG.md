@@ -2,6 +2,58 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 5.0.0 - unreleased
+
+- PHP version requirement is now `^8.0`
+- Laravel version requirement is now `^8.0`
+- Removed `AggregateRoot::$allowConcurrency`
+- Removed `$aggregateVersion` from `StoredEventRepository::persist`
+- Removed `$aggregateVersion` from `StoredEventRepository::persistMany`
+- Event handlers are no longer called with `app()->call()` ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
+    - Dependency injection in handlers isn't supported anymore, you should use constructor injection instead
+- `$storedEvent` and `$aggregateRootUuid` are no longer passed to event handler methods. Use `$event->storedEventId()` and `$event->aggregateRootUuid()` instead. ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
+- All event listeners are now registered in the same way: by looking at an event's type hint. This applies to all:
+    - Aggregate root `apply` methods
+    - Projection listeners
+    - Reactor listeners
+    - Event queries
+- `$handlesEvents` on Projectors and Reactors isn't supported anymore
+- Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
+- Rename `EloquentStoredEvent::query()->uuid()` to `EloquentStoredEvent::query()->whereAggregateRoot()`
+- Add `EloquentStoredEvent::query()->whereEvent(EventA::class, …)`
+- Add `EventQuery`
+- Add `AggregateEntity`
+    - If you're overriding an aggregate root's constructor, make sure to call `parent::__construct` from it
+- Add command bus and aggregate root handlers
+- Moved `Spatie\EventSourcing\Exception\CouldNotPersistAggregate` to `Spatie\EventSourcing\AggregateRoots\Exceptions\CouldNotPersistAggregate`
+- Moved `Spatie\EventSourcing\Exception\InvalidEloquentSnapshotModel` to `Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentSnapshotModel`
+- Moved `Spatie\EventSourcing\Exception\InvalidEloquentStoredEventModel` to `Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel`
+- Moved `Spatie\EventSourcing\Exception\MissingAggregateUuid` to `Spatie\EventSourcing\AggregateRoots\Exceptions\MissingAggregateUuid`
+- Moved `Spatie\EventSourcing\Exception\InvalidStoredEvent` to `Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent`
+
+### A note on changed listeners
+
+Since most code is probably already type hinting events, the listener change is likely to not have an impact on your code. It's good to know though that you don't have to worry about certain naming conventions any more:
+
+- In **aggregate roots**, you don't have to prefix apply methods with `apply` anymore if you don't want to
+- In **projectors**, you don't need a manual mapping anymore, neither does the event variable need to be called `$event`
+- In **reactors**, you don't need a manual mapping anymore, neither does the event variable need to be called `$event`
+- **Event queries** are a new concept and work in the same way
+
+Here's an example:
+
+```php
+class MyProjector extends Projector
+{
+    public function anEventHandlerWithAnotherName(MyEvent $eventVariableWithAnotherName): void
+    {
+        // This handler will automatically handle `MyEvent`
+    }
+}
+```
+
+Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
+
 ## 4.10.2 - 2021-05-04
 
 - Add missing config key in config stub (#203)

@@ -46,3 +46,9 @@ class UpgradeSerializer extends JsonEventSerializer
         return $event;
     }
 }
+
+## Want to know more?
+
+Our course, [Event Sourcing in Laravel](https://event-sourcing-laravel.com/) covers this topic in depth:
+
+- 18. Event Versioning

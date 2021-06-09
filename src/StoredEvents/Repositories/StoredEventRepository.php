@@ -8,6 +8,8 @@ use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 interface StoredEventRepository
 {
+    public function find(int $id): StoredEvent;
+
     public function retrieveAll(string $uuid = null): LazyCollection;
 
     public function retrieveAllStartingFrom(int $startingFrom, string $uuid = null): LazyCollection;
@@ -16,9 +18,9 @@ interface StoredEventRepository
 
     public function countAllStartingFrom(int $startingFrom, string $uuid = null): int;
 
-    public function persist(ShouldBeStored $event, string $uuid = null, int $aggregateVersion = null): StoredEvent;
+    public function persist(ShouldBeStored $event, string $uuid = null): StoredEvent;
 
-    public function persistMany(array $events, string $uuid = null, int $aggregateVersion = null): LazyCollection;
+    public function persistMany(array $events, string $uuid = null): LazyCollection;
 
     public function update(StoredEvent $storedEvent): StoredEvent;
 

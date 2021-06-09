@@ -15,22 +15,22 @@ class InvalidEventHandler extends Exception
         return new static("Tried to call `$methodName` on `$eventHandlerClass` to handle an event of class `$eventClass` but that method does not exist.");
     }
 
-    public static function doesNotExist(string $eventHandlerClass)
+    public static function doesNotExist(string $eventHandlerClass): self
     {
         return new static("The event handler class `{$eventHandlerClass}` does not exist.");
     }
 
-    public static function notAProjector(object $object)
+    public static function notAProjector(object $object): self
     {
         return new static('`'.get_class($object).'` must implement Spatie\EventProcjetor\Projectors\Projector');
     }
 
-    public static function notAnEventHandler(object $object)
+    public static function notAnEventHandler(object $object): self
     {
         return new static('`'.get_class($object).'` must implement Spatie\EventSourcing\EventHandlers\EventHandler');
     }
 
-    public static function notAnEventHandlingClassName(string $className)
+    public static function notAnEventHandlingClassName(string $className): self
     {
         return new static('`'.$className.'` must implement Spatie\EventSourcing\EventHandlers\EventHandler');
     }

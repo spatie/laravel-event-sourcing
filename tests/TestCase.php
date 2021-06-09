@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use CreateSnapshotsTable;
 use CreateStoredEventsTable;
 use Exception;
 use Illuminate\Database\Schema\Blueprint;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
+use PDO;
 use Spatie\EventSourcing\EventSourcingServiceProvider;
 use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 
@@ -17,6 +19,9 @@ abstract class TestCase extends Orchestra
     public function setUp(): void
     {
         parent::setUp();
+
+        // Needed for parallel testing
+        $this->setConfig('database.mysql.options', [PDO::ATTR_EMULATE_PREPARES => true]);
 
         $this->setUpDatabase();
 
@@ -51,7 +56,7 @@ abstract class TestCase extends Orchestra
 
         Schema::dropIfExists('snapshots');
         include_once __DIR__.'/../stubs/create_snapshots_table.php.stub';
-        (new \CreateSnapshotsTable())->up();
+        (new CreateSnapshotsTable())->up();
 
         Schema::dropIfExists('other_stored_events');
         if ($this->dbDriver() === 'mysql') {

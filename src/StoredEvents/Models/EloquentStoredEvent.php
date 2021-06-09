@@ -8,6 +8,10 @@ use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 
+/**
+ * @method static self|\Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder|\Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder query()
+ * @property-read \Spatie\SchemalessAttributes\SchemalessAttributes $meta_data
+ */
 class EloquentStoredEvent extends Model
 {
     public $guarded = [];
@@ -20,7 +24,7 @@ class EloquentStoredEvent extends Model
         'event_properties' => 'array',
         'meta_data' => 'array',
     ];
-    
+
     protected ?ShouldBeStored $originalEvent = null;
 
     public function toStoredEvent(): StoredEvent
@@ -30,16 +34,17 @@ class EloquentStoredEvent extends Model
             'event_properties' => $this->event_properties,
             'aggregate_uuid' => $this->aggregate_uuid ?? '',
             'aggregate_version' => $this->aggregate_version ?? 0,
+            'event_version' => $this->event_version,
             'event_class' => $this->event_class,
             'meta_data' => $this->meta_data,
             'created_at' => $this->created_at,
         ], $this->originalEvent);
     }
-    
+
     public function setOriginalEvent(ShouldBeStored $event): self
     {
         $this->originalEvent = $event;
-        
+
         return $this;
     }
 
@@ -53,23 +58,18 @@ class EloquentStoredEvent extends Model
         return SchemalessAttributes::createForModel($this, 'meta_data');
     }
 
+    public function newEloquentBuilder($query): EloquentStoredEventQueryBuilder
+    {
+        return new EloquentStoredEventQueryBuilder($query);
+    }
+
+    public function newCollection(array $models = []): EloquentStoredEventCollection
+    {
+        return new EloquentStoredEventCollection($models);
+    }
+
     public function scopeWithMetaDataAttributes(): Builder
     {
-        return SchemalessAttributes::scopeWithSchemalessAttributes('meta_data');
-    }
-
-    public function scopeStartingFrom(Builder $query, int $storedEventId): void
-    {
-        $query->where('id', '>=', $storedEventId);
-    }
-
-    public function scopeAfterVersion(Builder $query, int $version): void
-    {
-        $query->where('aggregate_version', '>', $version);
-    }
-
-    public function scopeUuid(Builder $query, string $uuid): void
-    {
-        $query->where('aggregate_uuid', $uuid);
+        return $this->meta_data->modelScope();
     }
 }

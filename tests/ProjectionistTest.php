@@ -5,15 +5,13 @@ namespace Spatie\EventSourcing\Tests;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Queue;
-use Mockery;
-use Spatie\EventSourcing\Exceptions\InvalidEventHandler;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\HandleStoredEventJob;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
-use Spatie\EventSourcing\Tests\TestClasses\Projectors\InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\FakeMoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
@@ -47,16 +45,6 @@ class ProjectionistTest extends TestCase
     }
 
     /** @test */
-    public function it_will_thrown_an_exception_when_an_event_handler_does_not_have_the_expected_event_handling_method()
-    {
-        $this->expectException(InvalidEventHandler::class);
-
-        Projectionist::addProjector(InvalidProjectorThatDoesNotHaveTheRightEventHandlingMethod::class);
-
-        event(new MoneyAddedEvent($this->account, 1234));
-    }
-
-    /** @test */
     public function it_will_not_register_the_same_projector_twice()
     {
         Projectionist::addProjector(BalanceProjector::class);
@@ -77,15 +65,15 @@ class ProjectionistTest extends TestCase
     /** @test */
     public function it_will_call_the_method_on_the_projector_when_the_projector_throws_an_exception()
     {
+        ProjectorThatThrowsAnException::$exceptionsHandled = 0;
+
         $this->setConfig('event-sourcing.catch_exceptions', true);
 
-        $projector = Mockery::mock(ProjectorThatThrowsAnException::class.'[handleException]');
-
-        $projector->shouldReceive('handleException')->once();
-
-        Projectionist::addProjector($projector);
+        Projectionist::addProjector(ProjectorThatThrowsAnException::class);
 
         event(new MoneyAddedEvent($this->account, 1000));
+
+        $this->assertEquals(1, ProjectorThatThrowsAnException::$exceptionsHandled);
     }
 
     /** @test */
@@ -178,5 +166,21 @@ class ProjectionistTest extends TestCase
 
         Projectionist::withoutEventHandler(BalanceProjector::class);
         $this->assertCount(0, Projectionist::getProjectors());
+    }
+
+    /** @test */
+    public function it_can_fake_event_handlers()
+    {
+        FakeMoneyAddedCountProjector::$eventsHandledCount = 0;
+
+        Projectionist::addProjector(MoneyAddedCountProjector::class);
+
+        Projectionist::fake(MoneyAddedCountProjector::class, FakeMoneyAddedCountProjector::class);
+
+        $this->assertCount(1, Projectionist::getProjectors());
+
+        event(new MoneyAddedEvent($this->account, 500));
+
+        $this->assertEquals(1, FakeMoneyAddedCountProjector::$eventsHandledCount);
     }
 }

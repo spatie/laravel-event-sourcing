@@ -4,21 +4,23 @@ namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
-use Spatie\EventSourcing\StoredEvents\StoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 
 class ProjectorThatWritesMetaData extends Projector
 {
-    protected array $handlesEvents = [
-        MoneyAddedEvent::class => 'onMoneyAdded',
-    ];
-
     protected $trackStream = '*';
 
-    public function onMoneyAdded(StoredEvent $storedEvent, StoredEventRepository $repository, MoneyAddedEvent $event)
+    public function __construct(
+        protected StoredEventRepository $repository
+    ) {
+    }
+
+    public function onMoneyAdded(MoneyAddedEvent $event)
     {
+        $storedEvent = $this->repository->find($event->storedEventId());
+
         $storedEvent->meta_data['user_id'] = 1;
 
-        $repository->update($storedEvent);
+        $this->repository->update($storedEvent);
     }
 }

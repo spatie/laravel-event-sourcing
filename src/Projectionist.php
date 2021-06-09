@@ -18,15 +18,15 @@ use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 class Projectionist
 {
-    private EventHandlerCollection $projectors;
+    protected EventHandlerCollection $projectors;
 
-    private EventHandlerCollection $reactors;
+    protected EventHandlerCollection $reactors;
 
-    private bool $catchExceptions;
+    protected bool $catchExceptions;
 
-    private bool $isProjecting = false;
+    protected bool $isProjecting = false;
 
-    private bool $isReplaying = false;
+    protected bool $isReplaying = false;
 
     public function __construct(array $config)
     {
@@ -36,7 +36,14 @@ class Projectionist
         $this->catchExceptions = $config['catch_exceptions'];
     }
 
-    public function addProjector($projector): Projectionist
+    public function fake(string $originalHandlerClass, string $fakeHandlerClass): void
+    {
+        $this
+            ->removeEventHandler($originalHandlerClass)
+            ->addEventHandler($fakeHandlerClass);
+    }
+
+    public function addProjector(string | Projector $projector): Projectionist
     {
         if (is_string($projector)) {
             $projector = app($projector);
@@ -47,6 +54,13 @@ class Projectionist
         }
 
         $this->projectors->addEventHandler($projector);
+
+        return $this;
+    }
+
+    public function removeProjector(string $projectorClass): Projectionist
+    {
+        $this->projectors->remove([$projectorClass]);
 
         return $this;
     }
@@ -129,6 +143,13 @@ class Projectionist
         return $this;
     }
 
+    public function removeReactor(string $reactorClass): Projectionist
+    {
+        $this->reactors->remove([$reactorClass]);
+
+        return $this;
+    }
+
     public function getReactors(): Collection
     {
         return $this->reactors;
@@ -160,11 +181,30 @@ class Projectionist
         throw InvalidEventHandler::notAnEventHandlingClassName($eventHandlerClass);
     }
 
-    public function addEventHandlers(array $eventHandlers): void
+    public function removeEventHandler(string $eventHandlerClass): self
+    {
+        if (is_subclass_of($eventHandlerClass, Projector::class)) {
+            $this->removeProjector($eventHandlerClass);
+
+            return $this;
+        }
+
+        if (is_subclass_of($eventHandlerClass, EventHandler::class)) {
+            $this->removeReactor($eventHandlerClass);
+
+            return $this;
+        }
+
+        throw InvalidEventHandler::notAnEventHandlingClassName($eventHandlerClass);
+    }
+
+    public function addEventHandlers(array $eventHandlers): self
     {
         foreach ($eventHandlers as $eventHandler) {
             $this->addEventHandler($eventHandler);
         }
+
+        return $this;
     }
 
     /**
@@ -238,6 +278,22 @@ class Projectionist
 
     private function callEventHandler(EventHandler $eventHandler, StoredEvent $storedEvent): bool
     {
+        /**
+         * We "refresh" an event handler every time it's called, to ensure that its dependencies are properly re-injected.
+         * The underlying problem is with tests: if we're faking an injected dependency when running tests and the handler is already resolved beforehand,
+         * we won't get those faked dependencies.
+         *
+         * A better solution is to store event handler class names instead of an instantiated version of them in the list of handlers, which requires a larger and complex refactor.
+         *
+         * More info here: https://github.com/spatie/laravel-event-sourcing/discussions/181
+         *
+         * Note that we provided `Projectionist::fake` to counter this issue, but it turned out to be very cumbersome to use in complex examples,
+         * which is why we reverted back to the original idea.
+         *
+         * @var \Spatie\EventSourcing\EventHandlers\EventHandler $eventHandler
+         */
+        $eventHandler = app($eventHandler::class);
+
         try {
             $eventHandler->handle($storedEvent);
         } catch (Exception $exception) {

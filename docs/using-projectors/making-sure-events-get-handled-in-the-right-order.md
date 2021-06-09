@@ -14,3 +14,11 @@ A useful rule of thumb is that if your projectors aren't producing data that is 
 You can set the name of the queue connection in the `queue` key of the `event-sourcing` config file.  You should make sure that the queue will process only one job at a time.
 
 In a local environment, where events have a very low chance of getting fired concurrently, it's probably ok to just use the `sync` driver.
+
+## Want to know more?
+
+We discuss projections and complex patterns such as CQRS in depth in our [Event Sourcing in Laravel](https://event-sourcing-laravel.com/) course. In practice, you want to check out these chapters:
+
+- 07. Storing and Projecting Events
+- 08. [Projectors in Depth](https://event-sourcing-laravel.com/projectors-in-depth)
+- 16. CQRS

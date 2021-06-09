@@ -7,6 +7,7 @@ use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\AttributeProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatWritesMetaData;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithAssociativeAndNonAssociativeHandleEvents;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutHandlesEvents;
@@ -15,6 +16,13 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\ResettableProjector;
 
 class ProjectorTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        AttributeProjector::$handledEvents = [];
+    }
+
     /** @test */
     public function it_can_reach_the_stored_event_and_write_meta_data_to_it()
     {

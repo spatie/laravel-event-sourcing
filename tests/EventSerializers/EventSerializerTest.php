@@ -4,6 +4,7 @@ namespace Spatie\EventSourcing\Tests\EventSerializers;
 
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
+use DateTimeImmutable;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Tests\TestCase;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithArray;
@@ -47,7 +48,7 @@ class EventSerializerTest extends TestCase
         $event = new MoneyAddedEvent($account, 1234);
 
         $json = $this->eventSerializer->serialize($event);
-        $event = $this->eventSerializer->deserialize(get_class($event), $json);
+        $event = $this->eventSerializer->deserialize(get_class($event), $json, 1);
 
         $this->assertEquals($account->id, $event->account->id);
         $this->assertEquals('test', $event->account->name);
@@ -79,16 +80,16 @@ class EventSerializerTest extends TestCase
     /** @test */
     public function it_can_deserialize_an_event_with_datetime()
     {
-        $event = new EventWithDatetime(new \DateTimeImmutable('now'));
+        $event = new EventWithDatetime(new DateTimeImmutable('now'));
 
         $json = $this->eventSerializer->serialize($event);
 
         /**
          * @var EventWithDatetime
          */
-        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json);
+        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
 
-        $this->assertInstanceOf(\DateTimeImmutable::class, $normalizedEvent->value);
+        $this->assertInstanceOf(DateTimeImmutable::class, $normalizedEvent->value);
     }
 
     /** @test */
@@ -98,7 +99,7 @@ class EventSerializerTest extends TestCase
 
         $json = $this->eventSerializer->serialize($event);
 
-        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json);
+        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
 
         $this->assertInstanceOf(CarbonInterface::class, $normalizedEvent->value);
     }
@@ -110,7 +111,7 @@ class EventSerializerTest extends TestCase
 
         $json = $this->eventSerializer->serialize($event);
 
-        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json);
+        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
 
         $this->assertInstanceOf(CarbonInterface::class, $normalizedEvent->values[0]);
     }
@@ -122,7 +123,7 @@ class EventSerializerTest extends TestCase
 
         $json = $this->eventSerializer->serialize($event);
 
-        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json);
+        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
 
         $this->assertInstanceOf(CarbonInterface::class, $normalizedEvent->value);
     }
@@ -130,7 +131,7 @@ class EventSerializerTest extends TestCase
     /** @test */
     public function it_can_upgrade_an_event_version()
     {
-        $event = new EventWithDatetime(new \DateTimeImmutable('2019-08-07T00:00:00Z'));
+        $event = new EventWithDatetime(new DateTimeImmutable('2019-08-07T00:00:00Z'));
         $eventSerializer = app(UpgradeSerializer::class);
 
         $json = $eventSerializer->serialize($event);
@@ -138,9 +139,9 @@ class EventSerializerTest extends TestCase
         /**
          * @var EventWithDatetime
          */
-        $normalizedEvent = $eventSerializer->deserialize(get_class($event), $json, '{ "version": 1 }');
+        $normalizedEvent = $eventSerializer->deserialize(get_class($event), $json, 1, '{ "version": 1 }');
 
-        $this->assertInstanceOf(\DateTimeImmutable::class, $normalizedEvent->value);
+        $this->assertInstanceOf(DateTimeImmutable::class, $normalizedEvent->value);
         $this->assertEquals('UTC', $normalizedEvent->value->getTimezone()->getName());
     }
 }
