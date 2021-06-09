@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\ServiceProvider;
 use Spatie\EventSourcing\Console\CacheEventHandlersCommand;
 use Spatie\EventSourcing\Console\ClearCachedEventHandlersCommand;
 use Spatie\EventSourcing\Console\ListCommand;
@@ -30,7 +29,7 @@ class EventSourcingServiceProvider extends PackageServiceProvider
             ->hasCommands()
             ->hasMigrations([
                 'create_stored_events_table',
-                'create_snapshots_table'
+                'create_snapshots_table',
             ])
             ->hasCommands([
                 CacheEventHandlersCommand::class,
