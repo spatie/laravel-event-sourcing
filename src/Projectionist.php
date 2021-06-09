@@ -18,15 +18,15 @@ use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 class Projectionist
 {
-    private EventHandlerCollection $projectors;
+    protected EventHandlerCollection $projectors;
 
-    private EventHandlerCollection $reactors;
+    protected EventHandlerCollection $reactors;
 
-    private bool $catchExceptions;
+    protected bool $catchExceptions;
 
-    private bool $isProjecting = false;
+    protected bool $isProjecting = false;
 
-    private bool $isReplaying = false;
+    protected bool $isReplaying = false;
 
     public function __construct(array $config)
     {
@@ -38,9 +38,9 @@ class Projectionist
 
     public function fake(string $originalHandlerClass, string $fakeHandlerClass): void
     {
-        $this->removeEventHandler($originalHandlerClass);
-
-        $this->addEventHandler($fakeHandlerClass);
+        $this
+            ->removeEventHandler($originalHandlerClass)
+            ->addEventHandler($fakeHandlerClass);
     }
 
     public function addProjector($projector): Projectionist
@@ -181,28 +181,30 @@ class Projectionist
         throw InvalidEventHandler::notAnEventHandlingClassName($eventHandlerClass);
     }
 
-    public function removeEventHandler(string $eventHandlerClass): void
+    public function removeEventHandler(string $eventHandlerClass): self
     {
         if (is_subclass_of($eventHandlerClass, Projector::class)) {
             $this->removeProjector($eventHandlerClass);
 
-            return;
+            return $this;
         }
 
         if (is_subclass_of($eventHandlerClass, EventHandler::class)) {
             $this->removeReactor($eventHandlerClass);
 
-            return;
+            return $this;
         }
 
         throw InvalidEventHandler::notAnEventHandlingClassName($eventHandlerClass);
     }
 
-    public function addEventHandlers(array $eventHandlers): void
+    public function addEventHandlers(array $eventHandlers): self
     {
         foreach ($eventHandlers as $eventHandler) {
             $this->addEventHandler($eventHandler);
         }
+
+        return $this;
     }
 
     /**
