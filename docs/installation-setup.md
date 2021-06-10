@@ -12,14 +12,14 @@ composer require spatie/laravel-event-sourcing
 You need to publish and run the migrations to create the `stored_events` table:
 
 ```bash
-php artisan vendor:publish --provider="Spatie\EventSourcing\EventSourcingServiceProvider" --tag="migrations"
+php artisan vendor:publish --provider="Spatie\EventSourcing\EventSourcingServiceProvider" --tag="event-sourcing-migrations"
 php artisan migrate
 ```
 
 You must publish the config file with this command:
 
 ```bash
-php artisan vendor:publish --provider="Spatie\EventSourcing\EventSourcingServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Spatie\EventSourcing\EventSourcingServiceProvider" --tag="event-sourcing-config"
 ```
 
 This is the default content of the config file that will be published at `config/event-sourcing.php`:
