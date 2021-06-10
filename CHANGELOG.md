@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 5.0.1 - 2021-06-10
+
+- move migrations to default location
+
 ## 5.0.0 - 2021-06-09
 
 - Add `EloquentStoredEvent::query()->whereEvent(EventA::class, …)`
