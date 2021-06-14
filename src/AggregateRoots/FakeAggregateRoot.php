@@ -10,7 +10,7 @@ use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class FakeAggregateRoot
 {
-    protected ?string $whenResult = null;
+    protected $whenResult = null;
 
     public function __construct(
         private AggregateRoot $aggregateRoot
