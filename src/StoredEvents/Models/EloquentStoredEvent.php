@@ -70,6 +70,11 @@ class EloquentStoredEvent extends Model
 
     public function scopeWithMetaDataAttributes(): Builder
     {
+        // Legacy support for laravel-schemaless-attributes:^1.0
+        if (! method_exists($this->meta_data, 'modelScope')) {
+            return $this->meta_data->scopeWithSchemalessAttributes('meta_data');
+        }
+
         return $this->meta_data->modelScope();
     }
 }

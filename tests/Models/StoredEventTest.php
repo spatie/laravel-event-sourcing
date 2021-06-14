@@ -64,7 +64,7 @@ class StoredEventTest extends TestCase
     public function it_allows_to_modify_metadata_with_offset_set_in_eloquent_model()
     {
         EloquentStoredEvent::creating(function (EloquentStoredEvent $event) {
-            $event->meta_data['ip'] = '127.0.0.1';
+            $event->meta_data->set('ip', '127.0.0.1');
         });
 
         $this->setConfig('event-sourcing.event_class_map', [
