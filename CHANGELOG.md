@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 5.0.3 - 2021-06-14
+
+- fix `$whenResult` (#227)
+
 ## 5.0.2 - 2021-06-14
 
 - Support legacy `spatie/laravel-schemaless-attributes:^1.0` as well
