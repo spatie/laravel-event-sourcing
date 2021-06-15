@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 5.0.4 - 2021-06-15
+
+- Fix visual glitch in `event-sourcing:list` command where event handlers wouldn't be shown
+
 ## 5.0.3 - 2021-06-14
 
 - fix `$whenResult` (#227)

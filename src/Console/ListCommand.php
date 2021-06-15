@@ -34,7 +34,11 @@ class ListCommand extends Command
     {
         $events = $eventHandlers
             ->reduce(function ($events, EventHandler $eventHandler) {
-                $eventHandler->getEventHandlingMethods();
+                $eventHandler
+                    ->getEventHandlingMethods()
+                    ->each(function (array $methods, string $eventClass) use (&$events, $eventHandler) {
+                        $events[$eventClass][] = get_class($eventHandler);
+                    });
 
                 return $events;
             }, []);
