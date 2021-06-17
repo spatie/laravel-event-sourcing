@@ -7,7 +7,7 @@ A reactor is a class, that much like a projector, listens for incoming events. U
 
 ## Creating reactors
 
-Let's create a reactor. You can perform this artisan command to create a projector in `app\Reactors`:
+Let's create a reactor. You can perform this artisan command to create a reactor in `app\Reactors`:
 
 ```php
 php artisan make:reactor BigAmountAddedReactor
