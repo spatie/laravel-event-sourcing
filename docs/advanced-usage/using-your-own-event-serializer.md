@@ -46,6 +46,7 @@ class UpgradeSerializer extends JsonEventSerializer
         return $event;
     }
 }
+```
 
 ## Want to know more?
 
