@@ -22,7 +22,7 @@ If you want to skip to reading code immediately, here are some example apps. In 
 
 ## Even sourcing in Laravel course
 
-If you want to learn more about event sourcing, check out [our upcoming course on event sourcing in Laravel](https://event-sourcing-laravel.com)
+If you want to learn more about event sourcing, check out [our course on event sourcing in Laravel](https://event-sourcing-laravel.com)
 
 ## Support us
 
