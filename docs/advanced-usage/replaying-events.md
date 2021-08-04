@@ -78,8 +78,8 @@ After all events are replayed, the `onFinishedEventReplay` method will be called
 When using models with timestamps, it is important to keep in mind that the projector will create or update these models when replaying and the timestamps will not correspond to the event's original timestamps. This will probably not be behaviour you intended. To work around this you can use the stored event's timestamps:
 
 ```php
-public function onAccountCreated(StoredEvent $storedEvent, AccountCreated $event) {
-        Account::create(array_merge($event->accountAttributes, ['created_at' => $storedEvent->created_at, 'updated_at' => $storedEvent->created_at]));
+public function onAccountCreated(AccountCreated $event) {
+        Account::create(array_merge($event->accountAttributes, ['created_at' => $event->created_at(), 'updated_at' => $event->created_at()]));
 }
 ```
 
