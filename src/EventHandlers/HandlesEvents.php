@@ -4,7 +4,9 @@ namespace Spatie\EventSourcing\EventHandlers;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Spatie\EventSourcing\Handlers;
+use Spatie\BetterTypes\Handlers;
+use Spatie\BetterTypes\Method;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 trait HandlesEvents
@@ -32,6 +34,14 @@ trait HandlesEvents
 
     public function getEventHandlingMethods(): Collection
     {
-        return Handlers::list($this);
+        return Handlers::new($this)
+            ->public()
+            ->protected()
+            ->all()
+            ->groupBy(fn (Method $method) => $method->getTypes()->first()?->getName())
+            ->filter(function (Collection $group, string $key) {
+                return class_exists($key) && isset(class_parents($key)[ShouldBeStored::class]);
+            })
+            ->map(fn (Collection $group) => $group->map(fn (Method $method) => $method->getName()));
     }
 }
