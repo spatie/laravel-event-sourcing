@@ -12,7 +12,7 @@ class EloquentSnapshotRepository implements SnapshotRepository
     {
         $this->snapshotModel = (string)config('event-sourcing.snapshot_model', EloquentSnapshot::class);
 
-        if (! new $this->snapshotModel instanceof EloquentSnapshot) {
+        if (! new $this->snapshotModel() instanceof EloquentSnapshot) {
             throw new InvalidEloquentSnapshotModel("The class {$this->snapshotModel} must extend EloquentSnapshot");
         }
     }

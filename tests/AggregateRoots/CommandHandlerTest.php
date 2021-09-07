@@ -69,7 +69,7 @@ class CartForCommand extends AggregateRoot
 
     public function clear(ClearCart $clearCart): self
     {
-        $this->recordThat(new CartClearedForCommand);
+        $this->recordThat(new CartClearedForCommand());
 
         return $this;
     }

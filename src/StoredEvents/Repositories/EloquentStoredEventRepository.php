@@ -21,7 +21,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
     {
         $this->storedEventModel = (string) config('event-sourcing.stored_event_model', EloquentStoredEvent::class);
 
-        if (! new $this->storedEventModel instanceof EloquentStoredEvent) {
+        if (! new $this->storedEventModel() instanceof EloquentStoredEvent) {
             throw new InvalidEloquentStoredEventModel("The class {$this->storedEventModel} must extend EloquentStoredEvent");
         }
     }

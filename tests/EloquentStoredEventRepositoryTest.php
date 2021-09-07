@@ -29,15 +29,15 @@ class EloquentStoredEventRepositoryTest extends TestCase
         $this->assertEquals(1, $eloquentStoredEventRepository->getLatestAggregateVersion('uuid-2'));
         $this->assertEquals(2, $eloquentStoredEventRepository->getLatestAggregateVersion('uuid-1'));
     }
-    
+
     /** @test */
     public function it_sets_the_original_event_on_persist()
     {
         $eloquentStoredEventRepository = app(EloquentStoredEventRepository::class);
-        
+
         $originalEvent = new MoneyAdded(100);
         $storedEvent = $eloquentStoredEventRepository->persist($originalEvent, 'uuid-1', 1);
-        
+
         $this->assertSame($originalEvent, $storedEvent->event);
     }
 }

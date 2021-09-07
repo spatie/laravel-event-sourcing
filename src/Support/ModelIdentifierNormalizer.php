@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInterface
 {
     use SerializesAndRestoresModelIdentifiers;
-    
+
     /**
      * @inheritdoc
      */
@@ -22,10 +22,10 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
         if (! $this->supportsNormalization($object)) {
             throw new InvalidArgumentException('Cannot serialize an object that is not a QueueableEntity or QueueableCollection in ModelIdentifierNormalizer.');
         }
-    
+
         return $this->getSerializedPropertyValue($object);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -33,7 +33,7 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
     {
         return ($data instanceof QueueableEntity || $data instanceof QueueableCollection);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -42,10 +42,10 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
         $identifier = $data instanceof ModelIdentifier
             ? $data
             : new ModelIdentifier($data['class'], $data['id'], $data['relations'], $data['connection']);
-        
+
         return $this->getRestoredPropertyValue($identifier);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -54,13 +54,13 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
         return $this->normalizedDataIsModelIdentifier($data)
             && $this->isNormalizedToModelIdentifier($type);
     }
-    
+
     protected function normalizedDataIsModelIdentifier($data): bool
     {
         return $data instanceof ModelIdentifier
             || isset($data['class'], $data['id'], $data['relations'], $data['connection']);
     }
-    
+
     protected function isNormalizedToModelIdentifier($class): bool
     {
         return is_a($class, QueueableEntity::class, true)

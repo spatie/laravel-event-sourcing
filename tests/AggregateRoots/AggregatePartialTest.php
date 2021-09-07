@@ -23,7 +23,7 @@ class AggregatePartialTest extends TestCase
             ->addItem('test 2')
             ->persist();
 
-        $this->assertDatabaseCount((new EloquentStoredEvent)->getTable(), 2);
+        $this->assertDatabaseCount((new EloquentStoredEvent())->getTable(), 2);
 
         $cart::retrieve(self::CART_UUID);
 
@@ -87,7 +87,7 @@ class Cart extends AggregateRoot
 
     public function clear(): self
     {
-        $this->recordThat(new CartCleared);
+        $this->recordThat(new CartCleared());
 
         return $this;
     }

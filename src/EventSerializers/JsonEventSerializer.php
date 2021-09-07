@@ -14,7 +14,7 @@ class JsonEventSerializer implements EventSerializer
     {
         $encoders = [new JsonEncoder()];
         $normalizers = array_map(
-            fn ($className) => new $className,
+            fn ($className) => new $className(),
             config('event-sourcing.event_normalizers')
         );
 
