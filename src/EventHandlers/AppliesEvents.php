@@ -9,14 +9,14 @@ use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 trait AppliesEvents
 {
-    protected function apply(StoredEvent|ShouldBeStored ...$storedEvents): void
+    protected function apply(StoredEvent | ShouldBeStored ...$storedEvents): void
     {
         foreach ($storedEvents as $storedEvent) {
             $this->applyStoredEvent($storedEvent);
         }
     }
 
-    private function applyStoredEvent(StoredEvent|ShouldBeStored $event)
+    private function applyStoredEvent(StoredEvent | ShouldBeStored $event)
     {
         $event = $event instanceof StoredEvent
             ? $event->event
