@@ -12,9 +12,10 @@ use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionProperty;
 use ReflectionType;
+use Spatie\BetterTypes\Handlers;
+use Spatie\BetterTypes\Method;
 use Spatie\EventSourcing\AggregateRoots\Exceptions\CouldNotPersistAggregate;
 use Spatie\EventSourcing\Commands\Exceptions\UnhandledCommand;
-use Spatie\EventSourcing\Handlers;
 use Spatie\EventSourcing\Snapshots\Snapshot;
 use Spatie\EventSourcing\Snapshots\SnapshotRepository;
 use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
@@ -68,20 +69,31 @@ abstract class AggregateRoot
 
     public function handleCommand(object $command): static
     {
-        if ($handler = Handlers::find($command, $this)[0] ?? null) {
-            $this->{$handler}($command);
+        if ($handler = Handlers::new($this)
+            ->public()
+            ->protected()
+            ->reject(fn (Method $method) => in_array($method->getName(), ['handleCommand', 'recordThat', 'apply']))
+            ->accepts($command)
+            ->first()
+        ) {
+            $this->{$handler->getName()}($command);
 
             return $this;
         }
 
         foreach ($this->resolvePartials() as $partial) {
-            $handler = Handlers::find($command, $partial)[0] ?? null;
+            $handler = Handlers::new($partial)
+                ->public()
+                ->protected()
+                ->reject(fn (Method $method) => in_array($method->getName(), ['recordThat', 'apply']))
+                ->accepts($command)
+                ->first();
 
             if (! $handler) {
                 continue;
             }
 
-            $partial->{$handler}($command);
+            $partial->{$handler->getName()}($command);
 
             return $this;
         }
@@ -240,9 +252,13 @@ abstract class AggregateRoot
             $partial->apply($event);
         }
 
-        $handlers = Handlers::find($event, $this);
-
-        $handlers->each(fn (string $handler) => $this->{$handler}($event));
+        Handlers::new($this)
+            ->public()
+            ->protected()
+            ->reject(fn (Method $method) => in_array($method->getName(), ['handleCommand', 'recordThat', 'apply']))
+            ->accepts($event)
+            ->all()
+            ->each(fn (Method $method) => $this->{$method->getName()}($event));
 
         $this->appliedEvents[] = $event;
 
