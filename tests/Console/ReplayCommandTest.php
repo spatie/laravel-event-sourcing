@@ -5,7 +5,6 @@ namespace Spatie\EventSourcing\Console;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
-use Mockery;
 use Spatie\EventSourcing\Events\FinishedEventReplay;
 use Spatie\EventSourcing\Events\StartingEventReplay;
 use Spatie\EventSourcing\Facades\Projectionist;
@@ -99,16 +98,23 @@ class ReplayCommandTest extends TestCase
     /** @test */
     public function it_will_call_certain_methods_on_the_projector_when_replaying_events()
     {
-        $projector = Mockery::mock(BalanceProjector::class.'[onStartingEventReplay, onFinishedEventReplay]');
+        BalanceProjector::$log = [];
+
+        $projector = app(BalanceProjector::class);
 
         Projectionist::addProjector($projector);
-
-        $projector->shouldReceive('onStartingEventReplay')->once();
-        $projector->shouldReceive('onFinishedEventReplay')->once();
 
         Artisan::call('event-sourcing:replay', [
             'projector' => [get_class($projector)],
         ]);
+
+        $this->assertEquals([
+            'onStartingEventReplay',
+            MoneyAddedEvent::class,
+            MoneyAddedEvent::class,
+            MoneyAddedEvent::class,
+            'onFinishedEventReplay',
+        ], BalanceProjector::$log);
     }
 
     public function it_will_replay_events_from_a_specific_store()
