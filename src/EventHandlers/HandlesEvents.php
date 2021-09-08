@@ -42,6 +42,6 @@ trait HandlesEvents
             ->filter(function (Collection $group, string $key) {
                 return class_exists($key) && isset(class_parents($key)[ShouldBeStored::class]);
             })
-            ->map(fn (Collection $group) => $group->map(fn (Method $method) => $method->getName()));
+            ->map(fn (Collection $group) => $group->map(fn (Method $method) => $method->getName())->all());
     }
 }
