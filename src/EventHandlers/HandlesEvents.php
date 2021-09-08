@@ -31,7 +31,6 @@ trait HandlesEvents
             ->accepts($event)
             ->all()
             ->each(function (Method $method) use ($event) {
-                dd($this, $method->getName());
                 return $this->{$method->getName()}($event);
             });
     }
