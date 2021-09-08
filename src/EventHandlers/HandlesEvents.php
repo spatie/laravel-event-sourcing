@@ -11,20 +11,29 @@ use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 trait HandlesEvents
 {
-    public function handles(): array
+    public function handles(StoredEvent $storedEvent): bool
     {
-        return $this->getEventHandlingMethods()->keys()->toArray();
+        return Handlers::new($this)
+            ->public()
+            ->protected()
+            ->accepts($storedEvent->event)
+            ->all()
+            ->isNotEmpty();
     }
 
-    public function handle(StoredEvent $storedEvent)
+    public function handle(StoredEvent $storedEvent): void
     {
-        $eventClass = $storedEvent->event_class;
+        $event = $storedEvent->event;
 
-        $handlersForEvent = $this->getEventHandlingMethods()->get($eventClass);
-
-        foreach ($handlersForEvent as $handler) {
-            $this->{$handler}($storedEvent->event);
-        }
+        Handlers::new($this)
+            ->public()
+            ->protected()
+            ->accepts($event)
+            ->all()
+            ->each(function (Method $method) use ($event) {
+                dd($this, $method->getName());
+                return $this->{$method->getName()}($event);
+            });
     }
 
     public function handleException(Exception $exception): void
@@ -40,7 +49,8 @@ trait HandlesEvents
             ->all()
             ->groupBy(fn (Method $method) => $method->getTypes()->first()?->getName())
             ->filter(function (Collection $group, string $key) {
-                return class_exists($key) && isset(class_parents($key)[ShouldBeStored::class]);
+                return (class_exists($key) && isset(class_parents($key)[ShouldBeStored::class]))
+                    || $key === 'object';
             })
             ->map(fn (Collection $group) => $group->map(fn (Method $method) => $method->getName())->all());
     }

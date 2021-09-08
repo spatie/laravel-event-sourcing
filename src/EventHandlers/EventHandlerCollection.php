@@ -26,8 +26,11 @@ class EventHandlerCollection extends Collection
     {
         $eventHandlers = $this
             ->filter(
-                fn (EventHandler $eventHandler) => in_array($storedEvent->event_class, $eventHandler->handles(), true)
-            )->toArray();
+                function (EventHandler $eventHandler) use ($storedEvent) {
+                    return $eventHandler->handles($storedEvent);
+                }
+            )
+            ->toArray();
 
         return new static($eventHandlers);
     }
