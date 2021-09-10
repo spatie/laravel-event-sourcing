@@ -3,6 +3,7 @@
 namespace Spatie\EventSourcing\Tests\Models;
 
 use Carbon\Carbon;
+use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
@@ -173,6 +174,17 @@ class StoredEventTest extends TestCase
         /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentEvent */
         $eloquentEvent = EloquentStoredEvent::first();
 
+        $event = $eloquentEvent->toStoredEvent()->event;
+
+        $this->assertEquals($eloquentEvent->id, $event->storedEventId());
+    }
+
+    /** @test */
+    public function the_stored_event_is_fetched_from_id_when_not_present_in_metadata()
+    {
+        $this->fireEvents();
+        $eloquentEvent = EloquentStoredEvent::first();
+        unset($eloquentEvent->meta_data[MetaData::STORED_EVENT_ID]);
         $event = $eloquentEvent->toStoredEvent()->event;
 
         $this->assertEquals($eloquentEvent->id, $event->storedEventId());
