@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSourcing\Tests;
 
-use Spatie\EventSourcing\Attributes\EventSerializer as EventSerializerAttribute;
 use Spatie\EventSourcing\Attributes\EventVersion;
 use Spatie\EventSourcing\EventSerializers\JsonEventSerializer;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
