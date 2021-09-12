@@ -256,7 +256,7 @@ If you take a look at the contents of the `accounts` table you should see some a
 
 Imagine that, after a while, someone at the bank wants to know which accounts have processed the most transactions. Because we stored all changes to the accounts in the events table we can easily get that info by creating another projector.
 
-We are going to create another projector that stores the transaction count per account in a model. Bear in mind that you can easily use any other storage mechanism instead of a model. The projector doesn't care what you use.
+We are going to create another projector that stores the transactions count per account in a model. Bear in mind that you can easily use any other storage mechanism instead of a model. The projector doesn't care what you use.
 
 Here's the migration and the model class that the projector is going to use:
 
@@ -265,11 +265,11 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTransactionCountsTable extends Migration
+class CreateTransactionsCountTable extends Migration
 {
     public function up()
     {
-        Schema::create('transaction_counts', function (Blueprint $table) {
+        Schema::create('transactions_count', function (Blueprint $table) {
             $table->increments('id');
             $table->string('account_uuid');
             $table->integer('count')->default(0);
@@ -344,7 +344,7 @@ If you've followed along, you've already created some accounts and some events. 
 php artisan event-sourcing:replay App\\Projectors\\TransactionCountProjector
 ```
 
-This command will take all events stored in the `stored_events` table and pass them to `TransactionCountProjector`. After the command completes you should see the transaction counts in the `transaction_counts` table.
+This command will take all events stored in the `stored_events` table and pass them to `TransactionCountProjector`. After the command completes you should see the transaction counts in the `transactions_count` table.
 
 ## Welcoming new events
 
@@ -363,13 +363,13 @@ $yetAnotherAccount->addMoney(1000);
 $yetAnotherAccount->subtractMoney(50);
 ```
 
-You'll notice that both projectors are immediately handling these new events. The balance of the `Account` model is up to date and the data in the `transaction_counts` table gets updated.
+You'll notice that both projectors are immediately handling these new events. The balance of the `Account` model is up to date and the data in the `transactions_count` table gets updated.
 
 ## Benefits of projectors and projections
 
 The cool thing about projectors is that you can write them after events have happened. Imagine that someone at the bank wants to have a report of the average balance of each account. You would be able to write a new projector, replay all events, and have that data.
 
-Projections are very fast to query. Imagine that our application has processed millions of events. If you want to create a screen where you display the accounts with the most transactions you can easily query the `transaction_counts` table. This way you don't need to fire off some expensive query. The projector will keep the projections (the `transaction_counts` table) up to date.
+Projections are very fast to query. Imagine that our application has processed millions of events. If you want to create a screen where you display the accounts with the most transactions you can easily query the `transactions_count` table. This way you don't need to fire off some expensive query. The projector will keep the projections (the `transactions_count` table) up to date.
 
 ## Using Factories in Tests
 
