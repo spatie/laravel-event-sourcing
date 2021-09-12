@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 5.0.6 - 2021-09-12
+
+- fix AggregateRoot return types for static analysis (#251)
+
 ## 5.0.5 - 2021-07-26
 
 - Use `jsonb` in migration stubs instead of `json` (#237)
