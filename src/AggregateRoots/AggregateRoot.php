@@ -54,7 +54,7 @@ abstract class AggregateRoot
         return $aggregateRoot->reconstituteFromEvents();
     }
 
-    public function loadUuid(string $uuid): self
+    public function loadUuid(string $uuid): static
     {
         $this->uuid = $uuid;
 
@@ -66,7 +66,7 @@ abstract class AggregateRoot
         return $this->uuid;
     }
 
-    public function handleCommand(object $command): self
+    public function handleCommand(object $command): static
     {
         if ($handler = Handlers::find($command, $this)[0] ?? null) {
             $this->{$handler}($command);
@@ -89,7 +89,7 @@ abstract class AggregateRoot
         throw new UnhandledCommand($command::class);
     }
 
-    public function recordThat(ShouldBeStored $domainEvent): self
+    public function recordThat(ShouldBeStored $domainEvent): static
     {
         $domainEvent
             ->setAggregateRootUuid($this->uuid)
@@ -104,7 +104,7 @@ abstract class AggregateRoot
         return $this;
     }
 
-    public function persist(): self
+    public function persist(): static
     {
         $storedEvents = $this->persistWithoutApplyingToEventHandlers();
 
@@ -198,7 +198,7 @@ abstract class AggregateRoot
         return $recordedEvents;
     }
 
-    protected function reconstituteFromEvents(): self
+    protected function reconstituteFromEvents(): static
     {
         $storedEventRepository = $this->getStoredEventRepository();
 
@@ -289,7 +289,7 @@ abstract class AggregateRoot
         $projectionist->handleStoredEvents($storedEvents);
     }
 
-    private function disableEventHandling(): self
+    private function disableEventHandling(): static
     {
         $this->handleEvents = false;
 
