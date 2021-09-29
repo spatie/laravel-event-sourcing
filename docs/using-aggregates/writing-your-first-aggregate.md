@@ -3,7 +3,7 @@ title: Writing your first aggregate
 weight: 1
 ---
 
-An aggregate is a class that decides to record events based on past events. To know more about their general purpose and the idea behind them, read this section on [using aggregates to make decisions-based-on-the-past](/laravel-event-sourcing/v4/getting-familiar-with-event-sourcing/using-aggregates-to-make-decisions-based-on-the-past).
+An aggregate is a class that decides to record events based on past events. To know more about their general purpose and the idea behind them, read this section on [using aggregates to make decisions-based-on-the-past](/laravel-event-sourcing/v5/getting-familiar-with-event-sourcing/using-aggregates-to-make-decisions-based-on-the-past).
 
 ## Creating an aggregate
 
