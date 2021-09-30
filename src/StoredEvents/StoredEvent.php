@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 use ReflectionClass;
 use ReflectionException;
 use Spatie\EventSourcing\Attributes\EventSerializer as EventSerializerAttribute;
+use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
@@ -104,7 +105,8 @@ class StoredEvent implements Arrayable
     protected function shouldDispatchJob(): bool
     {
         /** @var \Spatie\EventSourcing\EventHandlers\EventHandlerCollection $eventHandlers */
-        $eventHandlers = Projectionist::allEventHandlers();
+        $eventHandlers = Projectionist::allEventHandlers()
+        ->filter(fn (EventHandler $eventHandler) => in_array($this->event_class, $eventHandler->handles(), true));
 
         return $eventHandlers->asyncEventHandlers()->count() > 0;
     }
