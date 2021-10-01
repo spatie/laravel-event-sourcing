@@ -17,7 +17,7 @@ Some concepts in the package, for example the testing methods of aggregates, wer
 
 ## A premium course on event sourcing
 
-[Our premium course on event sourcing](https://spatie.be/event-sourcing) will greatly help you understand event sourcing concepts.
+[Our premium course on event sourcing](https://event-sourcing-laravel.com) will greatly help you understand event sourcing concepts.
 
 In this course, we'll walk you through all the basics, and work our way towards the most complex topics. Though the knowledge presented is framework agnostic, the examples embrace Laravel.
 
