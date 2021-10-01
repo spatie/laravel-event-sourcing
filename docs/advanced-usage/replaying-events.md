@@ -3,11 +3,11 @@ title: Replaying events
 weight: 2
 ---
 
-All [events](/laravel-event-sourcing/v4/advanced-usage/preparing-events/) that implement `Spatie\EventSourcing\ShouldBeStored` will be [serialized](/laravel-event-sourcing/v4/advanced-usage/using-your-own-event-serializer) and stored in the `stored_events` table. After your app has been doing its work for a while the `stored_events` table will probably contain some events.
+All [events](/laravel-event-sourcing/v5/advanced-usage/preparing-events/) that implement `Spatie\EventSourcing\ShouldBeStored` will be [serialized](/laravel-event-sourcing/v5/advanced-usage/using-your-own-event-serializer) and stored in the `stored_events` table. After your app has been doing its work for a while the `stored_events` table will probably contain some events.
 
- When creating a new [projector](/laravel-event-sourcing/v4/using-projectors/writing-your-first-projector/) you'll want to feed all stored events to that new projector. We call this process replaying events.
+ When creating a new [projector](/laravel-event-sourcing/v5/using-projectors/writing-your-first-projector/) you'll want to feed all stored events to that new projector. We call this process replaying events.
 
- Events can be replayed to [all projectors that were added to the projectionist](/laravel-event-sourcing/v4/using-projectors/creating-and-configuring-projectors/) with this artisan command:
+ Events can be replayed to [all projectors that were added to the projectionist](/laravel-event-sourcing/v5/using-projectors/creating-and-configuring-projectors/) with this artisan command:
 
  ```bash
  php artisan event-sourcing:replay
