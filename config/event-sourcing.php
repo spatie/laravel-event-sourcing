@@ -114,7 +114,7 @@ return [
      * In production, you likely don't want the package to auto-discover the event handlers
      * on every request. The package can cache all registered event handlers.
      * More info:
-     * https://spatie.be/docs/laravel-event-sourcing/v4/advanced-usage/discovering-projectors-and-reactors#caching-discovered-projectors-and-reactors
+     * https://spatie.be/docs/laravel-event-sourcing/v5/advanced-usage/discovering-projectors-and-reactors#caching-discovered-projectors-and-reactors
      *
      * Here you can specify where the cache should be stored.
      */
