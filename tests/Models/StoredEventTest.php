@@ -3,6 +3,7 @@
 namespace Spatie\EventSourcing\Tests\Models;
 
 use Carbon\Carbon;
+use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
@@ -146,6 +147,26 @@ class StoredEventTest extends TestCase
         $eloquentStoredEvent->setOriginalEvent($originalEvent);
 
         $this->assertSame($originalEvent, $eloquentStoredEvent->event);
+    }
+
+    /** @test */
+    public function it_gets_created_at_from_stored_event_meta_data()
+    {
+        $originalEvent = new MoneyAddedEvent($this->account, 1234);
+        $storedEvent = new StoredEvent([
+            'event_properties' => null,
+            'aggregate_uuid' => '',
+            'aggregate_version' => '',
+            'event_version' => null,
+            'event_class' => MoneyAddedEvent::class,
+            'meta_data' => [
+                MetaData::CREATED_AT => '2021-10-05 12:00:00',
+            ],
+            'created_at' => '',
+
+        ], $originalEvent);
+        
+        $this->assertEquals(Carbon::parse('2021-10-05 12:00:00'), $storedEvent->event->createdAt(), );
     }
 
     /** @test */
