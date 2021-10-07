@@ -15,7 +15,7 @@ Let's first add a little helper method to the `Account` model to check if an acc
 // ...
 
 class Account extends Model
-
+{
     // ...
 
     public function isBroke(): bool
