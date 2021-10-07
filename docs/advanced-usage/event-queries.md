@@ -32,23 +32,29 @@ The first step in implementing an event query is the determine which events shou
 Here's what the full constructor of our example query looks like:
 
 ```php
-public function __construct(
-    private Period $period,
-    private Collection $products
-) {
-    EloquentStoredEvent::query()
-        // We're only interested in `OrderCreated` events
-        ->whereEvent(OrderCreated::class)
-        // And we only need events within a given period
-        ->whereDate(
-            'created_at', '>=', $this->period->getStart()
-        )
-        ->whereDate(
-            'created_at', '<=', $this->period->getEnd()
-        )
-        ->each(
-            fn (EloquentStoredEvent $event) => $this->apply($event->toStoredEvent())
-        );
+// ...
+use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
+
+class EarningsForProductAndPeriod extends EventQuery
+{
+    public function __construct(
+        private Period $period,
+        private Collection $products
+    ) {
+        EloquentStoredEvent::query()
+            // We're only interested in `OrderCreated` events
+            ->whereEvent(OrderCreated::class)
+            // And we only need events within a given period
+            ->whereDate(
+                'created_at', '>=', $this->period->getStart()
+            )
+            ->whereDate(
+                'created_at', '<=', $this->period->getEnd()
+            )
+            ->each(
+                fn (EloquentStoredEvent $event) => $this->apply($event->toStoredEvent())
+            );
+    }
 }
 ```
 
