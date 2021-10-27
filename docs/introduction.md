@@ -17,7 +17,7 @@ Some concepts in the package, for example the testing methods of aggregates, wer
 
 ## A premium course on event sourcing
 
-Our team launched [a premium course on event sourcing](https://spatie.be/event-sourcing) in June 2021.
+Our team launched [a premium course on event sourcing](https://spatie.be/products/event-sourcing-in-laravel) in June 2021.
 
 In this course, we'll walk you through all the basics. Though the knowledge presented is framework agnostic, the examples embrace Laravel.
 The course includes a cart demo application that is event sourced and can be used as a starting point in your e-commerce projects.
