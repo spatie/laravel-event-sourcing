@@ -22,7 +22,7 @@ Our team launched [a premium course on event sourcing](https://spatie.be/product
 In this course, we'll walk you through all the basics. Though the knowledge presented is framework agnostic, the examples embrace Laravel.
 The course includes a cart demo application that is event sourced and can be used as a starting point in your e-commerce projects.
 
-Head over to [our course page at spatie.be](https://spatie.be/event-sourcing) to purchase your copy!
+Head over to [our course page at spatie.be](https://spatie.be/products/event-sourcing-in-laravel) to purchase your copy!
 
 ## We have badges!
 
