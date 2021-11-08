@@ -15,7 +15,7 @@ class CatchAllHandlerTest extends TestCase
 
         Projectionist::addReactor(CatchAllReactor::class);
 
-        event(new TestEvent);
+        event(new TestEvent());
 
         $this->assertEquals([TestEvent::class], CatchAllReactor::$log);
     }
