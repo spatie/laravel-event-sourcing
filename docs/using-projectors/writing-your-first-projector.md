@@ -324,7 +324,7 @@ class TransactionCountProjector extends Projector
     {
         $transactionCounter = TransactionCount::firstOrCreate(['account_uuid' => $event->accountUuid]);
 
-        $transactionCounter->count += 1;
+        $transactionCounter->count -= 1;
 
         $transactionCounter->save();
     }
