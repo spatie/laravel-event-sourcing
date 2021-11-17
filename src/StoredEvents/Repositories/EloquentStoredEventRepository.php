@@ -51,7 +51,11 @@ class EloquentStoredEventRepository implements StoredEventRepository
         /** @var LazyCollection $lazyCollection */
         $lazyCollection = $query
             ->orderBy('id')
-            ->lazyById();
+            ->when(
+                method_exists($query, 'lazyById'),
+                fn (Builder $builder) => $builder->lazyById(),
+                fn (Builder $builder) => $builder->cursor()
+            );
 
         return $lazyCollection->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
