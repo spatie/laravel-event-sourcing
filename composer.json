@@ -24,7 +24,7 @@
         "php": "^8.0",
         "ext-json": "*",
         "illuminate/console": "^8.0",
-        "illuminate/database": "^8.0",
+        "illuminate/database": "^8.34",
         "illuminate/events": "^8.0",
         "illuminate/support": "^8.0",
         "league/flysystem": "^1.1.3",
