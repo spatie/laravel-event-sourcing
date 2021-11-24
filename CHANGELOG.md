@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 6.0.0 - 2021-11-24
+
+- Support PHP 8.1
+- The `EventHandler` interface was changed in order to use the `spatie/better-types` package:
+
+```diff
+-    public function handles(): array;
++    public function handles(StoredEvent $storedEvent): bool;
+
+-    public function handle(StoredEvent $event);
++    public function handle(StoredEvent $storedEvent): void;
+
+```
 ## 6.0.0 - 2021-??-??
 
 - Support PHP 8.1
@@ -13,8 +26,8 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
-```
 
+```
 ## 5.0.8 - 2021-11-17
 
 ## What's Changed
@@ -83,13 +96,14 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 ## 5.0.0 - 2021-06-09
 
-- Add `EloquentStoredEvent::query()-&amp;gt;whereEvent(EventA::class, …)`
+- Add `EloquentStoredEvent::query()-&amp;amp;gt;whereEvent(EventA::class, …)`
 - 
 - Add `EventQuery`
 - 
 - Add `AggregatePartial`
 - 
 - - If you're overriding an aggregate root's constructor, make sure to call `parent::__construct` from it
+- 
 - 
 - 
 - Add command bus and aggregate root handlers
@@ -100,11 +114,15 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - - Aggregate root `apply` methods
 - 
+- 
 - - Projection listeners
+- 
 - 
 - - Reactor listeners
 - 
+- 
 - - Event queries
+- 
 - 
 - 
 - Moved `Spatie\EventSourcing\Exception\CouldNotPersistAggregate` to `Spatie\EventSourcing\AggregateRoots\Exceptions\CouldNotPersistAggregate`
@@ -119,9 +137,9 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - Dependency injection in handlers isn't supported anymore,  use constructor injection instead
 - 
-- `$storedEvent` and `$aggregateRootUuid` are no longer passed to event handler methods. Use `$event-&amp;gt;storedEventId()` and `$event-&amp;gt;aggregateRootUuid()` instead. ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
+- `$storedEvent` and `$aggregateRootUuid` are no longer passed to event handler methods. Use `$event-&amp;amp;gt;storedEventId()` and `$event-&amp;amp;gt;aggregateRootUuid()` instead. ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
 - 
-- Rename `EloquentStoredEvent::query()-&amp;gt;uuid()` to `EloquentStoredEvent::query()-&amp;gt;whereAggregateRoot()`
+- Rename `EloquentStoredEvent::query()-&amp;amp;gt;uuid()` to `EloquentStoredEvent::query()-&amp;amp;gt;whereAggregateRoot()`
 - 
 - Removed `AggregateRoot::$allowConcurrency`
 - 
@@ -129,7 +147,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - Removed `$aggregateVersion` from `StoredEventRepository::persistMany`
 - 
-- Event handlers are no longer called with `app()-&amp;gt;call()` ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
+- Event handlers are no longer called with `app()-&amp;amp;gt;call()` ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
 - 
 - `$handlesEvents` on Projectors and Reactors isn't supported anymore
 - 
@@ -159,6 +177,7 @@ class MyProjector extends Projector
 }
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -182,6 +201,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 ```
