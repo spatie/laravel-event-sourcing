@@ -1,5 +1,18 @@
 # Upgrading
 
+## From v5 to v6
+
+The `EventHandler` interface was changed:
+
+```diff
+-    public function handles(): array;
++    public function handles(StoredEvent $storedEvent): bool;
+
+-    public function handle(StoredEvent $event);
++    public function handle(StoredEvent $storedEvent): void;
+```
+
+
 ## From v3 to v4
 
 - Projectors should not implement the `Projector` interface anymore. Instead, they should extend from `Spatie\EventSourcing\EventHandlers\Projectors\Projector` class. You don't need the use the `ProjectsEvents` trait anymore, as it's already applied on the base class.
