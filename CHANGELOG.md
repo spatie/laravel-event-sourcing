@@ -4,6 +4,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 ## 6.0.0 - 2021-??-??
 
+- Support PHP 8.1
 - The `EventHandler` interface was changed in order to use the `spatie/better-types` package:
 
 ```diff
