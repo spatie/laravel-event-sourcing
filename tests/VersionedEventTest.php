@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use Spatie\EventSourcing\Attributes\EventSerializer;
 use Spatie\EventSourcing\Attributes\EventVersion;
 use Spatie\EventSourcing\EventSerializers\JsonEventSerializer;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
@@ -46,7 +47,7 @@ class VersionedEventTest extends TestCase
 
 #[
     EventVersion(2),
-    EventSerializerAttribute(VersionedEventSerializer::class),
+    EventSerializer(VersionedEventSerializer::class),
 ]
 class VersionedEvent extends ShouldBeStored
 {
