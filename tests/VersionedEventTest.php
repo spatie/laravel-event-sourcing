@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use Spatie\EventSourcing\Attributes\EventSerializer;
 use Spatie\EventSourcing\Attributes\EventVersion;
 use Spatie\EventSourcing\EventSerializers\JsonEventSerializer;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
@@ -32,7 +33,7 @@ class VersionedEventTest extends TestCase
             "aggregate_version" => null,
             "event_version" => 1,
             "event_class" => "Spatie\\EventSourcing\\Tests\\VersionedEvent",
-            "event_properties" => ['uuid' => 'event-1'],
+            "event_properties" => ['name' => 'event-1'],
             "meta_data" => [],
             "created_at" => now(),
         ]);
@@ -46,7 +47,7 @@ class VersionedEventTest extends TestCase
 
 #[
     EventVersion(2),
-    EventSerializerAttribute(VersionedEventSerializer::class),
+    EventSerializer(VersionedEventSerializer::class),
 ]
 class VersionedEvent extends ShouldBeStored
 {

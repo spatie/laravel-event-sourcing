@@ -8,9 +8,9 @@ use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 interface EventHandler
 {
-    public function handles(): array;
+    public function handles(StoredEvent $storedEvent): bool;
 
-    public function handle(StoredEvent $event);
+    public function handle(StoredEvent $storedEvent): void;
 
     public function handleException(Exception $exception): void;
 

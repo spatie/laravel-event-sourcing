@@ -4,25 +4,35 @@ namespace Spatie\EventSourcing\EventHandlers;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Spatie\EventSourcing\Handlers;
+use Spatie\BetterTypes\Handlers;
+use Spatie\BetterTypes\Method;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 trait HandlesEvents
 {
-    public function handles(): array
+    public function handles(StoredEvent $storedEvent): bool
     {
-        return $this->getEventHandlingMethods()->keys()->toArray();
+        return Handlers::new($this)
+            ->public()
+            ->protected()
+            ->accepts($storedEvent->event)
+            ->all()
+            ->isNotEmpty();
     }
 
-    public function handle(StoredEvent $storedEvent)
+    public function handle(StoredEvent $storedEvent): void
     {
-        $eventClass = $storedEvent->event_class;
+        $event = $storedEvent->event;
 
-        $handlersForEvent = $this->getEventHandlingMethods()->get($eventClass);
-
-        foreach ($handlersForEvent as $handler) {
-            $this->{$handler}($storedEvent->event);
-        }
+        Handlers::new($this)
+            ->public()
+            ->protected()
+            ->accepts($event)
+            ->all()
+            ->each(function (Method $method) use ($event) {
+                return $this->{$method->getName()}($event);
+            });
     }
 
     public function handleException(Exception $exception): void
@@ -32,6 +42,15 @@ trait HandlesEvents
 
     public function getEventHandlingMethods(): Collection
     {
-        return Handlers::list($this);
+        return Handlers::new($this)
+            ->public()
+            ->protected()
+            ->all()
+            ->groupBy(fn (Method $method) => $method->getTypes()->first()?->getName())
+            ->filter(function (Collection $group, string $key) {
+                return (class_exists($key) && isset(class_parents($key)[ShouldBeStored::class]))
+                    || $key === 'object';
+            })
+            ->map(fn (Collection $group) => $group->map(fn (Method $method) => $method->getName())->all());
     }
 }

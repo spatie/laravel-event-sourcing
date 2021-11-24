@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 6.0.0 - 2021-??-??
+
+- Support PHP 8.1
+- The `EventHandler` interface was changed in order to use the `spatie/better-types` package:
+
+```diff
+-    public function handles(): array;
++    public function handles(StoredEvent $storedEvent): bool;
+
+-    public function handle(StoredEvent $event);
++    public function handle(StoredEvent $storedEvent): void;
+```
+
 ## 5.0.8 - 2021-11-17
 
 ## What's Changed

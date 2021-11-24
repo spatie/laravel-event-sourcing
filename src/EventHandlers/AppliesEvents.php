@@ -2,7 +2,8 @@
 
 namespace Spatie\EventSourcing\EventHandlers;
 
-use Spatie\EventSourcing\Handlers;
+use Spatie\BetterTypes\Handlers;
+use Spatie\BetterTypes\Method;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
@@ -21,8 +22,14 @@ trait AppliesEvents
             ? $event->event
             : $event;
 
-        Handlers::find($event, $this)->each(
-            fn (string $handler) => $this->{$handler}($event)
-        );
+        Handlers::new($this)
+            ->public()
+            ->protected()
+            ->reject(fn (Method $method) => in_array($method->getName(), ['apply', 'recordThat']))
+            ->accepts($event)
+            ->all()
+            ->each(
+                fn (Method $method) => $this->{$method->getName()}($event)
+            );
     }
 }
