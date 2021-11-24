@@ -33,7 +33,7 @@ class VersionedEventTest extends TestCase
             "aggregate_version" => null,
             "event_version" => 1,
             "event_class" => "Spatie\\EventSourcing\\Tests\\VersionedEvent",
-            "event_properties" => ['uuid' => 'event-1'],
+            "event_properties" => ['name' => 'event-1'],
             "meta_data" => [],
             "created_at" => now(),
         ]);
