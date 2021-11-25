@@ -201,7 +201,7 @@ abstract class AggregateRoot
         }
     }
 
-    public function getAndClearRecordedEvents(): array
+    protected function getAndClearRecordedEvents(): array
     {
         $recordedEvents = $this->recordedEvents;
 
