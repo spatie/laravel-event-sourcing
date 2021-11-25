@@ -30,7 +30,7 @@ class FakeAggregateRoot
             $this->aggregateRoot->recordThat($event);
         }
 
-        $this->aggregateRoot->persist();
+        $this->aggregateRoot->getAndClearRecordedEvents();
 
         return $this;
     }
