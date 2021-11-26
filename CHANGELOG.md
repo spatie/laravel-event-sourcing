@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 6.0.1 - 2021-11-26
+
+- Fix for aggregate root testing without a database #292
+
 ## 6.0.0 - 2021-11-24
 
 - Support PHP 8.1
