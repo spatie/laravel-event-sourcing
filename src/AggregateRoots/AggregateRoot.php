@@ -285,7 +285,8 @@ abstract class AggregateRoot
     {
         $uuid ??= (string) Str::uuid();
 
-        $aggregateRoot = static::retrieve($uuid)->disableEventHandling();
+        $aggregateRoot = app(static::class)->disableEventHandling();
+        $aggregateRoot->uuid = $uuid;
 
         return (new FakeAggregateRoot($aggregateRoot));
     }
