@@ -6,6 +6,10 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 - Skip retrieve on aggregate::fake (#294)
 
+## 6.0.2 - 2021-11-26
+
+- Skip retrieve on aggregate::fake (#294)
+
 ## 6.0.1 - 2021-11-26
 
 - Fix for aggregate root testing without a database (#292)
@@ -23,6 +27,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 +    public function handle(StoredEvent $storedEvent): void;
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -35,6 +40,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 ```
@@ -117,6 +123,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - Add command bus and aggregate root handlers
 - 
 - Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
@@ -127,7 +134,9 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - - Projection listeners
+- 
 - 
 - 
 - 
@@ -135,7 +144,9 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - - Event queries
+- 
 - 
 - 
 - 
@@ -194,6 +205,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -217,6 +229,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
