@@ -11,6 +11,7 @@ use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 class FakeAggregateRoot
 {
     protected $whenResult = null;
+    protected $givenEventsCount = 0;
 
     public function __construct(
         private AggregateRoot $aggregateRoot
@@ -30,7 +31,7 @@ class FakeAggregateRoot
             $this->aggregateRoot->recordThat($event);
         }
 
-        $this->aggregateRoot->persist();
+        $this->givenEventsCount = count($events);
 
         return $this;
     }
@@ -170,6 +171,6 @@ class FakeAggregateRoot
             unset($metaData[MetaData::AGGREGATE_ROOT_VERSION]);
 
             return $event->setMetaData($metaData);
-        }, $this->aggregateRoot->getRecordedEvents());
+        }, array_slice($this->aggregateRoot->getRecordedEvents(), $this->givenEventsCount));
     }
 }
