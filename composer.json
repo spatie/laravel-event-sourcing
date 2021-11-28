@@ -32,7 +32,7 @@
         "spatie/better-types": "0.1.0",
         "spatie/laravel-package-tools": "^1.9",
         "spatie/laravel-schemaless-attributes": "^1.0|^2.0",
-        "symfony/finder": "^5.3.8",
+        "symfony/finder": "^5.3.7",
         "symfony/property-access": "^5.3",
         "symfony/property-info": "^5.3",
         "symfony/serializer": "^5.3"
