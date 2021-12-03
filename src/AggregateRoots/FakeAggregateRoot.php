@@ -122,6 +122,7 @@ class FakeAggregateRoot
         $expectedEvents = Arr::wrap($expectedEvents);
 
         $appliedEvents = array_map(function (ShouldBeStored $event) {
+            $eventWithoutUuid = clone $event;
             $metaData = $event->metaData();
 
             unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);
@@ -129,7 +130,7 @@ class FakeAggregateRoot
             unset($metaData[MetaData::CREATED_AT]);
             unset($metaData[MetaData::AGGREGATE_ROOT_VERSION]);
 
-            return $event->setMetaData($metaData);
+            return $eventWithoutUuid->setMetaData($metaData);
         }, $this->aggregateRoot->getAppliedEvents());
 
         Assert::assertEquals($expectedEvents, $appliedEvents);
@@ -163,6 +164,7 @@ class FakeAggregateRoot
     private function getRecordedEventsWithoutUuid(): array
     {
         return array_map(static function (ShouldBeStored $event) {
+            $eventWithoutUuid = clone $event;
             $metaData = $event->metaData();
 
             unset($metaData[MetaData::AGGREGATE_ROOT_UUID]);
@@ -170,7 +172,7 @@ class FakeAggregateRoot
             unset($metaData[MetaData::CREATED_AT]);
             unset($metaData[MetaData::AGGREGATE_ROOT_VERSION]);
 
-            return $event->setMetaData($metaData);
+            return $eventWithoutUuid->setMetaData($metaData);
         }, array_slice($this->aggregateRoot->getRecordedEvents(), $this->givenEventsCount));
     }
 }
