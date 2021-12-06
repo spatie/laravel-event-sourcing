@@ -12,6 +12,17 @@ The `EventHandler` interface was changed:
 +    public function handle(StoredEvent $storedEvent): void;
 ```
 
+## From v4 to v5
+
+- Stored events now have an `event_version` column and property. You must add this migration manually.
+- Make sure any aggregate roots with constructors call the parent `__construct` method
+- Event listeners in aggregate roots, projectors and reactors all rely on type hints rather than method naming. Make sure all your methods use the appropriate type hints (the method name no longer matters). `$handlesEvents` on Projectors and Reactors isn't supported anymore.
+- Dependency injection in handlers isn't supported anymore,  use constructor injection instead
+- `$storedEvent` and `$aggregateRootUuid` are no longer passed to event handler methods. Use `$event->storedEventId()` and `$event->aggregateRootUuid()` instead. ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
+- The `EloquentStoredEvent::query()->uuid()` is now `EloquentStoredEvent::query()->whereAggregateRoot()`
+- `AggregateRoot::$allowConcurrency` is no longer supported
+- Event handlers are no longer called with `app()->call()` ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
+- See [5.0.0 release notes](https://github.com/spatie/laravel-event-sourcing/releases/tag/5.0.0) for all other changes
 
 ## From v3 to v4
 
