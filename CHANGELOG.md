@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 6.0.4 - 2021-12-06
+
+- Don't mutate original events in `FakeAggregateRoot::getRecordedEventsWithoutUuid` (#296)
+
 ## 6.0.3 - 2021-11-28
 
 ## What's Changed
