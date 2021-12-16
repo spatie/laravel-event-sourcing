@@ -155,6 +155,14 @@ class FakeAggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function it_excludes_given_events_to_assert_that_an_event_is_not_recorded()
+    {
+        DummyAggregateRoot::fake()
+            ->given([new DummyEvent(1)])
+            ->assertNotRecorded(DummyEvent::class);
+    }
+
+    /** @test */
     public function it_can_assert_that_an_event_is_not_applied()
     {
         DummyAggregateRoot::fake()->assertNotApplied(DummyEvent::class);
