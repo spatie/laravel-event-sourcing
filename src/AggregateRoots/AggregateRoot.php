@@ -15,6 +15,7 @@ use ReflectionType;
 use Spatie\BetterTypes\Handlers;
 use Spatie\BetterTypes\Method;
 use Spatie\EventSourcing\AggregateRoots\Exceptions\CouldNotPersistAggregate;
+use Spatie\EventSourcing\Attributes\IncludeInSnapshot;
 use Spatie\EventSourcing\Commands\Exceptions\UnhandledCommand;
 use Spatie\EventSourcing\Snapshots\Snapshot;
 use Spatie\EventSourcing\Snapshots\SnapshotRepository;
@@ -191,13 +192,25 @@ abstract class AggregateRoot
             ->reject(fn (ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
             ->mapWithKeys(function (ReflectionProperty $property) {
                 return [$property->getName() => $this->{$property->getName()}];
-            })->toArray();
+            })->merge(
+                collect($class->getProperties(ReflectionProperty::IS_PROTECTED))
+                    ->filter(fn (ReflectionProperty $reflectionProperty) => !empty($reflectionProperty->getAttributes(IncludeInSnapshot::class)))
+                    ->mapWithKeys(function (ReflectionProperty $property) {
+                        return [$property->getName() => $this->{$property->getName()}];
+                    })
+            )->merge(
+                $this->entities->map(fn(AggregatePartial $aggregatePartial) => $aggregatePartial->getState())
+            )->merge([])->toArray();
     }
 
     protected function useState(array $state): void
     {
         foreach ($state as $key => $value) {
-            $this->$key = $value;
+            if ($this->$key instanceof AggregatePartial) {
+                $this->$key->useState($value);
+            } else {
+                $this->$key = $value;
+            }
         }
     }
 

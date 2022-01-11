@@ -13,10 +13,12 @@ Here's an example of an aggregate partial, which manages cart items and is part 
 namespace Spatie\Shop\Cart\Partials;
 
 use Spatie\EventSourcing\AggregateRoots\AggregatePartial;
+use Spatie\EventSourcing\Attributes\IncludeInSnapshot;
 
 class CartItems extends AggregatePartial
 {
-    private array $cartItems = [];
+    #[IncludeInSnapshot]
+    protected array $cartItems = [];
 
     public function isEmpty(): bool
     {

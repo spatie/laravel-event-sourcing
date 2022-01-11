@@ -3,6 +3,9 @@
 namespace Spatie\EventSourcing\AggregateRoots;
 
 use Ramsey\Uuid\Uuid;
+use ReflectionClass;
+use ReflectionProperty;
+use Spatie\EventSourcing\Attributes\IncludeInSnapshot;
 use Spatie\EventSourcing\EventHandlers\AppliesEvents;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
@@ -14,6 +17,32 @@ abstract class AggregatePartial
     public function __construct(
         protected AggregateRoot $aggregateRoot
     ) {
+    }
+
+    public function getState(): array
+    {
+        $class = new ReflectionClass($this);
+
+        return collect($class->getProperties(ReflectionProperty::IS_PUBLIC))
+            ->reject(fn (ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
+            ->mapWithKeys(function (ReflectionProperty $property) {
+                return [$property->getName() => $this->{$property->getName()}];
+            })
+            ->merge(
+                collect($class->getProperties(ReflectionProperty::IS_PROTECTED))
+                    ->filter(fn (ReflectionProperty $reflectionProperty) => !empty($reflectionProperty->getAttributes(IncludeInSnapshot::class)))
+                    ->mapWithKeys(function (ReflectionProperty $property) {
+                        return [$property->getName() => $this->{$property->getName()}];
+                    })
+            )
+            ->merge([])->toArray();
+    }
+
+    public function useState(array $state): void
+    {
+        foreach ($state as $key => $value) {
+            $this->$key = $value;
+        }
     }
 
     protected function aggregateRootUuid(): string
