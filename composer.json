@@ -28,7 +28,7 @@
         "illuminate/events": "^8.67|^9.0",
         "illuminate/support": "^8.67|^9.0",
         "phpdocumentor/reflection-docblock": "^5.2",
-        "spatie/better-types": "0.1.0",
+        "spatie/better-types": "^0.1.0",
         "spatie/laravel-package-tools": "^1.9",
         "spatie/laravel-schemaless-attributes": "^1.0|^2.0",
         "symfony/finder": "^5.3.7|^6.0",
