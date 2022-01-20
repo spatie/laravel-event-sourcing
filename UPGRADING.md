@@ -1,5 +1,9 @@
 # Upgrading
 
+## From v6 to v7
+
+There were no changes to the public API, we only performed internal cleanup and provided support for Laravel 9
+
 ## From v5 to v6
 
 The `EventHandler` interface was changed:
