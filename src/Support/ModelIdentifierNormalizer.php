@@ -5,6 +5,8 @@ namespace Spatie\EventSourcing\Support;
 use Illuminate\Contracts\Database\ModelIdentifier;
 use Illuminate\Contracts\Queue\QueueableCollection;
 use Illuminate\Contracts\Queue\QueueableEntity;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\SerializesAndRestoresModelIdentifiers;
 use InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -17,19 +19,19 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
     /**
      * @inheritdoc
      */
-    public function normalize($object, string $format = null, array $context = [])
+    public function normalize(mixed $object, string $format = null, array $context = []): array
     {
         if (! $this->supportsNormalization($object)) {
             throw new InvalidArgumentException('Cannot serialize an object that is not a QueueableEntity or QueueableCollection in ModelIdentifierNormalizer.');
         }
 
-        return $this->getSerializedPropertyValue($object);
+        return (array) $this->getSerializedPropertyValue($object);
     }
 
     /**
      * @inheritdoc
      */
-    public function supportsNormalization($data, string $format = null)
+    public function supportsNormalization(mixed $data, string $format = null): bool
     {
         return ($data instanceof QueueableEntity || $data instanceof QueueableCollection);
     }
@@ -37,7 +39,7 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
     /**
      * @inheritdoc
      */
-    public function denormalize($data, $class, string $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type, string $format = null, array $context = []): Collection|Model
     {
         $identifier = $data instanceof ModelIdentifier
             ? $data
@@ -49,7 +51,7 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
     /**
      * @inheritdoc
      */
-    public function supportsDenormalization($data, $type, string $format = null)
+    public function supportsDenormalization(mixed $data, string $type, string $format = null): bool
     {
         return $this->normalizedDataIsModelIdentifier($data)
             && $this->isNormalizedToModelIdentifier($type);
