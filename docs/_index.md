@@ -2,5 +2,5 @@
 title: v6
 slogan: Event Sourcing for Artisans
 githubUrl: https://github.com/spatie/laravel-event-sourcing
-branch: main
+branch: v6
 ---
