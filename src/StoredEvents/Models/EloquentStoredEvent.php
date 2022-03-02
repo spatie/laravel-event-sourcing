@@ -38,7 +38,7 @@ class EloquentStoredEvent extends Model
             'event_class' => $this->event_class,
             'meta_data' => $this->meta_data,
             'created_at' => $this->created_at,
-        ], $this->originalEvent);
+        ], $this->getOriginalEvent());
     }
 
     public function setOriginalEvent(ShouldBeStored $event): self
@@ -48,9 +48,18 @@ class EloquentStoredEvent extends Model
         return $this;
     }
 
+    public function getOriginalEvent(): ?ShouldBeStored
+    {
+        if ($this->isDirty('meta_data')) {
+            $this->originalEvent?->setMetaData($this->meta_data?->toArray() ?? []);
+        }
+
+        return $this->originalEvent;
+    }
+
     public function getEventAttribute(): ?ShouldBeStored
     {
-        return $this->originalEvent ??= $this->toStoredEvent()->event;
+        return ($event = $this->getOriginalEvent()) ? $event : $this->toStoredEvent()->event;
     }
 
     public function getMetaDataAttribute(): SchemalessAttributes

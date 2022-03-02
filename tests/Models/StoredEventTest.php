@@ -149,6 +149,23 @@ class StoredEventTest extends TestCase
     }
 
     /** @test */
+    public function it_updates_the_original_if_meta_data_is_changed()
+    {
+        $originalEvent = new MoneyAdded(100);
+
+        $eloquentStoredEvent = new EloquentStoredEvent();
+
+        $eloquentStoredEvent->setOriginalEvent($originalEvent);
+
+        $eloquentStoredEvent->meta_data->set('user.id', 1);
+
+        $this->assertEqualsCanonicalizing(
+            $eloquentStoredEvent->meta_data->toArray(),
+            $eloquentStoredEvent->event->metaData()
+        );
+    }
+
+    /** @test */
     public function created_at_is_set_on_event()
     {
         $now = Carbon::make('2021-01-01 10:00:00');
