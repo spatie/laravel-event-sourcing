@@ -50,7 +50,7 @@ class EloquentStoredEvent extends Model
 
     public function getOriginalEvent(): ?ShouldBeStored
     {
-        if ($this->isDirty('meta_data')) {
+        if ($this->isDirty('meta_data') || $this->wasChanged('meta_data')) {
             $this->originalEvent?->setMetaData($this->meta_data?->toArray() ?? []);
         }
 

@@ -3,6 +3,9 @@
 namespace Spatie\EventSourcing\Tests\Models;
 
 use Carbon\Carbon;
+use Illuminate\Support\Str;
+use Spatie\EventSourcing\Enums\MetaData;
+use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
@@ -158,6 +161,41 @@ class StoredEventTest extends TestCase
         $eloquentStoredEvent->setOriginalEvent($originalEvent);
 
         $eloquentStoredEvent->meta_data->set('user.id', 1);
+
+        $this->assertEqualsCanonicalizing(
+            $eloquentStoredEvent->meta_data->toArray(),
+            $eloquentStoredEvent->event->metaData()
+        );
+    }
+
+    /** @test */
+    public function it_updates_the_original_if_meta_data_is_changed_and_saved()
+    {
+        $originalEvent = new MoneyAdded(100);
+
+        $eloquentStoredEvent = new EloquentStoredEvent();
+
+        $eloquentStoredEvent->setOriginalEvent($originalEvent);
+
+        $createdAt = Carbon::now();
+
+        $eloquentStoredEvent->setRawAttributes([
+            'event_properties' => app(EventSerializer::class)->serialize(clone $originalEvent),
+            'aggregate_uuid' => Str::uuid(),
+            'aggregate_version' => 1,
+            'event_version' => 1,
+            'event_class' => MoneyAdded::class,
+            'meta_data' => json_encode($originalEvent->metaData() + [
+                MetaData::CREATED_AT => $createdAt->toDateTimeString(),
+            ]),
+            'created_at' => $createdAt,
+        ]);
+
+        $eloquentStoredEvent->save();
+
+        $eloquentStoredEvent->meta_data->set('user.id', 1);
+
+        $eloquentStoredEvent->save();
 
         $this->assertEqualsCanonicalizing(
             $eloquentStoredEvent->meta_data->toArray(),
