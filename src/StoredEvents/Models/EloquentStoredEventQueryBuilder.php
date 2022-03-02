@@ -36,4 +36,18 @@ class EloquentStoredEventQueryBuilder extends Builder
 
         return $this;
     }
+
+    public function whereProperty(string $property, mixed $value): self
+    {
+        $this->whereJsonContains(column: "event_properties->{$property}", value: $value);
+
+        return $this;
+    }
+
+    public function wherePropertyIsNot(string $property, mixed $value): self
+    {
+        $this->whereJsonDoesntContain(column: "event_properties->{$property}", value: $value);
+
+        return $this;
+    }
 }
