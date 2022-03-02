@@ -59,7 +59,9 @@ class EloquentStoredEvent extends Model
 
     public function getEventAttribute(): ?ShouldBeStored
     {
-        return ($event = $this->getOriginalEvent()) ? $event : $this->toStoredEvent()->event;
+        return ($event = $this->getOriginalEvent())
+            ? $event
+            : $this->originalEvent = $this->toStoredEvent()->event;
     }
 
     public function getMetaDataAttribute(): SchemalessAttributes
