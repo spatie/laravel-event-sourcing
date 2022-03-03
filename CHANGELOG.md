@@ -4,6 +4,22 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 ## 7.0.1 - 2022-03-03
 
+## What's Changed
+
+- Update testing-aggregates.md by @rmcdaniel in https://github.com/spatie/laravel-event-sourcing/pull/314
+- Updated the requirement to Laravel 9 by @davidlapham in https://github.com/spatie/laravel-event-sourcing/pull/318
+- Resolves issue with meta data updating on original event. by @aidan-casey in https://github.com/spatie/laravel-event-sourcing/pull/324
+
+## New Contributors
+
+- @rmcdaniel made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/314
+- @davidlapham made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/318
+- @aidan-casey made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/324
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.0.0...7.0.1
+
+## 7.0.1 - 2022-03-03
+
 - Fix for meta data updating on original event (#324)
 
 ## 6.0.5 - 2022-01-17
@@ -49,6 +65,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -61,6 +78,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -147,6 +165,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - Add command bus and aggregate root handlers
 - 
 - Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
@@ -159,7 +178,9 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - - Projection listeners
+- 
 - 
 - 
 - 
@@ -171,7 +192,9 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - - Event queries
+- 
 - 
 - 
 - 
@@ -234,6 +257,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -257,6 +281,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
