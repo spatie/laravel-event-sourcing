@@ -43,9 +43,8 @@ class EloquentStoredEventQueryBuilderTest extends TestCase
         $this->travelTo(
             now()->subMinutes(10), fn() => event(new EventWithDatetime($date))
         );
-        $this->travelTo(
-            now()->subMinutes(100), fn() => event(new MoneyAdded(10))
-        );
+
+        event(new MoneyAdded(10));
 
         $event = EloquentStoredEvent::query()->lastEvent(EventWithDatetime::class);
         $storedEvent = $event->toStoredEvent()->event;
@@ -63,7 +62,7 @@ class EloquentStoredEventQueryBuilderTest extends TestCase
             now()->subMinutes(10), fn() => event(new MoneyAdded(10))
         );
         $this->travelTo(
-            now()->subMinutes(10), fn() => event(new EventWithDatetime(now()->toDateTimeImmutable()))
+            now()->subMinutes(2), fn() => event(new EventWithDatetime(now()->toDateTimeImmutable()))
         );
 
         event(new EventWithCarbon($date));
