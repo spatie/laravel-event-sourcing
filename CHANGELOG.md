@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.0.1 - 2022-03-03
+
+- Fix for meta data updating on original event (#324)
+
 ## 6.0.5 - 2022-01-17
 
 - Change `event_version` to `tinyint` in migration stub (#306)
