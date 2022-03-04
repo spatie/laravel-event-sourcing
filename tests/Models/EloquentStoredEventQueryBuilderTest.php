@@ -11,11 +11,13 @@ class EloquentStoredEventQueryBuilderTest extends TestCase
     public function it_constrains_to_property_value()
     {
         $expected = EloquentStoredEvent::query()->whereJsonContains(
-            column: 'event_properties->otherEntityId', value: 10
+            column: 'event_properties->otherEntityId',
+            value: 10
         );
 
         $actual = EloquentStoredEvent::query()->wherePropertyIs(
-            property: 'otherEntityId', value: 10
+            property: 'otherEntityId',
+            value: 10
         );
 
         $this->assertEquals($expected, $actual);
@@ -25,11 +27,13 @@ class EloquentStoredEventQueryBuilderTest extends TestCase
     public function it_constrains_to_property_value_difference()
     {
         $expected = EloquentStoredEvent::query()->whereJsonDoesntContain(
-            column: 'event_properties->name', value: 'Johnson'
+            column: 'event_properties->name',
+            value: 'Johnson'
         );
 
         $actual = EloquentStoredEvent::query()->wherePropertyIsNot(
-            property: 'name', value: 'Johnson'
+            property: 'name',
+            value: 'Johnson'
         );
 
         $this->assertEquals($expected, $actual);
