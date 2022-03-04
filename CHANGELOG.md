@@ -2,7 +2,7 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
-## 7.0.2 - 2022-03-04
+## 7.2.0 - 2022-03-04
 
 - Add `EloquentStoredEventQueryBuilder::lastEvent` (#327)
 - Add `EloquentStoredEventQueryBuilder::wherePropertyIs` (#326)
