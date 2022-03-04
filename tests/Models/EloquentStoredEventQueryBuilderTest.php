@@ -48,8 +48,8 @@ class EloquentStoredEventQueryBuilderTest extends TestCase
     /** @test */
     public function it_retrieves_last_event()
     {
-        $this->travelTo(now()->subMinutes(10), fn() => event(new MoneyAdded(10)));
-        $this->travelTo(now()->subMinutes(5), fn() => event(new MoneyAdded(100)));
+        $this->travelTo(now()->subMinutes(10), fn () => event(new MoneyAdded(10)));
+        $this->travelTo(now()->subMinutes(5), fn () => event(new MoneyAdded(100)));
 
         event(new MoneyAdded(1000));
 
@@ -70,10 +70,12 @@ class EloquentStoredEventQueryBuilderTest extends TestCase
             ->toDateTimeImmutable();
 
         $this->travelTo(
-            now()->subMinutes(10), fn() => event(new MoneyAdded(10))
+            now()->subMinutes(10),
+            fn () => event(new MoneyAdded(10))
         );
         $this->travelTo(
-            now()->subMinutes(10), fn() => event(new EventWithDatetime($date))
+            now()->subMinutes(10),
+            fn () => event(new EventWithDatetime($date))
         );
 
         event(new MoneyAdded(10));
@@ -91,10 +93,12 @@ class EloquentStoredEventQueryBuilderTest extends TestCase
         $date = now()->subDays(3)->setTime(0, 0, 0);
 
         $this->travelTo(
-            now()->subMinutes(10), fn() => event(new MoneyAdded(10))
+            now()->subMinutes(10),
+            fn () => event(new MoneyAdded(10))
         );
         $this->travelTo(
-            now()->subMinutes(2), fn() => event(new EventWithDatetime(now()->toDateTimeImmutable()))
+            now()->subMinutes(2),
+            fn () => event(new EventWithDatetime(now()->toDateTimeImmutable()))
         );
 
         event(new EventWithCarbon($date));

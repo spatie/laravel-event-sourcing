@@ -56,7 +56,7 @@ class EloquentStoredEventQueryBuilder extends Builder
         return $this
             ->unless(
                 empty($eventClasses),
-                fn(self $query) => $query->whereEvent(...$eventClasses)
+                fn (self $query) => $query->whereEvent(...$eventClasses)
             )
             ->orderByDesc('created_at')
             ->first();
