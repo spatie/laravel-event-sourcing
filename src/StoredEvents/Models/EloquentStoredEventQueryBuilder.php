@@ -50,4 +50,15 @@ class EloquentStoredEventQueryBuilder extends Builder
 
         return $this;
     }
+
+    public function lastEvent(string ...$eventClasses): ?EloquentStoredEvent
+    {
+        return $this
+            ->unless(
+                empty($eventClasses),
+                fn(self $query) => $query->whereEvent(...$eventClasses)
+            )
+            ->orderByDesc('created_at')
+            ->first();
+    }
 }
