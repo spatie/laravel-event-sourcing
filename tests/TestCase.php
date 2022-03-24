@@ -51,12 +51,12 @@ abstract class TestCase extends Orchestra
         });
 
         Schema::dropIfExists('stored_events');
-        include_once __DIR__.'/../database/migrations/create_stored_events_table.php.stub';
-        (new CreateStoredEventsTable())->up();
+        $createStoredEventsTable = require __DIR__.'/../database/migrations/create_stored_events_table.php.stub';
+        $createStoredEventsTable->up();
 
         Schema::dropIfExists('snapshots');
-        include_once __DIR__.'/../database/migrations/create_snapshots_table.php.stub';
-        (new CreateSnapshotsTable())->up();
+        $createSnapshotsTable = require __DIR__.'/../database/migrations/create_snapshots_table.php.stub';
+        $createSnapshotsTable->up();
 
         Schema::dropIfExists('other_stored_events');
         if ($this->dbDriver() === 'mysql') {
