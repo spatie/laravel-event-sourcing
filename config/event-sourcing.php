@@ -118,7 +118,7 @@ return [
      *
      * Here you can specify where the cache should be stored.
      */
-    'cache_path' => storage_path('app/event-sourcing'),
+    'cache_path' => base_path('bootstrap/cache'),
 
     /*
      * When storable events are fired from aggregates roots, the package can fire off these
