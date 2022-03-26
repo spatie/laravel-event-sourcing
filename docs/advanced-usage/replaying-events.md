@@ -79,7 +79,7 @@ When using models with timestamps, it is important to keep in mind that the proj
 
 ```php
 public function onAccountCreated(AccountCreated $event) {
-        Account::create(array_merge($event->accountAttributes, ['created_at' => $event->created_at(), 'updated_at' => $event->created_at()]));
+        Account::create(array_merge($event->accountAttributes, ['created_at' => $event->createdAt(), 'updated_at' => $event->createdAt()]));
 }
 ```
 
