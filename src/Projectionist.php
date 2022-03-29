@@ -278,22 +278,6 @@ class Projectionist
 
     private function callEventHandler(EventHandler $eventHandler, StoredEvent $storedEvent): bool
     {
-        /**
-         * We "refresh" an event handler every time it's called, to ensure that its dependencies are properly re-injected.
-         * The underlying problem is with tests: if we're faking an injected dependency when running tests and the handler is already resolved beforehand,
-         * we won't get those faked dependencies.
-         *
-         * A better solution is to store event handler class names instead of an instantiated version of them in the list of handlers, which requires a larger and complex refactor.
-         *
-         * More info here: https://github.com/spatie/laravel-event-sourcing/discussions/181
-         *
-         * Note that we provided `Projectionist::fake` to counter this issue, but it turned out to be very cumbersome to use in complex examples,
-         * which is why we reverted back to the original idea.
-         *
-         * @var \Spatie\EventSourcing\EventHandlers\EventHandler $eventHandler
-         */
-        $eventHandler = app($eventHandler::class);
-
         try {
             $eventHandler->handle($storedEvent);
         } catch (Exception $exception) {
