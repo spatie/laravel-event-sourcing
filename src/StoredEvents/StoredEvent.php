@@ -11,6 +11,7 @@ use Spatie\EventSourcing\Attributes\EventSerializer as EventSerializerAttribute;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
+use Spatie\EventSourcing\Support\Helpers;
 
 class StoredEvent implements Arrayable
 {
@@ -56,7 +57,7 @@ class StoredEvent implements Arrayable
             'aggregate_uuid' => $this->aggregate_uuid,
             'aggregate_version' => $this->aggregate_version,
             'event_version' => $this->event_version,
-            'event_class' => self::getEventClass($this->event_class),
+            'event_class' => Helpers::getEventClass($this->event_class),
             'meta_data' => $this->meta_data instanceof Arrayable ? $this->meta_data->toArray() : (array) $this->meta_data,
             'created_at' => $this->created_at,
         ];
@@ -150,16 +151,5 @@ class StoredEvent implements Arrayable
     protected static function getActualClassForEvent(string $class): string
     {
         return Arr::get(config('event-sourcing.event_class_map', []), $class, $class);
-    }
-
-    protected static function getEventClass(string $class): string
-    {
-        $map = config('event-sourcing.event_class_map', []);
-
-        if (! empty($map) && in_array($class, $map)) {
-            return array_search($class, $map, true);
-        }
-
-        return $class;
     }
 }
