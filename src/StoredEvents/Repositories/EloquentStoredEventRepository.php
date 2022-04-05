@@ -12,7 +12,6 @@ use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
-use Spatie\EventSourcing\Support\Helpers;
 
 class EloquentStoredEventRepository implements StoredEventRepository
 {
@@ -88,7 +87,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             'aggregate_uuid' => $uuid,
             'aggregate_version' => $event->aggregateRootVersion(),
             'event_version' => $event->eventVersion(),
-            'event_class' => Helpers::getEventClass(get_class($event)),
+            'event_class' => StoredEvent::getEventClass(get_class($event)),
             'meta_data' => json_encode($event->metaData() + [
                 MetaData::CREATED_AT => $createdAt->toDateTimeString(),
             ]),
