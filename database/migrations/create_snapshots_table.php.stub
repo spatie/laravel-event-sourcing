@@ -4,12 +4,12 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSnapshotsTable extends Migration
+return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('snapshots', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->uuid('aggregate_uuid');
             $table->unsignedInteger('aggregate_version');
             $table->jsonb('state');
@@ -19,4 +19,4 @@ class CreateSnapshotsTable extends Migration
             $table->index('aggregate_uuid');
         });
     }
-}
+};
