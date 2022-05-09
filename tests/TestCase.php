@@ -2,8 +2,6 @@
 
 namespace Spatie\EventSourcing\Tests;
 
-use CreateSnapshotsTable;
-use CreateStoredEventsTable;
 use Exception;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Artisan;
