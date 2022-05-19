@@ -5,7 +5,7 @@ weight: 1
 
 This package aims to be the entry point to get started with event sourcing in Laravel. It can help you setting up aggregates, projectors and reactors.
 
-If you've never worked with event sourcing, or are uncertain about what projectors, reactors and aggregates are, head over to [the getting familiar with event sourcing section](/laravel-event-sourcing/v5/getting-familiar-with-event-sourcing/introduction).
+If you've never worked with event sourcing, or are uncertain about what projectors, reactors and aggregates are, head over to [the getting familiar with event sourcing section](/laravel-event-sourcing/v7/getting-familiar-with-event-sourcing/introduction).
 
 Event sourcing might be a good choice for your project if:
 
