@@ -14,6 +14,33 @@ class FakeAggregateRootTest extends TestCase
     }
 
     /** @test */
+    public function it_ignores_given_events_in_assert_nothing_recorded()
+    {
+        DummyAggregateRoot::fake()
+            ->given([new DummyEvent(123)])
+            ->assertNothingRecorded();
+    }
+
+    /** @test */
+    public function it_ignores_given_events_in_assert_recorded()
+    {
+        DummyAggregateRoot::fake()
+            ->given([new DummyEvent(1)])
+            ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
+                $dummyAggregateRoot->dummy();
+            })
+            ->assertRecorded([new DummyEvent(2)]);
+    }
+
+    /** @test */
+    public function it_ignores_given_events_in_assert_not_recorded()
+    {
+        DummyAggregateRoot::fake()
+            ->given([new DummyEvent(123)])
+            ->assertNotRecorded(DummyEvent::class);
+    }
+
+    /** @test */
     public function it_can_retrieve_an_aggregate_for_a_given_uuid()
     {
         $fakeUuid = 'fake-uuid';
