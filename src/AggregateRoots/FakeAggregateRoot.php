@@ -56,7 +56,7 @@ class FakeAggregateRoot
 
     public function assertNothingRecorded(): self
     {
-        Assert::assertCount(0, $this->aggregateRoot->getRecordedEvents());
+        Assert::assertCount(0, $this->getRecordedEventsAfterGiven());
 
         return $this;
     }
@@ -85,7 +85,7 @@ class FakeAggregateRoot
 
     public function assertNotRecorded($unexpectedEventClasses): self
     {
-        $actualEventClasses = array_map(fn (ShouldBeStored $event) => get_class($event), $this->aggregateRoot->getRecordedEvents());
+        $actualEventClasses = array_map(fn (ShouldBeStored $event) => get_class($event), $this->getRecordedEventsAfterGiven());
 
         $unexpectedEventClasses = Arr::wrap($unexpectedEventClasses);
 
@@ -173,6 +173,11 @@ class FakeAggregateRoot
             unset($metaData[MetaData::AGGREGATE_ROOT_VERSION]);
 
             return $eventWithoutUuid->setMetaData($metaData);
-        }, array_slice($this->aggregateRoot->getRecordedEvents(), $this->givenEventsCount));
+        }, $this->getRecordedEventsAfterGiven());
+    }
+
+    private function getRecordedEventsAfterGiven(): array
+    {
+        return array_slice($this->aggregateRoot->getRecordedEvents(), $this->givenEventsCount);
     }
 }
