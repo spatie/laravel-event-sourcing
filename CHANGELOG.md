@@ -2,6 +2,28 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.2.1 - 2022-05-27
+
+## What's Changed
+
+- Fix URL to documentation about caching by @rodrigopedra in https://github.com/spatie/laravel-event-sourcing/pull/328
+- Update cache_path in config by @lloricode in https://github.com/spatie/laravel-event-sourcing/pull/329
+- Update Projector docs to reflect changes to getting the aggregate uuid by @RobHarveyDev in https://github.com/spatie/laravel-event-sourcing/pull/331
+- Docs: createdAt() method is camel case by @inmanturbo in https://github.com/spatie/laravel-event-sourcing/pull/332
+- Update migration file to closure by @lloricode in https://github.com/spatie/laravel-event-sourcing/pull/330
+- Fix link to "getting familiar section" by @felixfrey in https://github.com/spatie/laravel-event-sourcing/pull/343
+- Do not assert events given to FakeAggregateRoot as recorded by @itsmarsu in https://github.com/spatie/laravel-event-sourcing/pull/344
+
+## New Contributors
+
+- @lloricode made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/329
+- @RobHarveyDev made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/331
+- @inmanturbo made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/332
+- @felixfrey made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/343
+- @itsmarsu made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/344
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.2.0...7.2.1
+
 ## 7.2.0 - 2022-03-04
 
 ## What's Changed
@@ -82,6 +104,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -94,6 +117,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -184,6 +208,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - Add command bus and aggregate root handlers
 - 
 - Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
@@ -191,6 +216,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - All event listeners are now registered in the same way: by looking at an event's type hint. This applies to all:
 - 
 - - Aggregate root `apply` methods
+- 
 - 
 - 
 - 
@@ -206,6 +232,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - - Reactor listeners
 - 
 - 
@@ -214,7 +241,9 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - - Event queries
+- 
 - 
 - 
 - 
@@ -281,6 +310,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -304,6 +334,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
