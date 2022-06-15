@@ -5,8 +5,8 @@ namespace Spatie\EventSourcing\Projections;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @method static create(array $parameters = [])
- * @method static find(string $uuid): static|null
+ * @method static static create(array $parameters = [])
+ * @method static static|null find(string $uuid)
  */
 abstract class Projection extends Model
 {
