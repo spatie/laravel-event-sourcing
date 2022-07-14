@@ -72,7 +72,7 @@ abstract class AggregateRoot
         if ($handler = Handlers::new($this)
             ->public()
             ->protected()
-            ->reject(fn (Method $method) => in_array($method->getName(), ['handleCommand', 'recordThat', 'apply']))
+            ->reject(fn (Method $method) => in_array($method->getName(), ['handleCommand', 'recordThat', 'apply', 'tap']))
             ->accepts($command)
             ->first()
         ) {
@@ -85,7 +85,7 @@ abstract class AggregateRoot
             $handler = Handlers::new($partial)
                 ->public()
                 ->protected()
-                ->reject(fn (Method $method) => in_array($method->getName(), ['recordThat', 'apply']))
+                ->reject(fn (Method $method) => in_array($method->getName(), ['recordThat', 'apply', 'tap']))
                 ->accepts($command)
                 ->first();
 
@@ -255,7 +255,7 @@ abstract class AggregateRoot
         Handlers::new($this)
             ->public()
             ->protected()
-            ->reject(fn (Method $method) => in_array($method->getName(), ['handleCommand', 'recordThat', 'apply']))
+            ->reject(fn (Method $method) => in_array($method->getName(), ['handleCommand', 'recordThat', 'apply', 'tap']))
             ->accepts($event)
             ->all()
             ->each(fn (Method $method) => $this->{$method->getName()}($event));
