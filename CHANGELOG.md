@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.2.2 - 2022-07-14
+
+### What's Changed
+
+- Fix method annotations in Projection class by @daniser in https://github.com/spatie/laravel-event-sourcing/pull/350
+- Exclude `tap` from possible handlers by @erikgaal in https://github.com/spatie/laravel-event-sourcing/pull/352
+
+### New Contributors
+
+- @daniser made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/350
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.2.1...7.2.2
+
 ## 7.2.1 - 2022-05-27
 
 ## What's Changed
@@ -105,6 +118,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -117,6 +131,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -209,6 +224,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - Add command bus and aggregate root handlers
 - 
 - Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
@@ -216,6 +232,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - All event listeners are now registered in the same way: by looking at an event's type hint. This applies to all:
 - 
 - - Aggregate root `apply` methods
+- 
 - 
 - 
 - 
@@ -233,6 +250,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - - Reactor listeners
 - 
 - 
@@ -242,7 +260,9 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - - Event queries
+- 
 - 
 - 
 - 
@@ -311,6 +331,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -334,6 +355,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
