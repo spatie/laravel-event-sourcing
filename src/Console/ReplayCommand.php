@@ -12,7 +12,8 @@ class ReplayCommand extends Command
 {
     protected $signature = 'event-sourcing:replay {projector?*}
                             {--from=0 : Replay events starting from this event number}
-                            {--stored-event-model= : Replay events from this store}';
+                            {--stored-event-model= : Replay events from this store}
+                            {--uuid= : Replay events for this uuid only}';
 
     protected $description = 'Replay stored events';
 
@@ -30,7 +31,7 @@ class ReplayCommand extends Command
             return;
         }
 
-        $this->replay($projectors, (int)$this->option('from'));
+        $this->replay($projectors, (int)$this->option('from'), $this->option('uuid'));
     }
 
     public function selectProjectors(array $projectorClassNames): ?Collection
@@ -54,7 +55,7 @@ class ReplayCommand extends Command
             });
     }
 
-    public function replay(Collection $projectors, int $startingFrom): void
+    public function replay(Collection $projectors, int $startingFrom, ?string $uuid = null): void
     {
         $repository = app(StoredEventRepository::class);
         $replayCount = $repository->countAllStartingFrom($startingFrom);
@@ -72,7 +73,7 @@ class ReplayCommand extends Command
             $bar->advance();
         };
 
-        $this->projectionist->replay($projectors, $startingFrom, $onEventReplayed);
+        $this->projectionist->replay($projectors, $startingFrom, $onEventReplayed, $uuid);
 
         $bar->finish();
 
