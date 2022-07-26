@@ -58,7 +58,7 @@ class ReplayCommand extends Command
     public function replay(Collection $projectors, int $startingFrom, ?string $uuid = null): void
     {
         $repository = app(StoredEventRepository::class);
-        $replayCount = $repository->countAllStartingFrom($startingFrom);
+        $replayCount = $repository->countAllStartingFrom($startingFrom, $uuid);
 
         if ($replayCount === 0) {
             $this->warn('There are no events to replay');
