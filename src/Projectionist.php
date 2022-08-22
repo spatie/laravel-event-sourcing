@@ -320,7 +320,7 @@ class Projectionist
         Collection $projectors,
         int $startingFromEventId = 0,
         callable $onEventReplayed = null,
-        ?string $uuid = null
+        ?string $aggregateUuid = null
     ): void {
         $projectors = new EventHandlerCollection($projectors);
 
@@ -339,7 +339,7 @@ class Projectionist
         $projectors->call('onStartingEventReplay');
 
         app(StoredEventRepository::class)
-            ->retrieveAllStartingFrom($startingFromEventId, $uuid)
+            ->retrieveAllStartingFrom($startingFromEventId, $aggregateUuid)
             ->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
                 $this->applyStoredEventToProjectors(
                     $storedEvent,
