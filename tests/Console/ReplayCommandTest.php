@@ -156,7 +156,7 @@ class ReplayCommandTest extends TestCase
 
         $this->artisan('event-sourcing:replay', [
                 'projector' => [AccountProjector::class],
-                '--aggregate-uuid' => $uuid1
+                '--aggregate-uuid' => $uuid1,
             ])
             ->expectsOutput('Replaying 1 events...')
             ->assertExitCode(0);
