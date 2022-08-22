@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.2.4 - 2022-08-22
+
+### What's Changed
+
+- Update Reactor docs on how to get the aggregate uuid by @soarecostin in https://github.com/spatie/laravel-event-sourcing/pull/363
+- Update event-sourcing:replay command to work with just one aggregate uuid by @soarecostin in https://github.com/spatie/laravel-event-sourcing/pull/362
+
+### New Contributors
+
+- @soarecostin made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/363
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.2.3...7.2.4
+
 ## 7.2.3 - 2022-07-29
 
 ### What's Changed
@@ -134,6 +147,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -146,6 +160,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -242,6 +257,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - Add command bus and aggregate root handlers
 - 
 - Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
@@ -249,6 +265,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - All event listeners are now registered in the same way: by looking at an event's type hint. This applies to all:
 - 
 - - Aggregate root `apply` methods
+- 
 - 
 - 
 - 
@@ -270,6 +287,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - - Reactor listeners
 - 
 - 
@@ -281,7 +299,9 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
+- 
 - - Event queries
+- 
 - 
 - 
 - 
@@ -354,6 +374,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -377,6 +398,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
