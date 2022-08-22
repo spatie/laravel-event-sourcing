@@ -1,16 +1,19 @@
 <?php
 
-namespace Spatie\EventSourcing\Console;
+namespace Spatie\EventSourcing\Tests\Console;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
+use Ramsey\Uuid\Uuid;
 use Spatie\EventSourcing\Events\FinishedEventReplay;
 use Spatie\EventSourcing\Events\StartingEventReplay;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestCase;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
@@ -129,6 +132,33 @@ class ReplayCommandTest extends TestCase
 
         $this->artisan('event-sourcing:replay', ['--stored-event-model' => OtherEloquentStoredEvent::class])
             ->expectsOutput('Replaying 5 events...')
+            ->assertExitCode(0);
+    }
+
+    /** @test */
+    public function it_will_replay_events_for_a_specific_aggregate_root_uuid()
+    {
+        EloquentStoredEvent::truncate();
+
+        $uuid1 = Uuid::uuid4();
+        $account1 = AccountAggregateRoot::retrieve($uuid1);
+        $account1->addMoney(1000);
+        $account1->persist();
+
+        $uuid2 = Uuid::uuid4();
+        $account2 = AccountAggregateRoot::retrieve($uuid2);
+        $account2->addMoney(1000);
+        $account2->persist();
+
+        $projector = app(AccountProjector::class);
+
+        Projectionist::addProjector($projector);
+
+        $this->artisan('event-sourcing:replay', [
+                'projector' => [AccountProjector::class],
+                '--aggregate-uuid' => $uuid1
+            ])
+            ->expectsOutput('Replaying 1 events...')
             ->assertExitCode(0);
     }
 }
