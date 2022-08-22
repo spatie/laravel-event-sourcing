@@ -64,20 +64,18 @@ Just by adding a typehint of the event you want to handle makes our package call
 
 ## Getting the uuid of an event
 
-In most cases you want to have access to the event that was fired. When using aggregates your events probably won't contain the uuid associated with that event. To get to the uuid of an event simply add a parameter called `$aggregateUuid` that typehinted as a string. 
+In most cases you want to have access to the event that was fired. When using aggregates your events probably won't contain the uuid associated with that event. To get to the uuid of an event simply call the `aggregateRootUuid()` method on the event object. 
 
 ```php
 // ...
 
-public function onMoneyAdded(MoneyAdded $event, string $aggregateUuid)
+public function onMoneyAdded(MoneyAdded $event)
 {
-    $account = Account::findByUuid($aggregateUuid);
+    $account = Account::findByUuid($event->aggregateRootUuid());
     
     Mail::to($account->user)->send(new MoreMoneyAddedMailable());
 }
 ```
-
-The order of the parameters giving to an event handling method like `onMoneyAdded`. We'll simply pass the uuid to any arguments named `$uuid`.
 
 ## Manually register event handling methods
 
