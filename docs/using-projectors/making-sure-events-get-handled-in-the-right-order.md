@@ -15,6 +15,25 @@ You can set the name of the queue connection in the `queue` key of the `event-so
 
 In a local environment, where events have a very low chance of getting fired concurrently, it's probably ok to just use the `sync` driver.
 
+## Tweaking projector order
+
+You can add a weight property to a projector to tweak the order projectors are run in. Projectors with a lower weight run first. When no explicit weight is provided, the weight is considered `0`.
+
+```php
+namespace App\Projectors;
+
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+
+class MyProjector extends Projector
+{
+    public int $weight = 5;
+    
+    //
+}
+```
+
+Note that providing a weight on a queued projector won't guarentee execution order.
+
 ## Want to know more?
 
 We discuss projections and complex patterns such as CQRS in depth in our [Event Sourcing in Laravel](https://event-sourcing-laravel.com/) course. In practice, you want to check out these chapters:

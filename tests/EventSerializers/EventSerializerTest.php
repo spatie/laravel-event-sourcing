@@ -66,15 +66,9 @@ class EventSerializerTest extends TestCase
 
         $array = json_decode($json, true);
 
-        $this->assertEquals([
-            'account' => [
-                'class' => get_class($account),
-                'id' => 1,
-                'relations' => [],
-                'connection' => $this->dbDriver(),
-            ],
-            'amount' => 1234,
-        ], $array);
+        $this->assertEquals(get_class($account), $array['account']['class'] ?? null);
+        $this->assertEquals(1, $array['account']['id'] ?? null);
+        $this->assertEquals(1234, $array['amount'] ?? null);
     }
 
     /** @test */
