@@ -53,7 +53,7 @@ class EventHandlerCollection extends Collection
 
     public function syncEventHandlers(): self
     {
-        return $this ->reject(
+        return $this->reject(
             fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
         );
     }
