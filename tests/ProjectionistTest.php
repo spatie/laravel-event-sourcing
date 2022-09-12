@@ -15,6 +15,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\FakeMoneyAddedCountProject
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithHighWeight;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithNegativeWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithLowWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
@@ -87,11 +88,13 @@ class ProjectionistTest extends TestCase
 
         Projectionist::addProjector(ProjectorWithHighWeight::class);
         Projectionist::addProjector(ProjectorWithoutWeight::class);
+        Projectionist::addProjector(ProjectorWithNegativeWeight::class);
         Projectionist::addProjector(ProjectorWithLowWeight::class);
 
         event(new MoneyAddedEvent($this->account, 1000));
 
         $this->assertSame([
+            ProjectorWithNegativeWeight::class,
             ProjectorWithoutWeight::class,
             ProjectorWithLowWeight::class,
             ProjectorWithHighWeight::class,

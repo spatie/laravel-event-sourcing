@@ -57,7 +57,9 @@ class EventHandlerCollection extends Collection
             ->reject(
                 fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
             )
-            ->sortBy('weight');
+            ->sortBy(
+                fn (EventHandler $eventHandler) => $eventHandler->weight ?? 0
+            );
     }
 
     public function asyncEventHandlers(): self
@@ -66,6 +68,8 @@ class EventHandlerCollection extends Collection
             ->filter(
                 fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
             )
-            ->sortBy('weight');
+            ->sortBy(
+                fn (EventHandler $eventHandler) => $eventHandler->weight ?? 0
+            );
     }
 }
