@@ -183,6 +183,21 @@ class SendMoneyAddedMail
 }
 ```
 
+## Tweaking reactor order
+
+You can add a weight property to a reactor to tweak the order reactors are run in. Reactors with a lower weight run first. When no explicit weight is provided, the weight is considered `0`.
+
+```php
+namespace App\Reactors;
+
+class MyReactor
+{
+    public int $weight = 5;
+}
+```
+
+Note that providing a weight on a queued reactor won't guarentee execution order.
+
 ## Want to know more?
 
 Reactors and process managers (which are built on top of the core reactor principle) are thoroughly discussed in [Event Sourcing in Laravel](https://event-sourcing-laravel.com/). More specifically, you want to read these chapters:
