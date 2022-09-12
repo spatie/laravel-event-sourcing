@@ -15,8 +15,8 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\FakeMoneyAddedCountProject
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithHighWeight;
-use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithLowWeight;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\ProjectorWithWeightTestHelper;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
