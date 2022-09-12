@@ -53,15 +53,19 @@ class EventHandlerCollection extends Collection
 
     public function syncEventHandlers(): self
     {
-        return $this->reject(
-            fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
-        );
+        return $this
+            ->reject(
+                fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
+            )
+            ->sortBy('weight');
     }
 
     public function asyncEventHandlers(): self
     {
-        return $this->filter(
-            fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
-        );
+        return $this
+            ->filter(
+                fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
+            )
+            ->sortBy('weight');
     }
 }

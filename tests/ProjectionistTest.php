@@ -14,7 +14,11 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\FakeMoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithHighWeight;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutWeight;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithLowWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
+use Spatie\EventSourcing\Tests\TestClasses\ProjectorWithWeightTestHelper;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
 class ProjectionistTest extends TestCase
@@ -74,6 +78,24 @@ class ProjectionistTest extends TestCase
         event(new MoneyAddedEvent($this->account, 1000));
 
         $this->assertEquals(1, ProjectorThatThrowsAnException::$exceptionsHandled);
+    }
+
+    /** @test */
+    public function it_will_call_projectors_ordered_by_weight()
+    {
+        app()->singleton(ProjectorWithWeightTestHelper::class);
+
+        Projectionist::addProjector(ProjectorWithHighWeight::class);
+        Projectionist::addProjector(ProjectorWithoutWeight::class);
+        Projectionist::addProjector(ProjectorWithLowWeight::class);
+
+        event(new MoneyAddedEvent($this->account, 1000));
+
+        $this->assertSame([
+            ProjectorWithoutWeight::class,
+            ProjectorWithLowWeight::class,
+            ProjectorWithHighWeight::class,
+        ], app(ProjectorWithWeightTestHelper::class)->calledBy);
     }
 
     /** @test */
