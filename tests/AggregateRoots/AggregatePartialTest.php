@@ -8,125 +8,122 @@ use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\Tests\TestCase;
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertTrue;
 
-class AggregatePartialTest extends TestCase
-{
-    protected const CART_UUID = 'cart-uuid';
-
-    /** @test */
-    public function test_entities()
+beforeAll(function () {
+    class Cart extends AggregateRoot
     {
-        $cart = Cart::retrieve(self::CART_UUID);
+        // Public for testing
+        public CartItems $cartItems;
 
-        $cart
-            ->addItem('test')
-            ->addItem('test 2')
-            ->persist();
-
-        $this->assertDatabaseCount((new EloquentStoredEvent())->getTable(), 2);
-
-        $cart::retrieve(self::CART_UUID);
-
-        $this->assertCount(2, $cart->cartItems->items);
-        $this->assertEquals('test', $cart->cartItems->items[0]);
-        $this->assertEquals('test 2', $cart->cartItems->items[1]);
-
-        $cart->clear()->persist();
-
-        $this->assertExceptionThrown(function () use ($cart) {
-            $cart->checkout();
-        });
-
-        $cart::retrieve(self::CART_UUID);
-
-        $this->assertExceptionThrown(function () use ($cart) {
-            $cart->checkout();
-        });
-    }
-
-    /** @test */
-    public function test_partial_fakes()
-    {
-        $cartItems = CartItems::fake();
-
-        $this->assertTrue($cartItems->isEmpty());
-
-        $cartItems->addItem('test');
-
-        $this->assertFalse($cartItems->isEmpty());
-    }
-}
-
-class Cart extends AggregateRoot
-{
-    // Public for testing
-    public CartItems $cartItems;
-
-    public function __construct()
-    {
-        $this->cartItems = new CartItems($this);
-    }
-
-    public function checkout(): self
-    {
-        if ($this->cartItems->isEmpty()) {
-            throw new Exception("Cart is empty");
+        public function __construct()
+        {
+            $this->cartItems = new CartItems($this);
         }
 
-        // …
+        public function checkout(): self
+        {
+            if ($this->cartItems->isEmpty()) {
+                throw new Exception("Cart is empty");
+            }
 
-        return $this;
+            // …
+
+            return $this;
+        }
+
+        public function addItem(string $name): self
+        {
+            $this->cartItems->addItem($name);
+
+            return $this;
+        }
+
+        public function clear(): self
+        {
+            $this->recordThat(new CartCleared());
+
+            return $this;
+        }
+
+        public function applyClear(CartCleared $event): void
+        {
+            $this->cartItems = new CartItems($this);
+        }
     }
 
-    public function addItem(string $name): self
+    class CartItems extends AggregatePartial
     {
-        $this->cartItems->addItem($name);
+        // Public for testing
+        public array $items = [];
 
-        return $this;
+        public function addItem(string $name)
+        {
+            $this->recordThat(new ItemAdded($name));
+        }
+
+        public function applyAddItem(ItemAdded $itemAdded)
+        {
+            $this->items[] = $itemAdded->name;
+        }
+
+        public function isEmpty(): bool
+        {
+            return count($this->items) === 0;
+        }
     }
 
-    public function clear(): self
+    class ItemAdded extends ShouldBeStored
     {
-        $this->recordThat(new CartCleared());
-
-        return $this;
+        public function __construct(
+            public string $name
+        ) {
+        }
     }
 
-    public function applyClear(CartCleared $event): void
+    class CartCleared extends ShouldBeStored
     {
-        $this->cartItems = new CartItems($this);
     }
-}
+});
 
-class CartItems extends AggregatePartial
-{
-    // Public for testing
-    public array $items = [];
+beforeEach(function () {
+    $this->CART_UUID = 'cart-uuid';
+});
 
-    public function addItem(string $name)
-    {
-        $this->recordThat(new ItemAdded($name));
-    }
+test('entities', function () {
+    $cart = Cart::retrieve($this->CART_UUID);
 
-    public function applyAddItem(ItemAdded $itemAdded)
-    {
-        $this->items[] = $itemAdded->name;
-    }
+    $cart
+        ->addItem('test')
+        ->addItem('test 2')
+        ->persist();
 
-    public function isEmpty(): bool
-    {
-        return count($this->items) === 0;
-    }
-}
+    $this->assertDatabaseCount((new EloquentStoredEvent())->getTable(), 2);
 
-class ItemAdded extends ShouldBeStored
-{
-    public function __construct(
-        public string $name
-    ) {
-    }
-}
+    $cart::retrieve($this->CART_UUID);
 
-class CartCleared extends ShouldBeStored
-{
-}
+    assertCount(2, $cart->cartItems->items);
+    assertEquals('test', $cart->cartItems->items[0]);
+    assertEquals('test 2', $cart->cartItems->items[1]);
+
+    $cart->clear()->persist();
+
+    expect(fn () => $cart->checkout())->toThrow(Exception::class, 'Cart is empty');
+
+    $cart::retrieve($this->CART_UUID);
+
+    expect(fn () => $cart->checkout())->toThrow(Exception::class, 'Cart is empty');
+});
+
+test('partial fakes', function () {
+    $cartItems = CartItems::fake();
+
+    assertTrue($cartItems->isEmpty());
+
+    $cartItems->addItem('test');
+
+    assertFalse($cartItems->isEmpty());
+});
