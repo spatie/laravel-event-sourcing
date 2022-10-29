@@ -4,6 +4,7 @@ namespace Spatie\EventSourcing\Tests;
 
 use Illuminate\Support\Str;
 use Spatie\EventSourcing\Support\Composer;
+use function PHPUnit\Framework\assertEquals;
 
 test('it can get all loaded files', function () {
     $pathToComposerJson = __DIR__.'/../composer.json';
@@ -14,7 +15,7 @@ test('it can get all loaded files', function () {
         return Str::after($path, $this->pathToTests());
     }, $files);
 
-    $this->assertEquals([
+    assertEquals([
         '/TestClasses/AutoDiscoverEventHandlers/functions.php',
     ], $files);
 });

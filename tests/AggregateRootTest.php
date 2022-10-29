@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use Exception;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
@@ -262,9 +263,7 @@ test('it will not call any event handlers when persisting fails', function () {
 
     $aggregateRoot = AccountAggregateRootWithFailingPersist::retrieve($this->aggregateUuid)->addMoney(123);
 
-    $this->assertExceptionThrown(
-        fn () => AggregateRoot::persistInTransaction($aggregateRoot)
-    );
+    expect(fn () => AggregateRoot::persistInTransaction($aggregateRoot))->toThrow(Exception::class);
 
     assertCount(0, EloquentStoredEvent::get());
     assertCount(0, Account::get());
@@ -339,7 +338,7 @@ test('when an apply method is public it can have additional dependencies', funct
 test('it can load the uuid', function () {
     $aggregateRoot = (new AccountAggregateRoot())->loadUuid($this->aggregateUuid);
 
-    $this->assertEquals($this->aggregateUuid, $aggregateRoot->uuid());
+    assertEquals($this->aggregateUuid, $aggregateRoot->uuid());
 })->skip();
 
 test('it persists when uuid is loaded', function () {

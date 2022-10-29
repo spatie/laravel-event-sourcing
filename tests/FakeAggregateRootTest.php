@@ -5,6 +5,7 @@ namespace Spatie\EventSourcing\Tests;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\DummyAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertNotNull;
 
 test('it can determine that no events were recorded', function () {
     DummyAggregateRoot::fake()->assertNothingRecorded();
@@ -47,7 +48,7 @@ test('it will apply the given events', function () {
         ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
             $dummyAggregateRoot->dummy();
 
-            $this->assertEquals(123 + 1, $dummyAggregateRoot->getLatestInteger());
+            assertEquals(123 + 1, $dummyAggregateRoot->getLatestInteger());
         });
 });
 
@@ -75,7 +76,7 @@ test('it can assert the recorded events with a closure', function () {
             $dummyAggregateRoot->dummy();
         })
         ->assertRecorded(function (DummyEvent $event) {
-            $this->assertEquals(3, $event->integer);
+            assertEquals(3, $event->integer);
         });
 });
 
@@ -85,7 +86,7 @@ test('when can return values which are captured and passed to assert that', func
             return $dummyAggregateRoot->uuid();
         })
         ->then(function ($uuid) {
-            $this->assertNotNull($uuid);
+            assertNotNull($uuid);
         });
 });
 
