@@ -24,407 +24,355 @@ use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertTrue;
 
-class AggregateRootTest extends TestCase
-{
-    protected string $aggregateUuid;
+beforeEach(function () {
+    $this->aggregateUuid = FakeUuid::generate();
+});
 
-    public function setUp(): void
-    {
-        parent::setUp();
+test('aggregate root resolves dependencies from the container', function () {
+    $this->app->bind(AccountAggregateRoot::class, function () {
+        return new AccountAggregateRoot(app(Math::class), 42);
+    });
 
-        $this->aggregateUuid = FakeUuid::generate();
-    }
-
-    /** @test */
-    public function aggregate_root_resolves_dependencies_from_the_container()
-    {
-        $this->app->bind(AccountAggregateRoot::class, function () {
-            return new AccountAggregateRoot(app(Math::class), 42);
-        });
-
-        $root = AccountAggregateRoot::retrieve($this->aggregateUuid);
+    $root = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        $this->assertEquals(42, $root->dependency);
-    }
+    assertEquals(42, $root->dependency);
+});
 
-    /** @test */
-    public function it_can_get_the_uuid()
-    {
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+test('it can get the uuid', function () {
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        $this->assertEquals($this->aggregateUuid, $aggregateRoot->uuid());
-    }
+    assertEquals($this->aggregateUuid, $aggregateRoot->uuid());
+});
 
-    /** @test */
-    public function persisting_an_aggregate_root_will_persist_all_events_it_recorded()
-    {
-        AccountAggregateRoot::retrieve($this->aggregateUuid)
-            ->addMoney(100)
-            ->persist();
+test('persisting an aggregate root will persist all events it recorded', function () {
+    AccountAggregateRoot::retrieve($this->aggregateUuid)
+        ->addMoney(100)
+        ->persist();
 
-        $storedEvents = EloquentStoredEvent::get();
-        $this->assertCount(1, $storedEvents);
-
-        $storedEvent = $storedEvents->first();
-        $this->assertEquals($this->aggregateUuid, $storedEvent->aggregate_uuid);
+    $storedEvents = EloquentStoredEvent::get();
+    assertCount(1, $storedEvents);
 
-        $event = $storedEvent->event;
-        $this->assertInstanceOf(MoneyAdded::class, $event);
-        $this->assertEquals(100, $event->amount);
-    }
-
-    /** @test */
-    public function when_an_aggregate_root_specifies_a_stored_event_repository_persisting_will_persist_all_events_it_recorded_via_repository()
-    {
-        AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid)
-            ->addMoney(100)
-            ->persist();
+    $storedEvent = $storedEvents->first();
+    assertEquals($this->aggregateUuid, $storedEvent->aggregate_uuid);
 
-        $storedEvents = EloquentStoredEvent::get();
-        $this->assertCount(0, $storedEvents);
-
-        $otherStoredEvents = OtherEloquentStoredEvent::get();
-        $this->assertCount(1, $otherStoredEvents);
-
-        $storedEvent = $otherStoredEvents->first();
-        $this->assertEquals($this->aggregateUuid, $storedEvent->aggregate_uuid);
-
-        $event = $storedEvent->event;
-        $this->assertInstanceOf(MoneyAdded::class, $event);
-        $this->assertEquals(100, $event->amount);
-    }
-
-    /** @test */
-    public function when_an_the_config_specifies_a_stored_event_model_persisting_will_persist_all_events_it_recorded_via_stored_event()
-    {
-        config()->set('event-sourcing.stored_event_model', OtherEloquentStoredEvent::class);
+    $event = $storedEvent->event;
+    assertInstanceOf(MoneyAdded::class, $event);
+    assertEquals(100, $event->amount);
+});
 
-        AccountAggregateRoot::retrieve($this->aggregateUuid)
-            ->addMoney(100)
-            ->persist();
+test('when an aggregate root specifies a stored event repository persisting will persist all events it recorded via repository', function () {
+    AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid)
+        ->addMoney(100)
+        ->persist();
 
-        $storedEvents = EloquentStoredEvent::get();
-        $this->assertCount(0, $storedEvents);
-
-        $otherStoredEvents = OtherEloquentStoredEvent::get();
-        $this->assertCount(1, $otherStoredEvents);
-
-        $storedEvent = $otherStoredEvents->first();
-        $this->assertEquals($this->aggregateUuid, $storedEvent->aggregate_uuid);
-
-        $event = $storedEvent->event;
-        $this->assertInstanceOf(MoneyAdded::class, $event);
-        $this->assertEquals(100, $event->amount);
-    }
-
-    /** @test * */
-    public function it_throws_an_error_when_defining_a_class_that_doesnt_extend_eloquent_stored_event()
-    {
-        config()->set('event-sourcing.stored_event_model', InvalidEloquentStoredEvent::class);
-
-        $this->expectException(InvalidEloquentStoredEventModel::class);
+    $storedEvents = EloquentStoredEvent::get();
+    assertCount(0, $storedEvents);
 
-        AccountAggregateRoot::retrieve($this->aggregateUuid)
-            ->addMoney(100)
-            ->persist();
-    }
-
-    /** @test */
-    public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it()
-    {
-        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
-
-        $aggregateRoot
-            ->addMoney(100)
-            ->addMoney(200)
-            ->addMoney(300);
+    $otherStoredEvents = OtherEloquentStoredEvent::get();
+    assertCount(1, $otherStoredEvents);
 
-        $aggregateRoot->persist();
+    $storedEvent = $otherStoredEvents->first();
+    assertEquals($this->aggregateUuid, $storedEvent->aggregate_uuid);
 
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+    $event = $storedEvent->event;
+    assertInstanceOf(MoneyAdded::class, $event);
+    assertEquals(100, $event->amount);
+});
 
-        $this->assertEquals(600, $aggregateRoot->balance);
-    }
+test('when an the config specifies a stored event model persisting will persist all events it recorded via stored event', function () {
+    config()->set('event-sourcing.stored_event_model', OtherEloquentStoredEvent::class);
 
-    /** @test */
-    public function when_applying_events_it_increases_the_version_number()
-    {
-        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
-
-        $aggregateRoot
-            ->addMoney(100)
-            ->addMoney(100)
-            ->addMoney(100);
+    AccountAggregateRoot::retrieve($this->aggregateUuid)
+        ->addMoney(100)
+        ->persist();
 
-        $this->assertEquals(3, $aggregateRoot->aggregateVersion);
-    }
+    $storedEvents = EloquentStoredEvent::get();
+    assertCount(0, $storedEvents);
 
-    /** @test */
-    public function snapshotting_stores_public_properties_and_version_number()
-    {
-        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+    $otherStoredEvents = OtherEloquentStoredEvent::get();
+    assertCount(1, $otherStoredEvents);
 
-        $aggregateRoot
-            ->addMoney(100)
-            ->addMoney(100)
-            ->addMoney(100);
+    $storedEvent = $otherStoredEvents->first();
+    assertEquals($this->aggregateUuid, $storedEvent->aggregate_uuid);
 
-        $this->assertEquals(0, EloquentSnapshot::count());
+    $event = $storedEvent->event;
+    assertInstanceOf(MoneyAdded::class, $event);
+    assertEquals(100, $event->amount);
+});
 
-        $aggregateRoot->snapshot();
+test('it throws an error when defining a class that doesnt extend eloquent stored event', function () {
+    config()->set('event-sourcing.stored_event_model', InvalidEloquentStoredEvent::class);
 
-        $this->assertEquals(1, EloquentSnapshot::count());
-        tap(EloquentSnapshot::first(), function (EloquentSnapshot $snapshot) {
-            $this->assertEquals(300, $snapshot->state['balance']);
-            $this->assertEquals(3, $snapshot->aggregate_version);
-        });
-    }
+    AccountAggregateRoot::retrieve($this->aggregateUuid)
+        ->addMoney(100)
+        ->persist();
+})->throws(InvalidEloquentStoredEventModel::class);
 
-    /** @test */
-    public function restoring_an_aggregate_root_with_a_snapshot_restores_public_properties()
-    {
-        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+test('when retrieving an aggregate root all events will be replayed to it', function () {
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        $aggregateRoot
-            ->addMoney(100)
-            ->addMoney(100)
-            ->addMoney(100);
+    $aggregateRoot
+        ->addMoney(100)
+        ->addMoney(200)
+        ->addMoney(300);
 
-        $aggregateRoot->snapshot();
+    $aggregateRoot->persist();
 
-        $aggregateRootRetrieved = AccountAggregateRoot::retrieve($this->aggregateUuid);
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        $this->assertEquals(3, $aggregateRootRetrieved->aggregateVersion);
-        $this->assertEquals(300, $aggregateRootRetrieved->balance);
-    }
+    assertEquals(600, $aggregateRoot->balance);
+});
 
-    /** @test */
-    public function events_saved_after_the_snapshot_are_reconstituted()
-    {
-        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+test('when applying events it increases the version number', function () {
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        $aggregateRoot
-            ->addMoney(100)
-            ->addMoney(100)
-            ->addMoney(100)
-            ->persist();
+    $aggregateRoot
+        ->addMoney(100)
+        ->addMoney(100)
+        ->addMoney(100);
 
-        $aggregateRoot->snapshot();
-        $aggregateRoot->addMoney(100)->persist();
+    assertEquals(3, $aggregateRoot->aggregateVersion);
+});
 
-        $aggregateRootRetrieved = AccountAggregateRoot::retrieve($this->aggregateUuid);
+test('snapshotting stores public properties and version number', function () {
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        $this->assertEquals(4, $aggregateRootRetrieved->aggregateVersion);
-        $this->assertEquals(400, $aggregateRootRetrieved->balance);
-    }
+    $aggregateRoot
+        ->addMoney(100)
+        ->addMoney(100)
+        ->addMoney(100);
 
-    /** @test */
-    public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it_in_the_correct_order()
-    {
-        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+    assertEquals(0, EloquentSnapshot::count());
 
-        $aggregateRoot
-            ->multiplyMoney(5)
-            ->addMoney(100);
+    $aggregateRoot->snapshot();
 
-        $aggregateRoot->persist();
+    assertEquals(1, EloquentSnapshot::count());
+    tap(EloquentSnapshot::first(), function (EloquentSnapshot $snapshot) {
+        assertEquals(300, $snapshot->state['balance']);
+        assertEquals(3, $snapshot->aggregate_version);
+    });
+});
 
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+test('restoring an aggregate root with a snapshot restores public properties', function () {
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        $this->assertEquals(100, $aggregateRoot->balance);
-    }
+    $aggregateRoot
+        ->addMoney(100)
+        ->addMoney(100)
+        ->addMoney(100);
 
-    /** @test */
-    public function when_retrieving_an_aggregate_root_all_events_will_be_replayed_to_it_with_the_stored_event_repository_specified()
-    {
-        /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified $aggregateRoot */
-        $aggregateRoot = AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid);
+    $aggregateRoot->snapshot();
 
-        $aggregateRoot
-            ->addMoney(100)
-            ->addMoney(100)
-            ->addMoney(100);
+    $aggregateRootRetrieved = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        $aggregateRoot->persist();
+    assertEquals(3, $aggregateRootRetrieved->aggregateVersion);
+    assertEquals(300, $aggregateRootRetrieved->balance);
+});
 
-        $this->assertEquals(0, EloquentStoredEvent::count());
-        $this->assertEquals(3, OtherEloquentStoredEvent::count());
+test('events saved after the snapshot are reconstituted', function () {
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
-        $this->assertEquals(0, $aggregateRoot->balance);
+    $aggregateRoot
+        ->addMoney(100)
+        ->addMoney(100)
+        ->addMoney(100)
+        ->persist();
 
-        $aggregateRoot = AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid);
-        $this->assertEquals(300, $aggregateRoot->balance);
-    }
+    $aggregateRoot->snapshot();
+    $aggregateRoot->addMoney(100)->persist();
 
-    /** @test */
-    public function a_recorded_event_immediately_gets_applied()
-    {
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
-        $aggregateRoot->addMoney(123);
+    $aggregateRootRetrieved = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        $this->assertEquals(123, $aggregateRoot->balance);
-    }
+    assertEquals(4, $aggregateRootRetrieved->aggregateVersion);
+    assertEquals(400, $aggregateRootRetrieved->balance);
+});
 
-    /** @test */
-    public function it_can_persist_aggregate_roots_in_a_transaction()
-    {
-        Mail::fake();
+test('when retrieving an aggregate root all events will be replayed to it in the correct order', function () {
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-        Projectionist::addProjector(AccountProjector::class);
-        Projectionist::addReactor(SendMailReactor::class);
+    $aggregateRoot
+        ->multiplyMoney(5)
+        ->addMoney(100);
 
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid)->addMoney(123);
-        AggregateRoot::persistInTransaction($aggregateRoot);
+    $aggregateRoot->persist();
 
-        $this->assertCount(1, EloquentStoredEvent::get());
-        $this->assertCount(1, Account::get());
-        Mail::assertSent(MoneyAddedMailable::class);
-    }
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-    /** @test */
-    public function it_will_not_call_any_event_handlers_when_persisting_fails()
-    {
-        Mail::fake();
+    assertEquals(100, $aggregateRoot->balance);
+});
 
-        Projectionist::addProjector(AccountProjector::class);
-        Projectionist::addReactor(SendMailReactor::class);
+test('when retrieving an aggregate root all events will be replayed to it with the stored event repository specified', function () {
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified $aggregateRoot */
+    $aggregateRoot = AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid);
 
-        $aggregateRoot = AccountAggregateRootWithFailingPersist::retrieve($this->aggregateUuid)->addMoney(123);
+    $aggregateRoot
+        ->addMoney(100)
+        ->addMoney(100)
+        ->addMoney(100);
 
-        $this->assertExceptionThrown(
-            fn () => AggregateRoot::persistInTransaction($aggregateRoot)
-        );
+    $aggregateRoot->persist();
 
-        $this->assertCount(0, EloquentStoredEvent::get());
-        $this->assertCount(0, Account::get());
-        Mail::assertNothingSent();
-    }
+    assertEquals(0, EloquentStoredEvent::count());
+    assertEquals(3, OtherEloquentStoredEvent::count());
 
-    /** @test */
-    public function reactors_will_get_called_when_an_aggregate_root_is_persisted()
-    {
-        Projectionist::addReactor(SendMailReactor::class);
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+    assertEquals(0, $aggregateRoot->balance);
 
-        Mail::fake();
+    $aggregateRoot = AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid);
+    assertEquals(300, $aggregateRoot->balance);
+});
 
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+test('a recorded event immediately gets applied', function () {
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+    $aggregateRoot->addMoney(123);
 
-        $aggregateRoot->addMoney(123);
+    assertEquals(123, $aggregateRoot->balance);
+});
 
-        Mail::assertNothingSent();
+test('it can persist aggregate roots in a transaction', function () {
+    Mail::fake();
 
-        $aggregateRoot->persist();
+    Projectionist::addProjector(AccountProjector::class);
+    Projectionist::addReactor(SendMailReactor::class);
 
-        Mail::assertSent(MoneyAddedMailable::class, function (MoneyAddedMailable $mailable) {
-            $this->assertEquals($this->aggregateUuid, $mailable->aggregateUuid);
-            $this->assertEquals(123, $mailable->amount);
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid)->addMoney(123);
+    AggregateRoot::persistInTransaction($aggregateRoot);
 
-            return true;
-        });
-    }
+    assertCount(1, EloquentStoredEvent::get());
+    assertCount(1, Account::get());
+    Mail::assertSent(MoneyAddedMailable::class);
+});
 
-    /** @test */
-    public function it_will_throw_an_exception_if_the_latest_stored_version_id_is_not_what_we_expect()
-    {
-        $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
-        $aggregateRoot->addMoney(100);
+test('it will not call any event handlers when persisting fails', function () {
+    Mail::fake();
 
-        $aggregateRootInAnotherRequest = AccountAggregateRoot::retrieve($this->aggregateUuid);
-        $aggregateRootInAnotherRequest->addMoney(100);
-        $aggregateRootInAnotherRequest->persist();
+    Projectionist::addProjector(AccountProjector::class);
+    Projectionist::addReactor(SendMailReactor::class);
 
-        $this->expectException(CouldNotPersistAggregate::class);
-        $aggregateRoot->persist();
-    }
+    $aggregateRoot = AccountAggregateRootWithFailingPersist::retrieve($this->aggregateUuid)->addMoney(123);
 
-    /** @test */
-    public function it_fires_the_triggered_events_on_the_event_bus_when_configured()
-    {
-        config()->set('event-sourcing.dispatch_events_from_aggregate_roots', true);
+    $this->assertExceptionThrown(
+        fn () => AggregateRoot::persistInTransaction($aggregateRoot)
+    );
 
-        Event::fake([
-            MoneyAdded::class,
-        ]);
+    assertCount(0, EloquentStoredEvent::get());
+    assertCount(0, Account::get());
+    Mail::assertNothingSent();
+});
 
-        AccountAggregateRoot::retrieve($this->aggregateUuid)
-            ->addMoney(100)
-            ->persist();
+test('reactors will get called when an aggregate root is persisted', function () {
+    Projectionist::addReactor(SendMailReactor::class);
 
-        Event::assertDispatched(MoneyAdded::class, function (MoneyAdded $event) {
-            $this->assertEquals(100, $event->amount);
-            $this->assertTrue($event->firedFromAggregateRoot);
+    Mail::fake();
 
-            return true;
-        });
-    }
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
-    /** @test */
-    public function when_an_apply_method_is_public_it_can_have_additional_dependencies()
-    {
-        config()->set('event-sourcing.dispatch_events_from_aggregate_roots', true);
+    $aggregateRoot->addMoney(123);
 
-        Event::fake([
-            MoneyMultiplied::class,
-        ]);
+    Mail::assertNothingSent();
 
-        AccountAggregateRoot::retrieve($this->aggregateUuid)
-            ->multiplyMoney(100)
-            ->persist();
+    $aggregateRoot->persist();
 
-        Event::assertDispatched(MoneyMultiplied::class);
-    }
+    Mail::assertSent(MoneyAddedMailable::class, function (MoneyAddedMailable $mailable) {
+        assertEquals($this->aggregateUuid, $mailable->aggregateUuid);
+        assertEquals(123, $mailable->amount);
 
-    public function it_can_load_the_uuid()
-    {
-        $aggregateRoot = (new AccountAggregateRoot())->loadUuid($this->aggregateUuid);
+        return true;
+    });
+});
 
-        $this->assertEquals($this->aggregateUuid, $aggregateRoot->uuid());
-    }
+test('it will throw an exception if the latest stored version id is not what we expect', function () {
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+    $aggregateRoot->addMoney(100);
 
-    /** @test */
-    public function it_persists_when_uuid_is_loaded()
-    {
-        app(AccountAggregateRoot::class)
-            ->loadUuid($this->aggregateUuid)
-            ->addMoney(100)
-            ->persist();
+    $aggregateRootInAnotherRequest = AccountAggregateRoot::retrieve($this->aggregateUuid);
+    $aggregateRootInAnotherRequest->addMoney(100);
+    $aggregateRootInAnotherRequest->persist();
 
-        $storedEvents = EloquentStoredEvent::get();
-        $this->assertCount(1, $storedEvents);
+    $aggregateRoot->persist();
+})->throws(CouldNotPersistAggregate::class);
 
-        $storedEvent = $storedEvents->first();
-        $this->assertEquals($this->aggregateUuid, $storedEvent->aggregate_uuid);
+test('it fires the triggered events on the event bus when configured', function () {
+    config()->set('event-sourcing.dispatch_events_from_aggregate_roots', true);
 
-        $event = $storedEvent->event;
-        $this->assertInstanceOf(MoneyAdded::class, $event);
-        $this->assertEquals(100, $event->amount);
-    }
+    Event::fake([
+        MoneyAdded::class,
+    ]);
 
-    /** @test */
-    public function created_at_is_set_from_within_the_aggregate_root()
-    {
-        $now = CarbonImmutable::make('2021-02-01 00:00:00');
+    AccountAggregateRoot::retrieve($this->aggregateUuid)
+        ->addMoney(100)
+        ->persist();
 
-        CarbonImmutable::setTestNow($now);
+    Event::assertDispatched(MoneyAdded::class, function (MoneyAdded $event) {
+        assertEquals(100, $event->amount);
+        assertTrue($event->firedFromAggregateRoot);
 
-        app(AccountAggregateRoot::class)
-            ->loadUuid($this->aggregateUuid)
-            ->addMoney(100)
-            ->persist();
+        return true;
+    });
+});
 
-        /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentEvent */
-        $eloquentEvent = EloquentStoredEvent::first();
+test('when an apply method is public it can have additional dependencies', function () {
+    config()->set('event-sourcing.dispatch_events_from_aggregate_roots', true);
 
-        $event = $eloquentEvent->toStoredEvent()->event;
+    Event::fake([
+        MoneyMultiplied::class,
+    ]);
 
-        $this->assertTrue($now->eq($event->createdAt()));
-    }
-}
+    AccountAggregateRoot::retrieve($this->aggregateUuid)
+        ->multiplyMoney(100)
+        ->persist();
+
+    Event::assertDispatched(MoneyMultiplied::class);
+});
+
+test('it can load the uuid', function () {
+    $aggregateRoot = (new AccountAggregateRoot())->loadUuid($this->aggregateUuid);
+
+    $this->assertEquals($this->aggregateUuid, $aggregateRoot->uuid());
+})->skip();
+
+test('it persists when uuid is loaded', function () {
+    app(AccountAggregateRoot::class)
+        ->loadUuid($this->aggregateUuid)
+        ->addMoney(100)
+        ->persist();
+
+    $storedEvents = EloquentStoredEvent::get();
+    assertCount(1, $storedEvents);
+
+    $storedEvent = $storedEvents->first();
+    assertEquals($this->aggregateUuid, $storedEvent->aggregate_uuid);
+
+    $event = $storedEvent->event;
+    assertInstanceOf(MoneyAdded::class, $event);
+    assertEquals(100, $event->amount);
+});
+
+test('created at is set from within the aggregate root', function () {
+    $now = CarbonImmutable::make('2021-02-01 00:00:00');
+
+    CarbonImmutable::setTestNow($now);
+
+    app(AccountAggregateRoot::class)
+        ->loadUuid($this->aggregateUuid)
+        ->addMoney(100)
+        ->persist();
+
+    /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentEvent */
+    $eloquentEvent = EloquentStoredEvent::first();
+
+    $event = $eloquentEvent->toStoredEvent()->event;
+
+    assertTrue($now->eq($event->createdAt()));
+});

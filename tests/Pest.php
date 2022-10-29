@@ -1,7 +1,6 @@
 <?php
 
 use Spatie\EventSourcing\Tests\TestCase;
-use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 
 /*
 |--------------------------------------------------------------------------
