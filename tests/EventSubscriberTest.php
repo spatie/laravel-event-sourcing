@@ -18,205 +18,174 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\SyncBrokeReactor;
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertInstanceOf;
 
-class EventSubscriberTest extends TestCase
-{
-    protected Account $account;
+beforeEach(function () {
+    $this->account = Account::create();
 
-    public function setUp(): void
-    {
-        parent::setUp();
+    Mail::fake();
+});
 
-        $this->account = Account::create();
+test('it will log events that implement ShouldBeStored', function () {
+    event(new MoneyAddedEvent($this->account, 1234));
 
-        Mail::fake();
-    }
+    assertCount(1, EloquentStoredEvent::get());
 
-    /** @test */
-    public function it_will_log_events_that_implement_ShouldBeStored()
-    {
-        event(new MoneyAddedEvent($this->account, 1234));
+    $storedEvent = EloquentStoredEvent::first();
 
-        $this->assertCount(1, EloquentStoredEvent::get());
+    assertEquals(MoneyAddedEvent::class, $storedEvent->event_class);
 
-        $storedEvent = EloquentStoredEvent::first();
+    assertInstanceOf(MoneyAddedEvent::class, $storedEvent->event);
+    assertEquals(1234, $storedEvent->event->amount);
+    assertEquals($this->account->id, $storedEvent->event->account->id);
+});
 
-        $this->assertEquals(MoneyAddedEvent::class, $storedEvent->event_class);
+test('it will log events that implement ShouldBeStored with a map', function () {
+    $this->setConfig('event-sourcing.event_class_map', [
+        'moneyadd' => MoneyAddedEvent::class,
+    ]);
 
-        $this->assertInstanceOf(MoneyAddedEvent::class, $storedEvent->event);
-        $this->assertEquals(1234, $storedEvent->event->amount);
-        $this->assertEquals($this->account->id, $storedEvent->event->account->id);
-    }
+    event(new MoneyAddedEvent($this->account, 1234));
 
-    /** @test * */
-    public function it_will_log_events_that_implement_ShouldBeStored_with_a_map()
-    {
-        $this->setConfig('event-sourcing.event_class_map', [
-            'moneyadd' => MoneyAddedEvent::class,
-        ]);
+    assertCount(1, EloquentStoredEvent::get());
 
-        event(new MoneyAddedEvent($this->account, 1234));
+    $storedEvent = EloquentStoredEvent::first();
 
-        $this->assertCount(1, EloquentStoredEvent::get());
+    $this->assertDatabaseHas('stored_events', ['event_class' => 'moneyadd']);
 
-        $storedEvent = EloquentStoredEvent::first();
+    assertInstanceOf(MoneyAddedEvent::class, $storedEvent->event);
+    assertEquals(1234, $storedEvent->event->amount);
+    assertEquals($this->account->id, $storedEvent->event->account->id);
+});
 
-        $this->assertDatabaseHas('stored_events', ['event_class' => 'moneyadd']);
+test('it will not store events without the ShouldBeStored interface', function () {
+    event(new DoNotStoreThisEvent());
 
-        $this->assertInstanceOf(MoneyAddedEvent::class, $storedEvent->event);
-        $this->assertEquals(1234, $storedEvent->event->amount);
-        $this->assertEquals($this->account->id, $storedEvent->event->account->id);
-    }
+    assertCount(0, EloquentStoredEvent::get());
+});
 
-    /** @test */
-    public function it_will_not_store_events_without_the_ShouldBeStored_interface()
-    {
-        event(new DoNotStoreThisEvent());
+test('it will not store events when events are fired from a aggregate root', function () {
+    $event = new MoneyAddedEvent($this->account, 1234);
+    $event->firedFromAggregateRoot = true;
 
-        $this->assertCount(0, EloquentStoredEvent::get());
-    }
+    event($event);
 
-    /** @test */
-    public function it_will_not_store_events_when_events_are_fired_from_a_aggregate_root()
-    {
-        $event = new MoneyAddedEvent($this->account, 1234);
-        $event->firedFromAggregateRoot = true;
+    assertCount(0, EloquentStoredEvent::get());
+});
 
-        event($event);
+test('it will call registered projectors', function () {
+    Projectionist::addProjector(BalanceProjector::class);
 
-        $this->assertCount(0, EloquentStoredEvent::get());
-    }
+    event(new MoneyAddedEvent($this->account, 1234));
+    $this->account->refresh();
+    assertEquals(1234, $this->account->amount);
 
-    /** @test */
-    public function it_will_call_registered_projectors()
-    {
-        Projectionist::addProjector(BalanceProjector::class);
+    event(new MoneySubtractedEvent($this->account, 34));
+    $this->account->refresh();
+    assertEquals(1200, $this->account->amount);
+});
 
-        event(new MoneyAddedEvent($this->account, 1234));
-        $this->account->refresh();
-        $this->assertEquals(1234, $this->account->amount);
+test('it will call registered reactors', function () {
+    Projectionist::addProjector(BalanceProjector::class);
+    Projectionist::addReactor(BrokeReactor::class);
 
-        event(new MoneySubtractedEvent($this->account, 34));
-        $this->account->refresh();
-        $this->assertEquals(1200, $this->account->amount);
-    }
+    event(new MoneyAddedEvent($this->account, 1234));
+    Mail::assertNotSent(AccountBroke::class);
 
-    /** @test */
-    public function it_will_call_registered_reactors()
-    {
-        Projectionist::addProjector(BalanceProjector::class);
-        Projectionist::addReactor(BrokeReactor::class);
+    event(new MoneySubtractedEvent($this->account, 1000));
+    Mail::assertNotSent(AccountBroke::class);
 
-        event(new MoneyAddedEvent($this->account, 1234));
-        Mail::assertNotSent(AccountBroke::class);
+    event(new MoneySubtractedEvent($this->account, 1000));
+    Mail::assertSent(AccountBroke::class);
+});
 
-        event(new MoneySubtractedEvent($this->account, 1000));
-        Mail::assertNotSent(AccountBroke::class);
+test('it will not queue event handling by default', function () {
+    Bus::fake();
 
-        event(new MoneySubtractedEvent($this->account, 1000));
-        Mail::assertSent(AccountBroke::class);
-    }
+    $projector = new BalanceProjector();
+    Projectionist::addProjector($projector);
 
-    /** @test */
-    public function it_will_not_queue_event_handling_by_default()
-    {
-        Bus::fake();
+    event(new MoneyAddedEvent($this->account, 1000));
 
-        $projector = new BalanceProjector();
-        Projectionist::addProjector($projector);
+    assertEquals(1000, $this->account->refresh()->amount);
+});
 
-        event(new MoneyAddedEvent($this->account, 1000));
+test('a queued projector will be queued', function () {
+    Bus::fake();
 
-        $this->assertEquals(1000, $this->account->refresh()->amount);
-    }
+    $projector = new QueuedProjector();
+    Projectionist::addProjector($projector);
 
-    /** @test */
-    public function a_queued_projector_will_be_queued()
-    {
-        Bus::fake();
+    event(new MoneyAddedEvent($this->account, 1234));
 
-        $projector = new QueuedProjector();
-        Projectionist::addProjector($projector);
+    Bus::assertDispatched(HandleStoredEventJob::class, function (HandleStoredEventJob $job) {
+        return get_class($job->storedEvent->event) === MoneyAddedEvent::class;
+    });
 
-        event(new MoneyAddedEvent($this->account, 1234));
+    assertEquals(0, $this->account->refresh()->amount);
+});
 
-        Bus::assertDispatched(HandleStoredEventJob::class, function (HandleStoredEventJob $job) {
-            return get_class($job->storedEvent->event) === MoneyAddedEvent::class;
-        });
+test('a queued reactor will be queued', function () {
+    Bus::fake();
 
-        $this->assertEquals(0, $this->account->refresh()->amount);
-    }
+    Projectionist::addProjector(BalanceProjector::class);
+    Projectionist::addReactor(BrokeReactor::class);
 
-    /** @test */
-    public function a_queued_reactor_will_be_queued()
-    {
-        Bus::fake();
+    event(new MoneySubtractedEvent($this->account, 1000));
 
-        Projectionist::addProjector(BalanceProjector::class);
-        Projectionist::addReactor(BrokeReactor::class);
+    Bus::assertDispatched(HandleStoredEventJob::class, function (HandleStoredEventJob $job) {
+        return get_class($job->storedEvent->event) === MoneySubtractedEvent::class;
+    });
+});
 
-        event(new MoneySubtractedEvent($this->account, 1000));
+test('a non queued reactor will not be queued', function () {
+    Bus::fake();
 
-        Bus::assertDispatched(HandleStoredEventJob::class, function (HandleStoredEventJob $job) {
-            return get_class($job->storedEvent->event) === MoneySubtractedEvent::class;
-        });
-    }
+    Projectionist::addProjector(BalanceProjector::class);
+    Projectionist::addReactor(SyncBrokeReactor::class);
 
-    /** @test */
-    public function a_non_queued_reactor_will_not_be_queued()
-    {
-        Bus::fake();
+    event(new MoneySubtractedEvent($this->account, 1000));
 
-        Projectionist::addProjector(BalanceProjector::class);
-        Projectionist::addReactor(SyncBrokeReactor::class);
+    Bus::assertNotDispatched(HandleStoredEventJob::class);
+});
 
-        event(new MoneySubtractedEvent($this->account, 1000));
+test('it calls sync projectors but does not dipatch job if event has no queued projectors and no reactors', function () {
+    Bus::fake();
 
-        Bus::assertNotDispatched(HandleStoredEventJob::class);
-    }
+    $projector = new BalanceProjector();
+    Projectionist::addProjector($projector);
 
-    /** @test */
-    public function it_calls_sync_projectors_but_does_not_dipatch_job_if_event_has_no_queued_projectors_and_no_reactors()
-    {
-        Bus::fake();
+    event(new MoneyAddedEvent($this->account, 1234));
 
-        $projector = new BalanceProjector();
-        Projectionist::addProjector($projector);
+    Bus::assertNotDispatched(HandleStoredEventJob::class);
 
-        event(new MoneyAddedEvent($this->account, 1234));
+    assertEquals(1234, $this->account->refresh()->amount);
+});
 
-        Bus::assertNotDispatched(HandleStoredEventJob::class);
+test('event without queue override will be queued correctly', function () {
+    Queue::fake();
 
-        $this->assertEquals(1234, $this->account->refresh()->amount);
-    }
+    $this->setConfig('event-sourcing.queue', 'defaultQueue');
 
-    /** @test */
-    public function event_without_queue_override_will_be_queued_correctly()
-    {
-        Queue::fake();
+    $projector = new QueuedProjector();
+    Projectionist::addProjector($projector);
 
-        $this->setConfig('event-sourcing.queue', 'defaultQueue');
+    event(new MoneyAddedEvent($this->account, 1234));
 
-        $projector = new QueuedProjector();
-        Projectionist::addProjector($projector);
+    Queue::assertPushedOn('defaultQueue', HandleStoredEventJob::class);
+});
 
-        event(new MoneyAddedEvent($this->account, 1234));
+test('event with queue override will be queued correctly', function () {
+    Queue::fake();
 
-        Queue::assertPushedOn('defaultQueue', HandleStoredEventJob::class);
-    }
+    $this->setConfig('event-sourcing.queue', 'defaultQueue');
 
-    /** @test */
-    public function event_with_queue_override_will_be_queued_correctly()
-    {
-        Queue::fake();
+    $projector = new QueuedProjector();
+    Projectionist::addProjector($projector);
 
-        $this->setConfig('event-sourcing.queue', 'defaultQueue');
+    event(new MoneyAddedEventWithQueueOverride($this->account, 1234));
 
-        $projector = new QueuedProjector();
-        Projectionist::addProjector($projector);
-
-        event(new MoneyAddedEventWithQueueOverride($this->account, 1234));
-
-        Queue::assertPushedOn('testQueue', HandleStoredEventJob::class);
-    }
-}
+    Queue::assertPushedOn('testQueue', HandleStoredEventJob::class);
+});
