@@ -3,34 +3,25 @@
 namespace Spatie\EventSourcing\Tests\Console;
 
 use Spatie\EventSourcing\Projectionist;
-use Spatie\EventSourcing\Tests\TestCase;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use function PHPUnit\Framework\assertFileDoesNotExist;
+use function PHPUnit\Framework\assertFileExists;
 
-class ClearEventHandlersCommandTest extends TestCase
-{
-    protected Projectionist $projectionist;
+beforeEach(function () {
+    $this->projectionist = app(Projectionist::class);
+});
 
-    public function setUp(): void
-    {
-        parent::setUp();
+test('it can clear the registered projectors', function () {
+    $this->projectionist->addProjector(BalanceProjector::class);
 
-        $this->projectionist = app(Projectionist::class);
-    }
+    $this->projectionist->addReactor(BrokeReactor::class);
 
-    /** @test */
-    public function it_can_clear_the_registered_projectors()
-    {
-        $this->projectionist->addProjector(BalanceProjector::class);
+    $this->artisan('event-sourcing:cache-event-handlers')->assertExitCode(0);
 
-        $this->projectionist->addReactor(BrokeReactor::class);
+    assertFileExists(config('event-sourcing.cache_path').'/event-handlers.php');
 
-        $this->artisan('event-sourcing:cache-event-handlers')->assertExitCode(0);
+    $this->artisan('event-sourcing:clear-event-handlers')->assertExitCode(0);
 
-        $this->assertFileExists(config('event-sourcing.cache_path').'/event-handlers.php');
-
-        $this->artisan('event-sourcing:clear-event-handlers')->assertExitCode(0);
-
-        $this->assertFileDoesNotExist(config('event-sourcing.cache_path').'/event-handlers.php');
-    }
-}
+    assertFileDoesNotExist(config('event-sourcing.cache_path').'/event-handlers.php');
+});
