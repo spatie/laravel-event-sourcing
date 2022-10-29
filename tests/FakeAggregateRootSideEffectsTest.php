@@ -6,36 +6,34 @@ use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Spatie\EventSourcing\Projectionist;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\DummyAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
+use function PHPUnit\Framework\assertFalse;
 
-class FakeAggregateRootSideEffectsTest extends TestCase
-{
-    /** @test */
-    public function it_will_apply_the_given_events()
+beforeAll(function () {
+    class FakeAggregateRootSideEffectsProjector extends Projector
     {
-        $projectionist = app(Projectionist::class);
+        public static $triggered = false;
 
-        $projectionist->addProjector(FakeAggregateRootSideEffectsProjector::class);
+        public static function clear(): void
+        {
+            self::$triggered = false;
+        }
 
-        DummyAggregateRoot::fake()
-            ->given([
-                new DummyEvent(123),
-            ]);
-
-        $this->assertFalse(FakeAggregateRootSideEffectsProjector::$triggered);
+        public function on(DummyEvent $dummyEvent): void
+        {
+            self::$triggered = true;
+        }
     }
-}
+});
 
-class FakeAggregateRootSideEffectsProjector extends Projector
-{
-    public static $triggered = false;
+test('it will apply the given events', function () {
+    $projectionist = app(Projectionist::class);
 
-    public static function clear(): void
-    {
-        self::$triggered = false;
-    }
+    $projectionist->addProjector(FakeAggregateRootSideEffectsProjector::class);
 
-    public function on(DummyEvent $dummyEvent): void
-    {
-        self::$triggered = true;
-    }
-}
+    DummyAggregateRoot::fake()
+        ->given([
+            new DummyEvent(123),
+        ]);
+
+    assertFalse(FakeAggregateRootSideEffectsProjector::$triggered);
+});
