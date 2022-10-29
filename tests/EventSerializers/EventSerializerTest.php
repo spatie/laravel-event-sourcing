@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use DateTimeImmutable;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
-use Spatie\EventSourcing\Tests\TestCase;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithArray;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithCarbon;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithDatetime;
@@ -15,127 +14,105 @@ use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithoutSerializedModels;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\EventSerializer\UpgradeSerializer;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertInstanceOf;
 
-class EventSerializerTest extends TestCase
-{
-    protected EventSerializer $eventSerializer;
+beforeEach(function () {
+    $this->eventSerializer = app(EventSerializer::class);
+});
 
-    public function setUp(): void
-    {
-        parent::setUp();
+test('it can serialize a plain event', function () {
+    $event = new EventWithoutSerializedModels('test');
 
-        $this->eventSerializer = app(EventSerializer::class);
-    }
+    $json = $this->eventSerializer->serialize($event);
 
-    /** @test */
-    public function it_can_serialize_a_plain_event()
-    {
-        $event = new EventWithoutSerializedModels('test');
+    $array = json_decode($json, true);
 
-        $json = $this->eventSerializer->serialize($event);
+    assertEquals([
+        'value' => 'test',
+    ], $array);
+});
 
-        $array = json_decode($json, true);
+test('it can serialize an event containing a model', function () {
+    $account = Account::create(['name' => 'test']);
+    $event = new MoneyAddedEvent($account, 1234);
 
-        $this->assertEquals([
-            'value' => 'test',
-        ], $array);
-    }
+    $json = $this->eventSerializer->serialize($event);
+    $event = $this->eventSerializer->deserialize(get_class($event), $json, 1);
 
-    /** @test */
-    public function it_can_serialize_an_event_containing_a_model()
-    {
-        $account = Account::create(['name' => 'test']);
-        $event = new MoneyAddedEvent($account, 1234);
+    assertEquals($account->id, $event->account->id);
+    assertEquals('test', $event->account->name);
+    assertEquals(1234, $event->amount);
+});
 
-        $json = $this->eventSerializer->serialize($event);
-        $event = $this->eventSerializer->deserialize(get_class($event), $json, 1);
+test('it serializes an event to json', function () {
+    $account = Account::create();
 
-        $this->assertEquals($account->id, $event->account->id);
-        $this->assertEquals('test', $event->account->name);
-        $this->assertEquals(1234, $event->amount);
-    }
+    $event = new MoneyAddedEvent($account, 1234);
 
-    /** @test */
-    public function it_serializes_an_event_to_json()
-    {
-        $account = Account::create();
+    $json = $this->eventSerializer->serialize($event);
 
-        $event = new MoneyAddedEvent($account, 1234);
+    $array = json_decode($json, true);
 
-        $json = $this->eventSerializer->serialize($event);
+    assertEquals(get_class($account), $array['account']['class'] ?? null);
+    assertEquals(1, $array['account']['id'] ?? null);
+    assertEquals(1234, $array['amount'] ?? null);
+});
 
-        $array = json_decode($json, true);
+test('it can deserialize an event with datetime', function () {
+    $event = new EventWithDatetime(new DateTimeImmutable('now'));
 
-        $this->assertEquals(get_class($account), $array['account']['class'] ?? null);
-        $this->assertEquals(1, $array['account']['id'] ?? null);
-        $this->assertEquals(1234, $array['amount'] ?? null);
-    }
+    $json = $this->eventSerializer->serialize($event);
 
-    /** @test */
-    public function it_can_deserialize_an_event_with_datetime()
-    {
-        $event = new EventWithDatetime(new DateTimeImmutable('now'));
+    /**
+     * @var EventWithDatetime
+     */
+    $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
 
-        $json = $this->eventSerializer->serialize($event);
+    assertInstanceOf(DateTimeImmutable::class, $normalizedEvent->value);
+});
 
-        /**
-         * @var EventWithDatetime
-         */
-        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
+test('it can deserialize an event with carbon', function () {
+    $event = new EventWithCarbon(Carbon::now());
 
-        $this->assertInstanceOf(DateTimeImmutable::class, $normalizedEvent->value);
-    }
+    $json = $this->eventSerializer->serialize($event);
 
-    /** @test */
-    public function it_can_deserialize_an_event_with_carbon()
-    {
-        $event = new EventWithCarbon(Carbon::now());
+    $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
 
-        $json = $this->eventSerializer->serialize($event);
+    assertInstanceOf(CarbonInterface::class, $normalizedEvent->value);
+});
 
-        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
+test('it can deserialize an event with an array', function () {
+    $event = new EventWithArray([Carbon::now(), Carbon::now()]);
 
-        $this->assertInstanceOf(CarbonInterface::class, $normalizedEvent->value);
-    }
+    $json = $this->eventSerializer->serialize($event);
 
-    /** @test */
-    public function it_can_deserialize_an_event_with_an_array()
-    {
-        $event = new EventWithArray([Carbon::now(), Carbon::now()]);
+    $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
 
-        $json = $this->eventSerializer->serialize($event);
+    assertInstanceOf(CarbonInterface::class, $normalizedEvent->values[0]);
+});
 
-        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
+test('it can deserialize an event with a docblock', function () {
+    $event = new EventWithDocblock(Carbon::now());
 
-        $this->assertInstanceOf(CarbonInterface::class, $normalizedEvent->values[0]);
-    }
+    $json = $this->eventSerializer->serialize($event);
 
-    /** @test */
-    public function it_can_deserialize_an_event_with_a_docblock()
-    {
-        $event = new EventWithDocblock(Carbon::now());
+    $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
 
-        $json = $this->eventSerializer->serialize($event);
+    assertInstanceOf(CarbonInterface::class, $normalizedEvent->value);
+});
 
-        $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
+test('it can upgrade an event version', function () {
+    $event = new EventWithDatetime(new DateTimeImmutable('2019-08-07T00:00:00Z'));
+    $eventSerializer = app(UpgradeSerializer::class);
 
-        $this->assertInstanceOf(CarbonInterface::class, $normalizedEvent->value);
-    }
+    $json = $eventSerializer->serialize($event);
 
-    /** @test */
-    public function it_can_upgrade_an_event_version()
-    {
-        $event = new EventWithDatetime(new DateTimeImmutable('2019-08-07T00:00:00Z'));
-        $eventSerializer = app(UpgradeSerializer::class);
+    /**
+     * @var EventWithDatetime
+     */
+    $normalizedEvent = $eventSerializer->deserialize(get_class($event), $json, 1, '{ "version": 1 }');
 
-        $json = $eventSerializer->serialize($event);
-
-        /**
-         * @var EventWithDatetime
-         */
-        $normalizedEvent = $eventSerializer->deserialize(get_class($event), $json, 1, '{ "version": 1 }');
-
-        $this->assertInstanceOf(DateTimeImmutable::class, $normalizedEvent->value);
-        $this->assertEquals('UTC', $normalizedEvent->value->getTimezone()->getName());
-    }
-}
+    assertInstanceOf(DateTimeImmutable::class, $normalizedEvent->value);
+    assertEquals('UTC', $normalizedEvent->value->getTimezone()->getName());
+});
