@@ -82,7 +82,7 @@ abstract class TestCase extends Orchestra
         (new EventSourcingServiceProvider($this->app))->register();
     }
 
-    protected function pathToTests(): string
+    public function pathToTests(): string
     {
         return __DIR__;
     }

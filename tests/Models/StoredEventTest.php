@@ -22,26 +22,27 @@ use function PHPUnit\Framework\assertIsArray;
 use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
 
+function fireEvents(int $number = 1, string $className = MoneyAddedEvent::class)
+{
+    foreach (range(1, $number) as $i) {
+        event(new $className(test()->account, 1234));
+    }
+}
+
 beforeEach(function () {
     Projectionist::addProjector(new BalanceProjector());
 
     $this->account = Account::create();
-
-    $this->fireEvents = function (int $number = 1, string $className = MoneyAddedEvent::class) {
-        foreach (range(1, $number) as $i) {
-            event(new $className($this->account, 1234));
-        }
-    };
 });
 
 test('it has a scope to get all events starting from given id', function () {
-    ($this->fireEvents)(4);
+    fireEvents(4);
 
     assertEquals([3, 4], EloquentStoredEvent::startingFrom(3)->pluck('id')->toArray());
 });
 
 test('it will throw a human readable exception when the event couldnt be deserialized', function () {
-    ($this->fireEvents)();
+    fireEvents();
 
     // sneakily change the stored event class
     EloquentStoredEvent::first()->update(['event_class' => 'NonExistingClass']);
@@ -54,7 +55,7 @@ test('it will store the alias when a classname is found in the event class map',
         'money_added' => MoneyAddedEvent::class,
     ]);
 
-    ($this->fireEvents)();
+    fireEvents();
 
     assertEquals(MoneyAddedEvent::class, EloquentStoredEvent::first()->toStoredEvent()->event_class);
     $this->assertDatabaseHas('stored_events', ['event_class' => 'money_added']);
@@ -69,7 +70,7 @@ test('it allows to modify metadata with offset set in eloquent model', function 
         'money_added' => MoneyAddedEvent::class,
     ]);
 
-    ($this->fireEvents)();
+    fireEvents();
 
     $instance = EloquentStoredEvent::withMetaDataAttributes('ip', '127.0.0.1')->first();
 
@@ -81,7 +82,7 @@ test('it allows to modify metadata with offset set in eloquent model', function 
 });
 
 test('it can handle an encoded string as event properties', function () {
-    ($this->fireEvents)();
+    fireEvents();
 
     $eloquentEvent = EloquentStoredEvent::first();
 
@@ -99,7 +100,7 @@ test('it can handle an encoded string as event properties', function () {
 });
 
 test('it encodes the event properties itself when its an array', function () {
-    ($this->fireEvents)();
+    fireEvents();
 
     $eloquentEvent = EloquentStoredEvent::first();
 
@@ -119,7 +120,7 @@ test('it encodes the event properties itself when its an array', function () {
 });
 
 test('it exposes the aggregate version', function () {
-    ($this->fireEvents)();
+    fireEvents();
 
     $eloquentEvent = EloquentStoredEvent::first();
 
@@ -191,7 +192,7 @@ test('created at is set on event', function () {
 
     Carbon::setTestNow($now);
 
-    ($this->fireEvents)();
+    fireEvents();
 
     /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentEvent */
     $eloquentEvent = EloquentStoredEvent::first();
@@ -202,7 +203,7 @@ test('created at is set on event', function () {
 });
 
 test('the stored event id is set', function () {
-    ($this->fireEvents)();
+    fireEvents();
 
     /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentEvent */
     $eloquentEvent = EloquentStoredEvent::first();

@@ -14,12 +14,10 @@ use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestQueuedP
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestReactor;
 use function PHPUnit\Framework\assertEqualsCanonicalizing;
 
-beforeEach(function () {
-    $this->getDiscoveryBasePath = function (): string
-    {
-        return realpath($this->pathToTests().'/../');
-    };
-});
+function getDiscoveryBasePath(): string
+{
+    return realpath(test()->pathToTests().'/../');
+}
 
 test('it can get all classes that have event handlers', function () {
     /** @var \Spatie\EventSourcing\Projectionist $projectionist */
@@ -27,11 +25,9 @@ test('it can get all classes that have event handlers', function () {
 
     $pathToComposerJson = __DIR__.'/../composer.json';
 
-    $getDiscoveryBasePath = $this->getDiscoveryBasePath;
-
     (new DiscoverEventHandlers())
         ->within([__DIR__.'/TestClasses/AutoDiscoverEventHandlers'])
-        ->useBasePath($getDiscoveryBasePath())
+        ->useBasePath(getDiscoveryBasePath())
         ->useRootNamespace('Spatie\EventSourcing\\')
         ->ignoringFiles(Composer::getAutoloadedFiles($pathToComposerJson))
 
