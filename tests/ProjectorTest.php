@@ -2,6 +2,9 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEquals;
+
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
@@ -13,8 +16,6 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithAssociativeAn
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutHandlesEvents;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectThatHandlesASingleEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ResettableProjector;
-use function PHPUnit\Framework\assertCount;
-use function PHPUnit\Framework\assertEquals;
 
 beforeEach(function () {
     AttributeProjector::$handledEvents = [];

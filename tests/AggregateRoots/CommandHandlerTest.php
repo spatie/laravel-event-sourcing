@@ -2,13 +2,14 @@
 
 namespace Spatie\EventSourcing\Tests\AggregateRoots;
 
+use function PHPUnit\Framework\assertCount;
+
 use Spatie\EventSourcing\AggregateRoots\AggregatePartial;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\Commands\AggregateUuid;
 use Spatie\EventSourcing\Commands\CommandBus;
 use Spatie\EventSourcing\Commands\HandledBy;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
-use function PHPUnit\Framework\assertCount;
 
 beforeAll(function () {
     #[HandledBy(CartForCommand::class)]

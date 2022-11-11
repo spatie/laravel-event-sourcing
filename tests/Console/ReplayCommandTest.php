@@ -5,6 +5,9 @@ namespace Spatie\EventSourcing\Tests\Console;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
+
+use function PHPUnit\Framework\assertEquals;
+
 use Ramsey\Uuid\Uuid;
 use Spatie\EventSourcing\Events\FinishedEventReplay;
 use Spatie\EventSourcing\Events\StartingEventReplay;
@@ -20,7 +23,6 @@ use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
-use function PHPUnit\Framework\assertEquals;
 
 beforeEach(function () {
     $this->account = Account::create();

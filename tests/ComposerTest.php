@@ -3,8 +3,10 @@
 namespace Spatie\EventSourcing\Tests;
 
 use Illuminate\Support\Str;
-use Spatie\EventSourcing\Support\Composer;
+
 use function PHPUnit\Framework\assertEquals;
+
+use Spatie\EventSourcing\Support\Composer;
 
 it('can get all loaded files', function () {
     $pathToComposerJson = __DIR__.'/../composer.json';

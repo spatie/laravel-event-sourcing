@@ -4,6 +4,15 @@ namespace Spatie\EventSourcing\Tests\Models;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+
+use function PHPUnit\Framework\assertArrayHasKey;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertEqualsCanonicalizing;
+use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertIsArray;
+use function PHPUnit\Framework\assertSame;
+use function PHPUnit\Framework\assertTrue;
+
 use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Facades\Projectionist;
@@ -14,13 +23,6 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAd
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
-use function PHPUnit\Framework\assertArrayHasKey;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertEqualsCanonicalizing;
-use function PHPUnit\Framework\assertInstanceOf;
-use function PHPUnit\Framework\assertIsArray;
-use function PHPUnit\Framework\assertSame;
-use function PHPUnit\Framework\assertTrue;
 
 function fireEvents(int $number = 1, string $className = MoneyAddedEvent::class)
 {

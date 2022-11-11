@@ -2,11 +2,12 @@
 
 namespace Spatie\EventSourcing\Tests\Console;
 
+use function PHPUnit\Framework\assertFileDoesNotExist;
+use function PHPUnit\Framework\assertFileExists;
+
 use Spatie\EventSourcing\Projectionist;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
-use function PHPUnit\Framework\assertFileDoesNotExist;
-use function PHPUnit\Framework\assertFileExists;
 
 beforeEach(function () {
     $this->projectionist = app(Projectionist::class);

@@ -2,10 +2,16 @@
 
 namespace Spatie\EventSourcing\Tests;
 
-use Exception;
 use Carbon\CarbonImmutable;
+use Exception;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
+
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertTrue;
+
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\AggregateRoots\Exceptions\CouldNotPersistAggregate;
 use Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel;
@@ -25,10 +31,6 @@ use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Models\InvalidEloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
-use function PHPUnit\Framework\assertCount;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertInstanceOf;
-use function PHPUnit\Framework\assertTrue;
 
 beforeEach(function () {
     $this->aggregateUuid = FakeUuid::generate();

@@ -4,11 +4,13 @@ namespace Spatie\EventSourcing\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Spatie\EventSourcing\Projections\Exceptions\ReadonlyProjection;
-use Spatie\EventSourcing\Tests\TestClasses\Models\ProjectionModel;
+
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertTrue;
+
+use Spatie\EventSourcing\Projections\Exceptions\ReadonlyProjection;
+use Spatie\EventSourcing\Tests\TestClasses\Models\ProjectionModel;
 
 function createProjection(): ProjectionModel
 {
@@ -55,7 +57,7 @@ it('can create', function () {
 });
 
 it('can save', function () {
-    $projection =  createProjection();
+    $projection = createProjection();
 
     expect(function () use ($projection) {
         $projection->field = 'changed';
@@ -73,7 +75,7 @@ it('can save', function () {
 });
 
 it('can update', function () {
-    $projection =  createProjection();
+    $projection = createProjection();
 
     expect(function () use ($projection) {
         $projection->update([
@@ -91,9 +93,9 @@ it('can update', function () {
 });
 
 it('can delete', function () {
-    $projection =  createProjection();
+    $projection = createProjection();
 
-    expect(fn() => $projection->delete())->toThrow(ReadonlyProjection::class);
+    expect(fn () => $projection->delete())->toThrow(ReadonlyProjection::class);
 
     assertNothingChanged();
 
@@ -103,7 +105,7 @@ it('can delete', function () {
 });
 
 it('can force delete', function () {
-    $projection =  createProjection();
+    $projection = createProjection();
 
     expect(fn () => $projection->forceDelete())->toThrow(ReadonlyProjection::class);
 
@@ -115,7 +117,7 @@ it('can force delete', function () {
 });
 
 it('can force fill', function () {
-    $projection =  createProjection();
+    $projection = createProjection();
 
     expect(function () use ($projection) {
         $projection->forceFill([
@@ -133,7 +135,7 @@ it('can force fill', function () {
 });
 
 it('should reset is writeable on refresh', function () {
-    $projection =  createProjection();
+    $projection = createProjection();
 
     $projection = $projection->writeable();
 
@@ -141,7 +143,7 @@ it('should reset is writeable on refresh', function () {
 });
 
 it('should reset is writeable on fresh', function () {
-    $projection =  createProjection();
+    $projection = createProjection();
 
     $projection = $projection->writeable();
 
@@ -149,7 +151,7 @@ it('should reset is writeable on fresh', function () {
 });
 
 it('can read', function () {
-     createProjection();
+    createProjection();
 
     assertEquals(1, ProjectionModel::all()->count());
 });

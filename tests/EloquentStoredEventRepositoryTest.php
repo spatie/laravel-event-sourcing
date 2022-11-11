@@ -2,11 +2,12 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertSame;
+
 use Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertSame;
 
 it('can get the latest version id for a given aggregate uuid', function () {
     $eloquentStoredEventRepository = new EloquentStoredEventRepository();

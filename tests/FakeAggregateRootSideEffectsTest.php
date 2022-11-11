@@ -2,11 +2,12 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use function PHPUnit\Framework\assertFalse;
+
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Spatie\EventSourcing\Projectionist;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\DummyAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
-use function PHPUnit\Framework\assertFalse;
 
 beforeAll(function () {
     class FakeAggregateRootSideEffectsProjector extends Projector

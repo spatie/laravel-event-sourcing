@@ -5,6 +5,10 @@ namespace Spatie\EventSourcing\Tests\EventSerializers;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use DateTimeImmutable;
+
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertInstanceOf;
+
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithArray;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithCarbon;
@@ -14,8 +18,6 @@ use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithoutSerializedModels;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\EventSerializer\UpgradeSerializer;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertInstanceOf;
 
 beforeEach(function () {
     $this->eventSerializer = app(EventSerializer::class);

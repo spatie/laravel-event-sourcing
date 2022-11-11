@@ -5,6 +5,11 @@ namespace Spatie\EventSourcing\Tests;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
+
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertInstanceOf;
+
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\HandleStoredEventJob;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
@@ -18,9 +23,6 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\SyncBrokeReactor;
-use function PHPUnit\Framework\assertCount;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertInstanceOf;
 
 beforeEach(function () {
     $this->account = Account::create();

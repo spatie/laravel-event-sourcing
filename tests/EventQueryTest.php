@@ -3,9 +3,11 @@
 namespace Spatie\EventSourcing\Tests;
 
 use Carbon\Carbon;
+
+use function PHPUnit\Framework\assertEquals;
+
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ReportEventQuery;
-use function PHPUnit\Framework\assertEquals;
 
 it('should apply from the past', function () {
     Carbon::setTestNow('2019-01-01');

@@ -5,6 +5,12 @@ namespace Spatie\EventSourcing\Tests;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Queue;
+
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertSame;
+
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\HandleStoredEventJob;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
@@ -21,10 +27,6 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\ProjectorWithWeightTestHelper;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
-use function PHPUnit\Framework\assertCount;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertInstanceOf;
-use function PHPUnit\Framework\assertSame;
 
 beforeEach(function () {
     $this->account = Account::create();

@@ -2,12 +2,13 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use function PHPUnit\Framework\assertEquals;
+
 use Spatie\EventSourcing\Attributes\EventSerializer;
 use Spatie\EventSourcing\Attributes\EventVersion;
 use Spatie\EventSourcing\EventSerializers\JsonEventSerializer;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
-use function PHPUnit\Framework\assertEquals;
 
 beforeAll(function () {
     #[

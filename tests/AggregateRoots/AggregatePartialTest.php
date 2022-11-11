@@ -3,14 +3,16 @@
 namespace Spatie\EventSourcing\Tests\AggregateRoots;
 
 use Exception;
-use Spatie\EventSourcing\AggregateRoots\AggregatePartial;
-use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
-use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
-use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
+
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertTrue;
+
+use Spatie\EventSourcing\AggregateRoots\AggregatePartial;
+use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
+use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 beforeAll(function () {
     class Cart extends AggregateRoot

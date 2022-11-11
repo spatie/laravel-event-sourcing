@@ -4,6 +4,9 @@ namespace Spatie\EventSourcing\Tests\Commands;
 
 use Illuminate\Foundation\Testing\Concerns\InteractsWithExceptionHandling;
 use Illuminate\Support\Facades\DB;
+
+use function PHPUnit\Framework\assertCount;
+
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\Commands\AggregateUuid;
 use Spatie\EventSourcing\Commands\CommandBus;
@@ -11,7 +14,6 @@ use Spatie\EventSourcing\Commands\HandledBy;
 use Spatie\EventSourcing\Commands\Middleware\RetryMiddleware;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\Fork\Fork;
-use function PHPUnit\Framework\assertCount;
 
 uses(InteractsWithExceptionHandling::class);
 

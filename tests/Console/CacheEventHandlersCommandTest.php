@@ -5,6 +5,7 @@ namespace Spatie\EventSourcing\Tests\Console;
 use Spatie\EventSourcing\Projectionist;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+
 use function Spatie\Snapshots\assertMatchesSnapshot;
 
 beforeEach(function () {

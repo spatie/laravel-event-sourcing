@@ -2,6 +2,8 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use function PHPUnit\Framework\assertEqualsCanonicalizing;
+
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\Projectionist;
 use Spatie\EventSourcing\Support\Composer;
@@ -12,7 +14,6 @@ use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirector
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestProjector;
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestQueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestReactor;
-use function PHPUnit\Framework\assertEqualsCanonicalizing;
 
 function getDiscoveryBasePath(): string
 {

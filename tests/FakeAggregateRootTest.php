@@ -2,10 +2,11 @@
 
 namespace Spatie\EventSourcing\Tests;
 
-use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\DummyAggregateRoot;
-use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotNull;
+
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\DummyAggregateRoot;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEvent;
 
 it('can determine that no events were recorded', function () {
     DummyAggregateRoot::fake()->assertNothingRecorded();

@@ -2,11 +2,12 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use function PHPUnit\Framework\assertCount;
+
 use Spatie\EventSourcing\EventSourcingServiceProvider;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
-use function PHPUnit\Framework\assertCount;
 
 it('will automatically register event handlers from the config file', function () {
     config()->set('event-sourcing.projectors', [BalanceProjector::class]);

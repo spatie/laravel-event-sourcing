@@ -3,13 +3,15 @@
 namespace Spatie\EventSourcing\Tests\Models;
 
 use Illuminate\Support\InteractsWithTime;
+
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertSame;
+
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithCarbon;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithDatetime;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertInstanceOf;
-use function PHPUnit\Framework\assertSame;
 
 uses(InteractsWithTime::class);
 
