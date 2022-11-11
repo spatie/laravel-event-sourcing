@@ -7,17 +7,17 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\DummyEv
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotNull;
 
-test('it can determine that no events were recorded', function () {
+it('can determine that no events were recorded', function () {
     DummyAggregateRoot::fake()->assertNothingRecorded();
 });
 
-test('it ignores given events in assert nothing recorded', function () {
+it('ignores given events in assert nothing recorded', function () {
     DummyAggregateRoot::fake()
         ->given([new DummyEvent(123)])
         ->assertNothingRecorded();
 });
 
-test('it ignores given events in assert recorded', function () {
+it('ignores given events in assert recorded', function () {
     DummyAggregateRoot::fake()
         ->given([new DummyEvent(1)])
         ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
@@ -26,13 +26,13 @@ test('it ignores given events in assert recorded', function () {
         ->assertRecorded([new DummyEvent(2)]);
 });
 
-test('it ignores given events in assert not recorded', function () {
+it('ignores given events in assert not recorded', function () {
     DummyAggregateRoot::fake()
         ->given([new DummyEvent(123)])
         ->assertNotRecorded(DummyEvent::class);
 });
 
-test('it can retrieve an aggregate for a given uuid', function () {
+it('can retrieve an aggregate for a given uuid', function () {
     $fakeUuid = 'fake-uuid';
 
     $realAggregateRoot = DummyAggregateRoot::fake($fakeUuid)->aggregateRoot();
@@ -40,7 +40,7 @@ test('it can retrieve an aggregate for a given uuid', function () {
     assertEquals($fakeUuid, $realAggregateRoot->uuid());
 });
 
-test('it will apply the given events', function () {
+it('will apply the given events', function () {
     DummyAggregateRoot::fake()
         ->given([
             new DummyEvent(123),
@@ -52,7 +52,7 @@ test('it will apply the given events', function () {
         });
 });
 
-test('it can assert the recorded events', function () {
+it('can assert the recorded events', function () {
     DummyAggregateRoot::fake()
         ->given([
             new DummyEvent(1),
@@ -66,7 +66,7 @@ test('it can assert the recorded events', function () {
         ]);
 });
 
-test('it can assert the recorded events with a closure', function () {
+it('can assert the recorded events with a closure', function () {
     DummyAggregateRoot::fake()
         ->given([
             new DummyEvent(1),
@@ -80,7 +80,7 @@ test('it can assert the recorded events with a closure', function () {
         });
 });
 
-test('when can return values which are captured and passed to assert that', function () {
+it('should return values which are captured and passed to assert that', function () {
     DummyAggregateRoot::fake()
         ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
             return $dummyAggregateRoot->uuid();
@@ -90,7 +90,7 @@ test('when can return values which are captured and passed to assert that', func
         });
 });
 
-test('assert that can return a boolean', function () {
+it('should return a boolean', function () {
     DummyAggregateRoot::fake()
         ->when(function (DummyAggregateRoot $dummyAggregateRoot) {
             return $dummyAggregateRoot->uuid();
@@ -100,7 +100,7 @@ test('assert that can return a boolean', function () {
         });
 });
 
-test('it can assert the applied events', function () {
+it('can assert the applied events', function () {
     DummyAggregateRoot::fake()
         ->given([
             new DummyEvent(1),
@@ -118,7 +118,7 @@ test('it can assert the applied events', function () {
         ]);
 });
 
-test('it can assert recorded events without using when', function () {
+it('can assert recorded events without using when', function () {
     /** @var \Spatie\EventSourcing\Tests\TestClasses\DummyAggregateRoot|\Spatie\EventSourcing\AggregateRoots\FakeAggregateRoot $fakeAggregateRoot */
     $fakeAggregateRoot = DummyAggregateRoot::fake();
 
@@ -134,7 +134,7 @@ test('it can assert recorded events without using when', function () {
     ]);
 });
 
-test('it can assert an specific event is recorded when multiple events are fired', function () {
+it('can assert an specific event is recorded when multiple events are fired', function () {
     DummyAggregateRoot::fake()
         ->given([
             new DummyEvent(1),
@@ -147,18 +147,18 @@ test('it can assert an specific event is recorded when multiple events are fired
         ->assertEventRecorded(new DummyEvent(3));
 });
 
-test('it can assert that an event is not recorded', function () {
+it('can assert that an event is not recorded', function () {
     DummyAggregateRoot::fake()->assertNotRecorded(DummyEvent::class);
 
     DummyAggregateRoot::fake()->assertNotRecorded([DummyEvent::class]);
 });
 
-test('it can assert that an event is not applied', function () {
+it('can assert that an event is not applied', function () {
     DummyAggregateRoot::fake()->assertNotApplied(DummyEvent::class);
 
     DummyAggregateRoot::fake()->assertNotApplied([DummyEvent::class]);
 });
 
-test('it can assert that noting is applied', function () {
+it('can assert that noting is applied', function () {
     DummyAggregateRoot::fake()->assertNothingApplied();
 });

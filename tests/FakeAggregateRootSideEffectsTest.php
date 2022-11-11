@@ -25,7 +25,7 @@ beforeAll(function () {
     }
 });
 
-test('it will apply the given events', function () {
+it('will apply the given events', function () {
     $projectionist = app(Projectionist::class);
 
     $projectionist->addProjector(FakeAggregateRootSideEffectsProjector::class);

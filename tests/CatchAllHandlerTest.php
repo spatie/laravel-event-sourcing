@@ -7,7 +7,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Events\TestEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\CatchAllReactor;
 use function PHPUnit\Framework\assertEquals;
 
-test('all events are handled', function () {
+it('should handle all events', function () {
     CatchAllReactor::$log = [];
 
     Projectionist::addReactor(CatchAllReactor::class);

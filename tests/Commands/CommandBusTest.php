@@ -56,7 +56,7 @@ beforeEach(function () {
     $this->UUID = 'cart-uuid';
 });
 
-test('with retry middleware', function () {
+it('should use retry middleware', function () {
     $bus = app(CommandBus::class)->middleware(new RetryMiddleware());
 
     Fork::new()

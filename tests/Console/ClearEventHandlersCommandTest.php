@@ -12,7 +12,7 @@ beforeEach(function () {
     $this->projectionist = app(Projectionist::class);
 });
 
-test('it can clear the registered projectors', function () {
+it('can clear the registered projectors', function () {
     $this->projectionist->addProjector(BalanceProjector::class);
 
     $this->projectionist->addReactor(BrokeReactor::class);

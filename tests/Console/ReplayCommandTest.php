@@ -32,7 +32,7 @@ beforeEach(function () {
     Mail::fake();
 });
 
-test('it will replay events to the given projectors', function () {
+it('will replay events to the given projectors', function () {
     Event::fake([FinishedEventReplay::class, StartingEventReplay::class]);
 
     Projectionist::addProjector(BalanceProjector::class);
@@ -46,7 +46,7 @@ test('it will replay events to the given projectors', function () {
     Event::assertDispatched(FinishedEventReplay::class);
 });
 
-test('if no projectors are given it will ask if it should run events againts all of them', function () {
+it('should ask if it should run events against all of them if no projectors are given', function () {
     Projectionist::addProjector(BalanceProjector::class);
 
     $this->artisan('event-sourcing:replay')
@@ -55,7 +55,7 @@ test('if no projectors are given it will ask if it should run events againts all
         ->assertExitCode(0);
 });
 
-test('it can replay events starting from a specific number', function () {
+it('can replay events starting from a specific number', function () {
     $projectorClass = BalanceProjector::class;
 
     Projectionist::addProjector($projectorClass);
@@ -65,7 +65,7 @@ test('it can replay events starting from a specific number', function () {
         ->assertExitCode(0);
 });
 
-test('it will not call any reactors', function () {
+it('will not call any reactors', function () {
     Projectionist::addProjector(BalanceProjector::class);
     Projectionist::addReactor(BrokeReactor::class);
 
@@ -83,7 +83,7 @@ test('it will not call any reactors', function () {
     Mail::assertSent(AccountBroke::class, 1);
 });
 
-test('it will call certain methods on the projector when replaying events', function () {
+it('will call certain methods on the projector when replaying events', function () {
     BalanceProjector::$log = [];
 
     $projector = app(BalanceProjector::class);
@@ -103,7 +103,7 @@ test('it will call certain methods on the projector when replaying events', func
     ], BalanceProjector::$log);
 });
 
-test('it will replay events from a specific store', function () {
+it('will replay events from a specific store', function () {
     $account = AccountAggregateRootWithStoredEventRepositorySpecified::create();
 
     foreach (range(1, 5) as $i) {
@@ -117,7 +117,7 @@ test('it will replay events from a specific store', function () {
         ->assertExitCode(0);
 })->skip();
 
-test('it will replay events for a specific aggregate root uuid', function () {
+it('will replay events for a specific aggregate root uuid', function () {
     EloquentStoredEvent::truncate();
 
     $uuid1 = Uuid::uuid4();

@@ -42,7 +42,7 @@ beforeAll(function () {
     }
 });
 
-test('the event version is saved in the database', function () {
+it('should the save the event version in the database', function () {
     $event = new VersionedEvent('uuid-1');
 
     event($event);
@@ -53,7 +53,7 @@ test('the event version is saved in the database', function () {
     assertEquals(2, $storedEvent->event_version);
 });
 
-test('a versioned event can be restored', function () {
+it('should restore a versioned event', function () {
     /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $storedEventV1 */
     $storedEventV1 = EloquentStoredEvent::create([
         "id" => 1,

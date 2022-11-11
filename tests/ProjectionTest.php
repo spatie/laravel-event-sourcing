@@ -36,7 +36,7 @@ beforeEach(function () {
     });
 });
 
-test('create', function () {
+it('can create', function () {
     expect(function () {
         ProjectionModel::create([
             'uuid' => 'test-uuid',
@@ -54,7 +54,7 @@ test('create', function () {
     assertTrue($model->exists);
 });
 
-test('save', function () {
+it('can save', function () {
     $projection =  createProjection();
 
     expect(function () use ($projection) {
@@ -72,7 +72,7 @@ test('save', function () {
     assertEquals('changed', $projection->refresh()->field);
 });
 
-test('update', function () {
+it('can update', function () {
     $projection =  createProjection();
 
     expect(function () use ($projection) {
@@ -90,7 +90,7 @@ test('update', function () {
     assertEquals('changed', $projection->refresh()->field);
 });
 
-test('delete', function () {
+it('can delete', function () {
     $projection =  createProjection();
 
     expect(fn() => $projection->delete())->toThrow(ReadonlyProjection::class);
@@ -102,7 +102,7 @@ test('delete', function () {
     assertEquals(0, ProjectionModel::all()->count());
 });
 
-test('force delete', function () {
+it('can force delete', function () {
     $projection =  createProjection();
 
     expect(fn () => $projection->forceDelete())->toThrow(ReadonlyProjection::class);
@@ -114,7 +114,7 @@ test('force delete', function () {
     assertEquals(0, ProjectionModel::all()->count());
 });
 
-test('force fill', function () {
+it('can force fill', function () {
     $projection =  createProjection();
 
     expect(function () use ($projection) {
@@ -132,7 +132,7 @@ test('force fill', function () {
     assertEquals('changed', $projection->refresh()->field);
 });
 
-test('is writeable is reset on refresh', function () {
+it('should reset is writeable on refresh', function () {
     $projection =  createProjection();
 
     $projection = $projection->writeable();
@@ -140,7 +140,7 @@ test('is writeable is reset on refresh', function () {
     assertFalse($projection->refresh()->isWriteable());
 });
 
-test('is writeable is reset on fresh', function () {
+it('should reset is writeable on fresh', function () {
     $projection =  createProjection();
 
     $projection = $projection->writeable();
@@ -148,7 +148,7 @@ test('is writeable is reset on fresh', function () {
     assertFalse($projection->fresh()->isWriteable());
 });
 
-test('read', function () {
+it('can read', function () {
      createProjection();
 
     assertEquals(1, ProjectionModel::all()->count());

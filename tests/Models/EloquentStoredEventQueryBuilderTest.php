@@ -13,7 +13,7 @@ use function PHPUnit\Framework\assertSame;
 
 uses(InteractsWithTime::class);
 
-test('it constrains to property value', function () {
+it('constrains to property value', function () {
     $expected = EloquentStoredEvent::query()->whereJsonContains(
         column: 'event_properties->otherEntityId',
         value: 10
@@ -27,7 +27,7 @@ test('it constrains to property value', function () {
     assertEquals($expected, $actual);
 });
 
-test('it constrains to property value difference', function () {
+it('constrains to property value difference', function () {
     $expected = EloquentStoredEvent::query()->whereJsonDoesntContain(
         column: 'event_properties->name',
         value: 'Johnson'
@@ -41,7 +41,7 @@ test('it constrains to property value difference', function () {
     assertEquals($expected, $actual);
 });
 
-test('it retrieves last event', function () {
+it('retrieves last event', function () {
     $this->travelTo(now()->subMinutes(10), fn () => event(new MoneyAdded(10)));
     $this->travelTo(now()->subMinutes(5), fn () => event(new MoneyAdded(100)));
 
@@ -55,7 +55,7 @@ test('it retrieves last event', function () {
     assertSame(1000, $storedEvent->amount);
 });
 
-test('it retrieve last event of type', function () {
+it('retrieve last event of type', function () {
     $date = now()
         ->subDays(3)
         ->setTime(0, 0, 0)
@@ -79,7 +79,7 @@ test('it retrieve last event of type', function () {
     assertEquals($date, $storedEvent->value);
 });
 
-test('it retrieves last event of multiple types', function () {
+it('retrieves last event of multiple types', function () {
     $date = now()->subDays(3)->setTime(0, 0, 0);
 
     $this->travelTo(

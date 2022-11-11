@@ -8,7 +8,7 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAd
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertSame;
 
-test('it can get the latest version id for a given aggregate uuid', function () {
+it('can get the latest version id for a given aggregate uuid', function () {
     $eloquentStoredEventRepository = new EloquentStoredEventRepository();
 
     assertEquals(0, $eloquentStoredEventRepository->getLatestAggregateVersion('uuid-non-existing'));
@@ -28,7 +28,7 @@ test('it can get the latest version id for a given aggregate uuid', function () 
     assertEquals(2, $eloquentStoredEventRepository->getLatestAggregateVersion('uuid-1'));
 });
 
-test('it sets the original event on persist', function () {
+it('sets the original event on persist', function () {
     $eloquentStoredEventRepository = app(EloquentStoredEventRepository::class);
 
     $originalEvent = new MoneyAdded(100);

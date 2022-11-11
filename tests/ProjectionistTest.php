@@ -30,29 +30,29 @@ beforeEach(function () {
     $this->account = Account::create();
 });
 
-test('it will throw an exception when trying to add a non existing projector', function () {
+it('will throw an exception when trying to add a non existing projector', function () {
     Projectionist::addProjector('non-exising-class-name');
 })->throws(BindingResolutionException::class);
 
-test('it will thrown an exception when trying to add a non existing reactor', function () {
+it('will thrown an exception when trying to add a non existing reactor', function () {
     Projectionist::addReactor('non-exising-class-name');
 })->throws(BindingResolutionException::class);
 
-test('it will not register the same projector twice', function () {
+it('will not register the same projector twice', function () {
     Projectionist::addProjector(BalanceProjector::class);
     Projectionist::addProjector(BalanceProjector::class);
 
     assertCount(1, Projectionist::getProjectors());
 });
 
-test('it will not register the same reactor twice', function () {
+it('will not register the same reactor twice', function () {
     Projectionist::addReactor(BrokeReactor::class);
     Projectionist::addReactor(BrokeReactor::class);
 
     assertCount(1, Projectionist::getReactors());
 });
 
-test('it will call the method on the projector when the projector throws an exception', function () {
+it('will call the method on the projector when the projector throws an exception', function () {
     ProjectorThatThrowsAnException::$exceptionsHandled = 0;
 
     $this->setConfig('event-sourcing.catch_exceptions', true);
@@ -64,7 +64,7 @@ test('it will call the method on the projector when the projector throws an exce
     assertEquals(1, ProjectorThatThrowsAnException::$exceptionsHandled);
 });
 
-test('it will call projectors ordered by weight', function () {
+it('will call projectors ordered by weight', function () {
     app()->singleton(ProjectorWithWeightTestHelper::class);
 
     Projectionist::addProjector(ProjectorWithHighWeight::class);
@@ -82,7 +82,7 @@ test('it will call projectors ordered by weight', function () {
     ], app(ProjectorWithWeightTestHelper::class)->calledBy);
 });
 
-test('it can catch exceptions and still continue calling other projectors', function () {
+it('can catch exceptions and still continue calling other projectors', function () {
     $this->setConfig('event-sourcing.catch_exceptions', true);
 
     $failingProjector = new ProjectorThatThrowsAnException();
@@ -96,14 +96,14 @@ test('it can catch exceptions and still continue calling other projectors', func
     assertEquals(1000, $this->account->refresh()->amount);
 });
 
-test('it can not catch exceptions and not continue', function () {
+it('can not catch exceptions and not continue', function () {
     $failingProjector = new ProjectorThatThrowsAnException();
     Projectionist::addProjector($failingProjector);
 
     event(new MoneyAddedEvent($this->account, 1000));
 })->throws(Exception::class);
 
-test('projectors that dont handle fired events are handled correctly', function () {
+it('should handle projectors that dont handle fired events', function () {
     Projectionist::addProjector(MoneyAddedCountProjector::class);
 
     event(new MoneySubtractedEvent($this->account, 500));
@@ -111,7 +111,7 @@ test('projectors that dont handle fired events are handled correctly', function 
     assertEquals(0, $this->account->fresh()->addition_count);
 });
 
-test('it propagates custom event tags to event job', function () {
+it('propagates custom event tags to event job', function () {
     Queue::fake();
 
     Projectionist::addProjector(QueuedProjector::class);
@@ -128,7 +128,7 @@ test('it propagates custom event tags to event job', function () {
     });
 });
 
-test('it can remove all event handlers', function () {
+it('can remove all event handlers', function () {
     Projectionist::addProjector(MoneyAddedCountProjector::class);
     Projectionist::addProjector(BalanceProjector::class);
     Projectionist::addReactor(BrokeReactor::class);
@@ -142,7 +142,7 @@ test('it can remove all event handlers', function () {
     assertCount(0, Projectionist::getReactors());
 });
 
-test('it can remove certain event handlers', function () {
+it('can remove certain event handlers', function () {
     Projectionist::addProjector(MoneyAddedCountProjector::class);
     Projectionist::addProjector(BalanceProjector::class);
     Projectionist::addReactor(BrokeReactor::class);
@@ -160,7 +160,7 @@ test('it can remove certain event handlers', function () {
     assertCount(0, Projectionist::getProjectors());
 });
 
-test('it can fake event handlers', function () {
+it('can fake event handlers', function () {
     FakeMoneyAddedCountProjector::$eventsHandledCount = 0;
 
     Projectionist::addProjector(MoneyAddedCountProjector::class);

@@ -8,7 +8,6 @@ use Spatie\EventSourcing\Commands\AggregateUuid;
 use Spatie\EventSourcing\Commands\CommandBus;
 use Spatie\EventSourcing\Commands\HandledBy;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
-use Spatie\EventSourcing\Tests\TestCase;
 use function PHPUnit\Framework\assertCount;
 
 beforeAll(function () {
@@ -87,7 +86,7 @@ beforeEach(function () {
     $this->UUID = 'cart-uuid';
 });
 
-test('command is dispatched to aggregate', function () {
+it('should dispatch command to aggregate', function () {
     $bus = new CommandBus();
 
     CartForCommand::retrieve($this->UUID)->persist();

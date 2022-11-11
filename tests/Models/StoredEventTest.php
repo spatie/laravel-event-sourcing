@@ -35,13 +35,13 @@ beforeEach(function () {
     $this->account = Account::create();
 });
 
-test('it has a scope to get all events starting from given id', function () {
+it('has a scope to get all events starting from given id', function () {
     fireEvents(4);
 
     assertEquals([3, 4], EloquentStoredEvent::startingFrom(3)->pluck('id')->toArray());
 });
 
-test('it will throw a human readable exception when the event couldnt be deserialized', function () {
+it('will throw a human readable exception when the event couldnt be deserialized', function () {
     fireEvents();
 
     // sneakily change the stored event class
@@ -50,7 +50,7 @@ test('it will throw a human readable exception when the event couldnt be deseria
     EloquentStoredEvent::first()->toStoredEvent();
 })->throws(InvalidStoredEvent::class);
 
-test('it will store the alias when a classname is found in the event class map', function () {
+it('will store the alias when a classname is found in the event class map', function () {
     $this->setConfig('event-sourcing.event_class_map', [
         'money_added' => MoneyAddedEvent::class,
     ]);
@@ -61,7 +61,7 @@ test('it will store the alias when a classname is found in the event class map',
     $this->assertDatabaseHas('stored_events', ['event_class' => 'money_added']);
 });
 
-test('it allows to modify metadata with offset set in eloquent model', function () {
+it('allows to modify metadata with offset set in eloquent model', function () {
     EloquentStoredEvent::creating(function (EloquentStoredEvent $event) {
         $event->meta_data->set('ip', '127.0.0.1');
     });
@@ -81,7 +81,7 @@ test('it allows to modify metadata with offset set in eloquent model', function 
     EloquentStoredEvent::flushEventListeners();
 });
 
-test('it can handle an encoded string as event properties', function () {
+it('can handle an encoded string as event properties', function () {
     fireEvents();
 
     $eloquentEvent = EloquentStoredEvent::first();
@@ -99,7 +99,7 @@ test('it can handle an encoded string as event properties', function () {
     assertInstanceOf(MoneyAddedEvent::class, $storedEvent->event);
 });
 
-test('it encodes the event properties itself when its an array', function () {
+it('encodes the event properties itself when its an array', function () {
     fireEvents();
 
     $eloquentEvent = EloquentStoredEvent::first();
@@ -119,7 +119,7 @@ test('it encodes the event properties itself when its an array', function () {
     assertInstanceOf(MoneyAddedEvent::class, $storedEvent->event);
 });
 
-test('it exposes the aggregate version', function () {
+it('exposes the aggregate version', function () {
     fireEvents();
 
     $eloquentEvent = EloquentStoredEvent::first();
@@ -129,7 +129,7 @@ test('it exposes the aggregate version', function () {
     assertSame('0', $storedEvent->aggregate_version);
 });
 
-test('it uses the original event if set', function () {
+it('uses the original event if set', function () {
     $originalEvent = new MoneyAdded(100);
 
     $eloquentStoredEvent = new EloquentStoredEvent();
@@ -139,7 +139,7 @@ test('it uses the original event if set', function () {
     assertSame($originalEvent, $eloquentStoredEvent->event);
 });
 
-test('it updates the original if meta data is changed', function () {
+it('updates the original if meta data is changed', function () {
     $originalEvent = new MoneyAdded(100);
 
     $eloquentStoredEvent = new EloquentStoredEvent();
@@ -154,7 +154,7 @@ test('it updates the original if meta data is changed', function () {
     );
 });
 
-test('it updates the original if meta data is changed and saved', function () {
+it('updates the original if meta data is changed and saved', function () {
     $originalEvent = new MoneyAdded(100);
 
     $eloquentStoredEvent = new EloquentStoredEvent();
@@ -187,7 +187,7 @@ test('it updates the original if meta data is changed and saved', function () {
     );
 });
 
-test('created at is set on event', function () {
+it('should set created at on event', function () {
     $now = Carbon::make('2021-01-01 10:00:00');
 
     Carbon::setTestNow($now);
@@ -202,7 +202,7 @@ test('created at is set on event', function () {
     assertTrue($event->createdAt()->eq($now));
 });
 
-test('the stored event id is set', function () {
+it('should set the stored event id', function () {
     fireEvents();
 
     /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentEvent */

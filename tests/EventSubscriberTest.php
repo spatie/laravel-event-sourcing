@@ -28,7 +28,7 @@ beforeEach(function () {
     Mail::fake();
 });
 
-test('it will log events that implement ShouldBeStored', function () {
+it('will log events that implement ShouldBeStored', function () {
     event(new MoneyAddedEvent($this->account, 1234));
 
     assertCount(1, EloquentStoredEvent::get());
@@ -42,7 +42,7 @@ test('it will log events that implement ShouldBeStored', function () {
     assertEquals($this->account->id, $storedEvent->event->account->id);
 });
 
-test('it will log events that implement ShouldBeStored with a map', function () {
+it('will log events that implement ShouldBeStored with a map', function () {
     $this->setConfig('event-sourcing.event_class_map', [
         'moneyadd' => MoneyAddedEvent::class,
     ]);
@@ -60,13 +60,13 @@ test('it will log events that implement ShouldBeStored with a map', function () 
     assertEquals($this->account->id, $storedEvent->event->account->id);
 });
 
-test('it will not store events without the ShouldBeStored interface', function () {
+it('will not store events without the ShouldBeStored interface', function () {
     event(new DoNotStoreThisEvent());
 
     assertCount(0, EloquentStoredEvent::get());
 });
 
-test('it will not store events when events are fired from a aggregate root', function () {
+it('will not store events when events are fired from a aggregate root', function () {
     $event = new MoneyAddedEvent($this->account, 1234);
     $event->firedFromAggregateRoot = true;
 
@@ -75,7 +75,7 @@ test('it will not store events when events are fired from a aggregate root', fun
     assertCount(0, EloquentStoredEvent::get());
 });
 
-test('it will call registered projectors', function () {
+it('will call registered projectors', function () {
     Projectionist::addProjector(BalanceProjector::class);
 
     event(new MoneyAddedEvent($this->account, 1234));
@@ -87,7 +87,7 @@ test('it will call registered projectors', function () {
     assertEquals(1200, $this->account->amount);
 });
 
-test('it will call registered reactors', function () {
+it('will call registered reactors', function () {
     Projectionist::addProjector(BalanceProjector::class);
     Projectionist::addReactor(BrokeReactor::class);
 
@@ -101,7 +101,7 @@ test('it will call registered reactors', function () {
     Mail::assertSent(AccountBroke::class);
 });
 
-test('it will not queue event handling by default', function () {
+it('will not queue event handling by default', function () {
     Bus::fake();
 
     $projector = new BalanceProjector();
@@ -112,7 +112,7 @@ test('it will not queue event handling by default', function () {
     assertEquals(1000, $this->account->refresh()->amount);
 });
 
-test('a queued projector will be queued', function () {
+it('should queue a queued projector', function () {
     Bus::fake();
 
     $projector = new QueuedProjector();
@@ -127,7 +127,7 @@ test('a queued projector will be queued', function () {
     assertEquals(0, $this->account->refresh()->amount);
 });
 
-test('a queued reactor will be queued', function () {
+it('should queue a queued reactor', function () {
     Bus::fake();
 
     Projectionist::addProjector(BalanceProjector::class);
@@ -140,7 +140,7 @@ test('a queued reactor will be queued', function () {
     });
 });
 
-test('a non queued reactor will not be queued', function () {
+it('should not queue a non queued reactor', function () {
     Bus::fake();
 
     Projectionist::addProjector(BalanceProjector::class);
@@ -151,7 +151,7 @@ test('a non queued reactor will not be queued', function () {
     Bus::assertNotDispatched(HandleStoredEventJob::class);
 });
 
-test('it calls sync projectors but does not dipatch job if event has no queued projectors and no reactors', function () {
+it('calls sync projectors but does not dipatch job if event has no queued projectors and no reactors', function () {
     Bus::fake();
 
     $projector = new BalanceProjector();
@@ -164,7 +164,7 @@ test('it calls sync projectors but does not dipatch job if event has no queued p
     assertEquals(1234, $this->account->refresh()->amount);
 });
 
-test('event without queue override will be queued correctly', function () {
+it('should queue event without queue override', function () {
     Queue::fake();
 
     $this->setConfig('event-sourcing.queue', 'defaultQueue');
@@ -177,7 +177,7 @@ test('event without queue override will be queued correctly', function () {
     Queue::assertPushedOn('defaultQueue', HandleStoredEventJob::class);
 });
 
-test('event with queue override will be queued correctly', function () {
+it('should queue event with queue override', function () {
     Queue::fake();
 
     $this->setConfig('event-sourcing.queue', 'defaultQueue');

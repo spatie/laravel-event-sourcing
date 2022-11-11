@@ -19,7 +19,7 @@ function getDiscoveryBasePath(): string
     return realpath(test()->pathToTests().'/../');
 }
 
-test('it can get all classes that have event handlers', function () {
+it('can get all classes that have event handlers', function () {
     /** @var \Spatie\EventSourcing\Projectionist $projectionist */
     $projectionist = app(Projectionist::class);
 

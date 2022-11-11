@@ -34,7 +34,7 @@ beforeEach(function () {
     $this->aggregateUuid = FakeUuid::generate();
 });
 
-test('aggregate root resolves dependencies from the container', function () {
+it('can resolve the aggregate root dependencies from the container', function () {
     $this->app->bind(AccountAggregateRoot::class, function () {
         return new AccountAggregateRoot(app(Math::class), 42);
     });
@@ -44,13 +44,13 @@ test('aggregate root resolves dependencies from the container', function () {
     assertEquals(42, $root->dependency);
 });
 
-test('it can get the uuid', function () {
+it('can get the uuid', function () {
     $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
     assertEquals($this->aggregateUuid, $aggregateRoot->uuid());
 });
 
-test('persisting an aggregate root will persist all events it recorded', function () {
+it('should persist all events it recorded when persisting an aggregate root will', function () {
     AccountAggregateRoot::retrieve($this->aggregateUuid)
         ->addMoney(100)
         ->persist();
@@ -66,7 +66,7 @@ test('persisting an aggregate root will persist all events it recorded', functio
     assertEquals(100, $event->amount);
 });
 
-test('when an aggregate root specifies a stored event repository persisting will persist all events it recorded via repository', function () {
+it('should persist all events it recorded via repository when an aggregate root specifies a stored event repository', function () {
     AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid)
         ->addMoney(100)
         ->persist();
@@ -85,7 +85,7 @@ test('when an aggregate root specifies a stored event repository persisting will
     assertEquals(100, $event->amount);
 });
 
-test('when an the config specifies a stored event model persisting will persist all events it recorded via stored event', function () {
+it('should persist all events it recorded via stored event when the config specifies a stored event model', function () {
     config()->set('event-sourcing.stored_event_model', OtherEloquentStoredEvent::class);
 
     AccountAggregateRoot::retrieve($this->aggregateUuid)
@@ -106,7 +106,7 @@ test('when an the config specifies a stored event model persisting will persist 
     assertEquals(100, $event->amount);
 });
 
-test('it throws an error when defining a class that doesnt extend eloquent stored event', function () {
+it('throws an error when defining a class that doesnt extend eloquent stored event', function () {
     config()->set('event-sourcing.stored_event_model', InvalidEloquentStoredEvent::class);
 
     AccountAggregateRoot::retrieve($this->aggregateUuid)
@@ -114,7 +114,7 @@ test('it throws an error when defining a class that doesnt extend eloquent store
         ->persist();
 })->throws(InvalidEloquentStoredEventModel::class);
 
-test('when retrieving an aggregate root all events will be replayed to it', function () {
+it('should replay all events when retrieving an aggregate root', function () {
     /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
     $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
@@ -130,7 +130,7 @@ test('when retrieving an aggregate root all events will be replayed to it', func
     assertEquals(600, $aggregateRoot->balance);
 });
 
-test('when applying events it increases the version number', function () {
+it('should increase the version number when applying events', function () {
     /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
     $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
@@ -142,7 +142,7 @@ test('when applying events it increases the version number', function () {
     assertEquals(3, $aggregateRoot->aggregateVersion);
 });
 
-test('snapshotting stores public properties and version number', function () {
+it('should store public properties and version number when snapshotting', function () {
     /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
     $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
@@ -162,7 +162,7 @@ test('snapshotting stores public properties and version number', function () {
     });
 });
 
-test('restoring an aggregate root with a snapshot restores public properties', function () {
+it('should restore public properties when restoring an aggregate root with a snapshot', function () {
     /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
     $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
@@ -179,7 +179,7 @@ test('restoring an aggregate root with a snapshot restores public properties', f
     assertEquals(300, $aggregateRootRetrieved->balance);
 });
 
-test('events saved after the snapshot are reconstituted', function () {
+it('should save events after the snapshot are reconstituted', function () {
     /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
     $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
@@ -198,7 +198,7 @@ test('events saved after the snapshot are reconstituted', function () {
     assertEquals(400, $aggregateRootRetrieved->balance);
 });
 
-test('when retrieving an aggregate root all events will be replayed to it in the correct order', function () {
+it('should replay all events in the correct order when retrieving an aggregate root all', function () {
     /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
     $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
 
@@ -213,7 +213,7 @@ test('when retrieving an aggregate root all events will be replayed to it in the
     assertEquals(100, $aggregateRoot->balance);
 });
 
-test('when retrieving an aggregate root all events will be replayed to it with the stored event repository specified', function () {
+it('should replay all events with the stored event repository specified when retrieving an aggregate root', function () {
     /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified $aggregateRoot */
     $aggregateRoot = AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($this->aggregateUuid);
 
@@ -234,14 +234,14 @@ test('when retrieving an aggregate root all events will be replayed to it with t
     assertEquals(300, $aggregateRoot->balance);
 });
 
-test('a recorded event immediately gets applied', function () {
+it('should apply a recorded event immediately', function () {
     $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
     $aggregateRoot->addMoney(123);
 
     assertEquals(123, $aggregateRoot->balance);
 });
 
-test('it can persist aggregate roots in a transaction', function () {
+it('can persist aggregate roots in a transaction', function () {
     Mail::fake();
 
     Projectionist::addProjector(AccountProjector::class);
@@ -255,7 +255,7 @@ test('it can persist aggregate roots in a transaction', function () {
     Mail::assertSent(MoneyAddedMailable::class);
 });
 
-test('it will not call any event handlers when persisting fails', function () {
+it('will not call any event handlers when persisting fails', function () {
     Mail::fake();
 
     Projectionist::addProjector(AccountProjector::class);
@@ -270,7 +270,7 @@ test('it will not call any event handlers when persisting fails', function () {
     Mail::assertNothingSent();
 });
 
-test('reactors will get called when an aggregate root is persisted', function () {
+it('should call reactors when an aggregate root is persisted', function () {
     Projectionist::addReactor(SendMailReactor::class);
 
     Mail::fake();
@@ -291,7 +291,7 @@ test('reactors will get called when an aggregate root is persisted', function ()
     });
 });
 
-test('it will throw an exception if the latest stored version id is not what we expect', function () {
+it('will throw an exception if the latest stored version id is not what we expect', function () {
     $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
     $aggregateRoot->addMoney(100);
 
@@ -302,7 +302,7 @@ test('it will throw an exception if the latest stored version id is not what we 
     $aggregateRoot->persist();
 })->throws(CouldNotPersistAggregate::class);
 
-test('it fires the triggered events on the event bus when configured', function () {
+it('fires the triggered events on the event bus when configured', function () {
     config()->set('event-sourcing.dispatch_events_from_aggregate_roots', true);
 
     Event::fake([
@@ -321,7 +321,7 @@ test('it fires the triggered events on the event bus when configured', function 
     });
 });
 
-test('when an apply method is public it can have additional dependencies', function () {
+it('can have additional dependencies when an apply method is public', function () {
     config()->set('event-sourcing.dispatch_events_from_aggregate_roots', true);
 
     Event::fake([
@@ -335,13 +335,13 @@ test('when an apply method is public it can have additional dependencies', funct
     Event::assertDispatched(MoneyMultiplied::class);
 });
 
-test('it can load the uuid', function () {
+it('can load the uuid', function () {
     $aggregateRoot = (new AccountAggregateRoot())->loadUuid($this->aggregateUuid);
 
     assertEquals($this->aggregateUuid, $aggregateRoot->uuid());
 })->skip();
 
-test('it persists when uuid is loaded', function () {
+it('persists when uuid is loaded', function () {
     app(AccountAggregateRoot::class)
         ->loadUuid($this->aggregateUuid)
         ->addMoney(100)
@@ -358,7 +358,7 @@ test('it persists when uuid is loaded', function () {
     assertEquals(100, $event->amount);
 });
 
-test('created at is set from within the aggregate root', function () {
+it('should set created at from within the aggregate root', function () {
     $now = CarbonImmutable::make('2021-02-01 00:00:00');
 
     CarbonImmutable::setTestNow($now);

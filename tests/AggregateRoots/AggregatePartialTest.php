@@ -7,7 +7,6 @@ use Spatie\EventSourcing\AggregateRoots\AggregatePartial;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
-use Spatie\EventSourcing\Tests\TestCase;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
@@ -93,7 +92,7 @@ beforeEach(function () {
     $this->CART_UUID = 'cart-uuid';
 });
 
-test('entities', function () {
+it('can use entities', function () {
     $cart = Cart::retrieve($this->CART_UUID);
 
     $cart
@@ -118,7 +117,7 @@ test('entities', function () {
     expect(fn () => $cart->checkout())->toThrow(Exception::class, 'Cart is empty');
 });
 
-test('partial fakes', function () {
+it('can uses partial fakes', function () {
     $cartItems = CartItems::fake();
 
     assertTrue($cartItems->isEmpty());

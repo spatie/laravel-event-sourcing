@@ -20,7 +20,7 @@ beforeEach(function () {
     AttributeProjector::$handledEvents = [];
 });
 
-test('it can reach the stored event and write meta data to it', function () {
+it('can reach the stored event and write meta data to it', function () {
     Projectionist::addProjector(ProjectorThatWritesMetaData::class);
 
     event(new MoneyAddedEvent(Account::create(), 1234));
@@ -30,7 +30,7 @@ test('it can reach the stored event and write meta data to it', function () {
     assertEquals(1, EloquentStoredEvent::first()->meta_data['user_id']);
 });
 
-test('can be reset', function () {
+it('can be reset', function () {
     Account::create();
 
     $projector = new ResettableProjector();
@@ -44,7 +44,7 @@ test('can be reset', function () {
     assertCount(0, Account::all());
 });
 
-test('it can handle non associative handle events', function () {
+it('can handle non associative handle events', function () {
     $account = Account::create();
 
     $projector = new ProjectorWithAssociativeAndNonAssociativeHandleEvents();
@@ -56,7 +56,7 @@ test('it can handle non associative handle events', function () {
     assertEquals(1234, $account->refresh()->amount);
 });
 
-test('it can handle mixed handle events', function () {
+it('can handle mixed handle events', function () {
     $account = Account::create();
 
     $projector = new ProjectorWithAssociativeAndNonAssociativeHandleEvents();
@@ -70,7 +70,7 @@ test('it can handle mixed handle events', function () {
     assertEquals(-3087, $account->refresh()->amount);
 });
 
-test('it can handle a single event', function () {
+it('can handle a single event', function () {
     $account = Account::create();
 
     $projector = new ProjectThatHandlesASingleEvent();
@@ -82,7 +82,7 @@ test('it can handle a single event', function () {
     assertEquals(1234, $account->refresh()->amount);
 });
 
-test('it can find the right method for the right event without the need to specify handles events', function () {
+it('can find the right method for the right event without the need to specify handles events', function () {
     $account = Account::create();
 
     Projectionist::addProjector(ProjectorWithoutHandlesEvents::class);

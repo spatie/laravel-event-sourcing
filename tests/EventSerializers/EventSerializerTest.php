@@ -21,7 +21,7 @@ beforeEach(function () {
     $this->eventSerializer = app(EventSerializer::class);
 });
 
-test('it can serialize a plain event', function () {
+it('can serialize a plain event', function () {
     $event = new EventWithoutSerializedModels('test');
 
     $json = $this->eventSerializer->serialize($event);
@@ -33,7 +33,7 @@ test('it can serialize a plain event', function () {
     ], $array);
 });
 
-test('it can serialize an event containing a model', function () {
+it('can serialize an event containing a model', function () {
     $account = Account::create(['name' => 'test']);
     $event = new MoneyAddedEvent($account, 1234);
 
@@ -45,7 +45,7 @@ test('it can serialize an event containing a model', function () {
     assertEquals(1234, $event->amount);
 });
 
-test('it serializes an event to json', function () {
+it('serializes an event to json', function () {
     $account = Account::create();
 
     $event = new MoneyAddedEvent($account, 1234);
@@ -59,7 +59,7 @@ test('it serializes an event to json', function () {
     assertEquals(1234, $array['amount'] ?? null);
 });
 
-test('it can deserialize an event with datetime', function () {
+it('can deserialize an event with datetime', function () {
     $event = new EventWithDatetime(new DateTimeImmutable('now'));
 
     $json = $this->eventSerializer->serialize($event);
@@ -72,7 +72,7 @@ test('it can deserialize an event with datetime', function () {
     assertInstanceOf(DateTimeImmutable::class, $normalizedEvent->value);
 });
 
-test('it can deserialize an event with carbon', function () {
+it('can deserialize an event with carbon', function () {
     $event = new EventWithCarbon(Carbon::now());
 
     $json = $this->eventSerializer->serialize($event);
@@ -82,7 +82,7 @@ test('it can deserialize an event with carbon', function () {
     assertInstanceOf(CarbonInterface::class, $normalizedEvent->value);
 });
 
-test('it can deserialize an event with an array', function () {
+it('can deserialize an event with an array', function () {
     $event = new EventWithArray([Carbon::now(), Carbon::now()]);
 
     $json = $this->eventSerializer->serialize($event);
@@ -92,7 +92,7 @@ test('it can deserialize an event with an array', function () {
     assertInstanceOf(CarbonInterface::class, $normalizedEvent->values[0]);
 });
 
-test('it can deserialize an event with a docblock', function () {
+it('can deserialize an event with a docblock', function () {
     $event = new EventWithDocblock(Carbon::now());
 
     $json = $this->eventSerializer->serialize($event);
@@ -102,7 +102,7 @@ test('it can deserialize an event with a docblock', function () {
     assertInstanceOf(CarbonInterface::class, $normalizedEvent->value);
 });
 
-test('it can upgrade an event version', function () {
+it('can upgrade an event version', function () {
     $event = new EventWithDatetime(new DateTimeImmutable('2019-08-07T00:00:00Z'));
     $eventSerializer = app(UpgradeSerializer::class);
 

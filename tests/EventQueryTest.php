@@ -7,7 +7,7 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAd
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ReportEventQuery;
 use function PHPUnit\Framework\assertEquals;
 
-test('test apply from the past', function () {
+it('should apply from the past', function () {
     Carbon::setTestNow('2019-01-01');
 
     event(new MoneyAdded(10));
