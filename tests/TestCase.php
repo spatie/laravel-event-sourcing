@@ -14,7 +14,7 @@ use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 
 abstract class TestCase extends Orchestra
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -82,7 +82,7 @@ abstract class TestCase extends Orchestra
         (new EventSourcingServiceProvider($this->app))->register();
     }
 
-    protected function pathToTests(): string
+    public function pathToTests(): string
     {
         return __DIR__;
     }

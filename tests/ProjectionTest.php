@@ -6,175 +6,150 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Spatie\EventSourcing\Projections\Exceptions\ReadonlyProjection;
 use Spatie\EventSourcing\Tests\TestClasses\Models\ProjectionModel;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertTrue;
 
-class ProjectionTest extends TestCase
+function createProjection(): ProjectionModel
 {
-    public function setUp(): void
-    {
-        parent::setUp();
+    ProjectionModel::new()->writeable()->create([
+        'uuid' => 'test-uuid',
+        'field' => 'original',
+    ]);
 
-        Schema::dropIfExists('projection_models');
+    return ProjectionModel::find('test-uuid');
+}
 
-        Schema::create('projection_models', function (Blueprint $table): void {
-            (new ProjectionModel())->getBlueprint($table);
-        });
-    }
+function assertNothingChanged(): void
+{
+    test()->assertDatabaseHas((new ProjectionModel())->getTable(), [
+        'uuid' => 'test-uuid',
+        'field' => 'original',
+    ]);
+}
 
-    /** @test */
-    public function test_create(): void
-    {
-        $this->assertExceptionThrown(function (): void {
-            ProjectionModel::create([
-                'uuid' => 'test-uuid',
-                'field' => 'test',
-            ]);
-        }, ReadonlyProjection::class);
+beforeEach(function () {
+    Schema::dropIfExists('projection_models');
 
-        $this->assertDatabaseCount((new ProjectionModel())->getTable(), 0);
+    Schema::create('projection_models', function (Blueprint $table): void {
+        (new ProjectionModel())->getBlueprint($table);
+    });
+});
 
-        $model = ProjectionModel::new()->writeable()->create([
-            'uuid' => 'test-uuid-2',
+it('can create', function () {
+    expect(function () {
+        ProjectionModel::create([
+            'uuid' => 'test-uuid',
             'field' => 'test',
         ]);
+    })->toThrow(ReadonlyProjection::class);
 
-        $this->assertTrue($model->exists);
-    }
+    $this->assertDatabaseCount((new ProjectionModel())->getTable(), 0);
 
-    /** @test */
-    public function test_save(): void
-    {
-        $projection = $this->createProjection();
+    $model = ProjectionModel::new()->writeable()->create([
+        'uuid' => 'test-uuid-2',
+        'field' => 'test',
+    ]);
 
-        $this->assertExceptionThrown(function () use ($projection): void {
-            $projection->field = 'changed';
+    assertTrue($model->exists);
+});
 
-            $projection->save();
-        }, ReadonlyProjection::class);
+it('can save', function () {
+    $projection =  createProjection();
 
-        $this->assertNothingChanged();
-
+    expect(function () use ($projection) {
         $projection->field = 'changed';
 
-        $projection->writeable()->save();
+        $projection->save();
+    })->toThrow(ReadonlyProjection::class);
 
-        $this->assertEquals('changed', $projection->refresh()->field);
-    }
+    assertNothingChanged();
 
-    /** @test */
-    public function test_update(): void
-    {
-        $projection = $this->createProjection();
+    $projection->field = 'changed';
 
-        $this->assertExceptionThrown(function () use ($projection): void {
-            $projection->update([
-                'field' => 'changed',
-            ]);
-        }, ReadonlyProjection::class);
+    $projection->writeable()->save();
 
-        $this->assertNothingChanged();
+    assertEquals('changed', $projection->refresh()->field);
+});
 
-        $projection->writeable()->update([
+it('can update', function () {
+    $projection =  createProjection();
+
+    expect(function () use ($projection) {
+        $projection->update([
             'field' => 'changed',
         ]);
+    })->toThrow(ReadonlyProjection::class);
 
-        $this->assertEquals('changed', $projection->refresh()->field);
-    }
+    assertNothingChanged();
 
-    /** @test */
-    public function test_delete(): void
-    {
-        $projection = $this->createProjection();
+    $projection->writeable()->update([
+        'field' => 'changed',
+    ]);
 
-        $this->assertExceptionThrown(function () use ($projection): void {
-            $projection->delete();
-        }, ReadonlyProjection::class);
+    assertEquals('changed', $projection->refresh()->field);
+});
 
-        $this->assertNothingChanged();
+it('can delete', function () {
+    $projection =  createProjection();
 
-        $projection->writeable()->delete();
+    expect(fn() => $projection->delete())->toThrow(ReadonlyProjection::class);
 
-        $this->assertEquals(0, ProjectionModel::all()->count());
-    }
+    assertNothingChanged();
 
-    /** @test */
-    public function test_force_delete(): void
-    {
-        $projection = $this->createProjection();
+    $projection->writeable()->delete();
 
-        $this->assertExceptionThrown(function () use ($projection): void {
-            $projection->forceDelete();
-        }, ReadonlyProjection::class);
+    assertEquals(0, ProjectionModel::all()->count());
+});
 
-        $this->assertNothingChanged();
+it('can force delete', function () {
+    $projection =  createProjection();
 
-        $projection->writeable()->forceDelete();
+    expect(fn () => $projection->forceDelete())->toThrow(ReadonlyProjection::class);
 
-        $this->assertEquals(0, ProjectionModel::all()->count());
-    }
+    assertNothingChanged();
 
-    /** @test */
-    public function test_force_fill(): void
-    {
-        $projection = $this->createProjection();
+    $projection->writeable()->forceDelete();
 
-        $this->assertExceptionThrown(function () use ($projection): void {
-            $projection->forceFill([
-                'field' => 'changed',
-            ])->save();
-        }, ReadonlyProjection::class);
+    assertEquals(0, ProjectionModel::all()->count());
+});
 
-        $this->assertNothingChanged();
+it('can force fill', function () {
+    $projection =  createProjection();
 
-        $projection->writeable()->forceFill([
+    expect(function () use ($projection) {
+        $projection->forceFill([
             'field' => 'changed',
         ])->save();
+    })->toThrow(ReadonlyProjection::class);
 
-        $this->assertEquals('changed', $projection->refresh()->field);
-    }
+    assertNothingChanged();
 
-    /** @test */
-    public function is_writeable_is_reset_on_refresh(): void
-    {
-        $projection = $this->createProjection();
+    $projection->writeable()->forceFill([
+        'field' => 'changed',
+    ])->save();
 
-        $projection = $projection->writeable();
+    assertEquals('changed', $projection->refresh()->field);
+});
 
-        $this->assertFalse($projection->refresh()->isWriteable());
-    }
+it('should reset is writeable on refresh', function () {
+    $projection =  createProjection();
 
-    /** @test */
-    public function is_writeable_is_reset_on_fresh(): void
-    {
-        $projection = $this->createProjection();
+    $projection = $projection->writeable();
 
-        $projection = $projection->writeable();
+    assertFalse($projection->refresh()->isWriteable());
+});
 
-        $this->assertFalse($projection->fresh()->isWriteable());
-    }
+it('should reset is writeable on fresh', function () {
+    $projection =  createProjection();
 
-    /** @test */
-    public function test_read(): void
-    {
-        $this->createProjection();
+    $projection = $projection->writeable();
 
-        $this->assertEquals(1, ProjectionModel::all()->count());
-    }
+    assertFalse($projection->fresh()->isWriteable());
+});
 
-    protected function createProjection(): ProjectionModel
-    {
-        ProjectionModel::new()->writeable()->create([
-            'uuid' => 'test-uuid',
-            'field' => 'original',
-        ]);
+it('can read', function () {
+     createProjection();
 
-        return ProjectionModel::find('test-uuid');
-    }
-
-    protected function assertNothingChanged(): void
-    {
-        $this->assertDatabaseHas((new ProjectionModel())->getTable(), [
-            'uuid' => 'test-uuid',
-            'field' => 'original',
-        ]);
-    }
-}
+    assertEquals(1, ProjectionModel::all()->count());
+});

@@ -13,101 +13,85 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithAssociativeAn
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutHandlesEvents;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectThatHandlesASingleEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ResettableProjector;
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEquals;
 
-class ProjectorTest extends TestCase
-{
-    public function setUp(): void
-    {
-        parent::setUp();
+beforeEach(function () {
+    AttributeProjector::$handledEvents = [];
+});
 
-        AttributeProjector::$handledEvents = [];
-    }
+it('can reach the stored event and write meta data to it', function () {
+    Projectionist::addProjector(ProjectorThatWritesMetaData::class);
 
-    /** @test */
-    public function it_can_reach_the_stored_event_and_write_meta_data_to_it()
-    {
-        Projectionist::addProjector(ProjectorThatWritesMetaData::class);
+    event(new MoneyAddedEvent(Account::create(), 1234));
 
-        event(new MoneyAddedEvent(Account::create(), 1234));
+    assertCount(1, EloquentStoredEvent::get());
 
-        $this->assertCount(1, EloquentStoredEvent::get());
+    assertEquals(1, EloquentStoredEvent::first()->meta_data['user_id']);
+});
 
-        $this->assertEquals(1, EloquentStoredEvent::first()->meta_data['user_id']);
-    }
+it('can be reset', function () {
+    Account::create();
 
-    /** @test */
-    public function it_can_be_reset()
-    {
-        Account::create();
+    $projector = new ResettableProjector();
 
-        $projector = new ResettableProjector();
+    Projectionist::addProjector($projector);
 
-        Projectionist::addProjector($projector);
+    assertCount(1, Account::all());
 
-        $this->assertCount(1, Account::all());
+    $projector->reset();
 
-        $projector->reset();
+    assertCount(0, Account::all());
+});
 
-        $this->assertCount(0, Account::all());
-    }
+it('can handle non associative handle events', function () {
+    $account = Account::create();
 
-    /** @test */
-    public function it_can_handle_non_associative_handle_events()
-    {
-        $account = Account::create();
+    $projector = new ProjectorWithAssociativeAndNonAssociativeHandleEvents();
 
-        $projector = new ProjectorWithAssociativeAndNonAssociativeHandleEvents();
+    Projectionist::addProjector($projector);
 
-        Projectionist::addProjector($projector);
+    event(new MoneyAddedEvent($account, 1234));
 
-        event(new MoneyAddedEvent($account, 1234));
+    assertEquals(1234, $account->refresh()->amount);
+});
 
-        $this->assertEquals(1234, $account->refresh()->amount);
-    }
+it('can handle mixed handle events', function () {
+    $account = Account::create();
 
-    /** @test */
-    public function it_can_handle_mixed_handle_events()
-    {
-        $account = Account::create();
+    $projector = new ProjectorWithAssociativeAndNonAssociativeHandleEvents();
 
-        $projector = new ProjectorWithAssociativeAndNonAssociativeHandleEvents();
+    Projectionist::addProjector($projector);
 
-        Projectionist::addProjector($projector);
+    event(new MoneyAddedEvent($account, 1234));
 
-        event(new MoneyAddedEvent($account, 1234));
+    event(new MoneySubtractedEvent($account, 4321));
 
-        event(new MoneySubtractedEvent($account, 4321));
+    assertEquals(-3087, $account->refresh()->amount);
+});
 
-        $this->assertEquals(-3087, $account->refresh()->amount);
-    }
+it('can handle a single event', function () {
+    $account = Account::create();
 
-    /** @test */
-    public function it_can_handle_a_single_event()
-    {
-        $account = Account::create();
+    $projector = new ProjectThatHandlesASingleEvent();
 
-        $projector = new ProjectThatHandlesASingleEvent();
+    Projectionist::addProjector($projector);
 
-        Projectionist::addProjector($projector);
+    event(new MoneyAddedEvent($account, 1234));
 
-        event(new MoneyAddedEvent($account, 1234));
+    assertEquals(1234, $account->refresh()->amount);
+});
 
-        $this->assertEquals(1234, $account->refresh()->amount);
-    }
+it('can find the right method for the right event without the need to specify handles events', function () {
+    $account = Account::create();
 
-    /** @test */
-    public function it_can_find_the_right_method_for_the_right_event_without_the_need_to_specify_handles_events()
-    {
-        $account = Account::create();
+    Projectionist::addProjector(ProjectorWithoutHandlesEvents::class);
 
-        Projectionist::addProjector(ProjectorWithoutHandlesEvents::class);
+    event(new MoneyAddedEvent($account, 1234));
+    assertCount(1, EloquentStoredEvent::get());
+    assertEquals(1234, $account->refresh()->amount);
 
-        event(new MoneyAddedEvent($account, 1234));
-        $this->assertCount(1, EloquentStoredEvent::get());
-        $this->assertEquals(1234, $account->refresh()->amount);
-
-        event(new MoneySubtractedEvent($account, 34));
-        $this->assertCount(2, EloquentStoredEvent::get());
-        $this->assertEquals(1200, $account->refresh()->amount);
-    }
-}
+    event(new MoneySubtractedEvent($account, 34));
+    assertCount(2, EloquentStoredEvent::get());
+    assertEquals(1200, $account->refresh()->amount);
+});

@@ -5,20 +5,16 @@ namespace Spatie\EventSourcing\Tests;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\DummyAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\GetMetaDataProjector;
+use function PHPUnit\Framework\assertEquals;
 
-class EventHasMetaDataTest extends TestCase
-{
-    /** @test */
-    public function it_can_store_the_aggregate_root_uuid_on_the_event_so_the_project_can_get_it()
-    {
-        Projectionist::addProjector(GetMetaDataProjector::class);
+it('can store the aggregate root uuid on the event so the project can get it', function () {
+    Projectionist::addProjector(GetMetaDataProjector::class);
 
-        $aggregateRoot = DummyAggregateRoot::retrieve('my-uuid');
+    $aggregateRoot = DummyAggregateRoot::retrieve('my-uuid');
 
-        $aggregateRoot->dummy();
+    $aggregateRoot->dummy();
 
-        $aggregateRoot->persist();
+    $aggregateRoot->persist();
 
-        $this->assertEquals('my-uuid', GetMetaDataProjector::$foundAggregateRootUuid);
-    }
-}
+    assertEquals('my-uuid', GetMetaDataProjector::$foundAggregateRootUuid);
+});

@@ -3,33 +3,20 @@
 namespace Spatie\EventSourcing\Tests\Console;
 
 use Spatie\EventSourcing\Projectionist;
-use Spatie\EventSourcing\Tests\TestCase;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
-use Spatie\Snapshots\MatchesSnapshots;
+use function Spatie\Snapshots\assertMatchesSnapshot;
 
-class CacheEventHandlersCommandTest extends TestCase
-{
-    use MatchesSnapshots;
+beforeEach(function () {
+    $this->projectionist = app(Projectionist::class);
+});
 
-    protected Projectionist $projectionist;
+it('can cache the registered projectors', function () {
+    $this->projectionist->addProjector(BalanceProjector::class);
 
-    public function setUp(): void
-    {
-        parent::setUp();
+    $this->projectionist->addReactor(BrokeReactor::class);
 
-        $this->projectionist = app(Projectionist::class);
-    }
+    $this->artisan('event-sourcing:cache-event-handlers')->assertExitCode(0);
 
-    /** @test */
-    public function it_can_cache_the_registered_projectors()
-    {
-        $this->projectionist->addProjector(BalanceProjector::class);
-
-        $this->projectionist->addReactor(BrokeReactor::class);
-
-        $this->artisan('event-sourcing:cache-event-handlers')->assertExitCode(0);
-
-        $this->assertMatchesSnapshot(file_get_contents(config('event-sourcing.cache_path').'/event-handlers.php'));
-    }
-}
+    assertMatchesSnapshot(file_get_contents(config('event-sourcing.cache_path').'/event-handlers.php'));
+});

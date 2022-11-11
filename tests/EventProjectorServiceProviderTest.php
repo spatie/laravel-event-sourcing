@@ -6,18 +6,14 @@ use Spatie\EventSourcing\EventSourcingServiceProvider;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use function PHPUnit\Framework\assertCount;
 
-class EventProjectorServiceProviderTest extends TestCase
-{
-    /** @test */
-    public function it_will_automatically_register_event_handlers_from_the_config_file()
-    {
-        config()->set('event-sourcing.projectors', [BalanceProjector::class]);
-        config()->set('event-sourcing.reactors', [BrokeReactor::class]);
+it('will automatically register event handlers from the config file', function () {
+    config()->set('event-sourcing.projectors', [BalanceProjector::class]);
+    config()->set('event-sourcing.reactors', [BrokeReactor::class]);
 
-        (new EventSourcingServiceProvider($this->app))->register();
+    (new EventSourcingServiceProvider($this->app))->register();
 
-        $this->assertCount(1, Projectionist::getProjectors());
-        $this->assertCount(1, Projectionist::getReactors());
-    }
-}
+    assertCount(1, Projectionist::getProjectors());
+    assertCount(1, Projectionist::getReactors());
+});

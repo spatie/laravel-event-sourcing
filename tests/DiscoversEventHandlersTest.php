@@ -12,59 +12,55 @@ use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\Subdirector
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestProjector;
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestQueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestReactor;
+use function PHPUnit\Framework\assertEqualsCanonicalizing;
 
-class DiscoversEventHandlersTest extends TestCase
+function getDiscoveryBasePath(): string
 {
-    /** @test */
-    public function it_can_get_all_classes_that_have_event_handlers()
-    {
-        /** @var \Spatie\EventSourcing\Projectionist $projectionist */
-        $projectionist = app(Projectionist::class);
-
-        $pathToComposerJson = __DIR__.'/../composer.json';
-
-        (new DiscoverEventHandlers())
-            ->within([__DIR__.'/TestClasses/AutoDiscoverEventHandlers'])
-            ->useBasePath($this->getDiscoveryBasePath())
-            ->useRootNamespace('Spatie\EventSourcing\\')
-            ->ignoringFiles(Composer::getAutoloadedFiles($pathToComposerJson))
-
-            ->addToProjectionist($projectionist);
-
-        $registeredProjectors = $projectionist
-            ->getProjectors()
-            ->toBase()
-            ->map(function (EventHandler $eventHandler) {
-                return get_class($eventHandler);
-            })
-            ->values()
-            ->toArray();
-
-        $this->assertEqualsCanonicalizing([
-            TestQueuedProjector::class,
-            TestProjectorInSubdirectory::class,
-            TestQueuedProjectorInSubdirectory::class,
-            TestProjector::class,
-        ], $registeredProjectors);
-
-        $registeredReactors = $projectionist
-            ->getReactors()
-            ->toBase()
-            ->map(function (EventHandler $eventHandler) {
-                return get_class($eventHandler);
-            })
-
-            ->values()
-            ->toArray();
-
-        $this->assertEqualsCanonicalizing([
-            TestReactorInSubdirectory::class,
-            TestReactor::class,
-        ], $registeredReactors);
-    }
-
-    protected function getDiscoveryBasePath(): string
-    {
-        return realpath($this->pathToTests().'/../');
-    }
+    return realpath(test()->pathToTests().'/../');
 }
+
+it('can get all classes that have event handlers', function () {
+    /** @var \Spatie\EventSourcing\Projectionist $projectionist */
+    $projectionist = app(Projectionist::class);
+
+    $pathToComposerJson = __DIR__.'/../composer.json';
+
+    (new DiscoverEventHandlers())
+        ->within([__DIR__.'/TestClasses/AutoDiscoverEventHandlers'])
+        ->useBasePath(getDiscoveryBasePath())
+        ->useRootNamespace('Spatie\EventSourcing\\')
+        ->ignoringFiles(Composer::getAutoloadedFiles($pathToComposerJson))
+
+        ->addToProjectionist($projectionist);
+
+    $registeredProjectors = $projectionist
+        ->getProjectors()
+        ->toBase()
+        ->map(function (EventHandler $eventHandler) {
+            return get_class($eventHandler);
+        })
+        ->values()
+        ->toArray();
+
+    assertEqualsCanonicalizing([
+        TestQueuedProjector::class,
+        TestProjectorInSubdirectory::class,
+        TestQueuedProjectorInSubdirectory::class,
+        TestProjector::class,
+    ], $registeredProjectors);
+
+    $registeredReactors = $projectionist
+        ->getReactors()
+        ->toBase()
+        ->map(function (EventHandler $eventHandler) {
+            return get_class($eventHandler);
+        })
+
+        ->values()
+        ->toArray();
+
+    assertEqualsCanonicalizing([
+        TestReactorInSubdirectory::class,
+        TestReactor::class,
+    ], $registeredReactors);
+});

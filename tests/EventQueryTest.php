@@ -5,23 +5,19 @@ namespace Spatie\EventSourcing\Tests;
 use Carbon\Carbon;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ReportEventQuery;
+use function PHPUnit\Framework\assertEquals;
 
-class EventQueryTest extends TestCase
-{
-    /** @test */
-    public function test_apply_from_the_past()
-    {
-        Carbon::setTestNow('2019-01-01');
+it('should apply from the past', function () {
+    Carbon::setTestNow('2019-01-01');
 
-        event(new MoneyAdded(10));
+    event(new MoneyAdded(10));
 
-        Carbon::setTestNow('2020-01-01');
+    Carbon::setTestNow('2020-01-01');
 
-        event(new MoneyAdded(10));
-        event(new MoneyAdded(20));
+    event(new MoneyAdded(10));
+    event(new MoneyAdded(20));
 
-        $report = new ReportEventQuery('2020-01-01');
+    $report = new ReportEventQuery('2020-01-01');
 
-        $this->assertEquals(30, $report->money());
-    }
-}
+    assertEquals(30, $report->money());
+});

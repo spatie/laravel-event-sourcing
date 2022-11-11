@@ -21,191 +21,155 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\ProjectorWithWeightTestHelper;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertSame;
 
-class ProjectionistTest extends TestCase
-{
-    protected Account $account;
+beforeEach(function () {
+    $this->account = Account::create();
+});
 
-    public function setUp(): void
-    {
-        parent::setUp();
+it('will throw an exception when trying to add a non existing projector', function () {
+    Projectionist::addProjector('non-exising-class-name');
+})->throws(BindingResolutionException::class);
 
-        $this->account = Account::create();
-    }
+it('will thrown an exception when trying to add a non existing reactor', function () {
+    Projectionist::addReactor('non-exising-class-name');
+})->throws(BindingResolutionException::class);
 
-    /** @test */
-    public function it_will_throw_an_exception_when_trying_to_add_a_non_existing_projector()
-    {
-        $this->expectException(BindingResolutionException::class);
+it('will not register the same projector twice', function () {
+    Projectionist::addProjector(BalanceProjector::class);
+    Projectionist::addProjector(BalanceProjector::class);
 
-        Projectionist::addProjector('non-exising-class-name');
-    }
+    assertCount(1, Projectionist::getProjectors());
+});
 
-    /** @test */
-    public function it_will_thrown_an_exception_when_trying_to_add_a_non_existing_reactor()
-    {
-        $this->expectException(BindingResolutionException::class);
+it('will not register the same reactor twice', function () {
+    Projectionist::addReactor(BrokeReactor::class);
+    Projectionist::addReactor(BrokeReactor::class);
 
-        Projectionist::addReactor('non-exising-class-name');
-    }
+    assertCount(1, Projectionist::getReactors());
+});
 
-    /** @test */
-    public function it_will_not_register_the_same_projector_twice()
-    {
-        Projectionist::addProjector(BalanceProjector::class);
-        Projectionist::addProjector(BalanceProjector::class);
+it('will call the method on the projector when the projector throws an exception', function () {
+    ProjectorThatThrowsAnException::$exceptionsHandled = 0;
 
-        $this->assertCount(1, Projectionist::getProjectors());
-    }
+    $this->setConfig('event-sourcing.catch_exceptions', true);
 
-    /** @test */
-    public function it_will_not_register_the_same_reactor_twice()
-    {
-        Projectionist::addReactor(BrokeReactor::class);
-        Projectionist::addReactor(BrokeReactor::class);
+    Projectionist::addProjector(ProjectorThatThrowsAnException::class);
 
-        $this->assertCount(1, Projectionist::getReactors());
-    }
+    event(new MoneyAddedEvent($this->account, 1000));
 
-    /** @test */
-    public function it_will_call_the_method_on_the_projector_when_the_projector_throws_an_exception()
-    {
-        ProjectorThatThrowsAnException::$exceptionsHandled = 0;
+    assertEquals(1, ProjectorThatThrowsAnException::$exceptionsHandled);
+});
 
-        $this->setConfig('event-sourcing.catch_exceptions', true);
+it('will call projectors ordered by weight', function () {
+    app()->singleton(ProjectorWithWeightTestHelper::class);
 
-        Projectionist::addProjector(ProjectorThatThrowsAnException::class);
+    Projectionist::addProjector(ProjectorWithHighWeight::class);
+    Projectionist::addProjector(ProjectorWithoutWeight::class);
+    Projectionist::addProjector(ProjectorWithNegativeWeight::class);
+    Projectionist::addProjector(ProjectorWithLowWeight::class);
 
-        event(new MoneyAddedEvent($this->account, 1000));
+    event(new MoneyAddedEvent($this->account, 1000));
 
-        $this->assertEquals(1, ProjectorThatThrowsAnException::$exceptionsHandled);
-    }
+    assertSame([
+        ProjectorWithNegativeWeight::class,
+        ProjectorWithoutWeight::class,
+        ProjectorWithLowWeight::class,
+        ProjectorWithHighWeight::class,
+    ], app(ProjectorWithWeightTestHelper::class)->calledBy);
+});
 
-    /** @test */
-    public function it_will_call_projectors_ordered_by_weight()
-    {
-        app()->singleton(ProjectorWithWeightTestHelper::class);
+it('can catch exceptions and still continue calling other projectors', function () {
+    $this->setConfig('event-sourcing.catch_exceptions', true);
 
-        Projectionist::addProjector(ProjectorWithHighWeight::class);
-        Projectionist::addProjector(ProjectorWithoutWeight::class);
-        Projectionist::addProjector(ProjectorWithNegativeWeight::class);
-        Projectionist::addProjector(ProjectorWithLowWeight::class);
+    $failingProjector = new ProjectorThatThrowsAnException();
+    Projectionist::addProjector($failingProjector);
 
-        event(new MoneyAddedEvent($this->account, 1000));
+    $workingProjector = new BalanceProjector();
+    Projectionist::addProjector($workingProjector);
 
-        $this->assertSame([
-            ProjectorWithNegativeWeight::class,
-            ProjectorWithoutWeight::class,
-            ProjectorWithLowWeight::class,
-            ProjectorWithHighWeight::class,
-        ], app(ProjectorWithWeightTestHelper::class)->calledBy);
-    }
+    event(new MoneyAddedEvent($this->account, 1000));
 
-    /** @test */
-    public function it_can_catch_exceptions_and_still_continue_calling_other_projectors()
-    {
-        $this->setConfig('event-sourcing.catch_exceptions', true);
+    assertEquals(1000, $this->account->refresh()->amount);
+});
 
-        $failingProjector = new ProjectorThatThrowsAnException();
-        Projectionist::addProjector($failingProjector);
+it('can not catch exceptions and not continue', function () {
+    $failingProjector = new ProjectorThatThrowsAnException();
+    Projectionist::addProjector($failingProjector);
 
-        $workingProjector = new BalanceProjector();
-        Projectionist::addProjector($workingProjector);
+    event(new MoneyAddedEvent($this->account, 1000));
+})->throws(Exception::class);
 
-        event(new MoneyAddedEvent($this->account, 1000));
+it('should handle projectors that dont handle fired events', function () {
+    Projectionist::addProjector(MoneyAddedCountProjector::class);
 
-        $this->assertEquals(1000, $this->account->refresh()->amount);
-    }
+    event(new MoneySubtractedEvent($this->account, 500));
 
-    /** @test */
-    public function it_can_not_catch_exceptions_and_not_continue()
-    {
-        $failingProjector = new ProjectorThatThrowsAnException();
-        Projectionist::addProjector($failingProjector);
+    assertEquals(0, $this->account->fresh()->addition_count);
+});
 
-        $this->expectException(Exception::class);
+it('propagates custom event tags to event job', function () {
+    Queue::fake();
 
-        event(new MoneyAddedEvent($this->account, 1000));
-    }
+    Projectionist::addProjector(QueuedProjector::class);
 
-    /** @test */
-    public function projectors_that_dont_handle_fired_events_are_handled_correctly()
-    {
-        Projectionist::addProjector(MoneyAddedCountProjector::class);
+    event(new MoneyAddedEvent($this->account, 500));
 
-        event(new MoneySubtractedEvent($this->account, 500));
+    Queue::assertPushed(HandleStoredEventJob::class, function (HandleStoredEventJob $job) {
+        $expected = [
+            'Account:'.$this->account->id,
+            MoneyAddedEvent::class,
+        ];
 
-        $this->assertEquals(0, $this->account->fresh()->addition_count);
-    }
+        return $expected === $job->tags();
+    });
+});
 
-    /** @test */
-    public function it_propagates_custom_event_tags_to_event_job()
-    {
-        Queue::fake();
+it('can remove all event handlers', function () {
+    Projectionist::addProjector(MoneyAddedCountProjector::class);
+    Projectionist::addProjector(BalanceProjector::class);
+    Projectionist::addReactor(BrokeReactor::class);
 
-        Projectionist::addProjector(QueuedProjector::class);
+    assertCount(2, Projectionist::getProjectors());
+    assertCount(1, Projectionist::getReactors());
 
-        event(new MoneyAddedEvent($this->account, 500));
+    Projectionist::withoutEventHandlers();
 
-        Queue::assertPushed(HandleStoredEventJob::class, function (HandleStoredEventJob $job) {
-            $expected = [
-                'Account:'.$this->account->id,
-                MoneyAddedEvent::class,
-            ];
+    assertCount(0, Projectionist::getProjectors());
+    assertCount(0, Projectionist::getReactors());
+});
 
-            return $expected === $job->tags();
-        });
-    }
+it('can remove certain event handlers', function () {
+    Projectionist::addProjector(MoneyAddedCountProjector::class);
+    Projectionist::addProjector(BalanceProjector::class);
+    Projectionist::addReactor(BrokeReactor::class);
 
-    /** @test */
-    public function it_can_remove_all_event_handlers()
-    {
-        Projectionist::addProjector(MoneyAddedCountProjector::class);
-        Projectionist::addProjector(BalanceProjector::class);
-        Projectionist::addReactor(BrokeReactor::class);
+    assertCount(2, Projectionist::getProjectors());
+    assertCount(1, Projectionist::getReactors());
 
-        $this->assertCount(2, Projectionist::getProjectors());
-        $this->assertCount(1, Projectionist::getReactors());
+    Projectionist::withoutEventHandlers([MoneyAddedCountProjector::class, BrokeReactor::class]);
 
-        Projectionist::withoutEventHandlers();
+    assertCount(1, Projectionist::getProjectors());
+    assertInstanceOf(BalanceProjector::class, Projectionist::getProjectors()->first());
+    assertCount(0, Projectionist::getReactors());
 
-        $this->assertCount(0, Projectionist::getProjectors());
-        $this->assertCount(0, Projectionist::getReactors());
-    }
+    Projectionist::withoutEventHandler(BalanceProjector::class);
+    assertCount(0, Projectionist::getProjectors());
+});
 
-    /** @test */
-    public function it_can_remove_certain_event_handlers()
-    {
-        Projectionist::addProjector(MoneyAddedCountProjector::class);
-        Projectionist::addProjector(BalanceProjector::class);
-        Projectionist::addReactor(BrokeReactor::class);
+it('can fake event handlers', function () {
+    FakeMoneyAddedCountProjector::$eventsHandledCount = 0;
 
-        $this->assertCount(2, Projectionist::getProjectors());
-        $this->assertCount(1, Projectionist::getReactors());
+    Projectionist::addProjector(MoneyAddedCountProjector::class);
 
-        Projectionist::withoutEventHandlers([MoneyAddedCountProjector::class, BrokeReactor::class]);
+    Projectionist::fake(MoneyAddedCountProjector::class, FakeMoneyAddedCountProjector::class);
 
-        $this->assertCount(1, Projectionist::getProjectors());
-        $this->assertInstanceOf(BalanceProjector::class, Projectionist::getProjectors()->first());
-        $this->assertCount(0, Projectionist::getReactors());
+    assertCount(1, Projectionist::getProjectors());
 
-        Projectionist::withoutEventHandler(BalanceProjector::class);
-        $this->assertCount(0, Projectionist::getProjectors());
-    }
+    event(new MoneyAddedEvent($this->account, 500));
 
-    /** @test */
-    public function it_can_fake_event_handlers()
-    {
-        FakeMoneyAddedCountProjector::$eventsHandledCount = 0;
-
-        Projectionist::addProjector(MoneyAddedCountProjector::class);
-
-        Projectionist::fake(MoneyAddedCountProjector::class, FakeMoneyAddedCountProjector::class);
-
-        $this->assertCount(1, Projectionist::getProjectors());
-
-        event(new MoneyAddedEvent($this->account, 500));
-
-        $this->assertEquals(1, FakeMoneyAddedCountProjector::$eventsHandledCount);
-    }
-}
+    assertEquals(1, FakeMoneyAddedCountProjector::$eventsHandledCount);
+});
