@@ -37,7 +37,7 @@ use Spatie\EventSourcing\EventSerializers\JsonEventSerializer;use Spatie\EventSo
 
     /*
      * Projectors are classes that build up projections. You can create them by performing
-     * `php artisan event-sourcing:create-projector`.  When not using auto-discovery
+     * `php artisan make:projector`.  When not using auto-discovery
      * Projectors can be registered in this array or a service provider.
      */
     'projectors' => [
@@ -46,7 +46,7 @@ use Spatie\EventSourcing\EventSerializers\JsonEventSerializer;use Spatie\EventSo
 
     /*
      * Reactors are classes that handle side effects. You can create them by performing
-     * `php artisan event-sourcing:create-reactor`. When not using auto-discovery
+     * `php artisan make:reactor`. When not using auto-discovery
      * Reactors can be registered in this array or a service provider.
      */
     'reactors' => [
