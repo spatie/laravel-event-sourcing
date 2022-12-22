@@ -4,10 +4,12 @@ namespace Spatie\EventSourcing\Tests;
 
 use Carbon\CarbonImmutable;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 
 use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertTrue;
@@ -376,4 +378,25 @@ it('should set created at from within the aggregate root', function () {
     $event = $eloquentEvent->toStoredEvent()->event;
 
     assertTrue($now->eq($event->createdAt()));
+});
+
+it('should always retrieve the last snapshot', function () {
+    Carbon::setTestNow();
+
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+    $aggregateRoot
+        ->addMoney(100)
+        ->persist();
+
+    $aggregateRoot->snapshot();
+    $aggregateRoot->addMoney(100)->persist();
+    $aggregateRoot->snapshot();
+
+    $aggregateRootRetrieved = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+    assertEmpty($aggregateRootRetrieved->getAppliedEvents());
+    assertEquals(2, $aggregateRootRetrieved->aggregateVersion);
+    assertEquals(200, $aggregateRootRetrieved->balance);
 });
