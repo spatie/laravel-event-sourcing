@@ -104,3 +104,17 @@ it('retrieves last event of multiple types', function () {
     assertInstanceOf(EventWithCarbon::class, $storedEvent);
     assertEquals($date, $storedEvent->value);
 });
+
+it('retrieves last event of type when two were created at the same time', function () {
+    $this->freezeTime();
+
+    event(new MoneyAdded(50));
+    event(new MoneyAdded(10));
+
+    $event = EloquentStoredEvent::query()->lastEvent(MoneyAdded::class);
+    /** @var MoneyAdded $storedEvent */
+    $storedEvent = $event->toStoredEvent()->event;
+
+    assertInstanceOf(MoneyAdded::class, $storedEvent);
+    assertEquals(10, $storedEvent->amount);
+});
