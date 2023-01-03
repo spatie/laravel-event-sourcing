@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\Models;
 
+use Carbon\Carbon;
 use Illuminate\Support\InteractsWithTime;
 
 use function PHPUnit\Framework\assertEquals;
@@ -106,7 +107,7 @@ it('retrieves last event of multiple types', function () {
 });
 
 it('retrieves last event of type when two were created at the same time', function () {
-    $this->freezeTime();
+    Carbon::setTestNow();
 
     event(new MoneyAdded(50));
     event(new MoneyAdded(10));
