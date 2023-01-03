@@ -59,6 +59,7 @@ class EloquentStoredEventQueryBuilder extends Builder
                 fn (self $query) => $query->whereEvent(...$eventClasses)
             )
             ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->first();
     }
 }

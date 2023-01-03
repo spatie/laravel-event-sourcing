@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\Models;
 
+use Carbon\Carbon;
 use Illuminate\Support\InteractsWithTime;
 
 use function PHPUnit\Framework\assertEquals;
@@ -103,4 +104,18 @@ it('retrieves last event of multiple types', function () {
 
     assertInstanceOf(EventWithCarbon::class, $storedEvent);
     assertEquals($date, $storedEvent->value);
+});
+
+it('retrieves last event of type when two were created at the same time', function () {
+    Carbon::setTestNow();
+
+    event(new MoneyAdded(50));
+    event(new MoneyAdded(10));
+
+    $event = EloquentStoredEvent::query()->lastEvent(MoneyAdded::class);
+    /** @var MoneyAdded $storedEvent */
+    $storedEvent = $event->toStoredEvent()->event;
+
+    assertInstanceOf(MoneyAdded::class, $storedEvent);
+    assertEquals(10, $storedEvent->amount);
 });
