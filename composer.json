@@ -23,10 +23,10 @@
     "require": {
         "php": "^8.0",
         "ext-json": "*",
-        "illuminate/console": "^9.0",
-        "illuminate/database": "^9.0",
-        "illuminate/events": "^9.0",
-        "illuminate/support": "^9.0",
+        "illuminate/console": "^9.0|^10.0",
+        "illuminate/database": "^9.0|^10.0",
+        "illuminate/events": "^9.0|^10.0",
+        "illuminate/support": "^9.0|^10.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "spatie/better-types": "^0.1.2",
         "spatie/laravel-package-tools": "^1.9",
@@ -39,7 +39,7 @@
     "require-dev": {
         "laravel/horizon": "^5.7",
         "mockery/mockery": "^1.4",
-        "orchestra/testbench": "^7.0",
+        "orchestra/testbench": "^7.0|^8.0",
         "pestphp/pest": "^1.22",
         "phpunit/phpunit": "^9.5.10",
         "spatie/fork": "^1.0",
