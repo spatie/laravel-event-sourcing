@@ -2,11 +2,12 @@
 
 namespace Spatie\EventSourcing\Projections;
 
+use Spatie\EventSourcing\Projections\Contracts\Writable;
 use Spatie\EventSourcing\Projections\Exceptions\ReadonlyProjection;
 
 class ProjectionObserver
 {
-    public function updating(Projection $projection): void
+    public function updating(Writable $projection): void
     {
         if ($projection->isWriteable()) {
             return;
@@ -15,7 +16,7 @@ class ProjectionObserver
         $this->preventChanges($projection);
     }
 
-    public function creating(Projection $projection): void
+    public function creating(Writable $projection): void
     {
         if ($projection->isWriteable()) {
             return;
@@ -24,7 +25,7 @@ class ProjectionObserver
         $this->preventChanges($projection);
     }
 
-    public function saving(Projection $projection): void
+    public function saving(Writable $projection): void
     {
         if ($projection->isWriteable()) {
             return;
@@ -33,7 +34,7 @@ class ProjectionObserver
         $this->preventChanges($projection);
     }
 
-    public function deleting(Projection $projection): void
+    public function deleting(Writable $projection): void
     {
         if ($projection->isWriteable()) {
             return;
@@ -42,7 +43,7 @@ class ProjectionObserver
         $this->preventChanges($projection);
     }
 
-    private function preventChanges(Projection $projection): void
+    private function preventChanges(Writable $projection): void
     {
         throw ReadonlyProjection::new(get_class($projection));
     }
