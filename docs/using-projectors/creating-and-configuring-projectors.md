@@ -66,7 +66,7 @@ Just by adding a typehint of the event you want to handle makes our package call
 
 ## Getting the uuid of an event
 
-In most cases you want to have access to the event that was fired. When [using aggregates](/laravel-event-sourcing/v5/using-aggregates/writing-your-first-aggregate) your events probably won't contain the uuid associated with that event. To get to the uuid of an event simply call the `aggregateRootUuid()` method on the event object.
+In most cases you want to have access to the event that was fired. When [using aggregates](/laravel-event-sourcing/v7/using-aggregates/writing-your-first-aggregate) your events probably won't contain the uuid associated with that event. To get to the uuid of an event simply call the `aggregateRootUuid()` method on the event object.
 
 ```php
 // ...
