@@ -3,7 +3,9 @@
 namespace Spatie\EventSourcing\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'make:aggregate')]
 class MakeAggregateCommand extends GeneratorCommand
 {
     protected $name = 'make:aggregate';

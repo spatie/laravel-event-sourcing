@@ -6,7 +6,9 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\Projectionist;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'event-sourcing:list')]
 class ListCommand extends Command
 {
     protected $signature = 'event-sourcing:list';

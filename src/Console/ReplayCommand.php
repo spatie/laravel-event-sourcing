@@ -7,7 +7,9 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Spatie\EventSourcing\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'event-sourcing:replay')]
 class ReplayCommand extends Command
 {
     protected $signature = 'event-sourcing:replay {projector?*}

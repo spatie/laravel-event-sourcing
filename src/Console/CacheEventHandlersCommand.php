@@ -7,7 +7,9 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\Projectionist;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'event-sourcing:cache-event-handlers')]
 class CacheEventHandlersCommand extends Command
 {
     protected $signature = 'event-sourcing:cache-event-handlers';

@@ -4,7 +4,9 @@ namespace Spatie\EventSourcing\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'event-sourcing:clear-event-handlers')]
 class ClearCachedEventHandlersCommand extends Command
 {
     protected $signature = 'event-sourcing:clear-event-handlers';
