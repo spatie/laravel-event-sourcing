@@ -5,7 +5,7 @@ weight: 1
 
 ## What is a reactor
 
-Now that you've [written your first projector](/laravel-event-sourcing/v5/using-projectors/writing-your-first-projector), let's learn how to handle side effects. With side effects we mean things like sending a mail, sending a notification, ... You only want to perform these actions when the original event happens. You don't want to do this work when replaying events.
+Now that you've [written your first projector](/laravel-event-sourcing/v7/using-projectors/writing-your-first-projector), let's learn how to handle side effects. With side effects we mean things like sending a mail, sending a notification, ... You only want to perform these actions when the original event happens. You don't want to do this work when replaying events.
 
 A reactor is a class, that much like a projector, listens for incoming events. Unlike projectors however, reactors will not get called when events are replayed. Reactors only will get called when the original event fires.
 

@@ -3,11 +3,11 @@ title: Replaying events
 weight: 2
 ---
 
-All [events](/laravel-event-sourcing/v5/advanced-usage/preparing-events/) that implement `Spatie\EventSourcing\ShouldBeStored` will be [serialized](/laravel-event-sourcing/v5/advanced-usage/using-your-own-event-serializer) and stored in the `stored_events` table. After your app has been doing its work for a while the `stored_events` table will probably contain some events.
+All [events](/laravel-event-sourcing/v7/advanced-usage/preparing-events/) that implement `Spatie\EventSourcing\ShouldBeStored` will be [serialized](/laravel-event-sourcing/v7/advanced-usage/using-your-own-event-serializer) and stored in the `stored_events` table. After your app has been doing its work for a while the `stored_events` table will probably contain some events.
 
- When creating a new [projector](/laravel-event-sourcing/v5/using-projectors/writing-your-first-projector/) you'll want to feed all stored events to that new projector. We call this process replaying events.
+ When creating a new [projector](/laravel-event-sourcing/v7/using-projectors/writing-your-first-projector/) you'll want to feed all stored events to that new projector. We call this process replaying events.
 
- Events can be replayed to [all projectors that were added to the projectionist](/laravel-event-sourcing/v5/using-projectors/creating-and-configuring-projectors/) with this artisan command:
+ Events can be replayed to [all projectors that were added to the projectionist](/laravel-event-sourcing/v7/using-projectors/creating-and-configuring-projectors/) with this artisan command:
 
  ```bash
  php artisan event-sourcing:replay
@@ -29,7 +29,7 @@ If your projector has a `resetState` method it will get called before replaying 
 
 If you want to replay events starting from a certain event you can use the `--from` option when executing `event-sourcing:replay`. If you use this option the `resetState` on projectors will not get called. This package does not track which events have already been processed by which projectors. Be sure not to replay events to projectors that already have handled them.
 
-If you are [using your own event storage model](/laravel-event-sourcing/v4/advanced-usage/using-your-own-event-storage-model/) then you will need to use the `--stored-event-model` option when executing `event-sourcing:replay` to specify the model storing the events you want to replay.
+If you are [using your own event storage model](/laravel-event-sourcing/v7/advanced-usage/using-your-own-event-storage-model/) then you will need to use the `--stored-event-model` option when executing `event-sourcing:replay` to specify the model storing the events you want to replay.
 
 ```bash
 php artisan event-sourcing:replay --stored-event-model=App\\Models\\AccountStoredEvent
