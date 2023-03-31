@@ -64,14 +64,12 @@ class StoredEvent implements Arrayable
 
     public function handleForAggregateRoot(): void
     {
-        $this->handle();
-
-        if (! config('event-sourcing.dispatch_events_from_aggregate_roots', false)) {
-            return;
+        if (config('event-sourcing.dispatch_events_from_aggregate_roots', false)) {
+            $this->event->firedFromAggregateRoot = true;
+            event($this->event);
         }
 
-        $this->event->firedFromAggregateRoot = true;
-        event($this->event);
+        $this->handle();
     }
 
     public function handle()
