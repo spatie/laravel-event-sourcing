@@ -26,6 +26,7 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWi
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Math;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\DoubleBalanceReactor;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyMultiplied;
@@ -323,6 +324,27 @@ it('fires the triggered events on the event bus when configured', function () {
 
         return true;
     });
+});
+
+it('should preserve event dispatch order when fired from event handler', function () {
+    config()->set('event-sourcing.dispatch_events_from_aggregate_roots', true);
+
+    $actualOrder = [];
+    Event::listen($expectedOrder = [MoneyAdded::class, MoneyMultiplied::class], function ($event) use (&$actualOrder) {
+        $actualOrder[] = $event::class;
+    });
+
+    Projectionist::addReactor(DoubleBalanceReactor::class);
+
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+
+    $aggregateRoot->addMoney(100)->persist();
+
+    assertEquals($expectedOrder, $actualOrder);
+
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+    assertEquals(200, $aggregateRoot->balance);
 });
 
 it('can have additional dependencies when an apply method is public', function () {
