@@ -5,11 +5,10 @@ namespace Spatie\EventSourcing\StoredEvents\Repositories;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\LazyCollection;
-use ReflectionClass;
 use Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel;
-use Spatie\EventSourcing\Attributes\EventAlias;
 use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\Facades\Dictionary;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
@@ -131,23 +130,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
     private function getEventClass(string $class): string
     {
-        $alias = collect(config('event-sourcing.event_class_map', []))
-            ->flip() // a given event should be aliased only once, so let's flip the collection to make class name the key
-            ->merge(
-                // merge alias from class' EventAlias attribute, if present
-                collect([new ReflectionClass($class)])
-                    ->reject(fn (ReflectionClass $reflection) => empty($reflection->getAttributes(EventAlias::class)))
-                    ->mapWithKeys(function (ReflectionClass $reflection) {
-                        /** @var ReflectionClass<EventAlias> $attribute */
-                        $attribute = $reflection->getAttributes(EventAlias::class)[0];
-
-                        return [$reflection->getName() => ($attribute->newInstance())->alias];
-                    })
-            )
-            ->flip() // flip it back so the alias is the key
-            ->search($class, true);
-
-        return $alias ?: $class;
+        return Dictionary::getAliasFromClass($class) ?: $class;
     }
 
     public function getLatestAggregateVersion(string $aggregateUuid): int

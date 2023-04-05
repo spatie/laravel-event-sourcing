@@ -65,6 +65,12 @@ class EventSourcingServiceProvider extends PackageServiceProvider
 
         $this->app->alias(Projectionist::class, 'event-sourcing');
 
+        $this->app->singleton(Dictionary::class, function () {
+            return new Dictionary();
+        });
+
+        $this->app->alias(Dictionary::class, 'event-sourcing-alias-dictionary');
+
         $this->app->singleton(StoredEventRepository::class, config('event-sourcing.stored_event_repository'));
 
         $this->app->singleton(EventSubscriber::class, fn () => new EventSubscriber(config('event-sourcing.stored_event_repository')));

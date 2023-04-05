@@ -4,12 +4,11 @@ namespace Spatie\EventSourcing\StoredEvents;
 
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\LazyCollection;
 use ReflectionClass;
 use ReflectionException;
-use Spatie\EventSourcing\Attributes\EventAlias;
 use Spatie\EventSourcing\Attributes\EventSerializer as EventSerializerAttribute;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\Facades\Dictionary;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 
@@ -150,46 +149,11 @@ class StoredEvent implements Arrayable
 
     protected static function getActualClassForEvent(string $class): string
     {
-        /** @var LazyCollection<string,string> $aliasedClasses */
-        $aliasedClasses = LazyCollection::make(function () {
-            foreach (get_declared_classes() as $declaredClass) {
-                if (is_subclass_of($declaredClass, ShouldBeStored::class)) {
-                    yield $declaredClass;
-                }
-            }
-        })
-            ->map(fn (string $eventClass) => new ReflectionClass($eventClass))
-            ->reject(fn (ReflectionClass $reflection) => empty($reflection->getAttributes(EventAlias::class)))
-            ->mapWithKeys(function (ReflectionClass $reflection) {
-                /** @var ReflectionClass<EventAlias> $attribute */
-                $attribute = $reflection->getAttributes(EventAlias::class)[0];
-
-                return [($attribute->newInstance())->alias => $reflection->getName()];
-            });
-
-        return collect(config('event-sourcing.event_class_map', []))
-            ->merge($aliasedClasses->toArray())
-            ->get($class, $class);
+        return Dictionary::getClassFromAlias($class) ?: $class;
     }
 
     protected static function getEventClass(string $class): string
     {
-        $alias = collect(config('event-sourcing.event_class_map', []))
-            ->flip() // a given event should be aliased only once, so let's flip the collection to make class name the key
-            ->merge(
-            // merge alias from class' EventAlias attribute, if present
-                collect([new ReflectionClass($class)])
-                    ->reject(fn (ReflectionClass $reflection) => empty($reflection->getAttributes(EventAlias::class)))
-                    ->mapWithKeys(function (ReflectionClass $reflection) {
-                        /** @var ReflectionClass<EventAlias> $attribute */
-                        $attribute = $reflection->getAttributes(EventAlias::class)[0];
-
-                        return [$reflection->getName() => ($attribute->newInstance())->alias];
-                    })
-            )
-            ->flip() // flip it back so the alias is the key
-            ->search($class, true);
-
-        return $alias ?: $class;
+        return Dictionary::getAliasFromClass($class) ?: $class;
     }
 }
