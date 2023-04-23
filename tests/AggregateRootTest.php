@@ -12,6 +12,7 @@ use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertTrue;
 
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
@@ -22,9 +23,11 @@ use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithFailingPersist;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithPartial;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Math;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Partials\MoneyPartial;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\DoubleBalanceReactor;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
@@ -164,6 +167,23 @@ it('should store public properties and version number when snapshotting', functi
     tap(EloquentSnapshot::first(), function (EloquentSnapshot $snapshot) {
         assertEquals(300, $snapshot->state['balance']);
         assertEquals(3, $snapshot->aggregate_version);
+    });
+});
+
+it('should store partial states when snapshotting', function () {
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+    $aggregateRoot = AccountAggregateRootWithPartial::retrieve($this->aggregateUuid);
+
+    $aggregateRoot
+        ->addMoney(100)
+        ->addMoney(100)
+        ->addMoney(100);
+
+    $aggregateRoot->snapshot();
+
+    tap(EloquentSnapshot::first(), function (EloquentSnapshot $snapshot) {
+        assertCount(1, $snapshot->state['__esPartials']);
+        assertEquals(300, $snapshot->state['__esPartials'][MoneyPartial::class]['balance']);
     });
 });
 

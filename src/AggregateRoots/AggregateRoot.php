@@ -34,6 +34,8 @@ abstract class AggregateRoot
 
     protected int $aggregateVersionAfterReconstitution = 0;
 
+    protected static string $partialsKey = '__esPartials';
+
     /** @var \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregatePartial[] */
     protected Collection $entities;
 
@@ -191,7 +193,18 @@ abstract class AggregateRoot
             ->reject(fn (ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
             ->mapWithKeys(function (ReflectionProperty $property) {
                 return [$property->getName() => $this->{$property->getName()}];
-            })->toArray();
+            })
+            ->put(self::$partialsKey, $this->getPartialsState())
+            ->toArray();
+    }
+
+    protected function getPartialsState(): array
+    {
+        $partials = [];
+        foreach ($this->resolvePartials() as $partial) {
+            $partials[$partial::class] = $partial->getState();
+        }
+        return $partials;
     }
 
     protected function useState(array $state): void
