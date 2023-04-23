@@ -46,6 +46,13 @@ abstract class AggregatePartial
             })->toArray();
     }
 
+    public function useState(array $state): void
+    {
+        foreach ($state as $key => $value) {
+            $this->$key = $value;
+        }
+    }
+
     public static function fake(): static
     {
         $aggregateRoot = FakeAggregateRootForPartial::retrieve(Uuid::uuid4()->toString());

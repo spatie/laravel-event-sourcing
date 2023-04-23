@@ -210,7 +210,17 @@ abstract class AggregateRoot
     protected function useState(array $state): void
     {
         foreach ($state as $key => $value) {
-            $this->$key = $value;
+            if ($key === self::$partialsKey) {
+                foreach ($value as $partialKey => $partialState) {
+                    foreach ($this->resolvePartials() as $partial) {
+                        if ($partial::class === $partialKey) {
+                            $partial->useState($partialState);
+                        }
+                    }
+                }    
+            } else {
+                $this->$key = $value;
+            }
         }
     }
 

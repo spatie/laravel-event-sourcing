@@ -223,6 +223,25 @@ it('should save events after the snapshot are reconstituted', function () {
     assertEquals(400, $aggregateRootRetrieved->balance);
 });
 
+it('should have partials reconstituted if present', function () {
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithPartial $aggregateRoot */
+    $aggregateRoot = AccountAggregateRootWithPartial::retrieve($this->aggregateUuid);
+
+    $aggregateRoot
+        ->addMoney(100)
+        ->addMoney(100)
+        ->addMoney(100)
+        ->persist();
+
+    $aggregateRoot->snapshot();
+    $aggregateRoot->addMoney(100)->persist();
+
+    $aggregateRootRetrieved = AccountAggregateRootWithPartial::retrieve($this->aggregateUuid);
+
+    assertEquals(4, $aggregateRootRetrieved->aggregateVersion);
+    assertEquals(400, $aggregateRootRetrieved->getBalance());
+});
+
 it('should replay all events in the correct order when retrieving an aggregate root all', function () {
     /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
     $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
