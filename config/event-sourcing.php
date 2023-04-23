@@ -75,6 +75,13 @@ return [
      */
     'snapshot_model' => Spatie\EventSourcing\Snapshots\EloquentSnapshot::class,
 
+    /**
+     * The key within an AggregateRoot under which snapshots of partials are stored.
+     * This is stored within the Aggregate state when snapshotted, and restored when
+     * a snapshot is retrieved.
+     */
+    'snapshot_partials_key' => '__esPartials',
+
     /*
      * This class is responsible for handling stored events. To add extra behaviour you
      * can change this to a class of your own. The only restriction is that
