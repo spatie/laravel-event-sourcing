@@ -205,17 +205,27 @@ abstract class AggregateRoot
         return $partials;
     }
 
+    protected function restorePartialsState(array $partialSnapshots): void
+    {
+        foreach ($partialSnapshots as $partialKey => $partialState) {
+            $this->restorePartialState($partialKey, $partialState);
+        } 
+    }
+
+    protected function restorePartialState(string $key, array $state): void
+    {
+        foreach ($this->resolvePartials() as $partial) {
+            if ($partial::class === $key) {
+                $partial->useState($state);
+            }
+        }
+    }
+
     protected function useState(array $state): void
     {
         foreach ($state as $key => $value) {
             if ($key === config('event-sourcing.snapshot_partials_key')) {
-                foreach ($value as $partialKey => $partialState) {
-                    foreach ($this->resolvePartials() as $partial) {
-                        if ($partial::class === $partialKey) {
-                            $partial->useState($partialState);
-                        }
-                    }
-                }    
+                $this->restorePartialsState($value);
             } else {
                 $this->$key = $value;
             }
