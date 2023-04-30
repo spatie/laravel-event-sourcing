@@ -105,20 +105,6 @@ it('will call certain methods on the projector when replaying events', function 
     ], BalanceProjector::$log);
 });
 
-it('will replay events from a specific store', function () {
-    $account = AccountAggregateRootWithStoredEventRepositorySpecified::create();
-
-    foreach (range(1, 5) as $i) {
-        event(new MoneyAddedEvent($account, 2000));
-    }
-
-    OtherEloquentStoredEvent::truncate();
-
-    $this->artisan('event-sourcing:replay', ['--stored-event-model' => OtherEloquentStoredEvent::class])
-        ->expectsOutput('Replaying 5 events...')
-        ->assertExitCode(0);
-})->skip();
-
 it('will replay events for a specific aggregate root uuid', function () {
     EloquentStoredEvent::truncate();
 
