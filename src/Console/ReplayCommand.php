@@ -12,7 +12,6 @@ class ReplayCommand extends Command
 {
     protected $signature = 'event-sourcing:replay {projector?*}
                             {--from=0 : Replay events starting from this event number}
-                            {--stored-event-model= : Replay events from this store}
                             {--aggregate-uuid= : Replay events for this aggregate only}';
 
     protected $description = 'Replay stored events';
