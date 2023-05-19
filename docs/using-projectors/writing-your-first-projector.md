@@ -7,6 +7,9 @@ This section is a perfect entry point to get yourself acquainted with projectors
 
 A projector is a class that gets triggered when new events come in. It typically writes data (to the database or to a file on disk). We call that written data a projection.
 
+Projections are based on the event stream, and we're not allowed to make changes to them from outside that stream. To prevent us from forgetting this rule, the package introduces a new class called `Projection`.
+This class extends Eloquent's `Model`, and includes functionality that prevents you saving a projection that is not based on the event stream. Saving without calling `writeable()` will throw an exception.
+
 Imagine you are a bank with customers that have accounts. All these accounts have a balance. When money gets added or subtracted we could modify the balance. If we do that however, we would never know why the balance got to that number. If we were to store all the transactions as events we could calculate the balance.
 
 ## Creating a model
@@ -42,10 +45,10 @@ use App\Events\AccountCreated;
 use App\Events\AccountDeleted;
 use App\Events\MoneyAdded;
 use App\Events\MoneySubtracted;
-use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
+use Spatie\EventSourcing\Projections\Projection;
 
-class Account extends Model
+class Account extends Projection
 {
     protected $guarded = [];
 
@@ -207,7 +210,7 @@ class AccountBalanceProjector extends Projector
 
         $account->balance += $event->amount;
 
-        $account->save();
+        $account->writeable()->save();
     }
 
     public function onMoneySubtracted(MoneySubtracted $event)
@@ -216,12 +219,12 @@ class AccountBalanceProjector extends Projector
 
         $account->balance -= $event->amount;
 
-        $account->save();
+        $account->writeable()->save();
     }
 
     public function onAccountDeleted(AccountDeleted $event)
     {
-        Account::uuid($event->accountUuid)->delete();
+        Account::uuid($event->accountUuid)->writeable()->delete();
     }
 }
 ```
@@ -288,9 +291,9 @@ php artisan migrate
 ```php
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Spatie\EventSourcing\Projections\Projection;
 
-class TransactionCount extends Model
+class TransactionCount extends Projection
 {
     protected $table = 'transactions_count';
     protected $guarded = [];
@@ -317,7 +320,7 @@ class TransactionCountProjector extends Projector
 
         $transactionCounter->count += 1;
 
-        $transactionCounter->save();
+        $transactionCounter->writeable()->save();
     }
 
     public function onMoneySubtracted(MoneySubtracted $event)
@@ -326,7 +329,7 @@ class TransactionCountProjector extends Projector
 
         $transactionCounter->count += 1;
 
-        $transactionCounter->save();
+        $transactionCounter->writeable()->save();
     }
 }
 ```
