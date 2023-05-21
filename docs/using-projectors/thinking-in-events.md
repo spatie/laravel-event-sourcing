@@ -14,7 +14,7 @@ Let's first add a little helper method to the `Account` model to check if an acc
 ```php
 // ...
 
-class Account extends Model
+class Account extends Projection
 {
     // ...
 
@@ -105,7 +105,7 @@ class AccountBalanceProjector extends Projector
 
         $account->broke_mail_sent = true;
 
-        $account->save();
+        $account->writeable()->save();
     }
 
     public function onMoneyAdded(MoneyAdded $event)
@@ -123,7 +123,7 @@ class AccountBalanceProjector extends Projector
             $account->broke_mail_sent = false;
         }
 
-        $account->save();
+        $account->writeable()->save();
     }
 }
 ```
