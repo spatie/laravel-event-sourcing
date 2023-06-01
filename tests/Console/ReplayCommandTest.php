@@ -108,8 +108,6 @@ it('will call certain methods on the projector when replaying events', function 
 });
 
 it('will replay events from a specific store', function () {
-    // OtherEloquentStoredEvent::truncate();
-
     $uuid = FakeUuid::generate();
 
     Collection::times(5, fn () =>
@@ -118,7 +116,13 @@ it('will replay events from a specific store', function () {
             ->persist()
     );
 
-    $this->artisan('event-sourcing:replay', ['--stored-event-model' => OtherEloquentStoredEvent::class])
+    $projector = app(AccountProjector::class);
+    Projectionist::addProjector($projector);
+
+    $this->artisan('event-sourcing:replay', [
+        'projector' => [AccountProjector::class],
+        '--stored-event-model' => OtherEloquentStoredEvent::class
+    ])
         ->expectsOutput('Replaying 5 events...')
         ->assertExitCode(0);
 });
