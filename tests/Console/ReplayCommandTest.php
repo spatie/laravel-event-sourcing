@@ -110,7 +110,9 @@ it('will call certain methods on the projector when replaying events', function 
 it('will replay events from a specific store', function () {
     $uuid = FakeUuid::generate();
 
-    Collection::times(5, fn () =>
+    Collection::times(
+        5,
+        fn () =>
         AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($uuid)
             ->addMoney(2000)
             ->persist()
