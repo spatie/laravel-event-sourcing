@@ -123,7 +123,7 @@ it('will replay events from a specific store', function () {
 
     $this->artisan('event-sourcing:replay', [
         'projector' => [AccountProjector::class],
-        '--stored-event-model' => OtherEloquentStoredEvent::class
+        '--stored-event-model' => OtherEloquentStoredEvent::class,
     ])
         ->expectsOutput('Replaying 5 events...')
         ->assertExitCode(0);
