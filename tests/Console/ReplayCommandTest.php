@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSourcing\Tests\Console;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
