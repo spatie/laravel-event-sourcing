@@ -31,8 +31,8 @@ class ReplayCommand extends Command
             return;
         }
 
-        if ($this->hasArgument('stored-event-model')) {
-            $model = $this->argument('stored-event-model');
+        if ($this->hasOption('stored-event-model')) {
+            $model = $this->option('stored-event-model');
 
             if (! class_exists($model)) {
                 throw new Exception("Model {$model} not found. Make sure the model namespace is correct.");
