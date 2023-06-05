@@ -105,7 +105,7 @@ abstract class AggregateRoot
     {
         $domainEvent
             ->setAggregateRootUuid($this->uuid)
-            ->setCreatedAt(CarbonImmutable::now());
+            ->setCreatedAt($domainEvent->createdAt() ?? CarbonImmutable::now());
 
         $this->recordedEvents[] = $domainEvent;
 

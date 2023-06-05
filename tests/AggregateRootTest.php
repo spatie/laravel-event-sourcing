@@ -402,6 +402,23 @@ it('should set created at from within the aggregate root', function () {
     assertTrue($now->eq($event->createdAt()));
 });
 
+it('should not overwrite created at, from within the aggregate root, if already defined', function () {
+    app(AccountAggregateRoot::class)
+        ->loadUuid($this->aggregateUuid)
+        ->recordThat(
+            (new MoneyAdded(100))
+                ->setCreatedAt($when = CarbonImmutable::make('2021-01-01 01:02:03'))
+        )
+        ->persist();
+
+    /** @var \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent $eloquentEvent */
+    $eloquentEvent = EloquentStoredEvent::first();
+
+    $event = $eloquentEvent->toStoredEvent()->event;
+
+    assertTrue($when->eq($event->createdAt()));
+});
+
 it('should always retrieve the last snapshot', function () {
     Carbon::setTestNow();
 
