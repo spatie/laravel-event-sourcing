@@ -390,6 +390,38 @@ public function test_can_have_many_accounts()
 }
 ```
 
+Another approach is to create a trait for your projection factories and write your tests like your would in a regular CRUD app:
+```php
+// Trait file:
+trait SupportsProjections
+{
+    public function newModel(array $attributes = [])
+    {
+        return Factory::newModel([
+            'uuid' => fake()->uuid(),
+            ...$attributes,
+        ])->writeable();
+    }
+}
+
+// Factory file:
+class AccountFactory extends Factory
+{
+    use SupportsProjections;
+
+    public function definition(): array
+    {
+        return [...];
+    }
+}
+
+// Test file:
+public function test_can_have_many_accounts()
+{
+    Account::factory()->times(5)->create();
+}
+```
+
 ## Want to know more?
 
 We discuss projections and complex patterns such as CQRS in depth in our [Event Sourcing in Laravel](https://event-sourcing-laravel.com/) course. In practice, you want to check out these chapters:
