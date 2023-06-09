@@ -45,4 +45,9 @@ class CarbonNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         return is_a($type, CarbonInterface::class, true);
     }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [CarbonInterface::class => false];
+    }
 }

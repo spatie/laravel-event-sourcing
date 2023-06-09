@@ -68,4 +68,9 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
         return is_a($class, QueueableEntity::class, true)
             || is_a($class, QueueableCollection::class, true);
     }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [QueueableEntity::class => false, QueueableCollection::class => false];
+    }
 }
