@@ -24,4 +24,9 @@ class ObjectNormalizer extends SymfonyObjectNormalizer
             $defaultContext
         );
     }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return ['object' => false];
+    }
 }
