@@ -12,10 +12,9 @@ namespace Spatie\Shop\Cart\Commands;
 
 use Spatie\Shop\Support\EventSourcing\Attributes\AggregateUuid;
 use Spatie\Shop\Support\EventSourcing\Attributes\HandledBy;
-use Spatie\Shop\Support\EventSourcing\Commands\Command;
 
 #[HandledBy(CartAggregateRoot::class)]
-class AddCartItem implements Command
+class AddCartItem
 {
     public function __construct(
         #[AggregateUuid] public string $cartUuid,
