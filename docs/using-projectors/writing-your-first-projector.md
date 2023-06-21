@@ -201,7 +201,7 @@ class AccountBalanceProjector extends Projector
 {
     public function onAccountCreated(AccountCreated $event)
     {
-        Account::create($event->accountAttributes);
+        (new Account($event->accountAttributes))->writeable()->save();
     }
 
     public function onMoneyAdded(MoneyAdded $event)
