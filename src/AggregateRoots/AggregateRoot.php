@@ -153,12 +153,13 @@ abstract class AggregateRoot
         try {
             $storedEvents = $this->persistWithoutApplyingToEventHandlers();
         } catch (CouldNotPersistAggregate $exception) {
-            $newInstance = static::retrieve($this->uuid());
-            $newInstance->concurrentTries = $this->concurrentTries + 1;
-
-            if ($newInstance->maximumTries !== -1 && $newInstance->concurrentTries > $newInstance->maximumTries) {
+            // @todo Add tests for maximum tries
+            if ($this->maximumTries !== -1 && $this->concurrentTries >= $this->maximumTries) {
                 throw $exception;
             }
+
+            $newInstance = static::retrieve($this->uuid());
+            $newInstance->concurrentTries = $this->concurrentTries + 1;
 
             foreach ($recordedEvents as $i => $recordedEvent) {
                 $concurrencyCheck = $concurrencyChecks[$i];
