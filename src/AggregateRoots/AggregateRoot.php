@@ -39,6 +39,13 @@ abstract class AggregateRoot
 
     private bool $handleEvents = true;
 
+    private int $concurrentTries = 0;
+
+    private int $maximumTries = -1;
+
+    /** @var callable[] $concurrencyChecks */
+    private array $concurrencyChecks = [];
+
     /**
      * @param string $uuid
      *
@@ -108,6 +115,7 @@ abstract class AggregateRoot
             ->setCreatedAt(CarbonImmutable::now());
 
         $this->recordedEvents[] = $domainEvent;
+        $this->concurrencyChecks[] = fn () => false;
 
         $this->apply($domainEvent);
 
@@ -116,9 +124,44 @@ abstract class AggregateRoot
         return $this;
     }
 
+    public function recordConcurrently(ShouldBeStored $domainEvent, bool|callable $allowConcurrent = true): static
+    {
+        $this->recordThat($domainEvent);
+
+        $this->concurrencyChecks[count($this->concurrencyChecks) - 1] = is_callable($allowConcurrent)
+            ? $allowConcurrent
+            : fn () => $allowConcurrent;
+
+        return $this;
+    }
+
     public function persist(): static
     {
-        $storedEvents = $this->persistWithoutApplyingToEventHandlers();
+        try {
+            $recordedEvents = $this->recordedEvents;
+            $concurrencyChecks = $this->concurrencyChecks;
+
+            $storedEvents = $this->persistWithoutApplyingToEventHandlers();
+        } catch (CouldNotPersistAggregate $exception) {
+            $newInstance = static::retrieve($this->uuid());
+            $newInstance->concurrentTries = $this->concurrentTries + 1;
+
+            if ($newInstance->maximumTries !== -1 && $newInstance->concurrentTries > $newInstance->maximumTries) {
+                throw $exception;
+            }
+
+            foreach ($recordedEvents as $i => $recordedEvent) {
+                $concurrencyCheck = $concurrencyChecks[$i];
+
+                if (! $concurrencyCheck($newInstance)) {
+                    throw $exception;
+                }
+
+                $newInstance->recordConcurrently($recordedEvent, $concurrencyCheck);
+            }
+
+            return $newInstance->persist();
+        }
 
         if ($this->handleEvents) {
             $storedEvents->each(fn (StoredEvent $storedEvent) => $storedEvent->handleForAggregateRoot());
@@ -206,6 +249,7 @@ abstract class AggregateRoot
         $recordedEvents = $this->recordedEvents;
 
         $this->recordedEvents = [];
+        $this->concurrencyChecks = [];
 
         return $recordedEvents;
     }

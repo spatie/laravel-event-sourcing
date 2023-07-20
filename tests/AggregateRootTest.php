@@ -21,6 +21,7 @@ use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithConcurrency;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithFailingPersist;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
@@ -301,6 +302,56 @@ it('will throw an exception if the latest stored version id is not what we expec
     $aggregateRoot->addMoney(100);
 
     $aggregateRootInAnotherRequest = AccountAggregateRoot::retrieve($this->aggregateUuid);
+    $aggregateRootInAnotherRequest->addMoney(100);
+    $aggregateRootInAnotherRequest->persist();
+
+    $aggregateRoot->persist();
+})->throws(CouldNotPersistAggregate::class);
+
+it('allows concurrency with concurrently', function () {
+    $aggregateRoot = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
+    $aggregateRoot->addMoney(100);
+
+    $aggregateRootInAnotherRequest = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
+    $aggregateRootInAnotherRequest->addMoney(100);
+    $aggregateRootInAnotherRequest->persist();
+
+    // @todo Keep the same instance
+    $aggregateRoot = $aggregateRoot->persist();
+
+    expect($aggregateRoot->balance)->toBe(200);
+
+    // Not refreshed
+    expect($aggregateRootInAnotherRequest->balance)->toBe(100);
+
+    $fresh = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
+    expect($fresh->balance)->toBe(200);
+});
+
+it('allows concurrency with concurrently under specific conditions', function () {
+    $aggregateRoot = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
+    $aggregateRoot->addMoney(100);
+
+    $aggregateRootInAnotherRequestA = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
+    $aggregateRootInAnotherRequestB = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
+    $aggregateRootInAnotherRequestC = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
+
+    $aggregateRootInAnotherRequestA->addMoney(100);
+    $aggregateRootInAnotherRequestA->persist();
+
+    $aggregateRootInAnotherRequestB->removeMoney(100);
+    $aggregateRootInAnotherRequestB->persist();
+
+    $aggregateRootInAnotherRequestC->removeMoney(200);
+    $aggregateRootInAnotherRequestC->persist();
+})->throws(CouldNotPersistAggregate::class);
+
+it('does not allow concurrency when a non-concurrent event was also recorded', function () {
+    $aggregateRoot = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
+    $aggregateRoot->addMoney(100);
+    $aggregateRoot->multiplyMoney(100);
+
+    $aggregateRootInAnotherRequest = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
     $aggregateRootInAnotherRequest->addMoney(100);
     $aggregateRootInAnotherRequest->persist();
 
