@@ -115,7 +115,7 @@ abstract class AggregateRoot
             ->setCreatedAt(CarbonImmutable::now());
 
         $this->recordedEvents[] = $domainEvent;
-        $this->concurrencyChecks[] = fn () => false;
+        $this->concurrencyChecks[] = null;
 
         $this->apply($domainEvent);
 
@@ -137,10 +137,20 @@ abstract class AggregateRoot
 
     public function persist(): static
     {
-        try {
-            $recordedEvents = $this->recordedEvents;
-            $concurrencyChecks = $this->concurrencyChecks;
+        $recordedEvents = $this->recordedEvents;
+        $concurrencyChecks = $this->concurrencyChecks;
 
+        foreach ($recordedEvents as $i => $recordedEvent) {
+            $concurrencyCheck = $concurrencyChecks[$i];
+
+            if (is_null($concurrencyCheck)) {
+                continue;
+            }
+
+            $concurrencyCheck($this);
+        }
+
+        try {
             $storedEvents = $this->persistWithoutApplyingToEventHandlers();
         } catch (CouldNotPersistAggregate $exception) {
             $newInstance = static::retrieve($this->uuid());
@@ -153,9 +163,11 @@ abstract class AggregateRoot
             foreach ($recordedEvents as $i => $recordedEvent) {
                 $concurrencyCheck = $concurrencyChecks[$i];
 
-                if (! $concurrencyCheck($newInstance)) {
+                if (is_null($concurrencyCheck)) {
                     throw $exception;
                 }
+
+                $concurrencyCheck($newInstance);
 
                 $newInstance->recordConcurrently($recordedEvent, $concurrencyCheck);
             }

@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots;
 
+use Exception;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyMultiplied;
@@ -36,7 +37,9 @@ class AccountAggregateRootWithConcurrency extends AggregateRoot
             ->recordConcurrently(
                 new MoneyRemoved($amount),
                 function (self $aggregateRootWithConcurrency) use ($amount) {
-                    return $aggregateRootWithConcurrency->balance > $amount;
+                    if ($aggregateRootWithConcurrency->balance < $amount) {
+                        throw new Exception('Insufficient balance');
+                    }
                 },
             );
 

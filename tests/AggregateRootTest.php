@@ -344,7 +344,7 @@ it('allows concurrency with concurrently under specific conditions', function ()
 
     $aggregateRootInAnotherRequestC->removeMoney(200);
     $aggregateRootInAnotherRequestC->persist();
-})->throws(CouldNotPersistAggregate::class);
+})->throws(Exception::class, 'Insufficient balance');
 
 it('does not allow concurrency when a non-concurrent event was also recorded', function () {
     $aggregateRoot = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
@@ -357,6 +357,12 @@ it('does not allow concurrency when a non-concurrent event was also recorded', f
 
     $aggregateRoot->persist();
 })->throws(CouldNotPersistAggregate::class);
+
+it('also validates concurrency checks before persisting', function () {
+    $aggregateRoot = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
+    $aggregateRoot->removeMoney(100);
+    $aggregateRoot->persist();
+})->throws(Exception::class, 'Insufficient balance');
 
 it('fires the triggered events on the event bus when configured', function () {
     config()->set('event-sourcing.dispatch_events_from_aggregate_roots', true);
