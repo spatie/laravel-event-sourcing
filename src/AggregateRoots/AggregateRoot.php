@@ -43,7 +43,7 @@ abstract class AggregateRoot
 
     private int $maximumTries = -1;
 
-    /** @var callable[] $concurrencyChecks */
+    /** @var callable[] */
     private array $concurrencyChecks = [];
 
     /**
