@@ -322,7 +322,8 @@ class Projectionist
         callable $onEventReplayed = null,
         ?string $aggregateUuid = null
     ): void {
-        $projectors = new EventHandlerCollection($projectors);
+        $projectors = (new EventHandlerCollection($projectors))
+            ->sortBy(fn (EventHandler $eventHandler) => $eventHandler->weight ?? 0);
 
         $this->isReplaying = true;
 

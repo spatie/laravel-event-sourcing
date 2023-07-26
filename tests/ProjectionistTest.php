@@ -84,6 +84,28 @@ it('will call projectors ordered by weight', function () {
     ], app(ProjectorWithWeightTestHelper::class)->calledBy);
 });
 
+it('will replay projectors ordered by weight', function () {
+    app()->singleton(ProjectorWithWeightTestHelper::class);
+
+    event(new MoneyAddedEvent($this->account, 1000));
+
+    Projectionist::addProjectors([
+        ProjectorWithHighWeight::class,
+        ProjectorWithoutWeight::class,
+        ProjectorWithNegativeWeight::class,
+        ProjectorWithLowWeight::class,
+    ]);
+
+    Projectionist::replay(Projectionist::getProjectors());
+
+    assertSame([
+        ProjectorWithNegativeWeight::class,
+        ProjectorWithoutWeight::class,
+        ProjectorWithLowWeight::class,
+        ProjectorWithHighWeight::class,
+    ], app(ProjectorWithWeightTestHelper::class)->calledBy);
+});
+
 it('can catch exceptions and still continue calling other projectors', function () {
     $this->setConfig('event-sourcing.catch_exceptions', true);
 
