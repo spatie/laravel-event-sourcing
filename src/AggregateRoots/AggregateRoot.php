@@ -158,6 +158,9 @@ abstract class AggregateRoot
                 throw $exception;
             }
 
+            // @todo Instead of creating a new instance, this should reset the aggregate root state back to it's
+            //       initial state after __construct, then re-retrieve events from the database and apply them
+            //       on the resetted aggregate root.
             $newInstance = static::retrieve($this->uuid());
             $newInstance->concurrentTries = $this->concurrentTries + 1;
 
@@ -173,6 +176,7 @@ abstract class AggregateRoot
                 $newInstance->recordConcurrently($recordedEvent, $concurrencyCheck);
             }
 
+            // @todo Don't return a new instance but the same one, see above todo
             return $newInstance->persist();
         }
 
