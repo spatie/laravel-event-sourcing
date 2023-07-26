@@ -327,6 +327,17 @@ it('allows concurrency with concurrently', function () {
     expect($fresh->balance)->toBe(200);
 });
 
+it('respects tries with concurrently', function () {
+    $aggregateRoot = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
+    $aggregateRoot->addMoney(100);
+
+    $aggregateRootInAnotherRequest = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
+    $aggregateRootInAnotherRequest->addMoney(100);
+    $aggregateRootInAnotherRequest->persistConcurrently(1);
+
+    $aggregateRoot->persistConcurrently(1);
+})->throws(CouldNotPersistAggregate::class);
+
 it('allows concurrency with concurrently under specific conditions', function () {
     $aggregateRoot = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
     $aggregateRoot->addMoney(100);
