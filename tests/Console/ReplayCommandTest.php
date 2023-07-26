@@ -18,6 +18,7 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWi
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
@@ -106,18 +107,24 @@ it('will call certain methods on the projector when replaying events', function 
 });
 
 it('will replay events from a specific store', function () {
-    $account = AccountAggregateRootWithStoredEventRepositorySpecified::create();
+    $uuid = FakeUuid::generate();
 
     foreach (range(1, 5) as $i) {
-        event(new MoneyAddedEvent($account, 2000));
-    }
+        AccountAggregateRootWithStoredEventRepositorySpecified::retrieve($uuid)
+            ->addMoney(2000)
+            ->persist();
+    };
 
-    OtherEloquentStoredEvent::truncate();
+    $projector = app(AccountProjector::class);
+    Projectionist::addProjector($projector);
 
-    $this->artisan('event-sourcing:replay', ['--stored-event-model' => OtherEloquentStoredEvent::class])
+    $this->artisan('event-sourcing:replay', [
+        'projector' => [AccountProjector::class],
+        '--stored-event-model' => OtherEloquentStoredEvent::class,
+    ])
         ->expectsOutput('Replaying 5 events...')
         ->assertExitCode(0);
-})->skip();
+});
 
 it('will replay events for a specific aggregate root uuid', function () {
     EloquentStoredEvent::truncate();

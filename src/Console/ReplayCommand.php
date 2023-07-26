@@ -31,6 +31,14 @@ class ReplayCommand extends Command
             return;
         }
 
+        if ($model = $this->option('stored-event-model')) {
+            if (! class_exists($model)) {
+                throw new Exception("Model {$model} not found. Make sure the model namespace is correct.");
+            }
+
+            config(['event-sourcing.stored_event_model' => $model]);
+        }
+
         $this->replay($projectors, (int)$this->option('from'), $this->option('aggregate-uuid'));
     }
 
