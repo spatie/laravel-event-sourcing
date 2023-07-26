@@ -314,12 +314,11 @@ it('allows concurrency with concurrently', function () {
 
     $aggregateRootInAnotherRequest = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
     $aggregateRootInAnotherRequest->addMoney(100);
-    $aggregateRootInAnotherRequest->persist();
+    $aggregateRootInAnotherRequest->persistConcurrently();
 
-    // @todo Keep the same instance
-    $aggregateRoot = $aggregateRoot->persist();
+    $newAggregateRoot = $aggregateRoot->persistConcurrently();
 
-    expect($aggregateRoot->balance)->toBe(200);
+    expect($newAggregateRoot->balance)->toBe(200);
 
     // Not refreshed
     expect($aggregateRootInAnotherRequest->balance)->toBe(100);
@@ -337,13 +336,13 @@ it('allows concurrency with concurrently under specific conditions', function ()
     $aggregateRootInAnotherRequestC = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
 
     $aggregateRootInAnotherRequestA->addMoney(100);
-    $aggregateRootInAnotherRequestA->persist();
+    $aggregateRootInAnotherRequestA->persistConcurrently();
 
     $aggregateRootInAnotherRequestB->removeMoney(100);
-    $aggregateRootInAnotherRequestB->persist();
+    $aggregateRootInAnotherRequestB->persistConcurrently();
 
     $aggregateRootInAnotherRequestC->removeMoney(200);
-    $aggregateRootInAnotherRequestC->persist();
+    $aggregateRootInAnotherRequestC->persistConcurrently();
 })->throws(Exception::class, 'Insufficient balance');
 
 it('does not allow concurrency when a non-concurrent event was also recorded', function () {
@@ -355,13 +354,13 @@ it('does not allow concurrency when a non-concurrent event was also recorded', f
     $aggregateRootInAnotherRequest->addMoney(100);
     $aggregateRootInAnotherRequest->persist();
 
-    $aggregateRoot->persist();
+    $aggregateRoot->persistConcurrently();
 })->throws(CouldNotPersistAggregate::class);
 
 it('also validates concurrency checks before persisting', function () {
     $aggregateRoot = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
     $aggregateRoot->removeMoney(100);
-    $aggregateRoot->persist();
+    $aggregateRoot->persistConcurrently();
 })->throws(Exception::class, 'Insufficient balance');
 
 it('fires the triggered events on the event bus when configured', function () {

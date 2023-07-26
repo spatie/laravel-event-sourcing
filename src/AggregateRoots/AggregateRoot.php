@@ -34,14 +34,12 @@ abstract class AggregateRoot
 
     protected int $aggregateVersionAfterReconstitution = 0;
 
+    protected ?self $aggregateInstanceRetrievedAfterReconstitution = null;
+
     /** @var \Illuminate\Support\Collection|\Spatie\EventSourcing\AggregateRoots\AggregatePartial[] */
     protected Collection $entities;
 
     private bool $handleEvents = true;
-
-    private int $concurrentTries = 0;
-
-    private int $maximumTries = -1;
 
     /** @var callable[] */
     private array $concurrencyChecks = [];
@@ -58,8 +56,11 @@ abstract class AggregateRoot
         $aggregateRoot = app(static::class);
 
         $aggregateRoot->uuid = $uuid;
+        $aggregateRoot->aggregateInstanceRetrievedAfterReconstitution = clone $aggregateRoot;
 
-        return $aggregateRoot->reconstituteFromEvents();
+        $aggregateRoot->reconstituteFromEvents();
+
+        return $aggregateRoot;
     }
 
     public function loadUuid(string $uuid): static
@@ -137,6 +138,19 @@ abstract class AggregateRoot
 
     public function persist(): static
     {
+        $storedEvents = $this->persistWithoutApplyingToEventHandlers();
+
+        if ($this->handleEvents) {
+            $storedEvents->each(fn (StoredEvent $storedEvent) => $storedEvent->handleForAggregateRoot());
+        }
+
+        $this->aggregateVersionAfterReconstitution = $this->aggregateVersion;
+
+        return $this;
+    }
+
+    public function persistConcurrently(int $tries = -1): static
+    {
         $recordedEvents = $this->recordedEvents;
         $concurrencyChecks = $this->concurrencyChecks;
 
@@ -153,16 +167,11 @@ abstract class AggregateRoot
         try {
             $storedEvents = $this->persistWithoutApplyingToEventHandlers();
         } catch (CouldNotPersistAggregate $exception) {
-            // @todo Add tests for maximum tries
-            if ($this->maximumTries !== -1 && $this->concurrentTries >= $this->maximumTries) {
+            if ($tries === 1) {
                 throw $exception;
             }
 
-            // @todo Instead of creating a new instance, this should reset the aggregate root state back to it's
-            //       initial state after __construct, then re-retrieve events from the database and apply them
-            //       on the resetted aggregate root.
             $newInstance = static::retrieve($this->uuid());
-            $newInstance->concurrentTries = $this->concurrentTries + 1;
 
             foreach ($recordedEvents as $i => $recordedEvent) {
                 $concurrencyCheck = $concurrencyChecks[$i];
@@ -176,8 +185,7 @@ abstract class AggregateRoot
                 $newInstance->recordConcurrently($recordedEvent, $concurrencyCheck);
             }
 
-            // @todo Don't return a new instance but the same one, see above todo
-            return $newInstance->persist();
+            return $newInstance->persistConcurrently($tries === -1 ? -1 : ($tries - 1));
         }
 
         if ($this->handleEvents) {
