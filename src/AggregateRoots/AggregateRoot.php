@@ -138,6 +138,16 @@ abstract class AggregateRoot
 
     public function persist(): static
     {
+        foreach ($this->recordedEvents as $i => $recordedEvent) {
+            $concurrencyCheck = $this->concurrencyChecks[$i];
+
+            if (is_null($concurrencyCheck)) {
+                continue;
+            }
+
+            $concurrencyCheck($this);
+        }
+
         $storedEvents = $this->persistWithoutApplyingToEventHandlers();
 
         if ($this->handleEvents) {

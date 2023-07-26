@@ -371,6 +371,12 @@ it('does not allow concurrency when a non-concurrent event was also recorded', f
 it('also validates concurrency checks before persisting', function () {
     $aggregateRoot = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
     $aggregateRoot->removeMoney(100);
+    $aggregateRoot->persist();
+})->throws(Exception::class, 'Insufficient balance');
+
+it('also validates concurrency checks before persisting concurrently', function () {
+    $aggregateRoot = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
+    $aggregateRoot->removeMoney(100);
     $aggregateRoot->persistConcurrently();
 })->throws(Exception::class, 'Insufficient balance');
 
