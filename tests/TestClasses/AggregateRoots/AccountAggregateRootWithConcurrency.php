@@ -26,6 +26,13 @@ class AccountAggregateRootWithConcurrency extends AggregateRoot
         return $this;
     }
 
+    public function addMoneyNonConcurrent(int $amount): self
+    {
+        $this->recordConcurrently(new MoneyAdded($amount), false);
+
+        return $this;
+    }
+
     protected function applyMoneyAdded(MoneyAdded $event)
     {
         $this->balance += $event->amount;

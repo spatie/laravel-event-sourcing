@@ -116,7 +116,7 @@ abstract class AggregateRoot
             ->setCreatedAt(CarbonImmutable::now());
 
         $this->recordedEvents[] = $domainEvent;
-        $this->concurrencyChecks[] = null;
+        $this->concurrencyChecks[] = false;
 
         $this->apply($domainEvent);
 
@@ -127,6 +127,14 @@ abstract class AggregateRoot
 
     public function recordConcurrently(ShouldBeStored $domainEvent, bool|callable $allowConcurrent = true): static
     {
+        if (! $allowConcurrent) {
+            return $this->recordThat($domainEvent);
+        }
+
+        if (is_callable($allowConcurrent)) {
+            $allowConcurrent($this);
+        }
+
         $this->recordThat($domainEvent);
 
         $this->concurrencyChecks[count($this->concurrencyChecks) - 1] = is_callable($allowConcurrent)
@@ -138,16 +146,6 @@ abstract class AggregateRoot
 
     public function persist(): static
     {
-        foreach ($this->recordedEvents as $i => $recordedEvent) {
-            $concurrencyCheck = $this->concurrencyChecks[$i];
-
-            if (is_null($concurrencyCheck)) {
-                continue;
-            }
-
-            $concurrencyCheck($this);
-        }
-
         $storedEvents = $this->persistWithoutApplyingToEventHandlers();
 
         if ($this->handleEvents) {
@@ -164,16 +162,6 @@ abstract class AggregateRoot
         $recordedEvents = $this->recordedEvents;
         $concurrencyChecks = $this->concurrencyChecks;
 
-        foreach ($recordedEvents as $i => $recordedEvent) {
-            $concurrencyCheck = $concurrencyChecks[$i];
-
-            if (is_null($concurrencyCheck)) {
-                continue;
-            }
-
-            $concurrencyCheck($this);
-        }
-
         try {
             $storedEvents = $this->persistWithoutApplyingToEventHandlers();
         } catch (CouldNotPersistAggregate $exception) {
@@ -186,11 +174,9 @@ abstract class AggregateRoot
             foreach ($recordedEvents as $i => $recordedEvent) {
                 $concurrencyCheck = $concurrencyChecks[$i];
 
-                if (is_null($concurrencyCheck)) {
+                if ($concurrencyCheck === false) {
                     throw $exception;
                 }
-
-                $concurrencyCheck($newInstance);
 
                 $newInstance->recordConcurrently($recordedEvent, $concurrencyCheck);
             }
