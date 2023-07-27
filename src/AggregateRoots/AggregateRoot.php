@@ -125,12 +125,8 @@ abstract class AggregateRoot
         return $this;
     }
 
-    public function recordConcurrently(ShouldBeStored $domainEvent, bool|callable $allowConcurrent = true): static
+    public function recordConcurrently(ShouldBeStored $domainEvent, ?callable $allowConcurrent = null): static
     {
-        if (! $allowConcurrent) {
-            return $this->recordThat($domainEvent);
-        }
-
         if (is_callable($allowConcurrent)) {
             $allowConcurrent($this);
         }
@@ -139,7 +135,7 @@ abstract class AggregateRoot
 
         $this->concurrencyChecks[count($this->concurrencyChecks) - 1] = is_callable($allowConcurrent)
             ? $allowConcurrent
-            : fn () => $allowConcurrent;
+            : fn () => true;
 
         return $this;
     }

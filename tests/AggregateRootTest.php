@@ -338,17 +338,6 @@ it('respects tries with concurrently', function () {
     $aggregateRoot->persistConcurrently(1);
 })->throws(CouldNotPersistAggregate::class);
 
-it('respects allowConcurrent false in recordConcurrently', function () {
-    $aggregateRoot = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
-    $aggregateRoot->addMoneyNonConcurrent(100);
-
-    $aggregateRootInAnotherRequest = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
-    $aggregateRootInAnotherRequest->addMoneyNonConcurrent(100);
-    $aggregateRootInAnotherRequest->persistConcurrently();
-
-    $aggregateRoot->persistConcurrently();
-})->throws(CouldNotPersistAggregate::class);
-
 it('allows concurrency with concurrently under specific conditions', function () {
     $aggregateRoot = AccountAggregateRootWithConcurrency::retrieve($this->aggregateUuid);
     $aggregateRoot->addMoney(100);
