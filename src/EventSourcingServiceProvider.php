@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\File;
 use Spatie\EventSourcing\Console\CacheEventHandlersCommand;
 use Spatie\EventSourcing\Console\ClearCachedEventHandlersCommand;
 use Spatie\EventSourcing\Console\ListCommand;
