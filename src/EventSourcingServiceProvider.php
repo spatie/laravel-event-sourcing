@@ -3,6 +3,7 @@
 namespace Spatie\EventSourcing;
 
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\File;
 use Spatie\EventSourcing\Console\CacheEventHandlersCommand;
 use Spatie\EventSourcing\Console\ClearCachedEventHandlersCommand;
 use Spatie\EventSourcing\Console\ListCommand;
@@ -92,7 +93,12 @@ class EventSourcingServiceProvider extends PackageServiceProvider
         (new DiscoverEventHandlers())
             ->within(config('event-sourcing.auto_discover_projectors_and_reactors'))
             ->useBasePath(config('event-sourcing.auto_discover_base_path', base_path()))
-            ->ignoringFiles(Composer::getAutoloadedFiles(base_path('composer.json')))
+            ->ignoringFiles(
+                array_merge(
+                    Composer::getAutoloadedFiles(base_path('composer.json')),
+                    config('event-sourcing.auto_discover_ignore_files', [])
+                )
+            )
             ->addToProjectionist($projectionist);
     }
 

@@ -11,6 +11,13 @@ return [
     ],
 
     /*
+     * Files in these directories will be ignored during the auto-discovery
+     * of projectors and reactors, and will not be registered.
+     */
+    'auto_discover_ignore_files' => \Illuminate\Support\Facades\File::allFiles(app_path('Providers')),
+
+
+    /*
      * This directory will be used as the base path when scanning
      * for projectors and reactors.
      */
