@@ -75,7 +75,8 @@
                 "Spatie\\EventSourcing\\EventSourcingServiceProvider"
             ],
             "aliases": {
-                "Projectionist": "Spatie\\EventSourcing\\Facades\\EventSourcing"
+                "EventRegistry": "Spatie\\EventSourcing\\Facades\\EventRegistry",
+                "Projectionist": "Spatie\\EventSourcing\\Facades\\Projectionist"
             }
         }
     },

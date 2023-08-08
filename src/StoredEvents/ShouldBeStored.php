@@ -3,7 +3,10 @@
 namespace Spatie\EventSourcing\StoredEvents;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use ReflectionClass;
+use Spatie\EventSourcing\Attributes\EventAlias;
 use Spatie\EventSourcing\Attributes\EventVersion;
 use Spatie\EventSourcing\Enums\MetaData;
 
@@ -13,13 +16,14 @@ abstract class ShouldBeStored
 
     public function eventVersion(): int
     {
-        $versionAttribute = (new ReflectionClass($this))->getAttributes(EventVersion::class)[0] ?? null;
+        return static::attribute(EventVersion::class)?->version ?? 1;
+    }
 
-        if (! $versionAttribute) {
-            return 1;
-        }
-
-        return $versionAttribute->newInstance()->version;
+    public static function eventName(string $mappedAlias = null): string
+    {
+        return $mappedAlias
+            ?? static::attribute(EventAlias::class)?->alias
+            ?? Str::kebab(class_basename(static::class));
     }
 
     public function createdAt(): ?CarbonImmutable
@@ -80,5 +84,22 @@ abstract class ShouldBeStored
         $this->metaData = $metaData;
 
         return $this;
+    }
+
+    protected static function attributes(string $attribute, bool $ascend = false): Collection
+    {
+        $classRef = new ReflectionClass(static::class);
+        $attrRefs = collect();
+
+        do {
+            $attrRefs->push(...$classRef->getAttributes($attribute));
+        } while ($ascend && false !== $classRef = $classRef->getParentClass());
+
+        return $attrRefs->map->newInstance();
+    }
+
+    protected static function attribute(string $attribute, bool $ascend = false)
+    {
+        return self::attributes($attribute, $ascend)->first();
     }
 }

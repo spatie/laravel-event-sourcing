@@ -3,6 +3,14 @@
 return [
 
     /*
+     * These directories will be scanned for storable events. They
+     * will be registered to event registry automatically.
+     */
+    'auto_discover_storable_events' => [
+        app()->path(),
+    ],
+
+    /*
      * These directories will be scanned for projectors and reactors. They
      * will be registered to Projectionist automatically.
      */
@@ -12,33 +20,44 @@ return [
 
     /*
      * This directory will be used as the base path when scanning
-     * for projectors and reactors.
+     * for storable events, projectors and reactors.
      */
     'auto_discover_base_path' => base_path(),
 
     /*
+     * Storable events are type of events being stored in storage repository when they fire.
+     * You can create them by performing `php artisan make:storable-event`.
+     * Similar to Relation::morphMap() you can define which alias responds to which
+     * event class. This allows you to change the namespace or class names
+     * of your events but still handle older events correctly.
+     */
+    'storable_events' => [
+        // 'money-added' => App\StorableEvents\MoneyAddedEvent::class,
+    ],
+
+    /*
      * Projectors are classes that build up projections. You can create them by performing
-     * `php artisan event-sourcing:create-projector`. When not using auto-discovery,
+     * `php artisan make:projector`. When not using auto-discovery,
      * Projectors can be registered in this array or a service provider.
      */
     'projectors' => [
-        // App\Projectors\YourProjector::class
+        // App\Projectors\YourProjector::class,
     ],
 
     /*
      * Reactors are classes that handle side-effects. You can create them by performing
-     * `php artisan event-sourcing:create-reactor`. When not using auto-discovery
+     * `php artisan make:reactor`. When not using auto-discovery,
      * Reactors can be registered in this array or a service provider.
      */
     'reactors' => [
-        // App\Reactors\YourReactor::class
+        // App\Reactors\YourReactor::class,
     ],
 
     /*
      * A queue is used to guarantee that all events get passed to the projectors in
      * the right order. Here you can set of the name of the queue.
      */
-    'queue' => env('EVENT_PROJECTOR_QUEUE_NAME', null),
+    'queue' => env('EVENT_PROJECTOR_QUEUE_NAME'),
 
     /*
      * When a Projector or Reactor throws an exception the event Projectionist can catch it
@@ -81,13 +100,6 @@ return [
      * it should implement \Spatie\EventSourcing\StoredEvents\HandleDomainEventJob.
      */
     'stored_event_job' => Spatie\EventSourcing\StoredEvents\HandleStoredEventJob::class,
-
-    /*
-     * Similar to Relation::morphMap() you can define which alias responds to which
-     * event class. This allows you to change the namespace or class names
-     * of your events but still handle older events correctly.
-     */
-    'event_class_map' => [],
 
     /*
      * This class is responsible for serializing events. By default an event will be serialized

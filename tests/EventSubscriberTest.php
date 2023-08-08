@@ -10,10 +10,12 @@ use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
 
+use Spatie\EventSourcing\Facades\EventRegistry;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\HandleStoredEventJob;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\DoNotStoreThisEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithAlias;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEventWithQueueOverride;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
@@ -45,7 +47,7 @@ it('will log events that implement ShouldBeStored', function () {
 });
 
 it('will log events that implement ShouldBeStored with a map', function () {
-    $this->setConfig('event-sourcing.event_class_map', [
+    EventRegistry::addEventClasses([
         'moneyadd' => MoneyAddedEvent::class,
     ]);
 
@@ -60,6 +62,38 @@ it('will log events that implement ShouldBeStored with a map', function () {
     assertInstanceOf(MoneyAddedEvent::class, $storedEvent->event);
     assertEquals(1234, $storedEvent->event->amount);
     assertEquals($this->account->id, $storedEvent->event->account->id);
+});
+
+it('will log events that implement ShouldBeStored with an alias', function () {
+    EventRegistry::addEventClasses([
+        EventWithAlias::class,
+    ]);
+
+    event(new EventWithAlias());
+
+    assertCount(1, EloquentStoredEvent::get());
+
+    $storedEvent = EloquentStoredEvent::first();
+
+    $this->assertDatabaseHas('stored_events', ['event_class' => 'event_with_alias']);
+
+    assertInstanceOf(EventWithAlias::class, $storedEvent->event);
+});
+
+it('will alias event with class map taking precedence over EventAlias attribute', function () {
+    EventRegistry::addEventClasses([
+        'event_alias_from_config' => EventWithAlias::class,
+    ]);
+
+    event(new EventWithAlias());
+
+    assertCount(1, EloquentStoredEvent::get());
+
+    $storedEvent = EloquentStoredEvent::first();
+
+    $this->assertDatabaseHas('stored_events', ['event_class' => 'event_alias_from_config']);
+
+    assertInstanceOf(EventWithAlias::class, $storedEvent->event);
 });
 
 it('will not store events without the ShouldBeStored interface', function () {

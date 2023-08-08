@@ -15,11 +15,6 @@ use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestProject
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestQueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\AutoDiscoverEventHandlers\TestReactor;
 
-function getDiscoveryBasePath(): string
-{
-    return realpath(test()->pathToTests().'/../');
-}
-
 it('can get all classes that have event handlers', function () {
     /** @var \Spatie\EventSourcing\Projectionist $projectionist */
     $projectionist = app(Projectionist::class);
@@ -28,7 +23,7 @@ it('can get all classes that have event handlers', function () {
 
     (new DiscoverEventHandlers())
         ->within([__DIR__.'/TestClasses/AutoDiscoverEventHandlers'])
-        ->useBasePath(getDiscoveryBasePath())
+        ->useBasePath(realpath(test()->pathToTests().'/../'))
         ->useRootNamespace('Spatie\EventSourcing\\')
         ->ignoringFiles(Composer::getAutoloadedFiles($pathToComposerJson))
 

@@ -5,6 +5,7 @@ namespace Spatie\EventSourcing\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
+use Spatie\EventSourcing\Facades\EventRegistry;
 use Spatie\EventSourcing\Projectionist;
 
 class ListCommand extends Command
@@ -19,14 +20,14 @@ class ListCommand extends Command
         $projectors = $projectionist->getProjectors();
         $rows = $this->convertEventHandlersToTableRows($projectors);
         count($rows)
-            ? $this->table(['Event', 'Handled by projectors'], $rows)
+            ? $this->table(['Event', 'Alias', 'Handled by projectors'], $rows)
             : $this->warn('No projectors registered');
 
         $this->info('');
-        $projectors = $projectionist->getReactors();
-        $rows = $this->convertEventHandlersToTableRows($projectors);
+        $reactors = $projectionist->getReactors();
+        $rows = $this->convertEventHandlersToTableRows($reactors);
         count($rows)
-            ? $this->table(['Event', 'Handled by reactors'], $rows)
+            ? $this->table(['Event', 'Alias', 'Handled by reactors'], $rows)
             : $this->warn('No reactors registered');
     }
 
@@ -44,9 +45,11 @@ class ListCommand extends Command
             }, []);
 
         return collect($events)
-            ->map(function (array $eventHandlers, string $eventClass) {
-                return [$eventClass, implode(PHP_EOL, collect($eventHandlers)->sort()->toArray())];
-            })
+            ->map(fn (array $eventHandlers, string $eventClass) => [
+                $eventClass,
+                EventRegistry::getAlias($eventClass),
+                implode(PHP_EOL, collect($eventHandlers)->sort()->toArray()),
+            ])
             ->sort()
             ->values()
             ->toArray();

@@ -25,6 +25,7 @@ abstract class TestCase extends Orchestra
 
         FakeUuid::reset();
 
+        $this->artisan('event-sourcing:clear-storable-events');
         $this->artisan('event-sourcing:clear-event-handlers');
     }
 

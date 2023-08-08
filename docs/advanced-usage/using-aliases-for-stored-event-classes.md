@@ -9,12 +9,14 @@ To get around this you can define event class aliases in the `event-sourcing.php
 
 ```php
     /*
+     * Storable events are type of events being stored in storage repository when they fire.
+     * You can create them by performing `php artisan make:storable-event`.
      * Similar to Relation::morphMap() you can define which alias responds to which
-     * event class. This allows you to change the namespace or classnames
+     * event class. This allows you to change the namespace or class names
      * of your events but still handle older events correctly.
      */
-    'event_class_map' => [
-        'money_added' => MoneyAddedEvent::class,
+    'storable_events' => [
+        'money-added' => App\StorableEvents\MoneyAddedEvent::class,
     ],
 ```
 

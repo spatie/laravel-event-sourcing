@@ -4,11 +4,11 @@ namespace Spatie\EventSourcing\StoredEvents;
 
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
 use ReflectionClass;
 use ReflectionException;
 use Spatie\EventSourcing\Attributes\EventSerializer as EventSerializerAttribute;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\Facades\EventRegistry;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 
@@ -41,7 +41,7 @@ class StoredEvent implements Arrayable
         $this->aggregate_uuid = $data['aggregate_uuid'];
         $this->aggregate_version = $data['aggregate_version'];
         $this->event_version = $data['event_version'] ?? 1;
-        $this->event_class = self::getActualClassForEvent($data['event_class']);
+        $this->event_class = EventRegistry::getEventClass($data['event_class']);
         $this->meta_data = $data['meta_data'];
         $this->created_at = $data['created_at'];
 
@@ -56,7 +56,7 @@ class StoredEvent implements Arrayable
             'aggregate_uuid' => $this->aggregate_uuid,
             'aggregate_version' => $this->aggregate_version,
             'event_version' => $this->event_version,
-            'event_class' => self::getEventClass($this->event_class),
+            'event_class' => EventRegistry::getAlias($this->event_class),
             'meta_data' => $this->meta_data instanceof Arrayable ? $this->meta_data->toArray() : (array) $this->meta_data,
             'created_at' => $this->created_at,
         ];
@@ -129,7 +129,7 @@ class StoredEvent implements Arrayable
 
         try {
             $this->event = app($serializerClass)->deserialize(
-                self::getActualClassForEvent($this->event_class),
+                EventRegistry::getEventClass($this->event_class),
                 is_string($this->event_properties)
                     ? $this->event_properties
                     : json_encode($this->event_properties),
@@ -143,21 +143,5 @@ class StoredEvent implements Arrayable
         } catch (Exception $exception) {
             throw InvalidStoredEvent::couldNotUnserializeEvent($this, $exception);
         }
-    }
-
-    protected static function getActualClassForEvent(string $class): string
-    {
-        return Arr::get(config('event-sourcing.event_class_map', []), $class, $class);
-    }
-
-    protected static function getEventClass(string $class): string
-    {
-        $map = config('event-sourcing.event_class_map', []);
-
-        if (! empty($map) && in_array($class, $map)) {
-            return array_search($class, $map, true);
-        }
-
-        return $class;
     }
 }

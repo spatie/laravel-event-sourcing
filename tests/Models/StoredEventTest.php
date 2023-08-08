@@ -15,6 +15,7 @@ use function PHPUnit\Framework\assertTrue;
 
 use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\Facades\EventRegistry;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
@@ -52,8 +53,8 @@ it('will throw a human readable exception when the event couldnt be deserialized
     EloquentStoredEvent::first()->toStoredEvent();
 })->throws(InvalidStoredEvent::class);
 
-it('will store the alias when a classname is found in the event class map', function () {
-    $this->setConfig('event-sourcing.event_class_map', [
+it('will store the alias when a classname is found in the event registry', function () {
+    EventRegistry::addEventClasses([
         'money_added' => MoneyAddedEvent::class,
     ]);
 
@@ -68,7 +69,7 @@ it('allows to modify metadata with offset set in eloquent model', function () {
         $event->meta_data->set('ip', '127.0.0.1');
     });
 
-    $this->setConfig('event-sourcing.event_class_map', [
+    EventRegistry::addEventClasses([
         'money_added' => MoneyAddedEvent::class,
     ]);
 

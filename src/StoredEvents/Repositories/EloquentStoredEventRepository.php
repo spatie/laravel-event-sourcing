@@ -8,6 +8,7 @@ use Illuminate\Support\LazyCollection;
 use Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\Facades\EventRegistry;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
@@ -87,7 +88,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             'aggregate_uuid' => $uuid,
             'aggregate_version' => $event->aggregateRootVersion(),
             'event_version' => $event->eventVersion(),
-            'event_class' => $this->getEventClass(get_class($event)),
+            'event_class' => EventRegistry::getAlias(get_class($event)),
             'meta_data' => json_encode($event->metaData() + [
                 MetaData::CREATED_AT => $createdAt->toDateTimeString(),
             ]),
@@ -125,17 +126,6 @@ class EloquentStoredEventRepository implements StoredEventRepository
         $eloquentStoredEvent->update($storedEvent->toArray());
 
         return $eloquentStoredEvent->toStoredEvent();
-    }
-
-    private function getEventClass(string $class): string
-    {
-        $map = config('event-sourcing.event_class_map', []);
-
-        if (! empty($map) && in_array($class, $map)) {
-            return array_search($class, $map, true);
-        }
-
-        return $class;
     }
 
     public function getLatestAggregateVersion(string $aggregateUuid): int
