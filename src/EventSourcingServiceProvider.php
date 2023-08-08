@@ -87,7 +87,7 @@ class EventSourcingServiceProvider extends PackageServiceProvider
         $this->app->bind(EventSerializer::class, config('event-sourcing.event_serializer'));
     }
 
-    public function discoverStorableEvents()
+    protected function discoverStorableEvents()
     {
         /** @var EventRegistry $eventRegistry */
         $eventRegistry = app(EventRegistry::class);

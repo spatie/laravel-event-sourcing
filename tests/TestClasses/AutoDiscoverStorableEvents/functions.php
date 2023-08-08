@@ -1,5 +1,7 @@
 <?php
 
-function aTestFunction()
-{
+if (! function_exists('aTestFunction')) {
+    function aTestFunction()
+    {
+    }
 }
