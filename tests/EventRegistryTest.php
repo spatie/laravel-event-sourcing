@@ -5,7 +5,9 @@ namespace Spatie\EventSourcing\Tests;
 use function PHPUnit\Framework\assertEquals;
 use function Spatie\Snapshots\assertMatchesSnapshot;
 
+use Spatie\EventSourcing\Exceptions\InvalidStorableEvent;
 use Spatie\EventSourcing\Facades\EventRegistry;
+use Spatie\EventSourcing\Tests\TestClasses\Events\DoNotStoreThisEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithAlias;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithCustomAlias;
 use Spatie\EventSourcing\Tests\TestClasses\Events\TestEvent;
@@ -32,6 +34,10 @@ it('passes through event class if corresponding alias has not been found in regi
     $alias = EventRegistry::getAlias(EventWithAlias::class);
     assertEquals(EventWithAlias::class, $alias);
 });
+
+it('will throw an exception if event class does not extend ShouldBeStored', function () {
+    EventRegistry::addEventClass(DoNotStoreThisEvent::class);
+})->throws(InvalidStorableEvent::class);
 
 it('will set the default alias based on class name while adding event to the registry', function () {
     EventRegistry::addEventClass(TestEvent::class);
