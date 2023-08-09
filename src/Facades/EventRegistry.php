@@ -13,6 +13,8 @@ use Spatie\EventSourcing\EventRegistry as Registry;
  * @method static string getAlias(string $eventClass)
  * @method static Registry setClassMap(array $classMap)
  * @method static Collection getClassMap()
+ *
+ * @see \Spatie\EventSourcing\EventRegistry
  */
 class EventRegistry extends Facade
 {

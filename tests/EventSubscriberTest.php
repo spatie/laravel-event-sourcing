@@ -75,7 +75,7 @@ it('will log events that implement ShouldBeStored with an alias', function () {
 
     $storedEvent = EloquentStoredEvent::first();
 
-    $this->assertDatabaseHas('stored_events', ['event_class' => 'event_with_alias']);
+    $this->assertDatabaseHas('stored_events', ['event_class' => 'event-with-alias-from-attribute']);
 
     assertInstanceOf(EventWithAlias::class, $storedEvent->event);
 });

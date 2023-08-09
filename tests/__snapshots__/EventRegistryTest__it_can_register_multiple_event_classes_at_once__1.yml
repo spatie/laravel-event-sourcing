@@ -1,0 +1,3 @@
+custom-alias: Spatie\EventSourcing\Tests\TestClasses\Events\TestEvent
+event-with-alias-from-attribute: Spatie\EventSourcing\Tests\TestClasses\Events\EventWithAlias
+event-with-alias-from-method: Spatie\EventSourcing\Tests\TestClasses\Events\EventWithCustomAlias
