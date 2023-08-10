@@ -4,6 +4,7 @@ namespace Spatie\EventSourcing\Support;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use ReflectionClass;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\Projectionist;
 use SplFileInfo;
@@ -64,6 +65,7 @@ class DiscoverEventHandlers
             ->reject(fn (SplFileInfo $file) => in_array($file->getPathname(), $this->ignoredFiles))
             ->map(fn (SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
             ->filter(fn (string $eventHandlerClass) => is_subclass_of($eventHandlerClass, EventHandler::class))
+            ->filter(fn (string $eventHandlerClass) => (new ReflectionClass($eventHandlerClass))->isInstantiable())
             ->pipe(function (Collection $eventHandlers) use ($projectionist) {
                 $projectionist->addEventHandlers($eventHandlers->toArray());
             });
