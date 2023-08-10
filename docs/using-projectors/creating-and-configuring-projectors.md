@@ -55,7 +55,7 @@ use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 
 class MyProjector extends Projector
 {
-    public function onEventHappened(EventHappended $event)
+    public function onEventHappened(EventHappened $event)
     {
         // do some work
     }

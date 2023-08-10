@@ -53,7 +53,7 @@ namespace App\Reactors;
 
 class MyReactor
 {
-    public function onEventHappened(EventHappended $event)
+    public function onEventHappened(EventHappened $event)
     {
 
     }
