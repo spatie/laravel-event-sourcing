@@ -21,9 +21,11 @@ abstract class AggregatePartial
         return $this->aggregateRoot->uuid();
     }
 
-    protected function recordThat(ShouldBeStored $event): void
+    protected function recordThat(ShouldBeStored $event): static
     {
         $this->aggregateRoot->recordThat($event);
+
+        return $this;
     }
 
     public function apply(StoredEvent | ShouldBeStored ...$storedEvents): void
