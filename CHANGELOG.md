@@ -2,6 +2,24 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.3.6 - 2023-08-17
+
+### What's Changed
+
+- Correcting Commands Documentation by @ChangingTerry in https://github.com/spatie/laravel-event-sourcing/pull/416
+- Sort projectors by weight when replaying by @rapkis in https://github.com/spatie/laravel-event-sourcing/pull/425
+- Replay events with custom stored event model by @avosalmon in https://github.com/spatie/laravel-event-sourcing/pull/410
+- Corrects typos in docs by @DriverCat in https://github.com/spatie/laravel-event-sourcing/pull/429
+- Make the aggregatePartial recordThat method fluent by @maartenpaauw in https://github.com/spatie/laravel-event-sourcing/pull/433
+
+### New Contributors
+
+- @ChangingTerry made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/416
+- @DriverCat made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/429
+- @maartenpaauw made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/433
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.3.5...7.3.6
+
 ## 7.3.5 - 2023-06-10
 
 ### What's Changed
@@ -229,6 +247,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -241,6 +260,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -332,7 +352,8 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - Add `AggregatePartial`
 - 
-- - If you're overriding an aggregate root's constructor, make sure to call `parent::__construct` from it
+- - If you're overriding an aggregate root's constructor, make sure to call `parent::__construct` from it   
+  
 - 
 - 
 - 
@@ -357,7 +378,8 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - All event listeners are now registered in the same way: by looking at an event's type hint. This applies to all:
 - 
-- - Aggregate root `apply` methods
+- - Aggregate root `apply` methods   
+  
 - 
 - 
 - 
@@ -375,7 +397,8 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
-- - Projection listeners
+- - Projection listeners   
+  
 - 
 - 
 - 
@@ -393,7 +416,8 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
-- - Reactor listeners
+- - Reactor listeners   
+  
 - 
 - 
 - 
@@ -411,7 +435,8 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
-- - Event queries
+- - Event queries   
+  
 - 
 - 
 - 
@@ -498,6 +523,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -521,6 +547,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
