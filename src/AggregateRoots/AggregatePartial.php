@@ -28,6 +28,13 @@ abstract class AggregatePartial
         return $this;
     }
 
+    protected function recordConcurrently(ShouldBeStored $domainEvent, ?callable $allowConcurrent = null): static
+    {
+        $this->aggregateRoot->recordConcurrently($domainEvent, $allowConcurrent);
+
+        return $this;
+    }
+
     public function apply(StoredEvent | ShouldBeStored ...$storedEvents): void
     {
         foreach ($storedEvents as $storedEvent) {
