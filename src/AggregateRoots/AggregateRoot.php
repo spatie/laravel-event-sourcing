@@ -258,7 +258,9 @@ abstract class AggregateRoot
             ->reject(fn (Method $method) => in_array($method->getName(), ['handleCommand', 'recordThat', 'apply', 'tap']))
             ->accepts($event)
             ->all()
-            ->each(fn (Method $method) => $this->{$method->getName()}($event));
+            ->each(function (Method $method) use ($event) {
+                return $this->{$method->getName()}($event);
+            });
 
         $this->appliedEvents[] = $event;
 
