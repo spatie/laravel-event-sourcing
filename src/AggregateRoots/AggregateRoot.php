@@ -192,7 +192,7 @@ abstract class AggregateRoot
             ->mapWithKeys(function (ReflectionProperty $property) {
                 return [$property->getName() => $this->{$property->getName()}];
             })
-            ->put(config('event-sourcing.snapshot_partials_key'), $this->getPartialsState())
+            ->merge($this->getPartialsState())
             ->toArray();
     }
 
@@ -203,13 +203,6 @@ abstract class AggregateRoot
             $partials[$partial::class] = $partial->getState();
         }
         return $partials;
-    }
-
-    protected function restorePartialsState(array $partialSnapshots): void
-    {
-        foreach ($partialSnapshots as $partialKey => $partialState) {
-            $this->restorePartialState($partialKey, $partialState);
-        } 
     }
 
     protected function restorePartialState(string $key, array $state): void
@@ -224,8 +217,8 @@ abstract class AggregateRoot
     protected function useState(array $state): void
     {
         foreach ($state as $key => $value) {
-            if ($key === config('event-sourcing.snapshot_partials_key')) {
-                $this->restorePartialsState($value);
+            if (class_exists($key)) {           
+                $this->$key = $this->restorePartialState($key, $value);
             } else {
                 $this->$key = $value;
             }

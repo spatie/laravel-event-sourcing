@@ -182,8 +182,7 @@ it('should store partial states when snapshotting', function () {
     $aggregateRoot->snapshot();
 
     tap(EloquentSnapshot::first(), function (EloquentSnapshot $snapshot) {
-        assertCount(1, $snapshot->state['__esPartials']);
-        assertEquals(300, $snapshot->state['__esPartials'][MoneyPartial::class]['balance']);
+        assertEquals(300, $snapshot->state[MoneyPartial::class]['balance']);
     });
 });
 
