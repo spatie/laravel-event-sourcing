@@ -29,6 +29,7 @@ use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProj
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\DoubleBalanceReactor;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyIncremented;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyMultiplied;
 use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
@@ -242,6 +243,13 @@ it('should replay all events with the stored event repository specified when ret
 it('should apply a recorded event immediately', function () {
     $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
     $aggregateRoot->addMoney(123);
+
+    assertEquals(123, $aggregateRoot->balance);
+});
+
+it('should apply to aggregate root event handlers using interfaces', function () {
+    $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
+    $aggregateRoot->recordThat(new MoneyIncremented(123));
 
     assertEquals(123, $aggregateRoot->balance);
 });
