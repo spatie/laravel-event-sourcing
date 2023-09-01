@@ -256,7 +256,7 @@ abstract class AggregateRoot
             ->public()
             ->protected()
             ->reject(fn (Method $method) => in_array($method->getName(), ['handleCommand', 'recordThat', 'apply', 'tap']))
-            ->reject(fn (Method $method) => $method->accepts(0))
+            ->reject(fn (Method $method) => $method->accepts(null))
             ->accepts($event)
             ->all()
             ->each(function (Method $method) use ($event) {
