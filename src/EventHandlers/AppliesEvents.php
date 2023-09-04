@@ -26,6 +26,7 @@ trait AppliesEvents
             ->public()
             ->protected()
             ->reject(fn (Method $method) => in_array($method->getName(), ['apply', 'recordThat']))
+            ->reject(fn (Method $method) => $method->accepts(null))
             ->accepts($event)
             ->all()
             ->each(
