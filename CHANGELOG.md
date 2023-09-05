@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.3.8 - 2023-09-05
+
+### What's Changed
+
+- Added an extra rejection to prevent events being passed to invalid handlers by @27pchrisl in https://github.com/spatie/laravel-event-sourcing/pull/438
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.3.7...7.3.8
+
 ## 7.3.7 - 2023-08-24
 
 ### What's Changed
@@ -257,6 +265,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -269,6 +278,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -556,6 +566,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -579,6 +590,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
