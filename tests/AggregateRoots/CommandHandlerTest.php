@@ -16,7 +16,8 @@ beforeAll(function () {
     class AddItem
     {
         public function __construct(
-            #[AggregateUuid] public string $cartUuid,
+            #[AggregateUuid]
+            public string $cartUuid,
             public string $name
         ) {
         }
@@ -26,7 +27,8 @@ beforeAll(function () {
     class ClearCart
     {
         public function __construct(
-            #[AggregateUuid] public string $cartUuid
+            #[AggregateUuid]
+            public string $cartUuid
         ) {
         }
     }

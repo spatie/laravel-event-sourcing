@@ -2,8 +2,10 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots;
 
+use Exception;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAddedInterface;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyMultiplied;
 
 class AccountAggregateRoot extends AggregateRoot
@@ -38,7 +40,7 @@ class AccountAggregateRoot extends AggregateRoot
         return $this;
     }
 
-    protected function applyMoneyAdded(MoneyAdded $event)
+    protected function applyMoneyAdded(MoneyAdded|MoneyAddedInterface $event)
     {
         $this->balance += $event->amount;
     }
@@ -46,5 +48,15 @@ class AccountAggregateRoot extends AggregateRoot
     public function applyMoneyMultiplied(MoneyMultiplied $event)
     {
         $this->balance = $this->math->multiply($this->balance, $event->amount);
+    }
+
+    public function mixedMethod($param): void
+    {
+        throw new Exception("Method should not be called by apply()");
+    }
+
+    public function variadicMethod(...$param): void
+    {
+        throw new Exception("Method should not be called by apply()");
     }
 }

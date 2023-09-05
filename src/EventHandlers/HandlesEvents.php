@@ -16,6 +16,7 @@ trait HandlesEvents
         return Handlers::new($this)
             ->public()
             ->protected()
+            ->reject(fn (Method $method) => $method->accepts(null))
             ->accepts($storedEvent->event)
             ->all()
             ->isNotEmpty();
@@ -28,6 +29,7 @@ trait HandlesEvents
         Handlers::new($this)
             ->public()
             ->protected()
+            ->reject(fn (Method $method) => $method->accepts(null))
             ->accepts($event)
             ->all()
             ->each(function (Method $method) use ($event) {
@@ -45,6 +47,7 @@ trait HandlesEvents
         return Handlers::new($this)
             ->public()
             ->protected()
+            ->reject(fn (Method $method) => $method->accepts(null))
             ->all()
             ->groupBy(fn (Method $method) => $method->getTypes()->first()?->getName())
             ->filter(function (Collection $group, string $key) {
