@@ -22,12 +22,12 @@ class BalanceProjector extends Projector
         $event->account->subtractMoney($event->amount);
     }
 
-    public function onStartingEventReplay()
+    public function onStartingEventReplay(?string $aggregateUuid = null)
     {
         static::$log[] = 'onStartingEventReplay';
     }
 
-    public function onFinishedEventReplay()
+    public function onFinishedEventReplay(?string $aggregateUuid = null)
     {
         static::$log[] = 'onFinishedEventReplay';
     }

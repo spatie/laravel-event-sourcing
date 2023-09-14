@@ -35,11 +35,11 @@ class EventHandlerCollection extends Collection
         return new static($eventHandlers);
     }
 
-    public function call(string $method): void
+    public function call(string $method, array $parameters = []): void
     {
         $this
             ->filter(fn (EventHandler $eventHandler) => method_exists($eventHandler, $method))
-            ->each(fn (EventHandler $eventHandler) => app()->call([$eventHandler, $method]));
+            ->each(fn (EventHandler $eventHandler) => app()->call([$eventHandler, $method], $parameters));
     }
 
     public function remove(array $eventHandlerClassNames): void

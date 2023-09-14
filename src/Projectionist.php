@@ -337,7 +337,7 @@ class Projectionist
 
         event(new StartingEventReplay($projectors));
 
-        $projectors->call('onStartingEventReplay');
+        $projectors->call('onStartingEventReplay', [$aggregateUuid]);
 
         app(StoredEventRepository::class)
             ->retrieveAllStartingFrom($startingFromEventId, $aggregateUuid)
@@ -356,6 +356,6 @@ class Projectionist
 
         event(new FinishedEventReplay());
 
-        $projectors->call('onFinishedEventReplay');
+        $projectors->call('onFinishedEventReplay', [$aggregateUuid]);
     }
 }
