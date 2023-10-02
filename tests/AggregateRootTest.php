@@ -12,7 +12,6 @@ use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
-use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertTrue;
 
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;

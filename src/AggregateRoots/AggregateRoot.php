@@ -204,6 +204,7 @@ abstract class AggregateRoot
         foreach ($this->resolvePartials() as $partial) {
             $partials[$partial::class] = $partial->getState();
         }
+
         return $partials;
     }
 
@@ -219,7 +220,7 @@ abstract class AggregateRoot
     protected function useState(array $state): void
     {
         foreach ($state as $key => $value) {
-            if (class_exists($key)) {           
+            if (class_exists($key)) {
                 $this->$key = $this->restorePartialState($key, $value);
             } else {
                 $this->$key = $value;
