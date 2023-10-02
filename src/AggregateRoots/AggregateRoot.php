@@ -193,13 +193,37 @@ abstract class AggregateRoot
             ->reject(fn (ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
             ->mapWithKeys(function (ReflectionProperty $property) {
                 return [$property->getName() => $this->{$property->getName()}];
-            })->toArray();
+            })
+            ->merge($this->getPartialsState())
+            ->toArray();
+    }
+
+    protected function getPartialsState(): array
+    {
+        $partials = [];
+        foreach ($this->resolvePartials() as $partial) {
+            $partials[$partial::class] = $partial->getState();
+        }
+        return $partials;
+    }
+
+    protected function restorePartialState(string $key, array $state): void
+    {
+        foreach ($this->resolvePartials() as $partial) {
+            if ($partial::class === $key) {
+                $partial->useState($state);
+            }
+        }
     }
 
     protected function useState(array $state): void
     {
         foreach ($state as $key => $value) {
-            $this->$key = $value;
+            if (class_exists($key)) {           
+                $this->$key = $this->restorePartialState($key, $value);
+            } else {
+                $this->$key = $value;
+            }
         }
     }
 

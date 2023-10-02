@@ -12,6 +12,7 @@ use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertTrue;
 
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
@@ -22,9 +23,11 @@ use Spatie\EventSourcing\Snapshots\EloquentSnapshot;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithFailingPersist;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithPartial;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Mailable\MoneyAddedMailable;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Math;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Partials\MoneyPartial;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\DoubleBalanceReactor;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Reactors\SendMailReactor;
@@ -168,6 +171,22 @@ it('should store public properties and version number when snapshotting', functi
     });
 });
 
+it('should store partial states when snapshotting', function () {
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
+    $aggregateRoot = AccountAggregateRootWithPartial::retrieve($this->aggregateUuid);
+
+    $aggregateRoot
+        ->addMoney(100)
+        ->addMoney(100)
+        ->addMoney(100);
+
+    $aggregateRoot->snapshot();
+
+    tap(EloquentSnapshot::first(), function (EloquentSnapshot $snapshot) {
+        assertEquals(300, $snapshot->state[MoneyPartial::class]['balance']);
+    });
+});
+
 it('should restore public properties when restoring an aggregate root with a snapshot', function () {
     /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot $aggregateRoot */
     $aggregateRoot = AccountAggregateRoot::retrieve($this->aggregateUuid);
@@ -202,6 +221,25 @@ it('should save events after the snapshot are reconstituted', function () {
 
     assertEquals(4, $aggregateRootRetrieved->aggregateVersion);
     assertEquals(400, $aggregateRootRetrieved->balance);
+});
+
+it('should have partials reconstituted if present', function () {
+    /** @var \Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithPartial $aggregateRoot */
+    $aggregateRoot = AccountAggregateRootWithPartial::retrieve($this->aggregateUuid);
+
+    $aggregateRoot
+        ->addMoney(100)
+        ->addMoney(100)
+        ->addMoney(100)
+        ->persist();
+
+    $aggregateRoot->snapshot();
+    $aggregateRoot->addMoney(100)->persist();
+
+    $aggregateRootRetrieved = AccountAggregateRootWithPartial::retrieve($this->aggregateUuid);
+
+    assertEquals(4, $aggregateRootRetrieved->aggregateVersion);
+    assertEquals(400, $aggregateRootRetrieved->getBalance());
 });
 
 it('should replay all events in the correct order when retrieving an aggregate root all', function () {

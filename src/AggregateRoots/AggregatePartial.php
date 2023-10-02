@@ -3,6 +3,8 @@
 namespace Spatie\EventSourcing\AggregateRoots;
 
 use Ramsey\Uuid\Uuid;
+use ReflectionClass;
+use ReflectionProperty;
 use Spatie\EventSourcing\EventHandlers\AppliesEvents;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
@@ -32,6 +34,24 @@ abstract class AggregatePartial
     {
         foreach ($storedEvents as $storedEvent) {
             $this->applyStoredEvent($storedEvent);
+        }
+    }
+
+    public function getState(): array
+    {
+        $class = new ReflectionClass($this);
+
+        return collect($class->getProperties(ReflectionProperty::IS_PUBLIC))
+            ->reject(fn (ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
+            ->mapWithKeys(function (ReflectionProperty $property) {
+                return [$property->getName() => $this->{$property->getName()}];
+            })->toArray();
+    }
+
+    public function useState(array $state): void
+    {
+        foreach ($state as $key => $value) {
+            $this->$key = $value;
         }
     }
 
