@@ -376,7 +376,7 @@ Projections are very fast to query. Imagine that our application has processed m
 
 ## Using Factories in Tests
 
-In the example above the `Account` model contains the necessary logic to create an `Account`, this pattern may require you to revise how you create test data using model factories. One possible solution is illustated below.
+In the example above the `Account` model contains the necessary logic to create an `Account`, this pattern may require you to revise how you create test data using model factories. One possible solution is illustrated below.
 
 ```php
 public function test_can_have_many_accounts()
