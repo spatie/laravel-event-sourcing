@@ -22,7 +22,7 @@ class InvalidEventHandler extends Exception
 
     public static function notAProjector(object $object): self
     {
-        return new static('`'.get_class($object).'` must implement Spatie\EventProcjetor\Projectors\Projector');
+        return new static('`'.get_class($object).'` must implement Spatie\EventProjector\Projectors\Projector');
     }
 
     public static function notAnEventHandler(object $object): self
