@@ -21,13 +21,13 @@ jobs:
                       testbench: 7.*
                 exclude:
                     - laravel: 10.*
-                      php: 8.0                    
+                      php: 8.0
 
         name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
         steps:
             - name: Checkout code
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
