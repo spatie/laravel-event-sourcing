@@ -102,7 +102,7 @@ it('should dispatch command to aggregate', function () {
 
     assertCount(1, CartForCommand::retrieve($this->UUID)->cartItems->items);
 
-    // Assert that commands are dispatched to the AR iteself
+    // Assert that commands are dispatched to the AR itself
     $bus->dispatch(new ClearCart(
         $this->UUID,
     ));
