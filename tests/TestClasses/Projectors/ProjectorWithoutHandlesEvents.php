@@ -14,7 +14,7 @@ class ProjectorWithoutHandlesEvents extends Projector
         $event->account->addMoney($event->amount);
     }
 
-    public function anotherFunctionThatHandlesMoneySubstracted(MoneySubtractedEvent $event)
+    public function anotherFunctionThatHandlesMoneySubtracted(MoneySubtractedEvent $event)
     {
         $event->account->subtractMoney($event->amount);
     }
@@ -23,7 +23,7 @@ class ProjectorWithoutHandlesEvents extends Projector
     {
     }
 
-    public function functionWithUnreleatedClassTypeHint(Collection $test)
+    public function functionWithUnrelatedClassTypeHint(Collection $test)
     {
     }
 
