@@ -3,9 +3,9 @@ title: Preparing events
 weight: 1
 ---
 
-The package will listen for events that implement the `\Spatie\EventSourcing\ShouldBeStored` interface. This is an empty interface that simply signals to the package that the event should be stored.
+The package will listen for events that extend the `\Spatie\EventSourcing\StoredEvents\ShouldBeStored` class. This is an abstract class that signals to the package that the event should be stored.
 
-You can quickly create an event that implements `ShouldBeStored` by running this artisan command:
+You can quickly create an event that extend `ShouldBeStored` by running this artisan command:
 
 ```bash
 php artisan make:storable-event NameOfYourEvent
