@@ -2,6 +2,24 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.3.10 - 2023-11-27
+
+### What's Changed
+
+* Address Typos and Make Grammatical Improvements in Documentation by @salehhashemi1992 in https://github.com/spatie/laravel-event-sourcing/pull/442
+* Update actions/checkout to v4 by @salehhashemi1992 in https://github.com/spatie/laravel-event-sourcing/pull/441
+* Fix Some Typos in Method Names, Namespaces, and PHPDoc Annotations by @salehhashemi1992 in https://github.com/spatie/laravel-event-sourcing/pull/443
+* Document prepare events using abstract class instead of interface by @Sparclex in https://github.com/spatie/laravel-event-sourcing/pull/446
+* Change the column type of snapshots.aggregate_version by @eschalks in https://github.com/spatie/laravel-event-sourcing/pull/447
+
+### New Contributors
+
+* @salehhashemi1992 made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/442
+* @Sparclex made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/446
+* @eschalks made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/447
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.3.9...7.3.10
+
 ## 7.3.9 - 2023-10-02
 
 ### What's Changed
@@ -280,6 +298,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -292,6 +311,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -381,102 +401,16 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 ## 5.0.0 - 2021-06-09
 
-- Add `EloquentStoredEvent::query()-&amp;amp;gt;whereEvent(EventA::class, …)`   
+- Add `EloquentStoredEvent::query()-&amp;amp;gt;whereEvent(EventA::class, …)`
   
 - 
-- Add `EventQuery`   
+- Add `EventQuery`
   
 - 
-- Add `AggregatePartial`   
+- Add `AggregatePartial`
   
 - 
-- - If you're overriding an aggregate root's constructor, make sure to call `parent::__construct` from it   
-  
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- Add command bus and aggregate root handlers   
-  
-- 
-- Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))   
-  
-- 
-- All event listeners are now registered in the same way: by looking at an event's type hint. This applies to all:   
-  
-- 
-- - Aggregate root `apply` methods   
-  
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- - Projection listeners   
-  
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- - Reactor listeners   
-  
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- - Event queries   
+- - If you're overriding an aggregate root's constructor, make sure to call `parent::__construct` from it
   
 - 
 - 
@@ -496,49 +430,135 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 - 
 - 
 - 
-- Moved `Spatie\EventSourcing\Exception\CouldNotPersistAggregate` to `Spatie\EventSourcing\AggregateRoots\Exceptions\CouldNotPersistAggregate`   
+- Add command bus and aggregate root handlers
   
 - 
-- Moved `Spatie\EventSourcing\Exception\InvalidEloquentSnapshotModel` to `Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentSnapshotModel`   
+- Add `Projectionist::fake(OriginalReactor::class, FakeReactor::class)` ([#181](https://github.com/spatie/laravel-event-sourcing/discussions/181))
   
 - 
-- Moved `Spatie\EventSourcing\Exception\InvalidEloquentStoredEventModel` to `Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel`   
+- All event listeners are now registered in the same way: by looking at an event's type hint. This applies to all:
   
 - 
-- Moved `Spatie\EventSourcing\Exception\MissingAggregateUuid` to `Spatie\EventSourcing\AggregateRoots\Exceptions\MissingAggregateUuid`   
+- - Aggregate root `apply` methods
   
 - 
-- Moved `Spatie\EventSourcing\Exception\InvalidStoredEvent` to `Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent`   
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- - Projection listeners
   
 - 
-- Dependency injection in handlers isn't supported anymore,  use constructor injection instead   
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- - Reactor listeners
   
 - 
-- `$storedEvent` and `$aggregateRootUuid` are no longer passed to event handler methods. Use `$event-&amp;amp;gt;storedEventId()` and `$event-&amp;amp;gt;aggregateRootUuid()` instead. ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))   
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- - Event queries
   
 - 
-- Rename `EloquentStoredEvent::query()-&amp;amp;gt;uuid()` to `EloquentStoredEvent::query()-&amp;amp;gt;whereAggregateRoot()`   
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- Moved `Spatie\EventSourcing\Exception\CouldNotPersistAggregate` to `Spatie\EventSourcing\AggregateRoots\Exceptions\CouldNotPersistAggregate`
   
 - 
-- Removed `AggregateRoot::$allowConcurrency`   
+- Moved `Spatie\EventSourcing\Exception\InvalidEloquentSnapshotModel` to `Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentSnapshotModel`
   
 - 
-- Removed `$aggregateVersion` from `StoredEventRepository::persist`   
+- Moved `Spatie\EventSourcing\Exception\InvalidEloquentStoredEventModel` to `Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel`
   
 - 
-- Removed `$aggregateVersion` from `StoredEventRepository::persistMany`   
+- Moved `Spatie\EventSourcing\Exception\MissingAggregateUuid` to `Spatie\EventSourcing\AggregateRoots\Exceptions\MissingAggregateUuid`
   
 - 
-- Event handlers are no longer called with `app()-&amp;amp;gt;call()` ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))   
+- Moved `Spatie\EventSourcing\Exception\InvalidStoredEvent` to `Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent`
   
 - 
-- `$handlesEvents` on Projectors and Reactors isn't supported anymore   
+- Dependency injection in handlers isn't supported anymore,  use constructor injection instead
   
 - 
-- PHP version requirement is now `^8.0`   
+- `$storedEvent` and `$aggregateRootUuid` are no longer passed to event handler methods. Use `$event-&amp;amp;gt;storedEventId()` and `$event-&amp;amp;gt;aggregateRootUuid()` instead. ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
   
 - 
-- Laravel version requirement is now `^8.0`   
+- Rename `EloquentStoredEvent::query()-&amp;amp;gt;uuid()` to `EloquentStoredEvent::query()-&amp;amp;gt;whereAggregateRoot()`
+  
+- 
+- Removed `AggregateRoot::$allowConcurrency`
+  
+- 
+- Removed `$aggregateVersion` from `StoredEventRepository::persist`
+  
+- 
+- Removed `$aggregateVersion` from `StoredEventRepository::persistMany`
+  
+- 
+- Event handlers are no longer called with `app()-&amp;amp;gt;call()` ([#180](https://github.com/spatie/laravel-event-sourcing/discussions/180))
+  
+- 
+- `$handlesEvents` on Projectors and Reactors isn't supported anymore
+  
+- 
+- PHP version requirement is now `^8.0`
+  
+- 
+- Laravel version requirement is now `^8.0`
   
 - 
 
@@ -561,6 +581,7 @@ class MyProjector extends Projector
         // This handler will automatically handle `MyEvent`
     }
 }
+
 
 
 
@@ -606,6 +627,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
