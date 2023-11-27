@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('snapshots', function (Blueprint $table) {
             $table->id();
             $table->uuid('aggregate_uuid');
-            $table->unsignedInteger('aggregate_version');
+            $table->unsignedBigInteger('aggregate_version');
             $table->jsonb('state');
 
             $table->timestamps();
