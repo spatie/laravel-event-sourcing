@@ -15,8 +15,6 @@ class ObjectNormalizer extends SymfonyAbstractObjectNormalizer
 {
     protected SymfonyObjectNormalizer $normalizer;
 
-    protected PropertyAccessorInterface $propertyAccessor;
-
     public function __construct(?ClassMetadataFactoryInterface $classMetadataFactory = null, ?NameConverterInterface $nameConverter = null, ?PropertyAccessorInterface $propertyAccessor = null, ?PropertyTypeExtractorInterface $propertyTypeExtractor = null, ?ClassDiscriminatorResolverInterface $classDiscriminatorResolver = null, ?callable $objectClassResolver = null, array $defaultContext = [])
     {
 
