@@ -20,11 +20,13 @@ class ObjectNormalizer extends SymfonyAbstractObjectNormalizer
     public function __construct(?ClassMetadataFactoryInterface $classMetadataFactory = null, ?NameConverterInterface $nameConverter = null, ?PropertyAccessorInterface $propertyAccessor = null, ?PropertyTypeExtractorInterface $propertyTypeExtractor = null, ?ClassDiscriminatorResolverInterface $classDiscriminatorResolver = null, ?callable $objectClassResolver = null, array $defaultContext = [])
     {
 
+        $propertyTypeExtractor = $propertyTypeExtractor ?? new PhpDocExtractor();
+
         $this->normalizer = new SymfonyObjectNormalizer(
             $classMetadataFactory,
             $nameConverter,
             $propertyAccessor,
-            $propertyTypeExtractor ?? new PhpDocExtractor(),
+            $propertyTypeExtractor,
             $classDiscriminatorResolver,
             $objectClassResolver,
             $defaultContext
@@ -33,7 +35,7 @@ class ObjectNormalizer extends SymfonyAbstractObjectNormalizer
         parent::__construct(
             $classMetadataFactory,
             $nameConverter,
-            $propertyTypeExtractor ?? new PhpDocExtractor(),
+            $propertyTypeExtractor,
             $classDiscriminatorResolver,
             $objectClassResolver,
             $defaultContext
