@@ -25,7 +25,7 @@ class CarbonNormalizer implements NormalizerInterface, DenormalizerInterface
     /**
      * @inheritdoc
      */
-    public function supportsNormalization(mixed $data, string $format = null): bool
+    public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
     {
         return $data instanceof CarbonInterface;
     }
@@ -41,7 +41,7 @@ class CarbonNormalizer implements NormalizerInterface, DenormalizerInterface
     /**
      * @inheritDoc
      */
-    public function supportsDenormalization(mixed $data, string $type, string $format = null): bool
+    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
     {
         return is_a($type, CarbonInterface::class, true);
     }
