@@ -22,20 +22,20 @@ class ObjectNormalizer extends SymfonyAbstractObjectNormalizer
 
         $this->normalizer = new SymfonyObjectNormalizer(
             $classMetadataFactory,
-            $nameConverter, 
-            $propertyAccessor, 
-            $propertyTypeExtractor ?? new PhpDocExtractor(), 
-            $classDiscriminatorResolver, 
-            $objectClassResolver, 
+            $nameConverter,
+            $propertyAccessor,
+            $propertyTypeExtractor ?? new PhpDocExtractor(),
+            $classDiscriminatorResolver,
+            $objectClassResolver,
             $defaultContext
         );
 
         parent::__construct(
-            $classMetadataFactory, 
-            $nameConverter, 
-            $propertyTypeExtractor ?? new PhpDocExtractor(), 
-            $classDiscriminatorResolver, 
-            $objectClassResolver, 
+            $classMetadataFactory,
+            $nameConverter,
+            $propertyTypeExtractor ?? new PhpDocExtractor(),
+            $classDiscriminatorResolver,
+            $objectClassResolver,
             $defaultContext
         );
     }
