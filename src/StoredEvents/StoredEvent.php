@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\StoredEvents;
 
+use AllowDynamicProperties;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
@@ -12,6 +13,7 @@ use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 
+#[AllowDynamicProperties]
 class StoredEvent implements Arrayable
 {
     public ?int $id;
