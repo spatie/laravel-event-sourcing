@@ -2,11 +2,13 @@
 
 namespace Spatie\EventSourcing\StoredEvents;
 
+use AllowDynamicProperties;
 use Carbon\CarbonImmutable;
 use ReflectionClass;
 use Spatie\EventSourcing\Attributes\EventVersion;
 use Spatie\EventSourcing\Enums\MetaData;
 
+#[AllowDynamicProperties]
 abstract class ShouldBeStored
 {
     protected array $metaData = [];
