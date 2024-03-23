@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.4.2 - 2024-03-23
+
+- fix AllowDynamicProperties to suppress PHP warnings on 8.2
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.4.1...7.4.2
+
 ## 7.4.1 - 2024-03-15
 
 ### What's Changed
@@ -317,6 +323,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -329,6 +336,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -626,6 +634,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -649,6 +658,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
