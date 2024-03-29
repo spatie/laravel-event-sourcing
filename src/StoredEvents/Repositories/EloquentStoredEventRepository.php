@@ -42,7 +42,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             $query->whereAggregateRoot($uuid);
         }
 
-        return $query->orderBy('id')->cursor()->map(fn(EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+        return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
     public function retrieveAllStartingFrom(int $startingFrom, string $uuid = null): LazyCollection
@@ -54,7 +54,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             ->orderBy('id')
             ->lazyById();
 
-        return $lazyCollection->map(fn(EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+        return $lazyCollection->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
     public function countAllStartingFrom(int $startingFrom, string $uuid = null): int
