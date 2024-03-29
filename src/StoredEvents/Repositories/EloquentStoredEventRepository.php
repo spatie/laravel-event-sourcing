@@ -22,7 +22,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
     {
         $this->storedEventModel = (string) config('event-sourcing.stored_event_model', EloquentStoredEvent::class);
 
-        if (!new $this->storedEventModel() instanceof EloquentStoredEvent) {
+        if (! new $this->storedEventModel() instanceof EloquentStoredEvent) {
             throw new InvalidEloquentStoredEventModel("The class {$this->storedEventModel} must extend EloquentStoredEvent");
         }
     }
@@ -42,8 +42,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             $query->whereAggregateRoot($uuid);
         }
 
-        return $query->orderBy('id')->cursor()->map(fn(EloquentStoredEvent $storedEvent
-        ) => $storedEvent->toStoredEvent());
+        return $query->orderBy('id')->cursor()->map(fn(EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
     public function retrieveAllStartingFrom(int $startingFrom, string $uuid = null): LazyCollection
@@ -72,7 +71,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $query
             ->orderBy('id')
             ->cursor()
-            ->map(fn(EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+            ->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
     public function persist(ShouldBeStored $event, string $uuid = null): StoredEvent
@@ -91,8 +90,8 @@ class EloquentStoredEventRepository implements StoredEventRepository
             'event_version' => $event->eventVersion(),
             'event_class' => $this->getEventClass(get_class($event)),
             'meta_data' => json_encode($event->metaData() + [
-                    MetaData::CREATED_AT => $createdAt->toDateTimeString(),
-                ]),
+                MetaData::CREATED_AT => $createdAt->toDateTimeString(),
+            ]),
             'created_at' => $createdAt,
         ]);
 
@@ -134,7 +133,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         $map = config('event-sourcing.event_class_map', []);
         $isMappingEnforced = config('event-sourcing.enforce_event_class_map', false);
 
-        if (!empty($map) && in_array($class, $map)) {
+        if (! empty($map) && in_array($class, $map)) {
             return array_search($class, $map, true);
         }
 
@@ -148,8 +147,8 @@ class EloquentStoredEventRepository implements StoredEventRepository
     public function getLatestAggregateVersion(string $aggregateUuid): int
     {
         return $this->getQuery()
-            ->whereAggregateRoot($aggregateUuid)
-            ->max('aggregate_version') ?? 0;
+                ->whereAggregateRoot($aggregateUuid)
+                ->max('aggregate_version') ?? 0;
     }
 
     private function prepareEventModelQuery(int $startingFrom, string $uuid = null): Builder
