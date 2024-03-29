@@ -81,6 +81,13 @@ use Spatie\EventSourcing\EventSerializers\JsonEventSerializer;use Spatie\EventSo
     'stored_event_job' => HandleStoredEventJob::class,
 
     /*
+     * Similar to Relation::enforceMorphMap() this option will make sure that every event has a
+     * corresponding alias defined. Otherwise, an exception is thrown
+     * if you try to persist an event without alias.
+     */
+    'enforce_event_class_map' => false,
+
+    /*
      * Similar to Relation::morphMap() you can define which alias responds to which
      * event class. This allows you to change the namespace or class names
      * of your events but still handle older events correctly.
