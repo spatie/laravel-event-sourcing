@@ -5,6 +5,7 @@ namespace Spatie\EventSourcing\Tests\Models;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
+use Spatie\EventSourcing\StoredEvents\Exceptions\EventClassMapMissing;
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertEqualsCanonicalizing;
@@ -62,6 +63,13 @@ it('will store the alias when a classname is found in the event class map', func
     assertEquals(MoneyAddedEvent::class, EloquentStoredEvent::first()->toStoredEvent()->event_class);
     $this->assertDatabaseHas('stored_events', ['event_class' => 'money_added']);
 });
+
+it('will throw exception if event class map is enforced and no mapping is provided', function () {
+    $this->setConfig('event-sourcing.enforce_event_class_map', true);
+    $this->setConfig('event-sourcing.event_class_map', []);
+
+    fireEvents();
+})->throws(EventClassMapMissing::class);
 
 it('allows to modify metadata with offset set in eloquent model', function () {
     EloquentStoredEvent::creating(function (EloquentStoredEvent $event) {

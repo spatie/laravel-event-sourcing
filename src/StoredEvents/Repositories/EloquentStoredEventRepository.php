@@ -8,6 +8,7 @@ use Illuminate\Support\LazyCollection;
 use Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel;
 use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\StoredEvents\Exceptions\EventClassMapMissing;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
@@ -130,9 +131,14 @@ class EloquentStoredEventRepository implements StoredEventRepository
     private function getEventClass(string $class): string
     {
         $map = config('event-sourcing.event_class_map', []);
+        $isMappingEnforced = config('event-sourcing.enforce_event_class_map', false);
 
         if (! empty($map) && in_array($class, $map)) {
             return array_search($class, $map, true);
+        }
+
+        if ($isMappingEnforced) {
+            throw EventClassMapMissing::noEventClassMappingProvided($class);
         }
 
         return $class;
