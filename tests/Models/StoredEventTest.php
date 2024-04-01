@@ -5,7 +5,6 @@ namespace Spatie\EventSourcing\Tests\Models;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
-use Spatie\EventSourcing\StoredEvents\Exceptions\EventClassMapMissing;
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertEqualsCanonicalizing;
@@ -15,8 +14,10 @@ use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
 
 use Spatie\EventSourcing\Enums\MetaData;
+
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\StoredEvents\Exceptions\EventClassMapMissing;
 use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;

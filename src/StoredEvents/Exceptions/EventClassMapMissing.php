@@ -3,7 +3,6 @@
 namespace Spatie\EventSourcing\StoredEvents\Exceptions;
 
 use Exception;
-use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 class EventClassMapMissing extends Exception
 {
