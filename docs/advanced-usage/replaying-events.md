@@ -25,7 +25,14 @@ All [events](/laravel-event-sourcing/v7/advanced-usage/preparing-events/) that i
    php artisan event-sourcing:replay App\\Projectors\\AccountBalanceProjector App\\Projectors\\AnotherProjector
   ```
 
-If your projector has a `resetState` method it will get called before replaying events. You can use that method to reset the state of your projector.
+If your projector has a `resetState` method it will get called before replaying events. You can use that method to reset the state of your projector. If you run the replay for a specific aggregate, the specified uuid will be passed as a parameter. 
+
+```
+public function resetState(?string $aggregateUuid = null): void
+{
+    // reset your projector
+}
+```
 
 If you want to replay events starting from a certain event you can use the `--from` option when executing `event-sourcing:replay`. If you use this option the `resetState` on projectors will not get called. This package does not track which events have already been processed by which projectors. Be sure not to replay events to projectors that already have handled them.
 
