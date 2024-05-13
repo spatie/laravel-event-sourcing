@@ -328,9 +328,9 @@ class Projectionist
         $this->isReplaying = true;
 
         if ($startingFromEventId === 0) {
-            $projectors->each(function (Projector $projector) {
+            $projectors->each(function (Projector $projector) use ($aggregateUuid) {
                 if (method_exists($projector, 'resetState')) {
-                    $projector->resetState();
+                    $projector->resetState($aggregateUuid);
                 }
             });
         }
