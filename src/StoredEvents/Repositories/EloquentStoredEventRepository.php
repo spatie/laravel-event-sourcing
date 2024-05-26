@@ -5,10 +5,14 @@ namespace Spatie\EventSourcing\StoredEvents\Repositories;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\LazyCollection;
+use ReflectionClass;
+use ReflectionException;
 use Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel;
+use Spatie\EventSourcing\Attributes\EventSerializer as EventSerializerAttribute;
 use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\StoredEvents\Exceptions\EventClassMapMissing;
+use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
@@ -83,8 +87,20 @@ class EloquentStoredEventRepository implements StoredEventRepository
 
         $createdAt = Carbon::now();
 
+        try {
+            $reflectionClass = new ReflectionClass(get_class($event));
+        } catch (ReflectionException) {
+            throw new InvalidStoredEvent();
+        }
+
+        if ($serializerAttribute = $reflectionClass->getAttributes(EventSerializerAttribute::class)[0] ?? null) {
+            $serializerClass = ($serializerAttribute->newInstance())->serializerClass;
+        } else {
+            $serializerClass = EventSerializer::class;
+        }
+
         $eloquentStoredEvent->setRawAttributes([
-            'event_properties' => app(EventSerializer::class)->serialize(clone $event),
+            'event_properties' => app($serializerClass)->serialize(clone $event),
             'aggregate_uuid' => $uuid,
             'aggregate_version' => $event->aggregateRootVersion(),
             'event_version' => $event->eventVersion(),
