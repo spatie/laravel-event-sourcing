@@ -93,10 +93,9 @@ class EloquentStoredEventRepository implements StoredEventRepository
             throw new InvalidStoredEvent();
         }
 
+        $serializerClass = EventSerializer::class;
         if ($serializerAttribute = $reflectionClass->getAttributes(EventSerializerAttribute::class)[0] ?? null) {
-            $serializerClass = ($serializerAttribute->newInstance())->serializerClass;
-        } else {
-            $serializerClass = EventSerializer::class;
+            $serializerClass = $serializerAttribute->newInstance()->serializerClass;
         }
 
         $eloquentStoredEvent->setRawAttributes([
