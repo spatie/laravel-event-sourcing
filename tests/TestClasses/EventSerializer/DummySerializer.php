@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSourcing\Tests\TestClasses\EventSerializer;
 
-use DateTimeZone;
 use Spatie\EventSourcing\EventSerializers\JsonEventSerializer;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
