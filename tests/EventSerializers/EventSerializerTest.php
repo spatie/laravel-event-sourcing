@@ -8,6 +8,7 @@ use DateTimeImmutable;
 
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertStringContainsString;
 
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithArray;
@@ -15,6 +16,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithCarbon;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithDatetime;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithDocblock;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithoutSerializedModels;
+use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithCreatedAtProperty;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\EventSerializer\UpgradeSerializer;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
@@ -72,6 +74,18 @@ it('can deserialize an event with datetime', function () {
     $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
 
     assertInstanceOf(DateTimeImmutable::class, $normalizedEvent->value);
+});
+
+it('does not modify `created_at` event properties', function() {
+    $event = new EventWithCreatedAtProperty('2020-01-01 00:00:00');
+
+    $json = $this->eventSerializer->serialize($event);
+
+    assertEquals('{"created_at":"2020-01-01 00:00:00"}', $json);
+
+    $normalizedEvent = $this->eventSerializer->deserialize(get_class($event), $json, 1);
+
+    assertEquals('2020-01-01 00:00:00', $normalizedEvent->created_at);
 });
 
 it('can deserialize an event with carbon', function () {
