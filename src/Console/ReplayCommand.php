@@ -100,6 +100,6 @@ class ReplayCommand extends Command
 
     protected function isRunningInteractively(): bool
     {
-        return ! $this->option('force');
+        return false === $this->option('force');
     }
 }
