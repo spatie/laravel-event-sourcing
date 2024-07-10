@@ -46,7 +46,7 @@ class ReplayCommand extends Command
     public function selectProjectors(array $projectorClassNames): ?Collection
     {
         if (count($projectorClassNames) === 0) {
-            if ($this->isRunningInteractively() && ! $this->confirm('Are you sure you want to replay events to all projectors?', true)) {
+            if (! $this->option('force') && ! $this->confirm('Are you sure you want to replay events to all projectors?', true)) {
                 return null;
             }
 
