@@ -13,7 +13,8 @@ class ReplayCommand extends Command
     protected $signature = 'event-sourcing:replay {projector?*}
                             {--from=0 : Replay events starting from this event number}
                             {--stored-event-model= : Replay events from this store}
-                            {--aggregate-uuid= : Replay events for this aggregate only}';
+                            {--aggregate-uuid= : Replay events for this aggregate only}
+                            {--force : Replay events without asking for confirmation}';
 
     protected $description = 'Replay stored events';
 
@@ -45,7 +46,7 @@ class ReplayCommand extends Command
     public function selectProjectors(array $projectorClassNames): ?Collection
     {
         if (count($projectorClassNames) === 0) {
-            if (! $this->confirm('Are you sure you want to replay events to all projectors?', true)) {
+            if (! $this->option('force') && ! $this->confirm('Are you sure you want to replay events to all projectors?', true)) {
                 return null;
             }
 
@@ -95,5 +96,10 @@ class ReplayCommand extends Command
         foreach (range(1, $amount) as $i) {
             $this->line('');
         }
+    }
+
+    protected function isRunningInteractively(): bool
+    {
+        return false === $this->option('force');
     }
 }

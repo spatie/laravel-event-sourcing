@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests\Console;
 
+use BadMethodCallException;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
@@ -33,6 +34,31 @@ beforeEach(function () {
     }
 
     Mail::fake();
+});
+
+it('will run without confirmation when given the force option', function () {
+    Projectionist::addProjector(BalanceProjector::class);
+
+    $this->artisan('event-sourcing:replay', ['--force' => true])
+        ->expectsOutput('Replaying 3 events...')
+        ->assertExitCode(0);
+});
+
+it('will not run without confirmation when not given the force option', function () {
+    $this->expectException(BadMethodCallException::class);
+
+    Projectionist::addProjector(BalanceProjector::class);
+
+    $this->artisan('event-sourcing:replay');
+});
+
+it('will not replay events when the user does not confirm', function () {
+    Projectionist::addProjector(BalanceProjector::class);
+
+    $this->artisan('event-sourcing:replay')
+        ->expectsConfirmation('Are you sure you want to replay events to all projectors?', 'no')
+        ->expectsOutput('No events replayed!')
+        ->assertExitCode(0);
 });
 
 it('will replay events to the given projectors', function () {
