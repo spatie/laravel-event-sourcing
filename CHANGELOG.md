@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.7.0 - 2024-07-10
+
+### What's Changed
+
+* Update installation-setup.md to match actual contents of config/event-sourcing.php by @inmanturbo in https://github.com/spatie/laravel-event-sourcing/pull/473
+* add force option to replay command by @inmanturbo in https://github.com/spatie/laravel-event-sourcing/pull/474
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.6.2...7.7.0
+
 ## 7.6.2 - 2024-06-13
 
 ### What's Changed
@@ -378,6 +387,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -390,6 +400,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -697,6 +708,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -720,6 +732,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
