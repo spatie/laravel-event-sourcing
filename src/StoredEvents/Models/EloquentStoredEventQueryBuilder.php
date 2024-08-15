@@ -34,10 +34,10 @@ class EloquentStoredEventQueryBuilder extends Builder
 
     public function whereEvent(string ...$eventClasses): self
     {
-        $this->whereIn(
-            'event_class',
-            Arr::map($eventClasses, static fn (string $eventClass): string => StoredEvent::getEventClass($eventClass)),
-        );
+        $this->whereIn('event_class', array_map(
+            static fn (string $eventClass): string => StoredEvent::getEventClass($eventClass),
+            $eventClasses,
+        ));
 
         return $this;
     }
