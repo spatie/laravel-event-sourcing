@@ -201,7 +201,7 @@ class AccountBalanceProjector extends Projector
 {
     public function onAccountCreated(AccountCreated $event)
     {
-        Account::create($event->accountAttributes);
+        (new Account($event->accountAttributes))->writeable()->save();
     }
 
     public function onMoneyAdded(MoneyAdded $event)
@@ -376,7 +376,7 @@ Projections are very fast to query. Imagine that our application has processed m
 
 ## Using Factories in Tests
 
-In the example above the `Account` model contains the necessary logic to create an `Account`, this pattern may require you to revise how you create test data using model factories. One possible solution is illustated below.
+In the example above the `Account` model contains the necessary logic to create an `Account`, this pattern may require you to revise how you create test data using model factories. One possible solution is illustrated below.
 
 ```php
 public function test_can_have_many_accounts()
@@ -387,6 +387,38 @@ public function test_can_have_many_accounts()
 
     $this->assertCount(5, auth()->user()->accounts);
     $this->assertInstanceOf(Account::class, auth()->user()->accounts()->first());
+}
+```
+
+Another approach is to create a trait for your projection factories and write your tests like your would in a regular CRUD app:
+```php
+// Trait file:
+trait SupportsProjections
+{
+    public function newModel(array $attributes = [])
+    {
+        return Factory::newModel([
+            'uuid' => fake()->uuid(),
+            ...$attributes,
+        ])->writeable();
+    }
+}
+
+// Factory file:
+class AccountFactory extends Factory
+{
+    use SupportsProjections;
+
+    public function definition(): array
+    {
+        return [...];
+    }
+}
+
+// Test file:
+public function test_can_have_many_accounts()
+{
+    Account::factory()->times(5)->create();
 }
 ```
 

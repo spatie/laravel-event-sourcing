@@ -53,7 +53,7 @@ namespace App\Reactors;
 
 class MyReactor
 {
-    public function onEventHappened(EventHappended $event)
+    public function onEventHappened(EventHappened $event)
     {
 
     }
@@ -196,7 +196,7 @@ class MyReactor
 }
 ```
 
-Note that providing a weight on a queued reactor won't guarentee execution order.
+Note that providing a weight on a queued reactor won't guarantee execution order.
 
 ## Want to know more?
 

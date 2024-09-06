@@ -1,28 +1,22 @@
 <?php
 
-namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots;
+namespace Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Partials;
 
-use Exception;
+use Spatie\EventSourcing\AggregateRoots\AggregatePartial;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Math;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
-use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAddedInterface;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyMultiplied;
 
-class AccountAggregateRoot extends AggregateRoot
+class MoneyPartial extends AggregatePartial
 {
     public int $balance = 0;
 
-    public int $aggregateVersion = 0;
-
-    public int $aggregateVersionAfterReconstitution = 0;
-
-    public $dependency;
-
     protected Math $math;
 
-    public function __construct(Math $math, $dependency = null)
+    public function __construct(AggregateRoot $aggregateRoot, Math $math)
     {
-        $this->dependency = $dependency;
+        parent::__construct($aggregateRoot);
         $this->math = $math;
     }
 
@@ -40,7 +34,7 @@ class AccountAggregateRoot extends AggregateRoot
         return $this;
     }
 
-    protected function applyMoneyAdded(MoneyAdded|MoneyAddedInterface $event)
+    protected function applyMoneyAdded(MoneyAdded $event)
     {
         $this->balance += $event->amount;
     }
@@ -50,13 +44,4 @@ class AccountAggregateRoot extends AggregateRoot
         $this->balance = $this->math->multiply($this->balance, $event->amount);
     }
 
-    public function mixedMethod($param): void
-    {
-        throw new Exception("Method should not be called by apply()");
-    }
-
-    public function variadicMethod(...$param): void
-    {
-        throw new Exception("Method should not be called by apply()");
-    }
 }

@@ -14,8 +14,10 @@ use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
 
 use Spatie\EventSourcing\Enums\MetaData;
+
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Facades\Projectionist;
+use Spatie\EventSourcing\StoredEvents\Exceptions\EventClassMapMissing;
 use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
@@ -62,6 +64,13 @@ it('will store the alias when a classname is found in the event class map', func
     assertEquals(MoneyAddedEvent::class, EloquentStoredEvent::first()->toStoredEvent()->event_class);
     $this->assertDatabaseHas('stored_events', ['event_class' => 'money_added']);
 });
+
+it('will throw exception if event class map is enforced and no mapping is provided', function () {
+    $this->setConfig('event-sourcing.enforce_event_class_map', true);
+    $this->setConfig('event-sourcing.event_class_map', []);
+
+    fireEvents();
+})->throws(EventClassMapMissing::class);
 
 it('allows to modify metadata with offset set in eloquent model', function () {
     EloquentStoredEvent::creating(function (EloquentStoredEvent $event) {

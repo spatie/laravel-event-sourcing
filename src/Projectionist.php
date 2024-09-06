@@ -322,14 +322,15 @@ class Projectionist
         callable $onEventReplayed = null,
         ?string $aggregateUuid = null
     ): void {
-        $projectors = new EventHandlerCollection($projectors);
+        $projectors = (new EventHandlerCollection($projectors))
+            ->sortBy(fn (EventHandler $eventHandler) => $eventHandler->weight ?? 0);
 
         $this->isReplaying = true;
 
         if ($startingFromEventId === 0) {
-            $projectors->each(function (Projector $projector) {
+            $projectors->each(function (Projector $projector) use ($aggregateUuid) {
                 if (method_exists($projector, 'resetState')) {
-                    $projector->resetState();
+                    $projector->resetState($aggregateUuid);
                 }
             });
         }

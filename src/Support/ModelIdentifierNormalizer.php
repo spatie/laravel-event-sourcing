@@ -31,7 +31,7 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
     /**
      * @inheritdoc
      */
-    public function supportsNormalization(mixed $data, string $format = null): bool
+    public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
     {
         return ($data instanceof QueueableEntity || $data instanceof QueueableCollection);
     }
@@ -51,7 +51,7 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
     /**
      * @inheritdoc
      */
-    public function supportsDenormalization(mixed $data, string $type, string $format = null): bool
+    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
     {
         return $this->normalizedDataIsModelIdentifier($data)
             && $this->isNormalizedToModelIdentifier($type);
@@ -67,5 +67,10 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
     {
         return is_a($class, QueueableEntity::class, true)
             || is_a($class, QueueableCollection::class, true);
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [QueueableEntity::class => false, QueueableCollection::class => false];
     }
 }

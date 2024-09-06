@@ -32,7 +32,7 @@ class MyProjector extends Projector
 }
 ```
 
-Note that providing a weight on a queued projector won't guarentee execution order.
+Note that providing a weight on a queued projector won't guarantee execution order.
 
 ## Want to know more?
 

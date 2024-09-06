@@ -118,7 +118,7 @@ class StoredEvent implements Arrayable
         try {
             $reflectionClass = new ReflectionClass($this->event_class);
         } catch (ReflectionException $exception) {
-            throw new InvalidStoredEvent();
+            throw new InvalidStoredEvent($exception->getMessage());
         }
 
         if ($serializerAttribute = $reflectionClass->getAttributes(EventSerializerAttribute::class)[0] ?? null) {

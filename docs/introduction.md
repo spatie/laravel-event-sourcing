@@ -5,12 +5,12 @@ weight: 1
 
 This package aims to be the entry point to get started with event sourcing in Laravel. It can help you setting up aggregates, projectors and reactors.
 
-If you've never worked with event sourcing, or are uncertain about what projectors, reactors and aggregates are, head over to [the getting familiar with event sourcing section](/laravel-event-sourcing/v7/getting-familiar-with-event-sourcing/introduction).
+If you've never worked with event sourcing, or are uncertain about what projectors, reactors and aggregates are, head over to [the getting familiar with event sourcing section](/docs/laravel-event-sourcing/v7/getting-familiar-with-event-sourcing/introduction).
 
 Event sourcing might be a good choice for your project if:
 
 - your app needs to make decisions based on the past
-- your app has auditing requirements: the reason why your app is in a certain state is equally as important as the state itself
+- your app has auditing requirements: the reason why your app is in a certain state is equally important as the state itself
 - you foresee that there will be a reporting need in the future, but you don't know yet which data you need to collect for those reports
 
 Some concepts in the package, for example the testing methods of aggregates, were inspired by [Frank De Jonge](https://twitter.com/frankdejonge/)'s [EventSauce](https://eventsauce.io/) package.

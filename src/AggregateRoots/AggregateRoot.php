@@ -73,6 +73,7 @@ abstract class AggregateRoot
             ->public()
             ->protected()
             ->reject(fn (Method $method) => in_array($method->getName(), ['handleCommand', 'recordThat', 'apply', 'tap']))
+            ->reject(fn (Method $method) => $method->accepts(null))
             ->accepts($command)
             ->first()
         ) {
@@ -86,6 +87,7 @@ abstract class AggregateRoot
                 ->public()
                 ->protected()
                 ->reject(fn (Method $method) => in_array($method->getName(), ['recordThat', 'apply', 'tap']))
+                ->reject(fn (Method $method) => $method->accepts(null))
                 ->accepts($command)
                 ->first();
 
@@ -191,13 +193,38 @@ abstract class AggregateRoot
             ->reject(fn (ReflectionProperty $reflectionProperty) => $reflectionProperty->isStatic())
             ->mapWithKeys(function (ReflectionProperty $property) {
                 return [$property->getName() => $this->{$property->getName()}];
-            })->toArray();
+            })
+            ->merge($this->getPartialsState())
+            ->toArray();
+    }
+
+    protected function getPartialsState(): array
+    {
+        $partials = [];
+        foreach ($this->resolvePartials() as $partial) {
+            $partials[$partial::class] = $partial->getState();
+        }
+
+        return $partials;
+    }
+
+    protected function restorePartialState(string $key, array $state): void
+    {
+        foreach ($this->resolvePartials() as $partial) {
+            if ($partial::class === $key) {
+                $partial->useState($state);
+            }
+        }
     }
 
     protected function useState(array $state): void
     {
         foreach ($state as $key => $value) {
-            $this->$key = $value;
+            if (class_exists($key)) {
+                $this->$key = $this->restorePartialState($key, $value);
+            } else {
+                $this->$key = $value;
+            }
         }
     }
 
@@ -256,9 +283,12 @@ abstract class AggregateRoot
             ->public()
             ->protected()
             ->reject(fn (Method $method) => in_array($method->getName(), ['handleCommand', 'recordThat', 'apply', 'tap']))
-            ->acceptsTypes([$event::class])
+            ->reject(fn (Method $method) => $method->accepts(null))
+            ->accepts($event)
             ->all()
-            ->each(fn (Method $method) => $this->{$method->getName()}($event));
+            ->each(function (Method $method) use ($event) {
+                return $this->{$method->getName()}($event);
+            });
 
         $this->appliedEvents[] = $event;
 

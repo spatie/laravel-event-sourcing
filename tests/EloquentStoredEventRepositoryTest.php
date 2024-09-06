@@ -8,6 +8,7 @@ use function PHPUnit\Framework\assertSame;
 use Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
+use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithCustomSerializer;
 
 it('can get the latest version id for a given aggregate uuid', function () {
     $eloquentStoredEventRepository = new EloquentStoredEventRepository();
@@ -36,4 +37,14 @@ it('sets the original event on persist', function () {
     $storedEvent = $eloquentStoredEventRepository->persist($originalEvent, 'uuid-1', 1);
 
     assertSame($originalEvent, $storedEvent->event);
+});
+
+it('uses the custom serializer if one is set', function () {
+    $eloquentStoredEventRepository = app(EloquentStoredEventRepository::class);
+
+    $originalEvent = new EventWithCustomSerializer('default message');
+    $storedEvent = $eloquentStoredEventRepository->persist($originalEvent, 'uuid-1', 1);
+
+    $eventFromDatabase = $eloquentStoredEventRepository->find($storedEvent->id)->event;
+    assertSame('message set by custom serializer', $eventFromDatabase->message);
 });
