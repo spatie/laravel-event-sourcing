@@ -60,7 +60,7 @@ class MyReactor
 }
 ```
 
-Just by adding a typehint of the event you want to handle makes our package call that method when the typehinted event occurs. All methods specified in your projector can also make use of method injection, so you can resolve any dependencies you need in those methods as well.
+Just by adding a typehint of the event you want to handle makes our package call that method when the typehinted event occurs. All methods specified in your reactor can also make use of method injection, so you can resolve any dependencies you need in those methods as well.
 
 ## Getting the uuid of an event
 
@@ -157,13 +157,13 @@ public function __invoke(MoneyAdded $event)
 Instead of letting a method on a reactor handle an event you can use a dedicated class.
 
 ```php
-// in a projector
+// in a reactor
 
 // ...
 
 protected array $handlesEvents = [
     /*
-     * If this event is passed to the projector, the `AddMoneyToAccount` class will be called.
+     * If this event is passed to the reactor, the `AddMoneyToAccount` class will be called.
      */ 
     MoneyAdded::class => SendMoneyAddedMail::class,
 ];
