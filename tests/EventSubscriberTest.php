@@ -197,13 +197,13 @@ it('should queue event with queue override', function () {
 it('only queues event if event has async handler', function () {
     Bus::fake();
 
-    $syncProjector = new class extends Projector {
+    $syncProjector = new class () extends Projector {
         public function onMoneyAddedEvent(MoneyAddedEvent $event)
         {
         }
     };
 
-    $asyncProjector = new class extends Projector implements ShouldQueue {
+    $asyncProjector = new class () extends Projector implements ShouldQueue {
         public function onMoneySubtractedEvent(MoneySubtractedEvent $event)
         {
         }
