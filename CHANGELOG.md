@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.8.0 - 2024-09-20
+
+### What's Changed
+
+* Replace 'projector' with 'reactor' where necessary. by @PHPGuus in https://github.com/spatie/laravel-event-sourcing/pull/485
+* Only Dispatch If Event Has Async Handler by @damiantw in https://github.com/spatie/laravel-event-sourcing/pull/484
+
+### New Contributors
+
+* @PHPGuus made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/485
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.7.0...7.8.0
+
 ## 7.7.0 - 2024-07-10
 
 ### What's Changed
@@ -388,6 +401,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -400,6 +414,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -709,6 +724,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -732,6 +748,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
