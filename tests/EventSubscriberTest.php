@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
@@ -10,6 +11,7 @@ use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
 
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\HandleStoredEventJob;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
@@ -190,4 +192,30 @@ it('should queue event with queue override', function () {
     event(new MoneyAddedEventWithQueueOverride($this->account, 1234));
 
     Queue::assertPushedOn('testQueue', HandleStoredEventJob::class);
+});
+
+it('only queues event if event has async handler', function () {
+    Bus::fake();
+
+    $syncProjector = new class extends Projector {
+        public function onMoneyAddedEvent(MoneyAddedEvent $event)
+        {
+        }
+    };
+
+    $asyncProjector = new class extends Projector implements ShouldQueue {
+        public function onMoneySubtractedEvent(MoneySubtractedEvent $event)
+        {
+        }
+    };
+
+    Projectionist::addProjectors([$syncProjector, $asyncProjector]);
+
+    event(new MoneyAddedEvent($this->account, 1234));
+
+    Bus::assertNotDispatched(HandleStoredEventJob::class);
+
+    event(new MoneySubtractedEvent($this->account, 1234));
+
+    Bus::assertDispatched(HandleStoredEventJob::class);
 });
