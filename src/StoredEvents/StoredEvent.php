@@ -150,7 +150,7 @@ class StoredEvent implements Arrayable
         return Arr::get(config('event-sourcing.event_class_map', []), $class, $class);
     }
 
-    protected static function getEventClass(string $class): string
+    public static function getEventClass(string $class): string
     {
         $map = config('event-sourcing.event_class_map', []);
 

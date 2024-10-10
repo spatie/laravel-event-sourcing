@@ -3,6 +3,8 @@
 namespace Spatie\EventSourcing\StoredEvents\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 /**
  * @method \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventCollection get
@@ -32,7 +34,10 @@ class EloquentStoredEventQueryBuilder extends Builder
 
     public function whereEvent(string ...$eventClasses): self
     {
-        $this->whereIn('event_class', $eventClasses);
+        $this->whereIn('event_class', array_map(
+           fn (string $eventClass): string => StoredEvent::getEventClass($eventClass),
+            $eventClasses,
+        ));
 
         return $this;
     }
