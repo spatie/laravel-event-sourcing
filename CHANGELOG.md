@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.9.0 - 2024-10-10
+
+### What's Changed
+
+* Use class map name when querying event class by @maartenpaauw in https://github.com/spatie/laravel-event-sourcing/pull/476
+* Register optimize commands by @erikgaal in https://github.com/spatie/laravel-event-sourcing/pull/489
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.8.0...7.9.0
+
 ## 7.8.0 - 2024-09-20
 
 ### What's Changed
@@ -402,6 +411,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -414,6 +424,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -725,6 +736,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -748,6 +760,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
