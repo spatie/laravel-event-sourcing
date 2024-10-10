@@ -47,6 +47,14 @@ class EventSourcingServiceProvider extends PackageServiceProvider
         Event::subscribe(EventSubscriber::class);
 
         $this->discoverEventHandlers();
+
+        if (method_exists($this, 'optimizes')) {
+            $this->optimizes(
+                optimize: 'event-sourcing:cache-event-handlers',
+                clear: 'event-sourcing:clear-cached-event-handlers',
+                key: 'laravel-event-sourcing',
+            );
+        }
     }
 
     public function packageRegistered(): void
