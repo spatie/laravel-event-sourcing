@@ -51,7 +51,7 @@ class EventSourcingServiceProvider extends PackageServiceProvider
         if (method_exists($this, 'optimizes')) {
             $this->optimizes(
                 optimize: 'event-sourcing:cache-event-handlers',
-                clear: 'event-sourcing:clear-cached-event-handlers',
+                clear: 'event-sourcing:clear-event-handlers',
                 key: 'laravel-event-sourcing',
             );
         }
