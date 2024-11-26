@@ -2,7 +2,7 @@
 
 namespace Spatie\EventSourcing\StoredEvents\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use MongoDB\Laravel\Eloquent\Builder;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 /**
@@ -12,7 +12,7 @@ class EloquentStoredEventQueryBuilder extends Builder
 {
     public function startingFrom(int $storedEventId): self
     {
-        $this->where('id', '>=', $storedEventId);
+        $this->where('_id', '>=', $storedEventId);
 
         return $this;
     }
@@ -34,7 +34,7 @@ class EloquentStoredEventQueryBuilder extends Builder
     public function whereEvent(string ...$eventClasses): self
     {
         $this->whereIn('event_class', array_map(
-            fn (string $eventClass): string => StoredEvent::getEventClass($eventClass),
+            fn(string $eventClass): string => StoredEvent::getEventClass($eventClass),
             $eventClasses,
         ));
 
@@ -43,27 +43,27 @@ class EloquentStoredEventQueryBuilder extends Builder
 
     public function wherePropertyIs(string $property, mixed $value): self
     {
-        $this->whereJsonContains(column: "event_properties->{$property}", value: $value);
+        $this->where("event_properties.$property", $value);
 
         return $this;
     }
 
     public function wherePropertyIsNot(string $property, mixed $value): self
     {
-        $this->whereJsonDoesntContain(column: "event_properties->{$property}", value: $value);
+        $this->where("event_properties.$property", '!=', $value);
 
         return $this;
     }
 
-    public function lastEvent(string ...$eventClasses): ?EloquentStoredEvent
+    public function lastEvent(string ...$eventClasses): ?StoredEvent
     {
         return $this
             ->unless(
                 empty($eventClasses),
-                fn (self $query) => $query->whereEvent(...$eventClasses)
+                fn(self $query) => $query->whereEvent(...$eventClasses)
             )
-            ->orderByDesc('created_at')
-            ->orderByDesc('id')
+            ->orderBy('created_at', 'desc')
+            ->orderBy('_id', 'desc')
             ->first();
     }
 }

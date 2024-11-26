@@ -2,10 +2,10 @@
 
 namespace Spatie\EventSourcing\StoredEvents\Models;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
+use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Builder;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 /**
