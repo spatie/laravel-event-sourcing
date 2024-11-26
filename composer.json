@@ -35,7 +35,8 @@
         "symfony/polyfill-php82": "*",
         "symfony/property-access": "^6.0|^7.0",
         "symfony/property-info": "^6.0|^7.0",
-        "symfony/serializer": "^6.0|^7.0"
+        "symfony/serializer": "^6.0|^7.0",
+        "mongodb/laravel-mongodb": "^4.7"
     },
     "require-dev": {
         "laravel/horizon": "^5.7",
