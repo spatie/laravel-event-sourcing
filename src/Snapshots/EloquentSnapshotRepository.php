@@ -22,7 +22,7 @@ class EloquentSnapshotRepository implements SnapshotRepository
         /** @var \Illuminate\Database\Query\Builder $query */
         $query = $this->snapshotModel::query();
 
-        if ($snapshot = $query->orderByDesc('id')->uuid($aggregateUuid)->first()) {
+        if ($snapshot = $query->orderByDesc('_id')->uuid($aggregateUuid)->first()) {
             return $snapshot->toSnapshot();
         }
 

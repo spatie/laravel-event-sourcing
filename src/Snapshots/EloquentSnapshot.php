@@ -2,8 +2,8 @@
 
 namespace Spatie\EventSourcing\Snapshots;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Builder;
 
 class EloquentSnapshot extends Model
 {
