@@ -3,20 +3,20 @@
 namespace Spatie\EventSourcing\StoredEvents\Repositories;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\LazyCollection;
 use ReflectionClass;
 use ReflectionException;
-use Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel;
-use Spatie\EventSourcing\Attributes\EventSerializer as EventSerializerAttribute;
+use Illuminate\Support\LazyCollection;
 use Spatie\EventSourcing\Enums\MetaData;
-use Spatie\EventSourcing\EventSerializers\EventSerializer;
-use Spatie\EventSourcing\StoredEvents\Exceptions\EventClassMapMissing;
-use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
-use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
-use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder;
-use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
+use Spatie\EventSourcing\EventSerializers\EventSerializer;
+use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
+use Spatie\EventSourcing\StoredEvents\Exceptions\EventClassMapMissing;
+use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventQueryBuilder;
+use Spatie\EventSourcing\Attributes\EventSerializer as EventSerializerAttribute;
+use Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel;
 
 class EloquentStoredEventRepository implements StoredEventRepository
 {
@@ -107,7 +107,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             'meta_data' => json_encode($event->metaData() + [
                 MetaData::CREATED_AT => $createdAt->toDateTimeString(),
             ]),
-            'created_at' => $createdAt,
+            'created_at' => $this->formatDateToMongoDB($createdAt->toDateTimeString())
         ]);
 
         $eloquentStoredEvent->save();
@@ -180,5 +180,13 @@ class EloquentStoredEventRepository implements StoredEventRepository
     private function getQuery(): EloquentStoredEventQueryBuilder
     {
         return $this->storedEventModel::query();
+    }
+
+    private function formatDateToMongoDB($dateStringToConvert)
+    {
+        $datetime = new Carbon($dateStringToConvert);
+        $miliseconds = $datetime->valueOf();
+
+        return new \MongoDB\BSON\UTCDateTime($miliseconds);
     }
 }
