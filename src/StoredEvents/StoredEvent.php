@@ -14,7 +14,7 @@ use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 
 class StoredEvent implements Arrayable
 {
-    public ?int $id;
+    public ?string $id;
 
     /** @var array|string */
     public $event_properties;
@@ -36,7 +36,7 @@ class StoredEvent implements Arrayable
 
     public function __construct(array $data, ?ShouldBeStored $originalEvent = null)
     {
-        $this->id = $data['id'] ?? null;
+        $this->id = $data['_id'] ?? null;
         $this->event_properties = $data['event_properties'];
         $this->aggregate_uuid = $data['aggregate_uuid'];
         $this->aggregate_version = $data['aggregate_version'];
