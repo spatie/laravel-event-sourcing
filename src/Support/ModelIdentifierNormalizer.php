@@ -19,7 +19,7 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
     /**
      * @inheritdoc
      */
-    public function normalize(mixed $object, string $format = null, array $context = []): array
+    public function normalize(mixed $object, ?string $format = null, array $context = []): array
     {
         if (! $this->supportsNormalization($object)) {
             throw new InvalidArgumentException('Cannot serialize an object that is not a QueueableEntity or QueueableCollection in ModelIdentifierNormalizer.');
@@ -31,7 +31,7 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
     /**
      * @inheritdoc
      */
-    public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         return ($data instanceof QueueableEntity || $data instanceof QueueableCollection);
     }
@@ -39,7 +39,7 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
     /**
      * @inheritdoc
      */
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = []): Collection|Model
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): Collection|Model
     {
         $identifier = $data instanceof ModelIdentifier
             ? $data
@@ -51,7 +51,7 @@ class ModelIdentifierNormalizer implements NormalizerInterface, DenormalizerInte
     /**
      * @inheritdoc
      */
-    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
         return $this->normalizedDataIsModelIdentifier($data)
             && $this->isNormalizedToModelIdentifier($type);

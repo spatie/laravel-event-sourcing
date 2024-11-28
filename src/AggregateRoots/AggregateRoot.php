@@ -311,7 +311,7 @@ abstract class AggregateRoot
         return $this->entities;
     }
 
-    public static function fake(string $uuid = null): FakeAggregateRoot
+    public static function fake(?string $uuid = null): FakeAggregateRoot
     {
         $uuid ??= (string) Str::uuid();
 
