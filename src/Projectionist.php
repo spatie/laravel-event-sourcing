@@ -319,7 +319,7 @@ class Projectionist
     public function replay(
         Collection $projectors,
         int $startingFromEventId = 0,
-        callable $onEventReplayed = null,
+        ?callable $onEventReplayed = null,
         ?string $aggregateUuid = null
     ): void {
         $projectors = (new EventHandlerCollection($projectors))
