@@ -38,7 +38,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $eloquentStoredEvent->toStoredEvent();
     }
 
-    public function retrieveAll(string $uuid = null): LazyCollection
+    public function retrieveAll(?string $uuid = null): LazyCollection
     {
         $query = $this->getQuery();
 
@@ -49,7 +49,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
-    public function retrieveAllStartingFrom(int $startingFrom, string $uuid = null): LazyCollection
+    public function retrieveAllStartingFrom(int $startingFrom, ?string $uuid = null): LazyCollection
     {
         $query = $this->prepareEventModelQuery($startingFrom, $uuid);
 
@@ -61,7 +61,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $lazyCollection->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
-    public function countAllStartingFrom(int $startingFrom, string $uuid = null): int
+    public function countAllStartingFrom(int $startingFrom, ?string $uuid = null): int
     {
         return $this->prepareEventModelQuery($startingFrom, $uuid)->count('id');
     }
@@ -78,7 +78,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             ->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
-    public function persist(ShouldBeStored $event, string $uuid = null): StoredEvent
+    public function persist(ShouldBeStored $event, ?string $uuid = null): StoredEvent
     {
         /** @var EloquentStoredEvent $eloquentStoredEvent */
         $eloquentStoredEvent = new $this->storedEventModel();
@@ -121,7 +121,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $eloquentStoredEvent->toStoredEvent();
     }
 
-    public function persistMany(array $events, string $uuid = null): LazyCollection
+    public function persistMany(array $events, ?string $uuid = null): LazyCollection
     {
         $storedEvents = [];
 
@@ -166,7 +166,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
                 ->max('aggregate_version') ?? 0;
     }
 
-    private function prepareEventModelQuery(int $startingFrom, string $uuid = null): Builder
+    private function prepareEventModelQuery(int $startingFrom, ?string $uuid = null): Builder
     {
         $query = $this->getQuery()->startingFrom($startingFrom);
 

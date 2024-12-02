@@ -70,7 +70,7 @@ class Projectionist
         return $this->projectors->merge($this->reactors);
     }
 
-    public function withoutEventHandlers(array $eventHandlers = null): Projectionist
+    public function withoutEventHandlers(?array $eventHandlers = null): Projectionist
     {
         if (is_null($eventHandlers)) {
             $this->projectors = new EventHandlerCollection();
