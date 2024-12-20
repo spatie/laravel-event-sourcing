@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.10.2 - 2024-12-20
+
+### What's Changed
+
+* Fix Remaining Nullable Parameter Definitions by @okaufmann in https://github.com/spatie/laravel-event-sourcing/pull/495
+
+### New Contributors
+
+* @okaufmann made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/495
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.10.1...7.10.2
+
 ## 7.10.1 - 2024-12-09
 
 ### What's Changed
@@ -447,6 +459,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -459,6 +472,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -778,6 +792,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -801,6 +816,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
