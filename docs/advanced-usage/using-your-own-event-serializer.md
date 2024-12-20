@@ -34,7 +34,7 @@ the currency.
 ```
 class UpgradeSerializer extends JsonEventSerializer
 {
-    public function deserialize(string $eventClass, string $json, string $metadata = null): ShouldBeStored
+    public function deserialize(string $eventClass, string $json, ?string $metadata = null): ShouldBeStored
     {
         $event = parent::deserialize($eventClass, $json, $metadata);
 
