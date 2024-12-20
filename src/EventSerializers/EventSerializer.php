@@ -12,6 +12,6 @@ interface EventSerializer
         string $eventClass,
         string $json,
         int $version,
-        string $metadata = null
+        ?string $metadata = null
     ): ShouldBeStored;
 }
