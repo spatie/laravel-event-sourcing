@@ -5,6 +5,11 @@ namespace Spatie\EventSourcing\StoredEvents\Models;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 
+/**
+ * @template TEloquentStoredEvent of EloquentStoredEvent
+ *
+ * @extends EloquentCollection<array-key, TEloquentStoredEvent>
+ */
 class EloquentStoredEventCollection extends EloquentCollection
 {
     /**

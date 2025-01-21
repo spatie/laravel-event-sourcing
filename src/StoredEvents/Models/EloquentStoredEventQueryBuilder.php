@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 /**
- * @method \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventCollection get
+ * @template TEloquentStoredEvent of EloquentStoredEvent
+ *
+ * @method \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventCollection<EloquentStoredEvent> get()
+ *
+ * @extends Builder<TEloquentStoredEvent>
  */
 class EloquentStoredEventQueryBuilder extends Builder
 {
