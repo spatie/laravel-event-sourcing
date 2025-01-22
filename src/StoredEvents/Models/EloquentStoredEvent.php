@@ -69,11 +69,17 @@ class EloquentStoredEvent extends Model
         return SchemalessAttributes::createForModel($this, 'meta_data');
     }
 
+    /**
+     * @return EloquentStoredEventQueryBuilder<$this>
+     */
     public function newEloquentBuilder($query): EloquentStoredEventQueryBuilder
     {
         return new EloquentStoredEventQueryBuilder($query);
     }
 
+    /**
+     * @return EloquentStoredEventCollection<$this>
+     */
     public function newCollection(array $models = []): EloquentStoredEventCollection
     {
         return new EloquentStoredEventCollection($models);
