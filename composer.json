@@ -27,25 +27,25 @@
         "illuminate/database": "^9.0|^10.0|^11.0|^12.0",
         "illuminate/events": "^9.0|^10.0|^11.0|^12.0",
         "illuminate/support": "^9.0|^10.0|^11.0|^12.0",
-        "phpdocumentor/reflection-docblock": "^5.2",
+        "phpdocumentor/reflection-docblock": "^5.6.1",
         "spatie/better-types": "^1.0",
-        "spatie/laravel-package-tools": "^1.9",
-        "spatie/laravel-schemaless-attributes": "^2.0",
-        "symfony/finder": "^6.0|^7.0",
-        "symfony/polyfill-php82": "*",
-        "symfony/property-access": "^6.0|^7.0",
-        "symfony/property-info": "^6.0|^7.0",
-        "symfony/serializer": "^6.0|^7.0"
+        "spatie/laravel-package-tools": "^1.19",
+        "spatie/laravel-schemaless-attributes": "^2.5.1",
+        "symfony/finder": "^6.0|^7.2.2",
+        "symfony/polyfill-php82": ">=1.31",
+        "symfony/property-access": "^6.0|^7.2.3",
+        "symfony/property-info": "^6.0|^7.2.3",
+        "symfony/serializer": "^6.0|^7.2.3"
     },
     "require-dev": {
-        "laravel/horizon": "^5.7",
-        "mockery/mockery": "^1.4",
-        "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0",
-        "pestphp/pest": "^1.22|^2.34|^3.7",
+        "laravel/horizon": "^5.30.3",
+        "mockery/mockery": "^1.6.12",
+        "orchestra/testbench": "^7.0|^8.0|^9.11|^10.0",
+        "pestphp/pest": "^1.22|^2.34|^3.7.4",
         "phpunit/phpunit": "^9.5.10|^10.5|^11.5.3",
-        "spatie/fork": "^1.0",
-        "spatie/pest-plugin-snapshots": "^1.1|^2.1",
-        "spatie/phpunit-snapshot-assertions": "^4.0|^5.1"
+        "spatie/fork": "^1.2.4",
+        "spatie/pest-plugin-snapshots": "^1.1|^2.2",
+        "spatie/phpunit-snapshot-assertions": "^4.0|^5.1.8"
     },
     "autoload": {
         "psr-4": {
