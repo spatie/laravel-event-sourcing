@@ -300,7 +300,7 @@ class TransactionCount extends Projection
 }
 ```
 
-Here's the projector that is going to listen to the `MoneyAdded` and `MoneySubtracted` events. Typehinting `MoneyAdded` and `MoneySubtracted`  will make our package call `onMoneyAdded` and ``MoneySubtracted`` when these events occur.
+Here's the projector that is going to listen to the `MoneyAdded` and `MoneySubtracted` events. Typehinting `MoneyAdded` and `MoneySubtracted`  will make our package call `onMoneyAdded` and ``onMoneySubtracted`` when these events occur.
 
 
 ```php
@@ -327,7 +327,7 @@ class TransactionCountProjector extends Projector
     {
         $transactionCounter = TransactionCount::firstOrCreate(['account_uuid' => $event->accountUuid]);
 
-        $transactionCounter->count += 1;
+        $transactionCounter->count -= 1;
 
         $transactionCounter->writeable()->save();
     }
