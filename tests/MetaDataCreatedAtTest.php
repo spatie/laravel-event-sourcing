@@ -2,7 +2,6 @@
 
 namespace Spatie\EventSourcing\Tests;
 
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
