@@ -98,13 +98,18 @@ class EloquentStoredEventRepository implements StoredEventRepository
             $serializerClass = $serializerAttribute->newInstance()->serializerClass;
         }
 
+        $metaData = $event->metaData();
+        if ($metaDataCreatedAt = data_get($metaData, MetaData::CREATED_AT)) {
+            $metaData[MetaData::CREATED_AT] = $metaDataCreatedAt->toDateTimeString();
+        }
+
         $eloquentStoredEvent->setRawAttributes([
             'event_properties' => app($serializerClass)->serialize(clone $event),
             'aggregate_uuid' => $uuid,
             'aggregate_version' => $event->aggregateRootVersion(),
             'event_version' => $event->eventVersion(),
             'event_class' => $this->getEventClass(get_class($event)),
-            'meta_data' => json_encode($event->metaData() + [
+            'meta_data' => json_encode($metaData + [
                 MetaData::CREATED_AT => $createdAt->toDateTimeString(),
             ]),
             'created_at' => $createdAt,
