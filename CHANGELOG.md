@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.11.1 - 2025-03-21
+
+### What's Changed
+
+* Fix the incorrect time conversion in json_encode by @youyingxiang in https://github.com/spatie/laravel-event-sourcing/pull/499
+
+### New Contributors
+
+* @youyingxiang made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/499
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.11.0...7.11.1
+
 ## 7.11.0 - 2025-02-20
 
 ### What's Changed
@@ -478,6 +490,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -490,6 +503,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -815,6 +829,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -838,6 +853,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
