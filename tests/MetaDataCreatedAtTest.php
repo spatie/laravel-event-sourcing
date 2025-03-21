@@ -3,11 +3,13 @@
 namespace Spatie\EventSourcing\Tests;
 
 use Carbon\CarbonImmutable;
+
+use function PHPUnit\Framework\assertEquals;
+
 use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
 use Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAdded;
-use function PHPUnit\Framework\assertEquals;
 
 it('correctly handles created_at in meta data', function () {
     $now = CarbonImmutable::now()->setTimezone('Asia/Singapore');
