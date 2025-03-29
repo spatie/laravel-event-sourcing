@@ -11,6 +11,18 @@ return [
     ],
 
     /*
+     * These directories will be ignored when scanning for projectors and reactors.
+     */
+    'auto_discover_projectors_and_reactors_should_ignore_directories' => [
+        app()->path('Providers'),
+        app()->path('Console'),
+        app()->path('Events'),
+        app()->path('Listeners'),
+        app()->path('Jobs'),
+        app()->path('Notifications'),
+    ],
+
+    /*
      * This directory will be used as the base path when scanning
      * for projectors and reactors.
      */

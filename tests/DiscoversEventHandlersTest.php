@@ -65,3 +65,46 @@ it('can get all classes that have event handlers', function () {
         TestReactor::class,
     ], $registeredReactors);
 });
+
+it('can ignore directories when discovering event handlers', function () {
+    /** @var \Spatie\EventSourcing\Projectionist $projectionist */
+    $projectionist = app(Projectionist::class);
+
+    $pathToComposerJson = __DIR__.'/../composer.json';
+    $subdirectoryPath = __DIR__.'/TestClasses/AutoDiscoverEventHandlers/Subdirectory';
+
+    (new DiscoverEventHandlers())
+        ->within([__DIR__.'/TestClasses/AutoDiscoverEventHandlers'])
+        ->useBasePath(getDiscoveryBasePath())
+        ->useRootNamespace('Spatie\EventSourcing\\')
+        ->ignoringFiles(Composer::getAutoloadedFiles($pathToComposerJson))
+        ->ignoringDirectories([$subdirectoryPath])
+        ->addToProjectionist($projectionist);
+
+    $registeredProjectors = $projectionist
+        ->getProjectors()
+        ->toBase()
+        ->map(function (EventHandler $eventHandler) {
+            return get_class($eventHandler);
+        })
+        ->values()
+        ->toArray();
+
+    assertEqualsCanonicalizing([
+        TestQueuedProjector::class,
+        TestProjector::class,
+    ], $registeredProjectors);
+
+    $registeredReactors = $projectionist
+        ->getReactors()
+        ->toBase()
+        ->map(function (EventHandler $eventHandler) {
+            return get_class($eventHandler);
+        })
+        ->values()
+        ->toArray();
+
+    assertEqualsCanonicalizing([
+        TestReactor::class,
+    ], $registeredReactors);
+});

@@ -20,6 +20,8 @@ class DiscoverEventHandlers
 
     protected array $ignoredFiles = [];
 
+    protected array $ignoredDirectories = [];
+
     public function __construct()
     {
         $this->basePath = app()->path();
@@ -53,6 +55,13 @@ class DiscoverEventHandlers
         return $this;
     }
 
+    public function ignoringDirectories(array $ignoredDirectories): self
+    {
+        $this->ignoredDirectories = $ignoredDirectories;
+
+        return $this;
+    }
+
     public function addToProjectionist(Projectionist $projectionist)
     {
         if (empty($this->directories)) {
@@ -62,10 +71,10 @@ class DiscoverEventHandlers
         $files = (new Finder())->files()->in($this->directories);
 
         return collect($files)
-            ->reject(fn (SplFileInfo $file) => in_array($file->getPathname(), $this->ignoredFiles))
-            ->map(fn (SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
-            ->filter(fn (string $eventHandlerClass) => is_subclass_of($eventHandlerClass, EventHandler::class))
-            ->filter(fn (string $eventHandlerClass) => (new ReflectionClass($eventHandlerClass))->isInstantiable())
+            ->reject(fn(SplFileInfo $file) => in_array($file->getPathname(), $this->ignoredFiles) || Str::startsWith($file->getPathname(), $this->ignoredDirectories))
+            ->map(fn(SplFileInfo $file) => $this->fullQualifiedClassNameFromFile($file))
+            ->filter(fn(string $eventHandlerClass) => is_subclass_of($eventHandlerClass, EventHandler::class))
+            ->filter(fn(string $eventHandlerClass) => (new ReflectionClass($eventHandlerClass))->isInstantiable())
             ->pipe(function (Collection $eventHandlers) use ($projectionist) {
                 $projectionist->addEventHandlers($eventHandlers->toArray());
             });
@@ -81,6 +90,6 @@ class DiscoverEventHandlers
             ucfirst(Str::replaceLast('.php', '', $class))
         );
 
-        return $this->rootNamespace.$class;
+        return $this->rootNamespace . $class;
     }
 }

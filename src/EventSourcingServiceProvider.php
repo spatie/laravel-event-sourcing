@@ -75,7 +75,7 @@ class EventSourcingServiceProvider extends PackageServiceProvider
 
         $this->app->singleton(StoredEventRepository::class, config('event-sourcing.stored_event_repository'));
 
-        $this->app->singleton(EventSubscriber::class, fn () => new EventSubscriber(config('event-sourcing.stored_event_repository')));
+        $this->app->singleton(EventSubscriber::class, fn() => new EventSubscriber(config('event-sourcing.stored_event_repository')));
 
         $this->app
             ->when(ReplayCommand::class)
@@ -101,12 +101,13 @@ class EventSourcingServiceProvider extends PackageServiceProvider
             ->within(config('event-sourcing.auto_discover_projectors_and_reactors'))
             ->useBasePath(config('event-sourcing.auto_discover_base_path', base_path()))
             ->ignoringFiles(Composer::getAutoloadedFiles(base_path('composer.json')))
+            ->ignoringDirectories(config('event-sourcing.auto_discover_projectors_and_reactors_should_ignore_directories'))
             ->addToProjectionist($projectionist);
     }
 
     protected function getCachedEventHandlers(): ?array
     {
-        $cachedEventHandlersPath = config('event-sourcing.cache_path').'/event-handlers.php';
+        $cachedEventHandlersPath = config('event-sourcing.cache_path') . '/event-handlers.php';
 
         if (! file_exists($cachedEventHandlersPath)) {
             return null;
