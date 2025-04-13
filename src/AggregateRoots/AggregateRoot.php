@@ -143,7 +143,7 @@ abstract class AggregateRoot
                     $this->uuid(),
                 );
         } catch (QueryException $exception) {
-            if (! str_contains($exception->getMessage(), 'Duplicate')) {
+            if (! str_contains(strtolower($exception->getMessage()), 'duplicate')) {
                 throw $exception;
             }
 
