@@ -4,6 +4,7 @@ namespace Spatie\EventSourcing\AggregateRoots;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Database\QueryException;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
@@ -143,7 +144,7 @@ abstract class AggregateRoot
                     $this->uuid(),
                 );
         } catch (QueryException $exception) {
-            if (! str_contains(strtolower($exception->getMessage()), 'duplicate')) {
+            if (! ($exception instanceof UniqueConstraintViolationException || str_contains($exception->getMessage(), 'Duplicate'))) {
                 throw $exception;
             }
 
