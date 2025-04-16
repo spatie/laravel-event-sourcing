@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.11.2 - 2025-04-16
+
+### What's Changed
+
+* docs: fix method name inconsistencies and usage corrections by @vildanbina in https://github.com/spatie/laravel-event-sourcing/pull/498
+* Case insensitive CouldNotPersistAggregate::invalidVersion detection by @nick-potts in https://github.com/spatie/laravel-event-sourcing/pull/501
+
+### New Contributors
+
+* @vildanbina made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/498
+* @nick-potts made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/501
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.11.1...7.11.2
+
 ## 7.11.1 - 2025-03-21
 
 ### What's Changed
@@ -491,6 +505,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -503,6 +518,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -830,6 +846,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -853,6 +870,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
