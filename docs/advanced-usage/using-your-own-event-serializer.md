@@ -9,7 +9,7 @@ You can specify your own serializer by creating a class that implements `Spatie\
 
 This is the content of the `EventSerializer` interface:
 
-```
+```php
 namespace Spatie\EventSourcing\EventSerializers;
 
 use Spatie\EventSourcing\ShouldBeStored;
@@ -31,17 +31,17 @@ Using our larabank example, let's imagine that we've gone international and our 
 international payments. Our `MoneyAdded` events will need to have an additional field for
 the currency.
 
-```
-use App\Events\PaymentCreated;
+```php
+use App\Events\MoneyAdded;
 
 class UpgradeSerializer extends JsonEventSerializer
 {
     public function deserialize(string $eventClass, string $json, int $version, ?string $metadata = null): ShouldBeStored
     {
-        $event = parent::deserialize($eventClass, $json, $metadata);
+        $event = parent::deserialize($eventClass, $json, $version, $metadata);
 
         // all currency was USD before we started accepting other currencies
-        if ($eventClass === PaymentCreated::class && empty($event->currency)) {
+        if ($eventClass === MoneyAdded::class && empty($event->currency)) {
             $event->currency = 'USD';
         }
 
