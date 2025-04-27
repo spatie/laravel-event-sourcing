@@ -18,7 +18,7 @@ interface EventSerializer
 {
     public function serialize(ShouldBeStored $event): string;
 
-    public function deserialize(string $eventClass, string $json, string $metadata): ShouldBeStored;
+    public function deserialize(string $eventClass, string $json, int $version, ?string $metadata = null): ShouldBeStored;
 }
 ```
 
@@ -32,14 +32,16 @@ international payments. Our `MoneyAdded` events will need to have an additional 
 the currency.
 
 ```
+use App\Events\PaymentCreated;
+
 class UpgradeSerializer extends JsonEventSerializer
 {
-    public function deserialize(string $eventClass, string $json, ?string $metadata = null): ShouldBeStored
+    public function deserialize(string $eventClass, string $json, int $version, ?string $metadata = null): ShouldBeStored
     {
         $event = parent::deserialize($eventClass, $json, $metadata);
 
         // all currency was USD before we started accepting other currencies
-        if (empty($event->currency)) {
+        if ($eventClass === PaymentCreated::class && empty($event->currency)) {
             $event->currency = 'USD';
         }
 
