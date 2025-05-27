@@ -92,7 +92,12 @@ class EventSourcingServiceProvider extends PackageServiceProvider
         $cachedEventHandlers = $this->getCachedEventHandlers();
 
         if (! is_null($cachedEventHandlers)) {
-            $projectionist->addEventHandlers($cachedEventHandlers);
+            // Filter out non-existent classes from cached event handlers
+            $validEventHandlers = array_filter($cachedEventHandlers, function ($eventHandlerClass) {
+                return class_exists($eventHandlerClass);
+            });
+
+            $projectionist->addEventHandlers($validEventHandlers);
 
             return;
         }
