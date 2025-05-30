@@ -65,3 +65,98 @@ it('can get all classes that have event handlers', function () {
         TestReactor::class,
     ], $registeredReactors);
 });
+
+it('filters out non-existent classes from cached event handlers', function () {
+    // Create a mock EventSourcingServiceProvider to test the protected method
+    $serviceProvider = new class(app()) extends \Spatie\EventSourcing\EventSourcingServiceProvider {
+        public function testDiscoverEventHandlers()
+        {
+            return $this->discoverEventHandlers();
+        }
+
+        public function testGetCachedEventHandlers(): ?array
+        {
+            return $this->getCachedEventHandlers();
+        }
+
+        public function mockCachedEventHandlers(array $handlers): void
+        {
+            // Create a temporary cache file with mixed valid and invalid classes
+            $cachePath = config('event-sourcing.cache_path', storage_path('framework/cache'));
+
+            if (!is_dir($cachePath)) {
+                mkdir($cachePath, 0755, true);
+            }
+
+            file_put_contents(
+                $cachePath . '/event-handlers.php',
+                '<?php return ' . var_export($handlers, true) . ';'
+            );
+        }
+
+        public function cleanupCache(): void
+        {
+            $cachePath = config('event-sourcing.cache_path', storage_path('framework/cache'));
+            $cacheFile = $cachePath . '/event-handlers.php';
+
+            if (file_exists($cacheFile)) {
+                unlink($cacheFile);
+            }
+        }
+    };
+
+    // Create a mix of valid and invalid event handler class names
+    $cachedHandlers = [
+        TestProjector::class, // This exists
+        TestReactor::class,   // This exists
+        'App\\NonExistentProjector', // This doesn't exist
+        'App\\AnotherFakeHandler',   // This doesn't exist
+    ];
+
+    // Mock the cached event handlers
+    $serviceProvider->mockCachedEventHandlers($cachedHandlers);
+
+    // Get the initial projectionist state
+    /** @var \Spatie\EventSourcing\Projectionist $projectionist */
+    $projectionist = app(Projectionist::class);
+
+    // Clear any existing handlers
+    $projectionist->withoutEventHandlers();
+
+    // Test that the discovery method filters out non-existent classes
+    $serviceProvider->testDiscoverEventHandlers();
+
+    // Get the registered handlers
+    $registeredProjectors = $projectionist
+        ->getProjectors()
+        ->toBase()
+        ->map(function (\Spatie\EventSourcing\EventHandlers\EventHandler $eventHandler) {
+            return get_class($eventHandler);
+        })
+        ->values()
+        ->toArray();
+
+    $registeredReactors = $projectionist
+        ->getReactors()
+        ->toBase()
+        ->map(function (\Spatie\EventSourcing\EventHandlers\EventHandler $eventHandler) {
+            return get_class($eventHandler);
+        })
+        ->values()
+        ->toArray();
+
+    // Verify that only existing classes are registered
+    expect($registeredProjectors)->toContain(TestProjector::class);
+    expect($registeredReactors)->toContain(TestReactor::class);
+
+    // Verify that non-existent classes are NOT registered
+    expect($registeredProjectors)->not->toContain('App\\NonExistentProjector');
+    expect($registeredReactors)->not->toContain('App\\AnotherFakeHandler');
+
+    // Verify the total count matches only valid handlers
+    expect($registeredProjectors)->toHaveCount(1);
+    expect($registeredReactors)->toHaveCount(1);
+
+    // Clean up
+    $serviceProvider->cleanupCache();
+});
