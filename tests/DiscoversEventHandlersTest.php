@@ -68,7 +68,7 @@ it('can get all classes that have event handlers', function () {
 
 it('filters out non-existent classes from cached event handlers', function () {
     // Create a mock EventSourcingServiceProvider to test the protected method
-    $serviceProvider = new class(app()) extends \Spatie\EventSourcing\EventSourcingServiceProvider {
+    $serviceProvider = new class (app()) extends \Spatie\EventSourcing\EventSourcingServiceProvider {
         public function testDiscoverEventHandlers()
         {
             return $this->discoverEventHandlers();
@@ -84,7 +84,7 @@ it('filters out non-existent classes from cached event handlers', function () {
             // Create a temporary cache file with mixed valid and invalid classes
             $cachePath = config('event-sourcing.cache_path', storage_path('framework/cache'));
 
-            if (!is_dir($cachePath)) {
+            if (! is_dir($cachePath)) {
                 mkdir($cachePath, 0755, true);
             }
 
