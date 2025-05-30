@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.11.3 - 2025-05-30
+
+### What's Changed
+
+* [Docs] Add Missing Version Property in Event Serializers by @devhammed in https://github.com/spatie/laravel-event-sourcing/pull/503
+* Filter out non-existent classes from cached event handlers by @youyingxiang in https://github.com/spatie/laravel-event-sourcing/pull/504
+
+### New Contributors
+
+* @devhammed made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/503
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.11.2...7.11.3
+
 ## 7.11.2 - 2025-04-16
 
 ### What's Changed
@@ -506,6 +519,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -518,6 +532,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -847,6 +862,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -870,6 +886,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
