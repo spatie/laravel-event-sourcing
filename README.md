@@ -2,7 +2,7 @@
     <a href="https://spatie.be/open-source?utm_source=github&utm_medium=banner&utm_campaign=laravel-event-sourcing">
       <picture>
         <source media="(prefers-color-scheme: dark)" srcset="https://spatie.be/packages/header/laravel-event-sourcing/html/dark.webp">
-        <img alt="Logo for laravel-event-sourcing" src="https://spatie.be/packages/header/laravel-event-sourcing/html/light.webp" height="190">
+        <img alt="Logo for laravel-event-sourcing" src="https://spatie.be/packages/header/laravel-event-sourcing/html/light.webp">
       </picture>
     </a>
 
