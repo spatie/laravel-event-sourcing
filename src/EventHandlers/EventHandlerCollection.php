@@ -51,25 +51,25 @@ class EventHandlerCollection extends Collection
             ->toArray();
     }
 
-    public function syncEventHandlers(): self
+    public function syncEventHandlers(StoredEvent $event): self
     {
         return $this
             ->reject(
                 fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
             )
             ->sortBy(
-                fn (EventHandler $eventHandler) => $eventHandler->weight ?? 0
+                fn (EventHandler $eventHandler) => $eventHandler->getWeight($event)
             );
     }
 
-    public function asyncEventHandlers(): self
+    public function asyncEventHandlers(StoredEvent $event): self
     {
         return $this
             ->filter(
                 fn (EventHandler $eventHandler) => $eventHandler instanceof ShouldQueue
             )
             ->sortBy(
-                fn (EventHandler $eventHandler) => $eventHandler->weight ?? 0
+                fn (EventHandler $eventHandler) => $eventHandler->getWeight($event)
             );
     }
 }
