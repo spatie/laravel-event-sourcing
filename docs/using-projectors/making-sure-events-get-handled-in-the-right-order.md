@@ -17,16 +17,20 @@ In a local environment, where events have a very low chance of getting fired con
 
 ## Tweaking projector order
 
-You can add a weight property to a projector to tweak the order projectors are run in. Projectors with a lower weight run first. When no explicit weight is provided, the weight is considered `0`.
+You can add a getWeight method to a projector to tweak the order projectors are run in. Projectors with a lower weight run first. When no explicit weight is provided, the weight is considered `0`.
 
 ```php
 namespace App\Projectors;
 
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 class MyProjector extends Projector
 {
-    public int $weight = 5;
+    public function getWeight(?StoredEvent $event): int 
+    {
+        return 5;
+    }
     
     //
 }
