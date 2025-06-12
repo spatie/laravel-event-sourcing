@@ -116,7 +116,7 @@ class Projectionist
     {
         return $this->projectors
             ->forEvent($storedEvent)
-            ->asyncEventHandlers();
+            ->asyncEventHandlers($storedEvent);
     }
 
     public function addReactor($reactor): Projectionist
@@ -221,7 +221,7 @@ class Projectionist
     {
         $projectors = $this->projectors
             ->forEvent($storedEvent)
-            ->asyncEventHandlers();
+            ->asyncEventHandlers($storedEvent);
 
         $this->applyStoredEventToProjectors(
             $storedEvent,
@@ -230,7 +230,7 @@ class Projectionist
 
         $reactors = $this->reactors
             ->forEvent($storedEvent)
-            ->asyncEventHandlers();
+            ->asyncEventHandlers($storedEvent);
 
         $this->applyStoredEventToReactors(
             $storedEvent,
@@ -242,13 +242,13 @@ class Projectionist
     {
         $projectors = $this->projectors
             ->forEvent($storedEvent)
-            ->syncEventHandlers();
+            ->syncEventHandlers($storedEvent);
 
         $this->applyStoredEventToProjectors($storedEvent, $projectors);
 
         $reactors = $this->reactors
             ->forEvent($storedEvent)
-            ->syncEventHandlers();
+            ->syncEventHandlers($storedEvent);
 
         $this->applyStoredEventToReactors($storedEvent, $reactors);
     }
@@ -262,18 +262,18 @@ class Projectionist
     {
         $this->isProjecting = true;
 
-        foreach ($projectors as $projector) {
-            $this->callEventHandler($projector, $storedEvent);
-        }
+        $projectors
+            ->sortBy(fn (EventHandler $eventHandler) => $eventHandler->getWeight($storedEvent))
+            ->each(fn (EventHandler $projector) => $this->callEventHandler($projector, $storedEvent));
 
         $this->isProjecting = false;
     }
 
     private function applyStoredEventToReactors(StoredEvent $storedEvent, Collection $reactors): void
     {
-        foreach ($reactors as $reactor) {
-            $this->callEventHandler($reactor, $storedEvent);
-        }
+        $reactors
+            ->sortBy(fn (EventHandler $eventHandler) => $eventHandler->getWeight($storedEvent))
+            ->each(fn (EventHandler $reactor) => $this->callEventHandler($reactor, $storedEvent));
     }
 
     private function callEventHandler(EventHandler $eventHandler, StoredEvent $storedEvent): bool
@@ -323,7 +323,7 @@ class Projectionist
         ?string $aggregateUuid = null
     ): void {
         $projectors = (new EventHandlerCollection($projectors))
-            ->sortBy(fn (EventHandler $eventHandler) => $eventHandler->weight ?? 0);
+            ->sortBy(fn (EventHandler $eventHandler) => $eventHandler->getWeight(null));
 
         $this->isReplaying = true;
 

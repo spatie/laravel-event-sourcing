@@ -56,4 +56,9 @@ trait HandlesEvents
             })
             ->map(fn (Collection $group) => $group->map(fn (Method $method) => $method->getName())->all());
     }
+
+    public function getWeight(?StoredEvent $event): int
+    {
+        return $this->weight ?? 0;
+    }
 }

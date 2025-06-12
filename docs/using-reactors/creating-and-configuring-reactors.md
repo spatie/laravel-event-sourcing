@@ -185,14 +185,20 @@ class SendMoneyAddedMail
 
 ## Tweaking reactor order
 
-You can add a weight property to a reactor to tweak the order reactors are run in. Reactors with a lower weight run first. When no explicit weight is provided, the weight is considered `0`.
+You can add a getWeight method to a reactor to tweak the order reactors are run in. Reactors with a lower weight run first. When no explicit weight is provided, the weight is considered `0`.
 
 ```php
 namespace App\Reactors;
 
-class MyReactor
+use Spatie\EventSourcing\EventHandlers\Reactors\Reactor;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
+
+class MyReactor extends Reactor
 {
-    public int $weight = 5;
+    public function getWeight(?StoredEvent $event): int 
+    {
+        return 5;
+    }
 }
 ```
 

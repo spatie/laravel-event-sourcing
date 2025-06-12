@@ -104,7 +104,7 @@ class StoredEvent implements Arrayable
         /** @var \Spatie\EventSourcing\EventHandlers\EventHandlerCollection $eventHandlers */
         $eventHandlers = Projectionist::allEventHandlers();
 
-        return $eventHandlers->forEvent($this)->asyncEventHandlers()->isNotEmpty();
+        return $eventHandlers->forEvent($this)->asyncEventHandlers($this)->isNotEmpty();
     }
 
     protected function instantiateEvent(?ShouldBeStored $originalEvent): void
