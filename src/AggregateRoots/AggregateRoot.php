@@ -222,7 +222,7 @@ abstract class AggregateRoot
     {
         foreach ($state as $key => $value) {
             if (class_exists($key)) {
-                $this->$key = $this->restorePartialState($key, $value);
+                $this->restorePartialState($key, $value);
             } else {
                 $this->$key = $value;
             }
