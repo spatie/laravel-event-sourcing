@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Queue;
 
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithDynamicWeight;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
@@ -66,30 +67,42 @@ it('will call the method on the projector when the projector throws an exception
     assertEquals(1, ProjectorThatThrowsAnException::$exceptionsHandled);
 });
 
-it('will call projectors ordered by weight', function () {
+it('will call projectors ordered by weight', function (string $eventClass, array $sortedProjectors) {
     app()->singleton(ProjectorWithWeightTestHelper::class);
 
+    Projectionist::addProjector(ProjectorWithDynamicWeight::class);
     Projectionist::addProjector(ProjectorWithHighWeight::class);
     Projectionist::addProjector(ProjectorWithoutWeight::class);
     Projectionist::addProjector(ProjectorWithNegativeWeight::class);
     Projectionist::addProjector(ProjectorWithLowWeight::class);
 
-    event(new MoneyAddedEvent($this->account, 1000));
+    event(new $eventClass($this->account, 1000));
 
-    assertSame([
+    assertSame($sortedProjectors, app(ProjectorWithWeightTestHelper::class)->calledBy);
+})->with([
+    [MoneyAddedEvent::class, [
         ProjectorWithNegativeWeight::class,
         ProjectorWithoutWeight::class,
         ProjectorWithLowWeight::class,
+        ProjectorWithDynamicWeight::class,
         ProjectorWithHighWeight::class,
-    ], app(ProjectorWithWeightTestHelper::class)->calledBy);
-});
+    ]],
+    [MoneySubtractedEvent::class, [
+        ProjectorWithNegativeWeight::class,
+        ProjectorWithDynamicWeight::class,
+        ProjectorWithoutWeight::class,
+        ProjectorWithLowWeight::class,
+        ProjectorWithHighWeight::class,
+    ]],
+]);
 
-it('will replay projectors ordered by weight', function () {
+it('will replay projectors ordered by weight', function (string $eventClass, array $sortedProjectors) {
     app()->singleton(ProjectorWithWeightTestHelper::class);
 
-    event(new MoneyAddedEvent($this->account, 1000));
+    event(new $eventClass($this->account, 1000));
 
     Projectionist::addProjectors([
+        ProjectorWithDynamicWeight::class,
         ProjectorWithHighWeight::class,
         ProjectorWithoutWeight::class,
         ProjectorWithNegativeWeight::class,
@@ -98,13 +111,23 @@ it('will replay projectors ordered by weight', function () {
 
     Projectionist::replay(Projectionist::getProjectors());
 
-    assertSame([
+    assertSame($sortedProjectors, app(ProjectorWithWeightTestHelper::class)->calledBy);
+})->with([
+    [MoneyAddedEvent::class, [
         ProjectorWithNegativeWeight::class,
         ProjectorWithoutWeight::class,
         ProjectorWithLowWeight::class,
+        ProjectorWithDynamicWeight::class,
         ProjectorWithHighWeight::class,
-    ], app(ProjectorWithWeightTestHelper::class)->calledBy);
-});
+    ]],
+    [MoneySubtractedEvent::class, [
+        ProjectorWithNegativeWeight::class,
+        ProjectorWithDynamicWeight::class,
+        ProjectorWithoutWeight::class,
+        ProjectorWithLowWeight::class,
+        ProjectorWithHighWeight::class,
+    ]],
+]);
 
 it('can catch exceptions and still continue calling other projectors', function () {
     $this->setConfig('event-sourcing.catch_exceptions', true);

@@ -15,4 +15,6 @@ interface EventHandler
     public function handleException(Exception $exception): void;
 
     public function getEventHandlingMethods(): Collection;
+
+    public function getWeight(?StoredEvent $event): int;
 }
