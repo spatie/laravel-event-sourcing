@@ -202,6 +202,29 @@ class MyReactor extends Reactor
 }
 ```
 
+Alternatively, you can determine the weight dynamically based on the event being processed. This allows you to prioritize certain events over others.
+
+```php
+namespace App\Reactors;
+
+use App\Events\MoneyAddedEvent;
+use App\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\EventHandlers\Reactors\Reactor;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
+
+class MyReactor extends Reactor
+{
+    public function getWeight(?StoredEvent $event): int
+    {
+        return match ($event?->event_class) {
+            MoneyAddedEvent::class => 2,
+            MoneySubtractedEvent::class => -2,
+            default => 0,
+        };
+    }
+}
+```
+
 Note that providing a weight on a queued reactor won't guarantee execution order.
 
 ## Want to know more?

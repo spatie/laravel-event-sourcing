@@ -36,6 +36,31 @@ class MyProjector extends Projector
 }
 ```
 
+Alternatively, you can determine the weight dynamically based on the event being processed. This allows you to prioritize certain events over others. The `$event` parameter will be `null` when the `resetState()` method is called (during projector reset operations).
+
+```php
+namespace App\Projectors;
+
+use App\Events\MoneyAddedEvent;
+use App\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
+
+class MyProjector extends Projector
+{
+    public function getWeight(?StoredEvent $event): int
+    {
+        return match ($event?->event_class) {
+            MoneyAddedEvent::class => 2,
+            MoneySubtractedEvent::class => -2,
+            default => 0,
+        };
+    }
+    
+    //
+}
+```
+
 Note that providing a weight on a queued projector won't guarantee execution order.
 
 ## Want to know more?
