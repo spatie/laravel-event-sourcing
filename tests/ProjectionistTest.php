@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Queue;
 
-use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithDynamicWeight;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
@@ -21,6 +20,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\FakeMoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\MoneyAddedCountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorThatThrowsAnException;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithDynamicWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithHighWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithLowWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithNegativeWeight;
