@@ -4,6 +4,7 @@ namespace Spatie\EventSourcing\Tests\TestClasses\Projectors;
 
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\ProjectorWithWeightTestHelper;
 
 class ProjectorWithHighWeight extends Projector
@@ -16,6 +17,11 @@ class ProjectorWithHighWeight extends Projector
     }
 
     public function onMoneyAdded(MoneyAddedEvent $event): void
+    {
+        $this->projectorWithWeightTestHelper->calledBy(static::class);
+    }
+
+    public function onMoneySubtracted(MoneySubtractedEvent $event): void
     {
         $this->projectorWithWeightTestHelper->calledBy(static::class);
     }
