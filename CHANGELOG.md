@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.12.0 - 2025-06-16
+
+### What's Changed
+
+* Fix restorePartialState() being incorrectly assigned to dynamic property by @nick-potts in https://github.com/spatie/laravel-event-sourcing/pull/507
+* feat: add dynamic weight by @Bloemendaal in https://github.com/spatie/laravel-event-sourcing/pull/506
+
+### New Contributors
+
+* @Bloemendaal made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/506
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.11.3...7.12.0
+
 ## 7.11.3 - 2025-05-30
 
 ### What's Changed
@@ -520,6 +533,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -532,6 +546,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -863,6 +878,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -886,6 +902,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
