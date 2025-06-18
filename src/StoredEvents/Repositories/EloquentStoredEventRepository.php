@@ -66,10 +66,10 @@ class EloquentStoredEventRepository implements StoredEventRepository
     public function runForAllStartingFrom(int $startingFrom, callable|\Closure $function, int $chunkSize = 1000, ?string $uuid = null, array $events = []): LazyCollection {
         $query = $this->prepareEventModelQuery($startingFrom, $uuid, $events);
 
-        $lazyCollection = $query
+        $query = $query
             ->orderBy('id');
 
-        return $lazyCollection->chunk($chunkSize, function (Collection $events) use ($function) {
+        return $query->chunk($chunkSize, function (Collection $events) use ($function) {
             foreach ($events as $event) {
                 $storedEVent = $event->toStoredEvent();
                 $function($storedEVent);
