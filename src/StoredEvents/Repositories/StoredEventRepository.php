@@ -12,11 +12,13 @@ interface StoredEventRepository
 
     public function retrieveAll(?string $uuid = null): LazyCollection;
 
-    public function retrieveAllStartingFrom(int $startingFrom, ?string $uuid = null): LazyCollection;
+    public function retrieveAllStartingFrom(int $startingFrom, ?string $uuid = null, array $events = []): LazyCollection;
+
+    public function runForAllStartingFrom(int $startingFrom, callable|\Closure $function, int $chunkSize = 1000, ?string $uuid = null, array $events = []): LazyCollection;
 
     public function retrieveAllAfterVersion(int $aggregateVersion, string $aggregateUuid): LazyCollection;
 
-    public function countAllStartingFrom(int $startingFrom, ?string $uuid = null): int;
+    public function countAllStartingFrom(int $startingFrom, ?string $uuid = null, array $events = []): int;
 
     public function persist(ShouldBeStored $event, ?string $uuid = null): StoredEvent;
 

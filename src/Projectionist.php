@@ -322,6 +322,7 @@ class Projectionist
         ?callable $onEventReplayed = null,
         ?string $aggregateUuid = null
     ): void {
+        $events = $projectors->map(fn(Projector $projector) => $projector->getEventHandlingMethods()->keys())->flatten()->toArray();
         $projectors = (new EventHandlerCollection($projectors))
             ->sortBy(fn (EventHandler $eventHandler) => $eventHandler->getWeight(null));
 
@@ -340,8 +341,7 @@ class Projectionist
         $projectors->call('onStartingEventReplay');
 
         app(StoredEventRepository::class)
-            ->retrieveAllStartingFrom($startingFromEventId, $aggregateUuid)
-            ->each(function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
+            ->runForAllStartingFrom($startingFromEventId, function (StoredEvent $storedEvent) use ($projectors, $onEventReplayed) {
                 $this->applyStoredEventToProjectors(
                     $storedEvent,
                     $projectors->forEvent($storedEvent)
@@ -350,7 +350,7 @@ class Projectionist
                 if ($onEventReplayed) {
                     $onEventReplayed($storedEvent);
                 }
-            });
+            }, 1000, $aggregateUuid, $events);
 
         $this->isReplaying = false;
 

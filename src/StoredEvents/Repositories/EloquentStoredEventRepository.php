@@ -5,6 +5,7 @@ namespace Spatie\EventSourcing\StoredEvents\Repositories;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\LazyCollection;
+use Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionException;
 use Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel;
@@ -49,9 +50,9 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
-    public function retrieveAllStartingFrom(int $startingFrom, ?string $uuid = null): LazyCollection
+    public function retrieveAllStartingFrom(int $startingFrom, ?string $uuid = null, array $events = []): LazyCollection
     {
-        $query = $this->prepareEventModelQuery($startingFrom, $uuid);
+        $query = $this->prepareEventModelQuery($startingFrom, $uuid, $events);
 
         /** @var LazyCollection $lazyCollection */
         $lazyCollection = $query
@@ -61,9 +62,26 @@ class EloquentStoredEventRepository implements StoredEventRepository
         return $lazyCollection->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
-    public function countAllStartingFrom(int $startingFrom, ?string $uuid = null): int
+
+    public function runForAllStartingFrom(int $startingFrom, callable|\Closure $function, int $chunkSize = 1000, ?string $uuid = null, array $events = []): LazyCollection {
+        $query = $this->prepareEventModelQuery($startingFrom, $uuid, $events);
+
+        /** @var LazyCollection $lazyCollection */
+        $lazyCollection = $query
+            ->orderBy('id')
+            ->lazyById();
+
+        return $lazyCollection->chunk($chunkSize, function (Collection $events) use ($function) {
+            foreach ($events as $event) {
+                $storedEVent = $event->toStoredEvent();
+                $function($storedEVent);
+            }
+        });
+    }
+
+    public function countAllStartingFrom(int $startingFrom, ?string $uuid = null, array $events = []): int
     {
-        return $this->prepareEventModelQuery($startingFrom, $uuid)->count('id');
+        return $this->prepareEventModelQuery($startingFrom, $uuid, $events)->count('id');
     }
 
     public function retrieveAllAfterVersion(int $aggregateVersion, string $aggregateUuid): LazyCollection
@@ -171,12 +189,16 @@ class EloquentStoredEventRepository implements StoredEventRepository
                 ->max('aggregate_version') ?? 0;
     }
 
-    private function prepareEventModelQuery(int $startingFrom, ?string $uuid = null): Builder
+    private function prepareEventModelQuery(int $startingFrom, ?string $uuid = null, array $events = []): Builder
     {
         $query = $this->getQuery()->startingFrom($startingFrom);
 
         if ($uuid) {
             $query->whereAggregateRoot($uuid);
+        }
+
+        if (!empty($events)) {
+            $query->whereEvent(...$events);
         }
 
         return $query;
