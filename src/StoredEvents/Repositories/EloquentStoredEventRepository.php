@@ -4,8 +4,8 @@ namespace Spatie\EventSourcing\StoredEvents\Repositories;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use ReflectionClass;
 use ReflectionException;
 use Spatie\EventSourcing\AggregateRoots\Exceptions\InvalidEloquentStoredEventModel;
@@ -63,7 +63,8 @@ class EloquentStoredEventRepository implements StoredEventRepository
     }
 
 
-    public function runForAllStartingFrom(int $startingFrom, callable|\Closure $function, int $chunkSize = 1000, ?string $uuid = null, array $events = []): bool {
+    public function runForAllStartingFrom(int $startingFrom, callable|\Closure $function, int $chunkSize = 1000, ?string $uuid = null, array $events = []): bool
+    {
         $query = $this->prepareEventModelQuery($startingFrom, $uuid, $events);
 
         $query = $query
@@ -195,7 +196,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             $query->whereAggregateRoot($uuid);
         }
 
-        if (!empty($events)) {
+        if (! empty($events)) {
             $query->whereEvent(...$events);
         }
 

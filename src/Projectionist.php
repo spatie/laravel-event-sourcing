@@ -322,7 +322,7 @@ class Projectionist
         ?callable $onEventReplayed = null,
         ?string $aggregateUuid = null
     ): void {
-        $events = collect($projectors->toArray())->map(fn(Projector $projector) => $projector->getEventHandlingMethods()->keys())->flatten()->toArray();
+        $events = collect($projectors->toArray())->map(fn (Projector $projector) => $projector->getEventHandlingMethods()->keys())->flatten()->toArray();
         $projectors = (new EventHandlerCollection($projectors))
             ->sortBy(fn (EventHandler $eventHandler) => $eventHandler->getWeight(null));
 
