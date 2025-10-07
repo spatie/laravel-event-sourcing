@@ -264,7 +264,9 @@ class Projectionist
 
         $projectors
             ->sortBy(fn (EventHandler $eventHandler) => $eventHandler->getWeight($storedEvent))
-            ->each(fn (EventHandler $projector) => $this->callEventHandler($projector, $storedEvent));
+            ->each(function (EventHandler $projector) use ($storedEvent): void {
+                $this->callEventHandler($projector, $storedEvent);
+            });
 
         $this->isProjecting = false;
     }
@@ -273,7 +275,9 @@ class Projectionist
     {
         $reactors
             ->sortBy(fn (EventHandler $eventHandler) => $eventHandler->getWeight($storedEvent))
-            ->each(fn (EventHandler $reactor) => $this->callEventHandler($reactor, $storedEvent));
+            ->each(function (EventHandler $reactor) use ($storedEvent): void {
+                $this->callEventHandler($reactor, $storedEvent);
+            });
     }
 
     private function callEventHandler(EventHandler $eventHandler, StoredEvent $storedEvent): bool
