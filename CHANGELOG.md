@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.12.2 - 2025-10-08
+
+### What's Changed
+
+* Update issue template by @AlexVanderbist in https://github.com/spatie/laravel-event-sourcing/pull/510
+* Projectionist: Don't stop handling events when catching exceptions by @m-bymike in https://github.com/spatie/laravel-event-sourcing/pull/511
+
+### New Contributors
+
+* @AlexVanderbist made their first contribution in https://github.com/spatie/laravel-event-sourcing/pull/510
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.12.1...7.12.2
+
 ## 7.12.1 - 2025-06-23
 
 ### What's Changed
@@ -547,6 +560,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -559,6 +573,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -894,6 +909,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -917,6 +933,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
