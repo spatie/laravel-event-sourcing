@@ -32,7 +32,7 @@
         "spatie/laravel-package-tools": "^1.19",
         "spatie/laravel-schemaless-attributes": "^2.5.1",
         "symfony/finder": "^6.0||^7.2.2 || ^8.0",
-        "symfony/polyfill-php82": ">=1.31 || ^6.0 || ^7.0 || ^8.0",
+        "symfony/polyfill-php82": ">=1.31 || ^6.0",
         "symfony/property-access": "^6.0||^7.2.3 || ^8.0",
         "symfony/property-info": "^6.0||^7.2.3 || ^8.0",
         "symfony/serializer": "^6.0||^7.2.3 || ^8.0"
