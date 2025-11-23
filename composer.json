@@ -31,11 +31,11 @@
         "spatie/better-types": "^1.0",
         "spatie/laravel-package-tools": "^1.19",
         "spatie/laravel-schemaless-attributes": "^2.5.1",
-        "symfony/finder": "^6.0|^7.2.2",
+        "symfony/finder": "^6.0|^7.2.2|^8.0",
         "symfony/polyfill-php82": ">=1.31",
-        "symfony/property-access": "^6.0|^7.2.3",
-        "symfony/property-info": "^6.0|^7.2.3",
-        "symfony/serializer": "^6.0|^7.2.3"
+        "symfony/property-access": "^6.0|^7.2.3|^8.0",
+        "symfony/property-info": "^6.0|^7.2.3|^8.0",
+        "symfony/serializer": "^6.0|^7.2.3|^8.0"
     },
     "require-dev": {
         "laravel/horizon": "^5.30.3",
