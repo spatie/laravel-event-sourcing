@@ -2,6 +2,7 @@
 
 namespace Spatie\EventSourcing\Tests;
 
+use PHPUnit\Framework\Assert;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertSame;
 
@@ -58,8 +59,8 @@ it('uses id ordering by default when retrieving aggregate events', function () {
     $repository = new EloquentStoredEventRepository();
     $events = $repository->retrieveAll('uuid-order-test');
 
-    $eventArray = $events->toArray();
-    assertCount(3, $eventArray);
+    $eventArray = $events->all();
+    Assert::assertCount(3, $eventArray);
 
     // Events should be ordered by id (which is the default)
     assertEquals(100, $eventArray[0]->event->amount);
@@ -76,8 +77,8 @@ it('uses aggregate_version ordering when configured', function () {
     $repository = new EloquentStoredEventRepository();
     $events = $repository->retrieveAll('uuid-version-test');
 
-    $eventArray = $events->toArray();
-    assertCount(3, $eventArray);
+    $eventArray = $events->all();
+    Assert::assertCount(3, $eventArray);
 
     // Events should be ordered by aggregate_version
     assertEquals(100, $eventArray[0]->event->amount);
@@ -85,9 +86,9 @@ it('uses aggregate_version ordering when configured', function () {
     assertEquals(300, $eventArray[2]->event->amount);
 
     // Verify they are ordered by aggregate_version
-    assertEquals(1, $eventArray[0]->aggregateVersion());
-    assertEquals(2, $eventArray[1]->aggregateVersion());
-    assertEquals(3, $eventArray[2]->aggregateVersion());
+    assertEquals(1, $eventArray[0]->aggregate_version);
+    assertEquals(2, $eventArray[1]->aggregate_version);
+    assertEquals(3, $eventArray[2]->aggregate_version);
 });
 
 it('always uses id ordering for global queries without uuid', function () {
@@ -101,7 +102,7 @@ it('always uses id ordering for global queries without uuid', function () {
     $repository = new EloquentStoredEventRepository();
     $events = $repository->retrieveAll(); // No UUID - global query
 
-    $eventArray = $events->toArray();
+    $eventArray = $events->all();
 
     // Should be ordered by id (global ordering) regardless of config
     // We can verify this by checking the ids are sequential
@@ -121,14 +122,14 @@ it('uses configured ordering in retrieveAllAfterVersion', function () {
     $repository = new EloquentStoredEventRepository();
     $events = $repository->retrieveAllAfterVersion(2, 'uuid-after-version');
 
-    $eventArray = $events->toArray();
-    assertCount(2, $eventArray);
+    $eventArray = $events->all();
+    Assert::assertCount(2, $eventArray);
 
     // Should be ordered by aggregate_version
     assertEquals(300, $eventArray[0]->event->amount);
     assertEquals(400, $eventArray[1]->event->amount);
-    assertEquals(3, $eventArray[0]->aggregateVersion());
-    assertEquals(4, $eventArray[1]->aggregateVersion());
+    assertEquals(3, $eventArray[0]->aggregate_version);
+    assertEquals(4, $eventArray[1]->aggregate_version);
 });
 
 it('uses configured ordering in retrieveAllStartingFrom with uuid', function () {
@@ -142,8 +143,8 @@ it('uses configured ordering in retrieveAllStartingFrom with uuid', function () 
 
     $events = $repository->retrieveAllStartingFrom($firstEvent->id + 1, 'uuid-starting-from');
 
-    $eventArray = $events->toArray();
-    assertCount(2, $eventArray);
+    $eventArray = $events->all();
+    Assert::assertCount(2, $eventArray);
 
     // Should be ordered by aggregate_version
     assertEquals(200, $eventArray[0]->event->amount);
