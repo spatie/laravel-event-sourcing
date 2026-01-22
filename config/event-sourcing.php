@@ -133,4 +133,22 @@ return [
      */
 
     'dispatch_events_from_aggregate_roots' => false,
+
+    /*
+     * This setting determines which column is used to order events when retrieving
+     * events for a specific aggregate.
+     *
+     * Options:
+     * - 'id' (default): Orders by the auto-incrementing ID column. This is the traditional
+     *   behavior but can cause MySQL "Out of sort memory" errors with large event payloads
+     *   because it requires a filesort operation.
+     *
+     * - 'aggregate_version': Orders by the aggregate_version column. This is semantically
+     *   correct for event sourcing and uses the existing (aggregate_uuid, aggregate_version)
+     *   index, avoiding filesort operations and preventing memory issues with large payloads.
+     *
+     * Note: This only affects queries filtered by aggregate_uuid. Global event queries
+     * (without uuid filter) always use 'id' for proper cross-aggregate ordering.
+     */
+    'aggregate_event_order_column' => 'id',
 ];

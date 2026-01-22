@@ -47,16 +47,20 @@ class EloquentStoredEventRepository implements StoredEventRepository
             $query->whereAggregateRoot($uuid);
         }
 
-        return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+        $orderBy = $uuid ? $this->getAggregateEventOrderColumn() : 'id';
+
+        return $query->orderBy($orderBy)->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
 
     public function retrieveAllStartingFrom(int $startingFrom, ?string $uuid = null, array $events = []): LazyCollection
     {
         $query = $this->prepareEventModelQuery($startingFrom, $uuid, $events);
 
+        $orderBy = $uuid ? $this->getAggregateEventOrderColumn() : 'id';
+
         /** @var LazyCollection $lazyCollection */
         $lazyCollection = $query
-            ->orderBy('id')
+            ->orderBy($orderBy)
             ->lazyById();
 
         return $lazyCollection->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
@@ -67,8 +71,9 @@ class EloquentStoredEventRepository implements StoredEventRepository
     {
         $query = $this->prepareEventModelQuery($startingFrom, $uuid, $events);
 
-        $query = $query
-            ->orderBy('id');
+        $orderBy = $uuid ? $this->getAggregateEventOrderColumn() : 'id';
+
+        $query = $query->orderBy($orderBy);
 
         return $query->chunk($chunkSize, function (Collection $events) use ($function) {
             foreach ($events as $event) {
@@ -90,7 +95,7 @@ class EloquentStoredEventRepository implements StoredEventRepository
             ->afterVersion($aggregateVersion);
 
         return $query
-            ->orderBy('id')
+            ->orderBy($this->getAggregateEventOrderColumn())
             ->cursor()
             ->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
     }
@@ -206,5 +211,10 @@ class EloquentStoredEventRepository implements StoredEventRepository
     private function getQuery(): EloquentStoredEventQueryBuilder
     {
         return $this->storedEventModel::query();
+    }
+
+    private function getAggregateEventOrderColumn(): string
+    {
+        return config('event-sourcing.aggregate_event_order_column', 'id') ?? 'id';
     }
 }
