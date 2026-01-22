@@ -3,6 +3,7 @@
 namespace Spatie\EventSourcing\Tests;
 
 use PHPUnit\Framework\Assert;
+
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertSame;
 
