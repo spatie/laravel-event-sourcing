@@ -45,7 +45,7 @@
         "phpunit/phpunit": "^9.5.10|^10.5|^11.5.3",
         "spatie/fork": "^1.2.4",
         "spatie/pest-plugin-snapshots": "^1.1|^2.2",
-        "spatie/phpunit-snapshot-assertions": "^4.0|^5.1.8"
+        "spatie/phpunit-snapshot-assertions": "^4.0|^5.1.8 <5.2"
     },
     "autoload": {
         "psr-4": {
