@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use DateTimeImmutable;
 
+use function PHPUnit\Framework\assertArrayNotHasKey;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
 
@@ -33,6 +34,18 @@ it('can serialize a plain event', function () {
     assertEquals([
         'value' => 'test',
     ], $array);
+});
+
+it('does not serialize metaData into event properties', function () {
+    $event = new EventWithoutSerializedModels('test');
+    $event->setMetaData(['aggregate-root-uuid' => 'some-uuid']);
+
+    $json = $this->eventSerializer->serialize($event);
+
+    $array = json_decode($json, true);
+
+    assertEquals(['value' => 'test'], $array);
+    assertArrayNotHasKey('metaData', $array);
 });
 
 it('can serialize an event containing a model', function () {
