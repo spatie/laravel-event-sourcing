@@ -8,11 +8,17 @@ use PHPUnit\Framework\Assert;
 use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
+/**
+ * @template TAggregateRoot of \Spatie\EventSourcing\AggregateRoots\AggregateRoot
+ */
 class FakeAggregateRoot
 {
     protected $whenResult = null;
     protected $givenEventsCount = 0;
 
+    /**
+     * @param TAggregateRoot $aggregateRoot
+     */
     public function __construct(
         private AggregateRoot $aggregateRoot
     ) {
@@ -156,6 +162,9 @@ class FakeAggregateRoot
         return $this;
     }
 
+    /**
+     * @return TAggregateRoot
+     */
     public function aggregateRoot(): AggregateRoot
     {
         return $this->aggregateRoot;
