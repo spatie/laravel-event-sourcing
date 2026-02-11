@@ -14,7 +14,7 @@ use Spatie\EventSourcing\StoredEvents\Exceptions\InvalidStoredEvent;
 
 class StoredEvent implements Arrayable
 {
-    public ?int $id;
+    public int | string | null $id;
 
     /** @var array|string */
     public $event_properties;
