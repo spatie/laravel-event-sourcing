@@ -9,7 +9,7 @@ use Spatie\EventSourcing\Enums\MetaData;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 /**
- * @template TAggregateRoot of AggregateRoot
+ * @template TAggregateRoot of \Spatie\EventSourcing\AggregateRoots\AggregateRoot
  */
 class FakeAggregateRoot
 {
