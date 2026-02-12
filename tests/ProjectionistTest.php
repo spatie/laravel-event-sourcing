@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\Queue;
 
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertSame;
+use function PHPUnit\Framework\assertTrue;
 
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\HandleStoredEventJob;
@@ -219,4 +221,48 @@ it('can fake event handlers', function () {
     event(new MoneyAddedEvent($this->account, 500));
 
     assertEquals(1, FakeMoneyAddedCountProjector::$eventsHandledCount);
+});
+
+it('does not resolve projectors from the container at registration time', function () {
+    $resolved = false;
+
+    $this->app->bind(BalanceProjector::class, function () use (&$resolved) {
+        $resolved = true;
+
+        return new BalanceProjector();
+    });
+
+    Projectionist::addProjector(BalanceProjector::class);
+
+    assertFalse($resolved);
+
+    Projectionist::getProjectors();
+
+    assertTrue($resolved);
+});
+
+it('does not resolve reactors from the container at registration time', function () {
+    $resolved = false;
+
+    $this->app->bind(BrokeReactor::class, function () use (&$resolved) {
+        $resolved = true;
+
+        return new BrokeReactor();
+    });
+
+    Projectionist::addReactor(BrokeReactor::class);
+
+    assertFalse($resolved);
+
+    Projectionist::getReactors();
+
+    assertTrue($resolved);
+});
+
+it('lazily registered handlers still handle events', function () {
+    Projectionist::addProjector(BalanceProjector::class);
+
+    event(new MoneyAddedEvent($this->account, 1234));
+
+    assertEquals(1234, $this->account->refresh()->amount);
 });
