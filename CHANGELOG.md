@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.12.9 - 2026-02-13
+
+### What's Changed
+
+* Fix #[Ignore] attributes on ShouldBeStored conflicting with child class properties
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.12.8...7.12.9
+
 ## 7.12.8 - 2026-02-11
 
 ### What's Changed
@@ -621,6 +629,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -633,6 +642,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -982,6 +992,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -1005,6 +1016,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
