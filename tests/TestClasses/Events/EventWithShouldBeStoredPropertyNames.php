@@ -10,5 +10,6 @@ class EventWithShouldBeStoredPropertyNames extends ShouldBeStored
         public readonly string $id,
         public readonly string $createdAt,
         public readonly string $aggregateRootUuid,
-    ) {}
+    ) {
+    }
 }
