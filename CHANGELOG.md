@@ -2,6 +2,16 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.13.0 - 2026-02-13
+
+### What's Changed
+
+* Lazy-resolve event handlers to eliminate boot-time overhead (#523)
+
+When registering projectors and reactors via class name strings, container resolution is now deferred until the handlers are actually needed. Most HTTP requests never fire a stored event, so the boot-time cost is never paid.
+
+**Full Changelog**: https://github.com/spatie/laravel-event-sourcing/compare/7.12.9...7.13.0
+
 ## 7.12.9 - 2026-02-13
 
 ### What's Changed
@@ -630,6 +640,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -642,6 +653,7 @@ All notable changes to `laravel-event-sourcing` will be documented in this file:
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -993,6 +1005,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -1016,6 +1029,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
