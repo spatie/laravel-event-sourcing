@@ -162,7 +162,7 @@ class Projectionist
             ->asyncEventHandlers($storedEvent);
     }
 
-    public function addReactor($reactor): Projectionist
+    public function addReactor(string|EventHandler $reactor): Projectionist
     {
         if ($reactor instanceof EventHandler) {
             $this->reactors->addEventHandler($reactor);
@@ -170,17 +170,13 @@ class Projectionist
             return $this;
         }
 
-        if (is_string($reactor) && ! is_subclass_of($reactor, EventHandler::class)) {
+        if (! is_subclass_of($reactor, EventHandler::class)) {
             throw InvalidEventHandler::notAnEventHandler(app($reactor));
         }
 
-        if (is_string($reactor)) {
-            $this->pendingReactors[$reactor] = $reactor;
+        $this->pendingReactors[$reactor] = $reactor;
 
-            return $this;
-        }
-
-        throw InvalidEventHandler::notAnEventHandler($reactor);
+        return $this;
     }
 
     public function addReactors(array $reactors): Projectionist
