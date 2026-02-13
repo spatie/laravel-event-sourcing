@@ -16,6 +16,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithCarbon;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithDatetime;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithDocblock;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithoutSerializedModels;
+use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithShouldBeStoredPropertyNames;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\EventSerializer\UpgradeSerializer;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
@@ -46,6 +47,28 @@ it('does not serialize metaData into event properties', function () {
 
     assertEquals(['value' => 'test'], $array);
     assertArrayNotHasKey('metaData', $array);
+});
+
+it('can serialize and deserialize an event with properties named like ShouldBeStored methods', function () {
+    $event = new EventWithShouldBeStoredPropertyNames(
+        id: 'lease-123',
+        createdAt: '2024-01-15',
+        aggregateRootUuid: 'custom-uuid',
+    );
+
+    $json = $this->eventSerializer->serialize($event);
+
+    $array = json_decode($json, true);
+
+    assertEquals('lease-123', $array['id']);
+    assertEquals('2024-01-15', $array['createdAt']);
+    assertEquals('custom-uuid', $array['aggregateRootUuid']);
+
+    $deserialized = $this->eventSerializer->deserialize(get_class($event), $json, 1);
+
+    assertEquals('lease-123', $deserialized->id);
+    assertEquals('2024-01-15', $deserialized->createdAt);
+    assertEquals('custom-uuid', $deserialized->aggregateRootUuid);
 });
 
 it('can serialize an event containing a model', function () {
