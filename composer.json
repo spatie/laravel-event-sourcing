@@ -41,7 +41,7 @@
         "laravel/horizon": "^5.30.3",
         "mockery/mockery": "^1.6.12",
         "orchestra/testbench": "^7.0|^8.0|^9.11|^10.0|^11.0",
-        "pestphp/pest": "^2.34|^3.7.4",
+        "pestphp/pest": "^2.34|^3.7.4|^4.0",
         "phpunit/phpunit": "^9.5.10|^10.5|^11.5.3|^12.5.12",
         "spatie/fork": "^1.2.4",
         "spatie/pest-plugin-snapshots": "^1.1|^2.2",
