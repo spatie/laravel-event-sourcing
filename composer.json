@@ -30,6 +30,7 @@
         "phpdocumentor/reflection-docblock": "^5.6.1",
         "spatie/better-types": "^1.0",
         "spatie/laravel-package-tools": "^1.19",
+        "spatie/php-attribute-reader": "^1.0",
         "spatie/laravel-schemaless-attributes": "^2.5.1",
         "symfony/finder": "^6.0|^7.2.2|^8.0",
         "symfony/polyfill-php82": ">=1.31",

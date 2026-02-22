@@ -4,7 +4,7 @@ namespace Spatie\EventSourcing\StoredEvents;
 
 use AllowDynamicProperties;
 use Carbon\CarbonImmutable;
-use ReflectionClass;
+use Spatie\Attributes\Attributes;
 use Spatie\EventSourcing\Attributes\EventVersion;
 use Spatie\EventSourcing\Enums\MetaData;
 
@@ -15,13 +15,13 @@ abstract class ShouldBeStored
 
     public function eventVersion(): int
     {
-        $versionAttribute = (new ReflectionClass($this))->getAttributes(EventVersion::class)[0] ?? null;
+        $versionAttribute = Attributes::get($this, EventVersion::class);
 
         if (! $versionAttribute) {
             return 1;
         }
 
-        return $versionAttribute->newInstance()->version;
+        return $versionAttribute->version;
     }
 
     public function createdAt(): ?CarbonImmutable
