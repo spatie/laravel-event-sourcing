@@ -3,6 +3,7 @@
 namespace Spatie\EventSourcing\Projections;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\EventSourcing\Projections\Exceptions\ReadonlyProjection;
 
 /**
  * @method static static create(array $parameters = [])
@@ -16,7 +17,16 @@ abstract class Projection extends Model
     {
         parent::boot();
 
-        static::observe(ProjectionObserver::class);
+        $preventChanges = function (Projection $projection): void {
+            if (! $projection->isWriteable()) {
+                throw ReadonlyProjection::new(get_class($projection));
+            }
+        };
+
+        static::creating($preventChanges);
+        static::updating($preventChanges);
+        static::saving($preventChanges);
+        static::deleting($preventChanges);
     }
 
     public static function new(): static
