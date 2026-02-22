@@ -3,6 +3,7 @@
 namespace Spatie\EventSourcing\Commands;
 
 use ReflectionClass;
+use Spatie\Attributes\Attributes;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 use Spatie\EventSourcing\AggregateRoots\Exceptions\MissingAggregateUuid;
 use Spatie\EventSourcing\Commands\Exceptions\CommandHandlerNotFound;
@@ -53,13 +54,13 @@ class CommandHandler
 
     private function resolveHandler(): void
     {
-        $attribute = (new ReflectionClass($this->command))->getAttributes(HandledBy::class)[0] ?? null;
+        $attribute = Attributes::get($this->command, HandledBy::class);
 
         if (! $attribute) {
             throw new CommandHandlerNotFound($this->command::class);
         }
 
-        $handlerClass = ($attribute->newInstance())->handlerClass;
+        $handlerClass = $attribute->handlerClass;
 
         if (is_subclass_of($handlerClass, AggregateRoot::class)) {
             $this->resolveHandlerForAggregateRoot($handlerClass);
@@ -72,20 +73,14 @@ class CommandHandler
 
     private function resolveHandlerForAggregateRoot(string $handlerClass): void
     {
-        $constructorParameters = (new ReflectionClass($this->command))->getConstructor()->getParameters();
-
         $uuidField = null;
 
-        foreach ($constructorParameters as $constructorParameter) {
-            $attribute = $constructorParameter->getAttributes(AggregateUuid::class);
+        foreach ((new ReflectionClass($this->command))->getProperties() as $property) {
+            if (Attributes::onProperty($this->command, $property->getName(), AggregateUuid::class)) {
+                $uuidField = $property->getName();
 
-            if (! count($attribute)) {
-                continue;
+                break;
             }
-
-            $uuidField = $constructorParameter->getName();
-
-            break;
         }
 
         if (! $uuidField) {

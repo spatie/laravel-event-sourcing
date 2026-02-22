@@ -5,8 +5,7 @@ namespace Spatie\EventSourcing\StoredEvents;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
-use ReflectionClass;
-use ReflectionException;
+use Spatie\Attributes\Attributes;
 use Spatie\EventSourcing\Attributes\EventSerializer as EventSerializerAttribute;
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Facades\Projectionist;
@@ -115,17 +114,12 @@ class StoredEvent implements Arrayable
             return;
         }
 
-        try {
-            $reflectionClass = new ReflectionClass($this->event_class);
-        } catch (ReflectionException $exception) {
-            throw new InvalidStoredEvent($exception->getMessage());
+        if (! class_exists($this->event_class)) {
+            throw new InvalidStoredEvent("Class {$this->event_class} does not exist");
         }
 
-        if ($serializerAttribute = $reflectionClass->getAttributes(EventSerializerAttribute::class)[0] ?? null) {
-            $serializerClass = ($serializerAttribute->newInstance())->serializerClass;
-        } else {
-            $serializerClass = EventSerializer::class;
-        }
+        $serializerAttribute = Attributes::get($this->event_class, EventSerializerAttribute::class);
+        $serializerClass = $serializerAttribute?->serializerClass ?? EventSerializer::class;
 
         try {
             $this->event = app($serializerClass)->deserialize(
