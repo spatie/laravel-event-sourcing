@@ -29,7 +29,7 @@ abstract class ShouldBeStored
         return CarbonImmutable::make($this->metaData[MetaData::CREATED_AT] ?? null);
     }
 
-    public function setCreatedAt(CarbonImmutable $createdAt): self
+    public function setCreatedAt(CarbonImmutable $createdAt): static
     {
         $this->metaData[MetaData::CREATED_AT] = $createdAt;
 
@@ -41,7 +41,7 @@ abstract class ShouldBeStored
         return $this->metaData[MetaData::AGGREGATE_ROOT_UUID] ?? null;
     }
 
-    public function setAggregateRootUuid(string $uuid): self
+    public function setAggregateRootUuid(string $uuid): static
     {
         $this->metaData[MetaData::AGGREGATE_ROOT_UUID] = $uuid;
 
@@ -53,7 +53,7 @@ abstract class ShouldBeStored
         return $this->metaData[MetaData::STORED_EVENT_ID] ?? null;
     }
 
-    public function setStoredEventId(int|string $id): self
+    public function setStoredEventId(int|string $id): static
     {
         $this->metaData[MetaData::STORED_EVENT_ID] = $id;
 
@@ -65,7 +65,7 @@ abstract class ShouldBeStored
         return $this->metaData[MetaData::AGGREGATE_ROOT_VERSION] ?? null;
     }
 
-    public function setAggregateRootVersion(int $version): self
+    public function setAggregateRootVersion(int $version): static
     {
         $this->metaData[MetaData::AGGREGATE_ROOT_VERSION] = $version;
 
@@ -77,7 +77,7 @@ abstract class ShouldBeStored
         return $this->metaData;
     }
 
-    public function setMetaData(array $metaData): self
+    public function setMetaData(array $metaData): static
     {
         $this->metaData = $metaData;
 

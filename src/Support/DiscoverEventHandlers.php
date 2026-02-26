@@ -25,28 +25,28 @@ class DiscoverEventHandlers
         $this->basePath = app()->path();
     }
 
-    public function within(array $directories): self
+    public function within(array $directories): static
     {
         $this->directories = $directories;
 
         return $this;
     }
 
-    public function useBasePath(string $basePath): self
+    public function useBasePath(string $basePath): static
     {
         $this->basePath = $basePath;
 
         return $this;
     }
 
-    public function useRootNamespace(string $rootNamespace): self
+    public function useRootNamespace(string $rootNamespace): static
     {
         $this->rootNamespace = $rootNamespace;
 
         return $this;
     }
 
-    public function ignoringFiles(array $ignoredFiles): self
+    public function ignoringFiles(array $ignoredFiles): static
     {
         $this->ignoredFiles = $ignoredFiles;
 
