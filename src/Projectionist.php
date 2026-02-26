@@ -68,7 +68,7 @@ class Projectionist
             ->addEventHandler($fakeHandlerClass);
     }
 
-    public function addProjector(string | Projector $projector): Projectionist
+    public function addProjector(string | Projector $projector): static
     {
         if ($projector instanceof Projector) {
             $this->projectors->addEventHandler($projector);
@@ -85,7 +85,7 @@ class Projectionist
         return $this;
     }
 
-    public function removeProjector(string $projectorClass): Projectionist
+    public function removeProjector(string $projectorClass): static
     {
         unset($this->pendingProjectors[$projectorClass]);
         $this->projectors->remove([$projectorClass]);
@@ -100,7 +100,7 @@ class Projectionist
         return $this->projectors->merge($this->reactors);
     }
 
-    public function withoutEventHandlers(?array $eventHandlers = null): Projectionist
+    public function withoutEventHandlers(?array $eventHandlers = null): static
     {
         if (is_null($eventHandlers)) {
             $this->pendingProjectors = [];
@@ -125,12 +125,12 @@ class Projectionist
         return $this;
     }
 
-    public function withoutEventHandler(string $eventHandler): Projectionist
+    public function withoutEventHandler(string $eventHandler): static
     {
         return $this->withoutEventHandlers([$eventHandler]);
     }
 
-    public function addProjectors(array $projectors): Projectionist
+    public function addProjectors(array $projectors): static
     {
         foreach ($projectors as $projector) {
             $this->addProjector($projector);
@@ -162,7 +162,7 @@ class Projectionist
             ->asyncEventHandlers($storedEvent);
     }
 
-    public function addReactor(string|EventHandler $reactor): Projectionist
+    public function addReactor(string|EventHandler $reactor): static
     {
         if ($reactor instanceof EventHandler) {
             $this->reactors->addEventHandler($reactor);
@@ -179,7 +179,7 @@ class Projectionist
         return $this;
     }
 
-    public function addReactors(array $reactors): Projectionist
+    public function addReactors(array $reactors): static
     {
         foreach ($reactors as $reactor) {
             $this->addReactor($reactor);
@@ -188,7 +188,7 @@ class Projectionist
         return $this;
     }
 
-    public function removeReactor(string $reactorClass): Projectionist
+    public function removeReactor(string $reactorClass): static
     {
         unset($this->pendingReactors[$reactorClass]);
         $this->reactors->remove([$reactorClass]);
@@ -231,7 +231,7 @@ class Projectionist
         throw InvalidEventHandler::notAnEventHandlingClassName($eventHandlerClass);
     }
 
-    public function removeEventHandler(string $eventHandlerClass): self
+    public function removeEventHandler(string $eventHandlerClass): static
     {
         if (is_subclass_of($eventHandlerClass, Projector::class)) {
             $this->removeProjector($eventHandlerClass);
@@ -248,7 +248,7 @@ class Projectionist
         throw InvalidEventHandler::notAnEventHandlingClassName($eventHandlerClass);
     }
 
-    public function addEventHandlers(array $eventHandlers): self
+    public function addEventHandlers(array $eventHandlers): static
     {
         foreach ($eventHandlers as $eventHandler) {
             $this->addEventHandler($eventHandler);

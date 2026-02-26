@@ -29,7 +29,7 @@ class FakeAggregateRoot
      *
      * @return $this
      */
-    public function given($events): self
+    public function given($events): static
     {
         $events = Arr::wrap($events);
 
@@ -42,14 +42,14 @@ class FakeAggregateRoot
         return $this;
     }
 
-    public function when($callable): self
+    public function when($callable): static
     {
         $this->whenResult = $callable($this->aggregateRoot);
 
         return $this;
     }
 
-    public function then(callable $callback): self
+    public function then(callable $callback): static
     {
         $result = $callback($this->whenResult);
 
@@ -60,7 +60,7 @@ class FakeAggregateRoot
         return $this;
     }
 
-    public function assertNothingRecorded(): self
+    public function assertNothingRecorded(): static
     {
         Assert::assertCount(0, $this->getRecordedEventsAfterGiven());
 
@@ -72,7 +72,7 @@ class FakeAggregateRoot
      *
      * @return $this
      */
-    public function assertRecorded($expectedEvents): self
+    public function assertRecorded($expectedEvents): static
     {
         $recordedEvents = $this->getRecordedEventsWithoutUuid();
 
@@ -89,7 +89,7 @@ class FakeAggregateRoot
         return $this;
     }
 
-    public function assertNotRecorded($unexpectedEventClasses): self
+    public function assertNotRecorded($unexpectedEventClasses): static
     {
         $actualEventClasses = array_map(fn (ShouldBeStored $event) => get_class($event), $this->getRecordedEventsAfterGiven());
 
@@ -102,7 +102,7 @@ class FakeAggregateRoot
         return $this;
     }
 
-    public function assertEventRecorded(ShouldBeStored $expectedEvent): self
+    public function assertEventRecorded(ShouldBeStored $expectedEvent): static
     {
         $recordedEvents = $this->getRecordedEventsWithoutUuid();
 
@@ -111,7 +111,7 @@ class FakeAggregateRoot
         return $this;
     }
 
-    public function assertNothingApplied(): self
+    public function assertNothingApplied(): static
     {
         Assert::assertCount(0, $this->aggregateRoot->getAppliedEvents());
 
@@ -123,7 +123,7 @@ class FakeAggregateRoot
      *
      * @return $this
      */
-    public function assertApplied($expectedEvents): self
+    public function assertApplied($expectedEvents): static
     {
         $expectedEvents = Arr::wrap($expectedEvents);
 
@@ -155,7 +155,7 @@ class FakeAggregateRoot
         }
     }
 
-    public function __call($name, $arguments): self
+    public function __call($name, $arguments): static
     {
         $this->aggregateRoot->$name(...$arguments);
 

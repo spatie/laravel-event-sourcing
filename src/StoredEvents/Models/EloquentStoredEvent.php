@@ -41,7 +41,7 @@ class EloquentStoredEvent extends Model
         ], $this->getOriginalEvent());
     }
 
-    public function setOriginalEvent(ShouldBeStored $event): self
+    public function setOriginalEvent(ShouldBeStored $event): static
     {
         $this->originalEvent = $event;
 

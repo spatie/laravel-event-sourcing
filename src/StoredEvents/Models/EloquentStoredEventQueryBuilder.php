@@ -14,28 +14,28 @@ use Spatie\EventSourcing\StoredEvents\StoredEvent;
  */
 class EloquentStoredEventQueryBuilder extends Builder
 {
-    public function startingFrom(int $storedEventId): self
+    public function startingFrom(int $storedEventId): static
     {
         $this->where('id', '>=', $storedEventId);
 
         return $this;
     }
 
-    public function afterVersion(int $version): self
+    public function afterVersion(int $version): static
     {
         $this->where('aggregate_version', '>', $version);
 
         return $this;
     }
 
-    public function whereAggregateRoot(string $uuid): self
+    public function whereAggregateRoot(string $uuid): static
     {
         $this->where('aggregate_uuid', $uuid);
 
         return $this;
     }
 
-    public function whereEvent(string ...$eventClasses): self
+    public function whereEvent(string ...$eventClasses): static
     {
         $this->whereIn('event_class', array_map(
             fn (string $eventClass): string => StoredEvent::getEventClass($eventClass),
@@ -45,14 +45,14 @@ class EloquentStoredEventQueryBuilder extends Builder
         return $this;
     }
 
-    public function wherePropertyIs(string $property, mixed $value): self
+    public function wherePropertyIs(string $property, mixed $value): static
     {
         $this->whereJsonContains(column: "event_properties->{$property}", value: $value);
 
         return $this;
     }
 
-    public function wherePropertyIsNot(string $property, mixed $value): self
+    public function wherePropertyIsNot(string $property, mixed $value): static
     {
         $this->whereJsonDoesntContain(column: "event_properties->{$property}", value: $value);
 
