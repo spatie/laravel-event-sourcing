@@ -42,7 +42,8 @@ class CommandHandlerTest extends TestCase
 class AddItem
 {
     public function __construct(
-        #[AggregateUuid] public string $cartUuid,
+        #[AggregateUuid]
+        public string $cartUuid,
         public string $name
     ) {
     }
@@ -52,7 +53,8 @@ class AddItem
 class ClearCart
 {
     public function __construct(
-        #[AggregateUuid] public string $cartUuid
+        #[AggregateUuid]
+        public string $cartUuid
     ) {
     }
 }

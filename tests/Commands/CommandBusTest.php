@@ -41,7 +41,8 @@ class CommandBusTest extends TestCase
 class AddItem
 {
     public function __construct(
-        #[AggregateUuid] public string $cartUuid,
+        #[AggregateUuid]
+        public string $cartUuid,
         public string $name
     ) {
     }
