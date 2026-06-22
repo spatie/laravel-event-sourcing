@@ -17,12 +17,12 @@ Some concepts in the package, for example the testing methods of aggregates, wer
 
 ## A premium course on event sourcing
 
-Our team is currently developing [a premium course on event sourcing](https://spatie.be/event-sourcing).
+Our team is currently developing a premium course on event sourcing.
 
 In this course, we'll walk you through all the basics, and work our way towards the most complex topics. Though the knowledge presented is framework agnostic, the examples will embrace Laravel.
 The course will include a cart package that will be event sourced and can be used in your e-commerce projects.
 
-Subscribe to [our mailing list at spatie.be](https://spatie.be/event-sourcing) now to be notified when we launch it!
+Subscribe to [our mailing list at spatie.be](https://spatie.be/newsletter) now to be notified when we launch it!
 
 ## We have badges!
 

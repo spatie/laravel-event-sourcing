@@ -29,18 +29,18 @@ class RunCommandJob implements ShouldQueue
          * For now, this functionality is disabled because we don't have a good way of handling it yet
          * https://github.com/spatie/laravel-event-sourcing/discussions/214
          */
-//        if (! $handler->forAggregateRoot()) {
-//            $handler->handle();
-//
-//            return;
-//        }
-//
-//        $lock = Cache::lock($handler->lockId());
-//
-//        if ($lock->get()) {
-//            $handler->handle();
-//
-//            $lock->release();
-//        }
+        //        if (! $handler->forAggregateRoot()) {
+        //            $handler->handle();
+        //
+        //            return;
+        //        }
+        //
+        //        $lock = Cache::lock($handler->lockId());
+        //
+        //        if ($lock->get()) {
+        //            $handler->handle();
+        //
+        //            $lock->release();
+        //        }
     }
 }
