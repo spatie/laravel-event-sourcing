@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use function PHPUnit\Framework\assertArrayNotHasKey;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertSame;
 
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithArray;
@@ -23,6 +24,11 @@ use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
 beforeEach(function () {
     $this->eventSerializer = app(EventSerializer::class);
+});
+
+it('reuses the configured serializer for every event', function () {
+    assertInstanceOf(config('event-sourcing.event_serializer'), $this->eventSerializer);
+    assertSame($this->eventSerializer, app(EventSerializer::class));
 });
 
 it('can serialize a plain event', function () {

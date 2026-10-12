@@ -7,6 +7,8 @@ Events will be serialized by the `Spatie\EventSourcing\EventSerializers\JsonEven
 
 You can specify your own serializer by creating a class that implements `Spatie\EventSourcing\EventSerializers\EventSerializer` and specifying the class in the `event_serializer` key of the `event-sourcing.php` config file.
 
+The serializer is registered as a singleton, so one instance serializes and deserializes every event. Make sure your serializer keeps no state between calls.
+
 This is the content of the `EventSerializer` interface:
 
 ```php

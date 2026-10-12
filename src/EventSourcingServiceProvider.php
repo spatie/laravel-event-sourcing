@@ -82,7 +82,7 @@ class EventSourcingServiceProvider extends PackageServiceProvider
             ->needs('$storedEventModelClass')
             ->give(config('event-sourcing.stored_event_repository'));
 
-        $this->app->bind(EventSerializer::class, config('event-sourcing.event_serializer'));
+        $this->app->singleton(EventSerializer::class, config('event-sourcing.event_serializer'));
     }
 
     protected function discoverEventHandlers()
