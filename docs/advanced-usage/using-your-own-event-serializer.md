@@ -7,7 +7,9 @@ Events will be serialized by the `Spatie\EventSourcing\EventSerializers\JsonEven
 
 You can specify your own serializer by creating a class that implements `Spatie\EventSourcing\EventSerializers\EventSerializer` and specifying the class in the `event_serializer` key of the `event-sourcing.php` config file.
 
-The serializer is registered as a singleton, so one instance serializes and deserializes every event. Make sure your serializer keeps no state between calls.
+The default `JsonEventSerializer` is registered as a singleton, so the same instance and its normalizers are reused for every event resolved through the `EventSerializer` interface. Custom normalizers must not retain event-specific state between calls. In long-running workers, this instance lives for the lifetime of the application.
+
+Custom serializers configured via `event_serializer` retain their transient binding: a new instance is created each time the interface is resolved. Serializers selected via an event's `#[EventSerializer]` attribute are resolved separately and are not made singletons by this binding.
 
 This is the content of the `EventSerializer` interface:
 
