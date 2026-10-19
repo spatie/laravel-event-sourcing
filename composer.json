@@ -21,12 +21,12 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.4",
         "ext-json": "*",
-        "illuminate/console": "^10.0|^11.0|^12.0|^13.0",
-        "illuminate/database": "^10.0|^11.0|^12.0|^13.0",
-        "illuminate/events": "^10.0|^11.0|^12.0|^13.0",
-        "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/console": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/events": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
         "phpdocumentor/reflection-docblock": "^5.6.1|^6.0",
         "spatie/better-types": "^1.0",
         "spatie/laravel-package-tools": "^1.19",
@@ -41,12 +41,11 @@
     "require-dev": {
         "laravel/horizon": "^5.30.3",
         "mockery/mockery": "^1.6.12",
-        "orchestra/testbench": "^7.0|^8.0|^9.11|^10.0|^11.0",
-        "pestphp/pest": "^2.34|^3.7.4|^4.0",
-        "phpunit/phpunit": "^9.5.10|^10.5|^11.5.3|^12.5.12",
+        "orchestra/testbench": "^10.0|^11.0",
+        "pestphp/pest": "^4.0|^5.0",
         "spatie/fork": "^1.2.4",
-        "spatie/pest-plugin-snapshots": "^1.1|^2.3.1",
-        "spatie/phpunit-snapshot-assertions": "^4.0|^5.3.1"
+        "spatie/pest-plugin-snapshots": "^2.4",
+        "spatie/phpunit-snapshot-assertions": "^5.4"
     },
     "autoload": {
         "psr-4": {

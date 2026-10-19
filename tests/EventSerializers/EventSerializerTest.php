@@ -9,6 +9,8 @@ use DateTimeImmutable;
 use function PHPUnit\Framework\assertArrayNotHasKey;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertNotSame;
+use function PHPUnit\Framework\assertSame;
 
 use Spatie\EventSourcing\EventSerializers\EventSerializer;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithArray;
@@ -18,11 +20,38 @@ use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithDocblock;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithoutSerializedModels;
 use Spatie\EventSourcing\Tests\TestClasses\Events\EventWithShouldBeStoredPropertyNames;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\EventSerializer\DummySerializer;
 use Spatie\EventSourcing\Tests\TestClasses\EventSerializer\UpgradeSerializer;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 
 beforeEach(function () {
     $this->eventSerializer = app(EventSerializer::class);
+});
+
+it('reuses the default serializer for every event', function () {
+    assertInstanceOf(config('event-sourcing.event_serializer'), $this->eventSerializer);
+    assertSame($this->eventSerializer, app(EventSerializer::class));
+});
+
+it('keeps custom serializers transient', function () {
+    $this->setConfig('event-sourcing.event_serializer', DummySerializer::class);
+
+    $serializer = app(EventSerializer::class);
+
+    assertInstanceOf(DummySerializer::class, $serializer);
+    assertNotSame($serializer, app(EventSerializer::class));
+    assertEquals('{"message":"message set by custom serializer"}', $serializer->serialize(new EventWithoutSerializedModels('test')));
+});
+
+it('does not leak event data when reusing the default serializer', function () {
+    foreach (['first event', 'different second event', ''] as $value) {
+        $event = new EventWithoutSerializedModels($value);
+        $serializer = app(EventSerializer::class);
+        $json = $serializer->serialize($event);
+
+        assertSame(['value' => $value], json_decode($json, true));
+        assertEquals($event, app(EventSerializer::class)->deserialize($event::class, $json, 1));
+    }
 });
 
 it('can serialize a plain event', function () {

@@ -29,7 +29,7 @@ beforeAll(function () {
             string $eventClass,
             string $json,
             int $version,
-            string $metadata = null
+            ?string $metadata = null
         ): VersionedEvent {
             $data = json_decode($json, true);
 
