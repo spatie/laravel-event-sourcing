@@ -2,6 +2,27 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.15.2 - 2026-10-19
+
+### Improvements
+
+- Reuse the built-in JSON event serializer and its normalizers instead of recreating them for every event, improving event retrieval performance.
+- Preserve transient bindings for configured custom serializers. Document how stateless custom serializers can opt into singleton reuse with Laravel’s `#[Singleton]` attribute or an explicit container binding.
+- Add regression coverage for serializer lifetimes and repeated event round trips.
+
+### Requirements and tooling
+
+- Require PHP 8.4 or newer and Laravel 12 or 13. Older PHP versions and end-of-life Laravel 10/11 are no longer supported.
+- Test PHP 8.4 and 8.5 with Pest 4 for Laravel 12 and Pest 5 for Laravel 13; update snapshot tooling and PHPUnit configuration.
+
+### Compatibility note
+
+The built-in serializer and its normalizers now live for the lifetime of the application, including across jobs in long-running workers. Custom normalizers must not retain event-specific state. Configured custom serializers remain transient unless explicitly opted into singleton reuse.
+
+Thanks to @Bloemendaal for the performance improvement in #536.
+
+**Full changelog:** https://github.com/spatie/laravel-event-sourcing/compare/7.15.1...7.15.2
+
 ## 7.15.1 - 2026-08-10
 
 - Allow `phpdocumentor/reflection-docblock` 6, fixing installation on Laravel 13 / Symfony 8 by @freekmurze in https://github.com/spatie/laravel-event-sourcing/pull/535
@@ -667,6 +688,7 @@ When registering projectors and reactors via class name strings, container resol
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -679,6 +701,7 @@ When registering projectors and reactors via class name strings, container resol
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -1038,6 +1061,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -1061,6 +1085,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
