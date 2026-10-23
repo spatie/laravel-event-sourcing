@@ -17,6 +17,7 @@ use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\HandleStoredEventJob;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\TestEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\FakeMoneyAddedCountProjector;
@@ -27,6 +28,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithHighWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithLowWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithNegativeWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutWeight;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithUnionTypeHandler;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\ProjectorWithWeightTestHelper;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
@@ -265,4 +267,28 @@ it('lazily registered handlers still handle events', function () {
     event(new MoneyAddedEvent($this->account, 1234));
 
     assertEquals(1234, $this->account->refresh()->amount);
+});
+
+it('lists a union typed handler under each of its event classes', function () {
+    assertEquals([
+        MoneyAddedEvent::class => ['onMoneyChanged'],
+        MoneySubtractedEvent::class => ['onMoneyChanged'],
+        TestEvent::class => ['onTestEvent'],
+    ], (new ProjectorWithUnionTypeHandler())->getEventHandlingMethods()->all());
+});
+
+it('replays events handled by a union typed handler', function () {
+    event(new MoneyAddedEvent($this->account, 10));
+    event(new MoneySubtractedEvent($this->account, 5));
+    event(new TestEvent());
+
+    ProjectorWithUnionTypeHandler::$log = [];
+
+    Projectionist::replay(collect([new ProjectorWithUnionTypeHandler()]));
+
+    assertEquals([
+        MoneyAddedEvent::class,
+        MoneySubtractedEvent::class,
+        TestEvent::class,
+    ], ProjectorWithUnionTypeHandler::$log);
 });
