@@ -6,6 +6,8 @@ use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
+use Spatie\BetterTypes\Handlers;
+use Spatie\BetterTypes\Method;
 use Spatie\EventSourcing\EventHandlers\EventHandler;
 use Spatie\EventSourcing\EventHandlers\EventHandlerCollection;
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
@@ -374,13 +376,42 @@ class Projectionist
         return $this->isReplaying;
     }
 
+    public function getEventClassesForProjectors(Collection $projectors): array
+    {
+        $events = [];
+
+        foreach ($projectors as $projector) {
+            $methods = $projector->getEventHandlingMethods();
+
+            if ($methods->has('object')) {
+                return [];
+            }
+
+            $unionHandler = Handlers::new($projector)
+                ->public()
+                ->protected()
+                ->reject(fn (Method $method) => $method->accepts(null))
+                ->filter(fn (Method $method) => $method->getTypes()->first()?->isUnion() ?? false)
+                ->first();
+
+            // Exact class filters cannot represent the subclasses or interfaces accepted by a union.
+            if ($unionHandler) {
+                return [];
+            }
+
+            $events = array_merge($events, $methods->keys()->all());
+        }
+
+        return $events;
+    }
+
     public function replay(
         Collection $projectors,
         int $startingFromEventId = 0,
         ?callable $onEventReplayed = null,
         ?string $aggregateUuid = null
     ): void {
-        $events = collect($projectors->toArray())->map(fn (Projector $projector) => $projector->getEventHandlingMethods()->keys())->flatten()->toArray();
+        $events = $this->getEventClassesForProjectors($projectors);
         $projectors = (new EventHandlerCollection($projectors))
             ->sortBy(fn (EventHandler $eventHandler) => $eventHandler->getWeight(null));
 

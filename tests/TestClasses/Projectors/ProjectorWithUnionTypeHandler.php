@@ -13,11 +13,16 @@ class ProjectorWithUnionTypeHandler extends Projector
 
     public function onMoneyChanged(MoneyAddedEvent|MoneySubtractedEvent $event): void
     {
-        self::$log[] = $event::class;
+        self::$log[] = [$event::class, $event->amount];
+    }
+
+    public function onMoneyAdded(MoneyAddedEvent $event): void
+    {
+        self::$log[] = ['added', $event->amount];
     }
 
     public function onTestEvent(TestEvent $event): void
     {
-        self::$log[] = $event::class;
+        self::$log[] = [$event::class];
     }
 }

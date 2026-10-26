@@ -5,7 +5,6 @@ namespace Spatie\EventSourcing\Console;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Spatie\EventSourcing\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
 
@@ -68,7 +67,7 @@ class ReplayCommand extends Command
     public function replay(Collection $projectors, int $startingFrom, ?string $aggregateUuid = null): void
     {
         $repository = app(StoredEventRepository::class);
-        $events = collect($projectors->toArray())->map(fn (Projector $projector) => $projector->getEventHandlingMethods()->keys())->flatten()->toArray();
+        $events = $this->projectionist->getEventClassesForProjectors($projectors);
         $replayCount = $repository->countAllStartingFrom($startingFrom, $aggregateUuid, $events);
 
         if ($replayCount === 0) {
