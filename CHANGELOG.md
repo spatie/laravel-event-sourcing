@@ -2,6 +2,28 @@
 
 All notable changes to `laravel-event-sourcing` will be documented in this file:
 
+## 7.15.3 - 2026-10-26
+
+### Fixes
+
+- Fix replay silently omitting events handled by union-typed projector methods, including accepted subclasses and interface implementations (#537).
+- Replay stored events for `object` catch-all handlers instead of treating `object` as a literal event class. Keep command counts and replay selection consistent.
+- Preserve one invocation per matching handler method, event-class aliases, starting event IDs and aggregate UUID filtering.
+- Keep replay compatible with the supported `spatie/better-types` 1.0.0 release without increasing dependency requirements (#538).
+
+### Replay selection
+
+Union and `object` catch-all projectors read all stored event classes within the requested event-ID and aggregate bounds; normal handler dispatch still selects matching events. This avoids incomplete exact-class filters and may read more rows for union projectors. Ordinary single-class projector filtering is unchanged.
+
+### CI
+
+- Provision a healthy MySQL 8.4 service instead of relying on the hosted runner MySQL init script.
+- Keep the PHP 8.4/8.5 × Laravel 12/13 matrix and add a full-suite minimum-better-types run on Laravel 12.
+
+Thanks to @m-bymike for #537.
+
+**Full changelog:** https://github.com/spatie/laravel-event-sourcing/compare/7.15.2...7.15.3
+
 ## 7.15.2 - 2026-10-19
 
 ### Improvements
@@ -689,6 +711,7 @@ When registering projectors and reactors via class name strings, container resol
 
 
 
+
 ```
 ## 6.0.0 - 2021-??-??
 
@@ -701,6 +724,7 @@ When registering projectors and reactors via class name strings, container resol
 
 -    public function handle(StoredEvent $event);
 +    public function handle(StoredEvent $storedEvent): void;
+
 
 
 
@@ -1062,6 +1086,7 @@ class MyProjector extends Projector
 
 
 
+
 ```
 Note that `__invoke` in projectors and reactors works the same way, it's automatically registered based on the type hinted event.
 
@@ -1085,6 +1110,7 @@ public function up()
         $table->unique(['aggregate_uuid', 'aggregate_version']);
     });
 }
+
 
 
 
