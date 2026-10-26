@@ -391,7 +391,7 @@ class Projectionist
                 ->public()
                 ->protected()
                 ->reject(fn (Method $method) => $method->accepts(null))
-                ->filter(fn (Method $method) => $method->getTypes()->first()?->isUnion() ?? false)
+                ->filter(fn (Method $method) => str_contains((string) $method->getTypes()->first()?->getName(), '|'))
                 ->first();
 
             // Exact class filters cannot represent the subclasses or interfaces accepted by a union.
