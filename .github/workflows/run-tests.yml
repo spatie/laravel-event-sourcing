@@ -10,6 +10,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel_event_sourcing
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
     strategy:
       fail-fast: false
       matrix:
@@ -36,11 +50,6 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
           coverage: none
-
-      - name: Create database
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_event_sourcing;'
 
       - name: Install dependencies
         run: |
