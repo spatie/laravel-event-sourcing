@@ -60,3 +60,11 @@ jobs:
         run: vendor/bin/pest
         env:
           DB_PASSWORD: root
+
+      - name: Test with minimum better-types version
+        if: matrix.php == '8.4' && matrix.laravel == '12.*'
+        run: |
+          composer update spatie/better-types --prefer-lowest --prefer-dist --no-interaction
+          vendor/bin/pest
+        env:
+          DB_PASSWORD: root
