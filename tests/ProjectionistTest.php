@@ -13,10 +13,17 @@ use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
 
+use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\HandleStoredEventJob;
+use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
+use Spatie\EventSourcing\StoredEvents\StoredEvent;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyAddedInterface;
+use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\StorableEvents\MoneyIncremented;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\SpecialMoneyAddedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\TestEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\FakeMoneyAddedCountProjector;
@@ -27,6 +34,7 @@ use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithHighWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithLowWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithNegativeWeight;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithoutWeight;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithUnionTypeHandler;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\QueuedProjector;
 use Spatie\EventSourcing\Tests\TestClasses\ProjectorWithWeightTestHelper;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
@@ -266,3 +274,106 @@ it('lazily registered handlers still handle events', function () {
 
     assertEquals(1234, $this->account->refresh()->amount);
 });
+
+it('lists a union typed handler under each of its event classes', function () {
+    assertEquals([
+        MoneyAddedEvent::class => ['onMoneyChanged', 'onMoneyAdded'],
+        MoneySubtractedEvent::class => ['onMoneyChanged'],
+        TestEvent::class => ['onTestEvent'],
+    ], (new ProjectorWithUnionTypeHandler())->getEventHandlingMethods()->all());
+});
+
+it('replays events handled by a union typed handler exactly once per matching method', function (bool $useClassMap) {
+    if ($useClassMap) {
+        config()->set('event-sourcing.event_class_map', [
+            'added' => MoneyAddedEvent::class,
+            'subtracted' => MoneySubtractedEvent::class,
+            'test' => TestEvent::class,
+        ]);
+        config()->set('event-sourcing.enforce_event_class_map', true);
+    }
+
+    event(new MoneyAddedEvent($this->account, 10));
+    event(new MoneySubtractedEvent($this->account, 5));
+    event(new TestEvent());
+    event(new MoneyAddedEvent($this->account, 17));
+
+    ProjectorWithUnionTypeHandler::$log = [];
+    $replayedIds = [];
+
+    Projectionist::replay(
+        collect([new ProjectorWithUnionTypeHandler()]),
+        onEventReplayed: function (StoredEvent $event) use (&$replayedIds) {
+            $replayedIds[] = $event->id;
+        },
+    );
+
+    assertSame([1, 2, 3, 4], $replayedIds);
+    assertSame([
+        [MoneyAddedEvent::class, 10],
+        ['added', 10],
+        [MoneySubtractedEvent::class, 5],
+        [TestEvent::class],
+        [MoneyAddedEvent::class, 17],
+        ['added', 17],
+    ], ProjectorWithUnionTypeHandler::$log);
+})->with([false, true]);
+
+it('replays broad handlers without losing accepted events', function (Projector $projector, array $expected) {
+    app()->instance($projector::class, $projector);
+    Projectionist::addProjector($projector);
+
+    event(new MoneyAddedEvent($this->account, 10));
+    event(new MoneyIncremented(7));
+    event(new MoneySubtractedEvent($this->account, 5));
+    event(new SpecialMoneyAddedEvent($this->account, 17));
+    event(new TestEvent());
+
+    assertSame($expected, $projector->log);
+    $projector->log = [];
+
+    Projectionist::replay(collect([$projector]));
+
+    assertSame($expected, $projector->log);
+})->with([
+    'object' => [fn () => new class () extends Projector {
+        public array $log = [];
+
+        public function onEvent(object $event): void
+        {
+            $this->log[] = $event::class;
+        }
+    }, [MoneyAddedEvent::class, MoneyIncremented::class, MoneySubtractedEvent::class, SpecialMoneyAddedEvent::class, TestEvent::class]],
+    'object union' => [fn () => new class () extends Projector {
+        public array $log = [];
+
+        public function onEvent(object|string $event): void
+        {
+            $this->log[] = $event::class;
+        }
+    }, [MoneyAddedEvent::class, MoneyIncremented::class, MoneySubtractedEvent::class, SpecialMoneyAddedEvent::class, TestEvent::class]],
+    'stored event union' => [fn () => new class () extends Projector {
+        public array $log = [];
+
+        public function onEvent(ShouldBeStored|string $event): void
+        {
+            $this->log[] = $event::class;
+        }
+    }, [MoneyAddedEvent::class, MoneyIncremented::class, MoneySubtractedEvent::class, SpecialMoneyAddedEvent::class, TestEvent::class]],
+    'interface union' => [fn () => new class () extends Projector {
+        public array $log = [];
+
+        public function onEvent(MoneyAddedEvent|MoneyAddedInterface $event): void
+        {
+            $this->log[] = $event::class;
+        }
+    }, [MoneyAddedEvent::class, MoneyIncremented::class, SpecialMoneyAddedEvent::class]],
+    'class union' => [fn () => new class () extends Projector {
+        public array $log = [];
+
+        protected function onEvent(MoneyAddedEvent|MoneySubtractedEvent $event): void
+        {
+            $this->log[] = $event::class;
+        }
+    }, [MoneyAddedEvent::class, MoneySubtractedEvent::class, SpecialMoneyAddedEvent::class]],
+]);

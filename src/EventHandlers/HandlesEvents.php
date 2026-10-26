@@ -49,7 +49,7 @@ trait HandlesEvents
             ->protected()
             ->reject(fn (Method $method) => $method->accepts(null))
             ->all()
-            ->groupBy(fn (Method $method) => $method->getTypes()->first()?->getName())
+            ->groupBy(fn (Method $method) => explode('|', (string) $method->getTypes()->first()?->getName()))
             ->filter(function (Collection $group, string $key) {
                 return (class_exists($key) && isset(class_parents($key)[ShouldBeStored::class]))
                     || $key === 'object';

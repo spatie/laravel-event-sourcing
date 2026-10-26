@@ -14,16 +14,19 @@ use Spatie\EventSourcing\Events\FinishedEventReplay;
 use Spatie\EventSourcing\Events\StartingEventReplay;
 use Spatie\EventSourcing\Facades\Projectionist;
 use Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEvent;
+use Spatie\EventSourcing\StoredEvents\Repositories\StoredEventRepository;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRoot;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\AccountAggregateRootWithStoredEventRepositorySpecified;
 use Spatie\EventSourcing\Tests\TestClasses\AggregateRoots\Projectors\AccountProjector;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneyAddedEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Events\MoneySubtractedEvent;
+use Spatie\EventSourcing\Tests\TestClasses\Events\TestEvent;
 use Spatie\EventSourcing\Tests\TestClasses\FakeUuid;
 use Spatie\EventSourcing\Tests\TestClasses\Mailables\AccountBroke;
 use Spatie\EventSourcing\Tests\TestClasses\Models\Account;
 use Spatie\EventSourcing\Tests\TestClasses\Models\OtherEloquentStoredEvent;
 use Spatie\EventSourcing\Tests\TestClasses\Projectors\BalanceProjector;
+use Spatie\EventSourcing\Tests\TestClasses\Projectors\ProjectorWithUnionTypeHandler;
 use Spatie\EventSourcing\Tests\TestClasses\Reactors\BrokeReactor;
 
 beforeEach(function () {
@@ -175,4 +178,32 @@ it('will replay events for a specific aggregate root uuid', function () {
     ])
         ->expectsOutput('Replaying 1 events...')
         ->assertExitCode(0);
+});
+
+it('counts and replays union handlers while respecting the starting id and aggregate uuid', function () {
+    $repository = app(StoredEventRepository::class);
+    $uuid = FakeUuid::generate();
+    $otherUuid = FakeUuid::generate();
+
+    $repository->persist(new MoneyAddedEvent($this->account, 10), $uuid);
+    $startingEvent = $repository->persist(new MoneySubtractedEvent($this->account, 5), $otherUuid);
+    $repository->persist(new MoneySubtractedEvent($this->account, 7), $uuid);
+    $repository->persist(new TestEvent(), $uuid);
+
+    Projectionist::addProjector(ProjectorWithUnionTypeHandler::class);
+    ProjectorWithUnionTypeHandler::$log = [];
+
+    $this->artisan('event-sourcing:replay', [
+        'projector' => [ProjectorWithUnionTypeHandler::class],
+        '--from' => $startingEvent->id,
+        '--aggregate-uuid' => $uuid,
+        '--force' => true,
+    ])
+        ->expectsOutput('Replaying 2 events...')
+        ->assertExitCode(0);
+
+    assertEquals([
+        [MoneySubtractedEvent::class, 7],
+        [TestEvent::class],
+    ], ProjectorWithUnionTypeHandler::$log);
 });
