@@ -30,6 +30,10 @@ jobs:
         php: ['8.6', '8.5', '8.4']
         laravel: ['12.*', '13.*']
         dependency-version: [prefer-stable]
+        exclude:
+          # Testbench 10 requires Symfony Process 7, while PHP 8.6 needs Pest 5 and Process 8.
+          - php: '8.6'
+            laravel: 12.*
         include:
           - laravel: 12.*
             testbench: 10.*
@@ -62,7 +66,7 @@ jobs:
           DB_PASSWORD: root
 
       - name: Test with minimum better-types version
-        if: matrix.laravel == '12.*'
+        if: matrix.laravel == '12.*' || matrix.php == '8.6'
         run: |
           composer update spatie/better-types --prefer-lowest --prefer-dist --no-interaction
           vendor/bin/pest
