@@ -11,30 +11,43 @@ use Spatie\EventSourcing\StoredEvents\StoredEvent;
 
 trait HandlesEvents
 {
+    /** @var array<string, string[]> */
+    private static array $eventHandlingMethodNames = [];
+
     public function handles(StoredEvent $storedEvent): bool
     {
-        return Handlers::new($this)
-            ->public()
-            ->protected()
-            ->reject(fn (Method $method) => $method->accepts(null))
-            ->accepts($storedEvent->event)
-            ->all()
-            ->isNotEmpty();
+        return $this->getEventHandlingMethodNamesFor($storedEvent->event) !== [];
     }
 
     public function handle(StoredEvent $storedEvent): void
     {
         $event = $storedEvent->event;
 
-        Handlers::new($this)
+        collect($this->getEventHandlingMethodNamesFor($event))
+            ->each(fn (string $methodName) => $this->{$methodName}($event));
+    }
+
+    /**
+     * Which methods accept an event only depends on the class of the handler and the class of the event,
+     * so the reflection is done once per combination instead of for every stored event.
+     *
+     * @return string[]
+     */
+    protected function getEventHandlingMethodNamesFor(?ShouldBeStored $event): array
+    {
+        if ($event === null) {
+            return [];
+        }
+
+        return self::$eventHandlingMethodNames[static::class.'|'.$event::class] ??= Handlers::new($this)
             ->public()
             ->protected()
             ->reject(fn (Method $method) => $method->accepts(null))
             ->accepts($event)
             ->all()
-            ->each(function (Method $method) use ($event) {
-                return $this->{$method->getName()}($event);
-            });
+            ->map(fn (Method $method) => $method->getName())
+            ->values()
+            ->all();
     }
 
     public function handleException(Exception $exception): void
